@@ -1,3 +1,11 @@
+<script context="module">
+    import { getContext } from "svelte";
+    import axios from 'axios';
+
+    export async function getSongs(){
+        return getContext('songs') ?? (await axios.get('/api/song')).data
+    }
+</script>
 <script lang="ts">
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
@@ -7,12 +15,16 @@
     import Main from "$lib/components/layout/main/Main.svelte";
     import ThemeToggler from "$lib/components/layout/main/ThemeToggler.svelte";
     import useTheme from "$lib/module/layout/theme";
+    import { setContext } from "svelte";
+
+    export let data;
 
     let [theme, _] = useTheme();
-
     $:if(browser){
         document.body.setAttribute('data-theme', $theme);
     }
+
+    setContext('songs', data.songs);
 </script>
 
 {#if $theme}

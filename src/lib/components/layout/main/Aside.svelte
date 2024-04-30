@@ -8,7 +8,7 @@
 
 <style>
     aside{
-        width: 300px;
+        width: 250px;
     }
 
     @media only screen and (max-width:1000px){

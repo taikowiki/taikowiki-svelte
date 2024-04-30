@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { getContext } from "svelte";
-    import type { Writable } from "svelte/store";
+    import { getTheme } from "$lib/module/layout/theme";
 
-    const theme: Writable<"light" | "dark"> = getContext("theme");
+    const [theme] = getTheme();
 </script>
 
 <header data-theme={$theme}>
@@ -23,7 +22,7 @@
         display: flex;
         justify-content: center;
 
-        height: 60px;
+        height: 50px;
 
         margin-bottom: 20px;
     }
@@ -51,6 +50,7 @@
     .left,
     .right {
         display: flex;
+        column-gap: 10px;
     }
     .left {
         flex-direction: row;

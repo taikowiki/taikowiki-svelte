@@ -34,7 +34,7 @@
     }
 
     main {
-        width: calc(100% - 320px);
+        width: calc(100% - 270px);
 
         box-sizing: border-box;
 

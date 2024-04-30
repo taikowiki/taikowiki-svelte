@@ -1,4 +1,4 @@
-import Song from "$lib/module/common/song";
+import Song from "$lib/module/common/song/song.server";
 
 export async function GET(){
     console.log(await Song.getAll());

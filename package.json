@@ -27,6 +27,7 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltekit-board/db": "^1.0.0",
-		"axios": "^1.6.8"
+		"axios": "^1.6.8",
+		"vite-plugin-node-polyfills": "^0.21.0"
 	}
 }

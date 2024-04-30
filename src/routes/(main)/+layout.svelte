@@ -1,21 +1,21 @@
-<script context="module">
+<script context="module" lang="ts">
     import { getContext } from "svelte";
-    import axios from 'axios';
 
-    export async function getSongs(){
-        return getContext('songs') ?? (await axios.get('/api/song')).data
+    export function getSongs(): SongData[]{
+        return getContext('songs')
     }
 </script>
 <script lang="ts">
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
-    import AsideItem from "$lib/components/layout/main/AsideItem.svelte";
     import Header from "$lib/components/layout/main/Header.svelte";
     import HeaderItem from '$lib/components/layout/main/HeaderItem.svelte';
     import Main from "$lib/components/layout/main/Main.svelte";
     import ThemeToggler from "$lib/components/layout/main/ThemeToggler.svelte";
     import useTheme from "$lib/module/layout/theme";
     import { setContext } from "svelte";
+    import type { SongData } from "$lib/module/common/song/types.js";
+    import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
 
     export let data;
 
@@ -44,9 +44,7 @@
     <Main>
         <slot slot="main"/>
         <Aside slot="aside">
-            <AsideItem title="신곡" icon="/assets/icon/song.svg">
-                ㅎㅇ
-            </AsideItem>
+            <AsideNewSong/>
         </Aside>
     </Main>
 {/if}

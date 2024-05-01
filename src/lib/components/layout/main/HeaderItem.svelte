@@ -24,7 +24,7 @@
         display:flex;
         flex-direction: row;
         align-items: center;
-        column-gap: 2px;
+        column-gap: 4px;
 
         height: 30px;
 

@@ -1,39 +1,28 @@
 <script lang="ts">
-    import type { SearchOption } from "$lib/module/page/song/types";
+    import type { SongSearchOption } from "$lib/module/page/song/types";
+    import SearchBoxPcDifficulty from "./SearchBox-Pc-Difficulty.svelte";
+    import SearchBoxPcGenre from "./SearchBox-Pc-Genre.svelte";
+    import SearchBoxPcInput from "./SearchBox-Pc-Input.svelte";
+    import SearchBox from "./SearchBox.svelte";
 
-    export let option: SearchOption;
+    export let option: SongSearchOption;
 
-    let optionCandidate: SearchOption = {};
+    let tempOption: SongSearchOption = {};
 
     let opened = false;
-    function open() {
-        opened = !opened;
-    }
 
     function search() {
-        option = structuredClone(optionCandidate);
+        option = structuredClone(tempOption);
     }
 </script>
 
 <div class="wrapper">
     <div class="container">
-        <div class="search-container">
-            <button class="search-detail-toggler" on:click={open} class:opened>
-                <span>▲</span>
-            </button>
-            <input
-                class="search-input"
-                type="text"
-                bind:value={optionCandidate.query}
-                placeholder="검색"
-                on:keypress={(event) => {
-                    if(event.key === "Enter"){
-                        search();
-                    }
-                }}
-            />
-            <button class="search-button" on:click={search}/>
-        </div>
+        <SearchBoxPcInput bind:opened bind:tempOption {search} />
+    </div>
+    <div class="details-container" class:opened>
+        <SearchBoxPcGenre bind:tempOption />
+        <SearchBoxPcDifficulty bind:tempOption />
     </div>
 </div>
 
@@ -42,72 +31,44 @@
         width: 100%;
 
         display: flex;
-        justify-content: center;
+        flex-direction: column;
     }
+
+    /*
+    @media only screen and (max-width: 1000px) {
+        .wrapper {
+            display: none;
+        }
+    }
+    */
 
     .container {
         width: 100%;
 
         box-sizing: border-box;
-    }
-
-    .search-container {
-        width: 100%;
-        height: 40px;
 
         display: flex;
     }
-    .search-detail-toggler {
-        width: 40px;
-        height: 40px;
 
-        font-size: 20px;
+    .details-container {
+        width: 0;
+        max-height: 0;
 
-        background-color: #cf4844;
-        border: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
 
-        cursor: pointer;
-    }
-    .search-detail-toggler > span {
-        display: block;
-        transform: rotate(90deg);
-        transition: transform 0.2s;
-    }
-    .search-detail-toggler.opened > span {
-        display: block;
-        transform: rotate(180deg);
-    }
-
-    .search-input {
-        width: calc(100% - 80px);
-        height: 100%;
+        row-gap: 5px;
+        padding-block: 5px;
 
         box-sizing: border-box;
 
-        border: 1px solid #cf4844;
-
-        font-size: 17px;
-        padding-inline: 5px;
+        transition:
+            width 0.2s,
+            max-height 0.2s;
     }
-    .search-input:focus {
-        border: 2px solid #cf4844;
-        outline: 0;
-    }
-
-    .search-button {
-        width: 40px;
-        height: 40px;
-
-        font-size: 20px;
-
-        background-color: #cf4844;
-        border: 0;
-
-        cursor: pointer;
-
-        background-image: url('/assets/icon/search.svg');
-        background-size: 20px 20px;
-        background-repeat: no-repeat;
-        background-position: center;
+    .details-container.opened {
+        width: 100%;
+        max-height: 400px;
     }
 </style>

@@ -73,10 +73,10 @@ export default class SongDB {
 
     static async getUpdateTime(): Promise<number> {
         let result = await runQuery(async (run) => {
-            return run("SHOW TABLE STATUS WHERE `name` = 'song';");
+            return run("SELECT `UPDATE_TIME` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'taikowiki_beta' AND TABLE_NAME = 'song';");
         })
 
-        const updateTime = new Date(result[0]['Update_time']).getTime();
+        const updateTime = new Date(result[0]['UPDATE_TIME']).getTime();
 
         return updateTime;
     }

@@ -7,6 +7,7 @@
     import ThemeToggler from "$lib/components/layout/main/ThemeToggler.svelte";
     import useTheme from "$lib/module/layout/theme";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
+    import { useIsMobile } from "$lib/module/layout/isMobile.js";
 
     export let data;
 
@@ -14,12 +15,14 @@
     $:if(browser){
         document.body.setAttribute('data-theme', $theme);
     }
+
+    const isMobile = useIsMobile();
 </script>
 
 {#if $theme}
     <Header>
         <svelte:fragment slot="left">
-            <HeaderItem icon="/assets/icon/song.svg">
+            <HeaderItem icon="/assets/icon/song.svg" href="/song">
                 곡
             </HeaderItem>
             <HeaderItem icon="/assets/icon/document.svg">

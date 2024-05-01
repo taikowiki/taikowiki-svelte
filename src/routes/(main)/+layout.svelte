@@ -1,10 +1,3 @@
-<script context="module" lang="ts">
-    import { getContext } from "svelte";
-
-    export function getSongs(): SongData[]{
-        return getContext('songs')
-    }
-</script>
 <script lang="ts">
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
@@ -13,8 +6,6 @@
     import Main from "$lib/components/layout/main/Main.svelte";
     import ThemeToggler from "$lib/components/layout/main/ThemeToggler.svelte";
     import useTheme from "$lib/module/layout/theme";
-    import { setContext } from "svelte";
-    import type { SongData } from "$lib/module/common/song/types.js";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
 
     export let data;
@@ -23,8 +14,6 @@
     $:if(browser){
         document.body.setAttribute('data-theme', $theme);
     }
-
-    setContext('songs', data.songs);
 </script>
 
 {#if $theme}
@@ -44,7 +33,7 @@
     <Main>
         <slot slot="main"/>
         <Aside slot="aside">
-            <AsideNewSong/>
+            <AsideNewSong newSongs={data.newSongs}/>
         </Aside>
     </Main>
 {/if}

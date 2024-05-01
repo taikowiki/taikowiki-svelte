@@ -3,7 +3,7 @@ import { runQuery } from "@sveltekit-board/db";
 import { type SongData } from "./types";
 
 export default class SongDB {
-    static async getAll(): Promise<(SongData & {order:number})[]> {
+    static async getAll(): Promise<SongData[]> {
         return await runQuery(async (run) => {
             let result = await run("SELECT * FROM `song`");
             result.map((e: any) => {
@@ -17,7 +17,21 @@ export default class SongDB {
         })
     }
 
-    static async addSong(data: SongData){
+    static async getBySongNo(songNo: number): Promise<SongData[]> {
+        return await runQuery(async (run) => {
+            let result = await run("SELECT * FROM `song` WHERE `songNo` = ?", [songNo]);
+            result.map((e: any) => {
+                e.courses = JSON.parse(e.courses);
+                e.bpm = JSON.parse(e.bpm);
+                e.version = JSON.parse(e.version);
+                e.genre = JSON.parse(e.genre);
+                e.artists = JSON.parse(e.artists);
+            })
+            return JSON.parse(JSON.stringify(result))
+        })
+    }
+
+    static async addSong(data: SongData) {
         return await runQuery(async (run) => {
             return await run(`INSERT INTO \`song\` (
                 \`songNo\`, 
@@ -37,7 +51,7 @@ export default class SongDB {
                 \`courses\`
             ) VALUES (
                 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
-            )`,[
+            )`, [
                 data.songNo,
                 data.title,
                 data.titleKo,
@@ -54,6 +68,30 @@ export default class SongDB {
                 data.addedDate || 0,
                 JSON.stringify(data.courses)
             ])
+        })
+    }
+
+    static async getUpdateTime(): Promise<number> {
+        let result = await runQuery(async (run) => {
+            return run("SHOW TABLE STATUS WHERE `name` = 'song';");
+        })
+
+        const updateTime = new Date(result[0]['Update_time']).getTime();
+
+        return updateTime;
+    }
+
+    static async getNewSongs(): Promise<SongData[]> {
+        return await runQuery(async (run) => {
+            let result = await run("SELECT * FROM `song` ORDER BY `addedDate` DESC LIMIT 3");
+            result.map((e: any) => {
+                e.courses = JSON.parse(e.courses);
+                e.bpm = JSON.parse(e.bpm);
+                e.version = JSON.parse(e.version);
+                e.genre = JSON.parse(e.genre);
+                e.artists = JSON.parse(e.artists);
+            })
+            return JSON.parse(JSON.stringify(result))
         })
     }
 

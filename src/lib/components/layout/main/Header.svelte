@@ -60,4 +60,10 @@
         flex-direction: row-reverse;
         justify-content: flex-end;
     }
+
+    @media only screen and (max-width: 1000px) {
+        header{
+            margin-bottom: 0;
+        }
+    }
 </style>

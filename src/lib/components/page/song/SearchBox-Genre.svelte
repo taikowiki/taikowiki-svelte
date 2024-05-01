@@ -2,7 +2,7 @@
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import type { SongSearchOption } from "$lib/module/page/song/types";
-    import SearchBoxPcGenreItem from "./SearchBox-Pc-GenreItem.svelte";
+    import SearchBoxGenreItem from "./SearchBox-GenreItem.svelte";
 
     export let tempOption: SongSearchOption;
 
@@ -16,30 +16,30 @@
     type={`${$isMobile ? 'vertical' : 'horizontal'}`}
 >
     <div class="wrapper">
-        <SearchBoxPcGenreItem bind:group={tempOption.genre} value="pops">
+        <SearchBoxGenreItem bind:group={tempOption.genre} value="pops">
             POPS
-        </SearchBoxPcGenreItem>
-        <SearchBoxPcGenreItem bind:group={tempOption.genre} value="anime">
+        </SearchBoxGenreItem>
+        <SearchBoxGenreItem bind:group={tempOption.genre} value="anime">
             애니메이션
-        </SearchBoxPcGenreItem>
-        <SearchBoxPcGenreItem bind:group={tempOption.genre} value="kids">
+        </SearchBoxGenreItem>
+        <SearchBoxGenreItem bind:group={tempOption.genre} value="kids">
             키즈
-        </SearchBoxPcGenreItem>
-        <SearchBoxPcGenreItem bind:group={tempOption.genre} value="vocaloid">
+        </SearchBoxGenreItem>
+        <SearchBoxGenreItem bind:group={tempOption.genre} value="vocaloid">
             보컬로이드
-        </SearchBoxPcGenreItem>
-        <SearchBoxPcGenreItem bind:group={tempOption.genre} value="game">
+        </SearchBoxGenreItem>
+        <SearchBoxGenreItem bind:group={tempOption.genre} value="game">
             게임 뮤직
-        </SearchBoxPcGenreItem>
-        <SearchBoxPcGenreItem bind:group={tempOption.genre} value="namco">
+        </SearchBoxGenreItem>
+        <SearchBoxGenreItem bind:group={tempOption.genre} value="namco">
             남코 오리지널
-        </SearchBoxPcGenreItem>
-        <SearchBoxPcGenreItem bind:group={tempOption.genre} value="variety">
+        </SearchBoxGenreItem>
+        <SearchBoxGenreItem bind:group={tempOption.genre} value="variety">
             버라이어티
-        </SearchBoxPcGenreItem>
-        <SearchBoxPcGenreItem bind:group={tempOption.genre} value="classic">
+        </SearchBoxGenreItem>
+        <SearchBoxGenreItem bind:group={tempOption.genre} value="classic">
             클래식
-        </SearchBoxPcGenreItem>
+        </SearchBoxGenreItem>
     </div>
 </TitledContainer>
 

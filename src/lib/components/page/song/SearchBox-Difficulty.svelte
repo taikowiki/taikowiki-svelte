@@ -3,7 +3,7 @@
     import color from "$lib/module/common/color/color";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import type { SongSearchOption } from "$lib/module/page/song/types";
-    import SearchBoxPcDifficultyItem from "./SearchBox-Pc-DifficultyItem.svelte";
+    import SearchBoxDifficultyItem from "./SearchBox-DifficultyItem.svelte";
 
     export let tempOption: SongSearchOption;
 
@@ -56,42 +56,42 @@
     type={`${$isMobile ? "vertical" : "horizontal"}`}
 >
     <div class="wrapper">
-        <SearchBoxPcDifficultyItem
+        <SearchBoxDifficultyItem
             value="easy"
             bind:group={tempOption.difficulty}
         >
             쉬움
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="normal"
             bind:group={tempOption.difficulty}
         >
             보통
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="hard"
             bind:group={tempOption.difficulty}
         >
             어려움
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="oni"
             bind:group={tempOption.difficulty}
         >
             오니(앞)
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="ura"
             bind:group={tempOption.difficulty}
         >
             오니(뒤)
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="oniura"
             bind:group={tempOption.difficulty}
         >
             오니
-        </SearchBoxPcDifficultyItem>
+        </SearchBoxDifficultyItem>
         <div class="level-container">
             <img
                 src="/assets/icon/star-full.svg"

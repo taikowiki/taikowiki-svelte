@@ -1,6 +1,6 @@
 <script lang="ts">
     import Loading from "$lib/components/common/Loading.svelte";
-    import SearchBox from "$lib/components/page/song/SearchBox.svelte";
+    import SearchBoxContainer from "$lib/components/page/song/SearchBoxContainer.svelte";
     import { loadAllSongs } from "$lib/module/common/song/song.client";
     import type { SongData } from "$lib/module/common/song/types";
 
@@ -10,7 +10,7 @@
 {#await loadAllSongs()}
     <Loading />
 {:then songs}
-    <SearchBox {songs} bind:filteredSongs />
+    <SearchBoxContainer {songs} bind:filteredSongs />
     {#if filteredSongs === null}
         <Loading />
     {:else}

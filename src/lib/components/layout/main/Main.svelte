@@ -40,7 +40,7 @@
 
         border-radius: 10px;
 
-        padding-inline: 15px;
+        padding: 15px
     }
     main[data-theme="light"] {
         background-color: white;
@@ -56,6 +56,7 @@
 
         main {
             width: 100%;
+            min-height: calc(100vh - 50px);
         }
     }
 </style>

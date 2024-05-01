@@ -160,6 +160,9 @@
         width: calc(100% - 35px);
         max-width: 300px;
     }
+    input:disabled{
+        opacity: 0.4
+    }
 
     @media only screen and (max-width: 1000px){
         .level-container{

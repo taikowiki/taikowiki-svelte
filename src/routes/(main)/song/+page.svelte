@@ -20,6 +20,6 @@
     {#if filteredSongs === null}
         <Loading />
     {:else}
-        <SongList {songLang} filteredSongs={filteredSongs.splice(0, 100)}/>
+        <SongList {songLang} filteredSongs={filteredSongs.splice(0, 500)}/>
     {/if}
 {/await}

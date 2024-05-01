@@ -1,29 +1,44 @@
 <script lang="ts">
     import color from "$lib/module/common/color";
     import type { Difficulty, SongData } from "$lib/module/common/song/types";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import type { SongLang } from "./SongLanguageSelector.svelte";
     import { getTheme } from "$lib/module/layout/theme";
 
     export let song: SongData;
     export let songLang: SongLang;
+    export let resizeObserver: ResizeObserver;
 
     const diffs: Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
 
     let titleContainer: HTMLElement;
+    onMount(resizeHandle);
     onMount(() => {
-        // @ts-expect-error
+        resizeObserver.observe(titleContainer);
+    })
+
+    onDestroy(() => {
+        resizeObserver.unobserve(titleContainer);
+    })
+
+    const [theme] = getTheme();
+
+    function resizeHandle() {
         let width =
+            // @ts-expect-error
             titleContainer.children[0].offsetWidth +
+            // @ts-expect-error
             titleContainer.children[1].offsetWidth +
             5;
 
         if (width > titleContainer.offsetWidth) {
-            titleContainer.children[1].innerHTML = "";
+            // @ts-expect-error
+            titleContainer.children[1].display = "none";
+        } else {
+            // @ts-expect-error
+            titleContainer.children[1].display = "flex";
         }
-    });
-
-    const [theme] = getTheme();
+    }
 </script>
 
 <a class="container" href={`/song/${song.songNo}`} data-theme={$theme}>
@@ -139,11 +154,9 @@
     .title {
         font-weight: bold;
         font-size: 20px;
-        text-wrap: nowrap;
-        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     .artists {
-        flex: 1 0 auto;
         font-size: 12px;
         overflow: hidden;
         white-space: nowrap;

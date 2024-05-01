@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Difficulty } from "$lib/module/common/song/types";
-    import color from "$lib/module/common/color/color";
+    import color from "$lib/module/common/color";
+    import { getTheme } from "$lib/module/layout/theme";
 
     export let value: Difficulty | "oniura";
     export let group: Difficulty | "oniura" | undefined;
@@ -12,6 +13,8 @@
             group = undefined;
         }
     }
+
+    const [theme] = getTheme();
 </script>
 
 <div
@@ -21,6 +24,7 @@
     style={`background:${color.difficulty[value]};`}
     on:click={clickHandle}
     role="presentation"
+    data-theme={$theme}
 >
     <slot />
 </div>
@@ -40,26 +44,30 @@
 
         height: 30px;
         border-radius: 5px;
-        color:white;
+        color: white;
         font-weight: bold;
         font-size: 14px;
-        
+
         box-sizing: border-box;
 
         cursor: pointer;
     }
 
-    .button.selected{
+    .button.selected {
         border: 2px solid black;
     }
-    .button.unselected{
+    .button.unselected {
         opacity: 0.4;
     }
 
-    .button.long{
+    .button.long {
         width: 110px;
     }
-    .button.short{
+    .button.short {
         width: 60px;
+    }
+
+    .button.selected[data-theme="dark"] {
+        border-color: white;
     }
 </style>

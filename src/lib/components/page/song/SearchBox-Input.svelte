@@ -2,8 +2,8 @@
     import type { SongSearchOption } from "$lib/module/page/song/types";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let opened:boolean;
-    export let tempOption: SongSearchOption
+    export let opened: boolean;
+    export let tempOption: SongSearchOption;
     export let search: () => void;
 
     function open() {
@@ -13,7 +13,7 @@
     const [theme] = getTheme();
 </script>
 
-<div class="search-container">
+<div class="search-container" data-theme={$theme}>
     <button class="search-detail-toggler" on:click={open} class:opened>
         <span>▲</span>
     </button>
@@ -21,9 +21,9 @@
         class="search-input"
         type="text"
         bind:value={tempOption.query}
-        placeholder="검색"
+        placeholder="검색어"
         on:keypress={(event) => {
-            if(event.key === "Enter"){
+            if (event.key === "Enter") {
                 search();
             }
         }}
@@ -31,7 +31,7 @@
         data-theme={$theme}
     />
     <button class="search-button" on:click={search}>
-        <img src='/assets/icon/search.svg' alt=""/>
+        <img src="/assets/icon/search.svg" alt="" />
     </button>
 </div>
 
@@ -52,7 +52,7 @@
         font-size: 20px;
 
         background-color: #cf4844;
-        color:white;
+        color: white;
         border: 0;
 
         cursor: pointer;
@@ -81,7 +81,7 @@
     .search-input:focus {
         outline: 0;
     }
-    .search-input[data-theme="dark"]{
+    .search-input[data-theme="dark"] {
         color: inherit;
         background-color: inherit;
     }
@@ -97,14 +97,28 @@
 
         cursor: pointer;
 
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
     }
-    .search-button > img{
-        width:20px;
-        height:20px;
+    .search-button > img {
+        width: 20px;
+        height: 20px;
 
         filter: invert(100%);
+    }
+
+    .search-container[data-theme="dark"] > .search-detail-toggler {
+        background-color: black;
+    }
+    .search-container[data-theme="dark"] > .search-input {
+        border-color: black;
+    }
+    .search-container[data-theme="dark"] > .search-input::placeholder {
+        color:white;
+        opacity: 0.7;
+    }
+    .search-container[data-theme="dark"] > .search-button {
+        background-color: black;
     }
 </style>

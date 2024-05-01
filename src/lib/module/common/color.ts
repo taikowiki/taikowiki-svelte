@@ -1,4 +1,4 @@
-import type { Difficulty, Genre } from "../song/types";
+import type { Difficulty, Genre } from "./song/types";
 
 export const genre: Record<Genre, string> = {
     pops: "#59bec5",

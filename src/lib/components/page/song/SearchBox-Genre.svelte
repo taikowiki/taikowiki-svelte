@@ -1,17 +1,20 @@
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile";
+    import { getTheme } from "$lib/module/layout/theme";
     import type { SongSearchOption } from "$lib/module/page/song/types";
     import SearchBoxGenreItem from "./SearchBox-GenreItem.svelte";
 
     export let tempOption: SongSearchOption;
 
     const isMobile = getIsMobile();
+
+    const [theme] = getTheme();
 </script>
 
 <TitledContainer
     title="장르"
-    color="#cf4844"
+    color={$theme === "light"? "#cf4844" : 'black'}
     titleSize="16px"
     type={`${$isMobile ? 'vertical' : 'horizontal'}`}
 >

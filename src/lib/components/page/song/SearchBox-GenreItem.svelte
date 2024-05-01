@@ -1,6 +1,7 @@
 <script lang="ts">
-    import color from "$lib/module/common/color/color";
+    import color from "$lib/module/common/color";
     import type { Genre } from "$lib/module/common/song/types";
+    import { getTheme } from "$lib/module/layout/theme";
 
     export let group: string | undefined;
     export let value: Genre;
@@ -23,13 +24,15 @@
 
     let widthType:"long"|"short";
     $: if(data?.clientWidth){
-        if(data.clientWidth > 63){
+        if(data.clientWidth > 60){
             widthType="long"
         }
         else{
             widthType="short"
         }
     }
+
+    const [theme] = getTheme();
 </script>
 
 <div
@@ -39,6 +42,7 @@
     style={`background-color:${color.genre[value]};`}
     on:click={clickHandle}
     role="presentation"
+    data-theme={$theme}
 >
     <span bind:this={data} style={`${transform} text-wrap:nowrap;`}>
         <slot />
@@ -80,5 +84,9 @@
     }
     .button.short{
         width: 60px;
+    }
+
+    .button.selected[data-theme="dark"]{
+        border-color: white;
     }
 </style>

@@ -18,6 +18,8 @@
         width: 100%;
         display: flex;
         justify-content: center;
+
+        overflow-x: hidden;
     }
 
     .container {

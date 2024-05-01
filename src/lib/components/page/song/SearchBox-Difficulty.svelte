@@ -1,9 +1,10 @@
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
-    import color from "$lib/module/common/color/color";
+    import color from "$lib/module/common/color";
     import { getIsMobile } from "$lib/module/layout/isMobile";
+    import { getTheme } from "$lib/module/layout/theme";
     import type { SongSearchOption } from "$lib/module/page/song/types";
-    import SearchBoxPcDifficultyItem from "./SearchBox-Pc-DifficultyItem.svelte";
+    import SearchBoxDifficultyItem from "./SearchBox-DifficultyItem.svelte";
 
     export let tempOption: SongSearchOption;
 
@@ -47,57 +48,60 @@
     }
 
     const isMobile = getIsMobile();
+
+    const [theme] = getTheme();
 </script>
 
 <TitledContainer
     title="난이도"
-    color="#cf4844"
+    color={$theme === "light"? "#cf4844" : 'black'}
     titleSize="16px"
     type={`${$isMobile ? "vertical" : "horizontal"}`}
 >
     <div class="wrapper">
-        <SearchBoxPcDifficultyItem
+        <SearchBoxDifficultyItem
             value="easy"
             bind:group={tempOption.difficulty}
         >
             쉬움
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="normal"
             bind:group={tempOption.difficulty}
         >
             보통
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="hard"
             bind:group={tempOption.difficulty}
         >
             어려움
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="oni"
             bind:group={tempOption.difficulty}
         >
             오니(앞)
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="ura"
             bind:group={tempOption.difficulty}
         >
             오니(뒤)
-        </SearchBoxPcDifficultyItem>
-        <SearchBoxPcDifficultyItem
+        </SearchBoxDifficultyItem>
+        <SearchBoxDifficultyItem
             value="oniura"
             bind:group={tempOption.difficulty}
         >
             오니
-        </SearchBoxPcDifficultyItem>
+        </SearchBoxDifficultyItem>
         <div class="level-container">
             <img
                 src="/assets/icon/star-full.svg"
                 alt="level"
                 class="star"
                 style={tempOption.difficulty === undefined ? "opacity:0.4" : ""}
+                data-theme={$theme}
             />
             <div class="level-indicator">
                 {tempOption.level || ""}
@@ -137,11 +141,15 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        column-gap: 5px;
     }
 
     .star {
         width: 20px;
         height: 20px;
+    }
+    .star[data-theme="dark"]{
+        filter: invert(100%);
     }
 
     .level-indicator {
@@ -158,7 +166,7 @@
             width:100%;
         }
         input{
-            width: calc(100% - 45px);
+            width: calc(100% - 55px);
             max-width: none;
         }
     }

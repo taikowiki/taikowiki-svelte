@@ -25,7 +25,7 @@
             <HeaderItem icon="/assets/icon/song.svg" href="/song">
                 곡
             </HeaderItem>
-            <HeaderItem icon="/assets/icon/document.svg">
+            <HeaderItem icon="/assets/icon/document.svg" href="/">
                 문서
             </HeaderItem>
         </svelte:fragment>

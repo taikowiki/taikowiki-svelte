@@ -5,7 +5,7 @@ import { type SongData } from "./types";
 export default class SongDB {
     static async getAll(): Promise<SongData[]> {
         return await runQuery(async (run) => {
-            let result = await run("SELECT * FROM `song`");
+            let result = await run("SELECT * FROM `song` ORDER BY `addedDate` DESC;");
             result.map((e: any) => {
                 e.courses = JSON.parse(e.courses);
                 e.bpm = JSON.parse(e.bpm);

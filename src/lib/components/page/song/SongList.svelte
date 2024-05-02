@@ -30,7 +30,6 @@
                 if (
                     children0.style.textOverflow !== "ellipsis"
                 ) {
-                    // @ts-expect-error
                     children1.style.display = "block";
                 }else {
                     children0.style.overflow = "visible";

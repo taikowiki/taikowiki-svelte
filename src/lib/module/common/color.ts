@@ -2,7 +2,7 @@ import type { Difficulty, Genre } from "./song/types";
 
 export const genre: Record<Genre, string> = {
     pops: "#59bec5",
-    vocaloid: "#a5d1da",
+    vocaloid: '#94A1A4',//"#a5d1da",
     anime: "#e28dc8",
     namco: "#EB6B6A",
     game: "#b697d3",

@@ -95,7 +95,7 @@
         align-items: flex-start;
 
         /*box-shadow: 0px 2px 2px #cf4844;*/
-        box-shadow: 0px 2px 2px #d1d1d1;
+        box-shadow: 0px 0px 3px #d2b3b2;
 
         padding: 15px;
         box-sizing: border-box;

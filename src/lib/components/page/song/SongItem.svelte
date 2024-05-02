@@ -7,7 +7,6 @@
 
     export let song: SongData;
     export let songLang: SongLang;
-    export let resizeObserver: ResizeObserver;
 
     const diffs: Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
 
@@ -176,6 +175,7 @@
         width: 100%;
         display:flex;
         flex-direction: row;
+        align-items: flex-end;
     }
 
     .level-container {

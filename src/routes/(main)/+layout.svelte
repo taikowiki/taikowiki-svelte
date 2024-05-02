@@ -22,29 +22,28 @@
 </script>
 
 {#if $theme}
-    {#if $navigating}
-        <Loading/>
-    {:else}
-        <Header>
-            <svelte:fragment slot="left">
-                <HeaderItem icon="/assets/icon/song.svg" href="/song">
-                    곡
-                </HeaderItem>
-                <HeaderItem icon="/assets/icon/document.svg" href="/">
-                    문서
-                </HeaderItem>
-            </svelte:fragment>
-            <svelte:fragment slot="right">
-                <ThemeToggler />
-            </svelte:fragment>
-        </Header>
-        <Main>
-            <slot slot="main" />
-            <Aside slot="aside">
-                <AsideNewSong newSongs={data.newSongs} />
-            </Aside>
-        </Main>
-    {/if}
+    <Header>
+        <svelte:fragment slot="left">
+            <HeaderItem icon="/assets/icon/song.svg" href="/song">
+                곡
+            </HeaderItem>
+            <HeaderItem icon="/assets/icon/document.svg" href="/">
+                문서
+            </HeaderItem>
+        </svelte:fragment>
+        <svelte:fragment slot="right">
+            <ThemeToggler />
+        </svelte:fragment>
+    </Header>
+    <Main>
+        {#if $navigating}
+            <Loading />
+        {/if}
+        <slot slot="main" />
+        <Aside slot="aside">
+            <AsideNewSong newSongs={data.newSongs} />
+        </Aside>
+    </Main>
 {/if}
 
 <style>

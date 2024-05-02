@@ -38,7 +38,7 @@
 
         cursor: pointer;
 
-        font-size: 15px;
+        font-size: 14px;
         font-weight: bold;
 
         padding: 3px;
@@ -57,6 +57,8 @@
         color:white;
 
         border:0;
+
+        font-weight: bold;
         
         padding-left: 5px;
         padding-right: 5px;

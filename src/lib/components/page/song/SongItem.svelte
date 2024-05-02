@@ -78,8 +78,10 @@
                             data-theme={$theme}
                         />
                     </div>
-                {:else}
+                <!--
+                    {:else}
                     <div class="level-item" />
+                -->
                 {/if}
             {/each}
         </div>
@@ -94,8 +96,8 @@
         flex-direction: column;
         align-items: flex-start;
 
-        /*box-shadow: 0px 2px 2px #cf4844;*/
-        box-shadow: 0px 0px 3px #d2b3b2;
+        /*box-shadow: 0px 2px 2px #d2b3b2;*/
+        box-shadow: 0px 0px 3px #d4d4d4;
 
         padding: 15px;
         box-sizing: border-box;
@@ -147,15 +149,18 @@
     .title-container {
         width: 100%;
         font-weight: bold;
+        font-size: 15px;
 
-        transform: translateY(4px);
+        transform: translateY(6px);
+
+        margin-top:4px;
     }
     .artists-container {
         width: calc(100% - 170px);
         font-size: 12px;
         color: #919191;
 
-        transform: translateY(2px);
+        transform: translateY(3px);
     }
     .artists-container[data-theme="dark"]{
         color: #c9c9c9;
@@ -171,7 +176,9 @@
         width: 100%;
         display:flex;
         flex-direction: row;
-        align-items: center;
+        align-items: flex-end;
+
+        margin-top:4px;
     }
 
     .level-container {
@@ -179,6 +186,7 @@
 
         display: flex;
         flex-direction: row;
+        justify-content: flex-end;
 
         column-gap: 5px;
         font-size: 13px;

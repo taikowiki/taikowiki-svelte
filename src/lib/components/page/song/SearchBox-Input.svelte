@@ -15,7 +15,7 @@
 
 <div class="search-container" data-theme={$theme}>
     <button class="search-detail-toggler" on:click={open} class:opened>
-        <span>▲</span>
+        <span>〉</span>
     </button>
     <input
         class="search-input"
@@ -59,12 +59,12 @@
     }
     .search-detail-toggler > span {
         display: block;
-        transform: rotate(90deg);
+        transform: rotate(90deg) translate(2px, -2px);
         transition: transform 0.2s;
     }
     .search-detail-toggler.opened > span {
         display: block;
-        transform: rotate(180deg);
+        transform: rotate(270deg) translate(1px, 0px);
     }
 
     .search-input {

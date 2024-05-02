@@ -3,15 +3,53 @@
     import SearchBoxDifficulty from "./SearchBox-Difficulty.svelte";
     import SearchBoxGenre from "./SearchBox-Genre.svelte";
     import SearchBoxInput from "./SearchBox-Input.svelte";
+    import { page } from "$app/stores";
+    import { pushState } from "$app/navigation";
 
     export let option: SongSearchOption;
+    export let pageNum: number;
 
-    let tempOption: SongSearchOption = {};
+    let tempOption: SongSearchOption = structuredClone(option);
 
     let opened = false;
 
     function search() {
         option = structuredClone(tempOption);
+        let searchParams = new URLSearchParams();
+        if (option.query) {
+            searchParams.append("query", option.query);
+        }
+        if (option.difficulty && option.level) {
+            searchParams.append("difficulty", option.difficulty);
+            searchParams.append("level", option.level.toString());
+        }
+        if (option.genre) {
+            searchParams.append("genre", option.genre);
+        }
+        searchParams.append("page", pageNum.toString());
+
+        if (
+            !([...$page.url.searchParams.keys()].every(
+                (key) =>
+                    $page.url.searchParams.get(key) === searchParams.get(key),
+            ) && [...$page.url.searchParams.keys()].length === [...searchParams.keys()].length)
+        ) {
+            const url = new URL($page.url.href);
+            [...$page.url.searchParams.keys()].forEach((key) => {
+                $page.url.searchParams.delete(key);
+            });
+            [...searchParams.keys()].forEach((key) => {
+                url.searchParams.set(key, searchParams.get(key) as string);
+                $page.url.searchParams.set(
+                    key,
+                    searchParams.get(key) as string,
+                );
+            });
+            $page.url.searchParams.set("page", "1");
+            url.searchParams.set("page", "1");
+            pageNum = 1;
+            pushState(url.href, $page.state);
+        }
     }
 </script>
 

@@ -69,7 +69,6 @@
 
 <style>
     .wrapper {
-        margin-top: 10px;
         position: relative;
     }
 

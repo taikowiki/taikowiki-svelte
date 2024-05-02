@@ -145,6 +145,7 @@
     */
 
     .title-container {
+        width: 100%;
         font-weight: bold;
 
         transform: translateY(4px);
@@ -154,10 +155,6 @@
         height: 100%;
         font-size: 12px;
         color: #919191;
-
-        display:flex;
-        flex-direction: row;
-        align-items: flex-end;
 
         transform: translateY(1px);
     }
@@ -205,5 +202,23 @@
     }
     .level-color[data-theme="dark"]{
         filter: brightness(85%);
+    }
+    @media only screen and (max-width: 1000px){
+        .artists-container{
+            width: calc( 100% - 145px );
+            font-size: 11px;
+            transform: translateY(2px);
+        }
+
+        .third-container{
+            align-items: center;
+        }
+
+        .level-container{
+            width: 145px;
+        }
+        .level-item{
+            width: 25px;
+        }
     }
 </style>

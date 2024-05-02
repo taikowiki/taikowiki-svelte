@@ -152,11 +152,10 @@
     }
     .artists-container {
         width: calc(100% - 170px);
-        height: 100%;
         font-size: 12px;
         color: #919191;
 
-        transform: translateY(1px);
+        transform: translateY(2px);
     }
     .artists-container[data-theme="dark"]{
         color: #c9c9c9;
@@ -172,7 +171,7 @@
         width: 100%;
         display:flex;
         flex-direction: row;
-        align-items: flex-end;
+        align-items: center;
     }
 
     .level-container {
@@ -207,11 +206,7 @@
         .artists-container{
             width: calc( 100% - 145px );
             font-size: 11px;
-            transform: translateY(2px);
-        }
-
-        .third-container{
-            align-items: center;
+            transform: translateY(1px);
         }
 
         .level-container{

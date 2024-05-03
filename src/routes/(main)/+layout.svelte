@@ -8,9 +8,10 @@
     import useTheme from "$lib/module/layout/theme";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
     import { useIsMobile } from "$lib/module/layout/isMobile.js";
-    import { navigating } from "$app/stores";
+    import { navigating, page } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
-    import i18n from "$lib/module/common/i18n/i18n.js";
+    import { getI18N, useLang } from "$lib/module/common/i18n/i18n.js";
+    import LanguageSelector from "$lib/components/layout/main/LanguageSelector.svelte";
 
     export let data;
 
@@ -19,21 +20,26 @@
         document.body.setAttribute("data-theme", $theme);
     }
 
-    const isMobile = useIsMobile();
+    useIsMobile();
+
+    const lang = useLang();
+    $: i18n = getI18N($lang, 'layout').main;
+    
 </script>
 
 {#if $theme}
     <Header>
         <svelte:fragment slot="left">
             <HeaderItem icon="/assets/icon/song.svg" href="/song">
-                곡
+                {i18n.song}
             </HeaderItem>
             <HeaderItem icon="/assets/icon/document.svg" href="/">
-                문서
+                {i18n.doc}
             </HeaderItem>
         </svelte:fragment>
         <svelte:fragment slot="right">
             <ThemeToggler />
+            <LanguageSelector/>
         </svelte:fragment>
     </Header>
     <Main>

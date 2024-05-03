@@ -1,12 +1,12 @@
 import type { LangFile } from "../types";
 
-const ko:LangFile = {
+const jp:LangFile = {
     layout: {
         main: {
-            song: '곡',
-            doc: '문서'
+            song: '曲',
+            doc: '文書'
         }
     }
 }
 
-export default ko;
+export default jp;

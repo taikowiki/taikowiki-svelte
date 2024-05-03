@@ -6,3 +6,7 @@
 body{
     font-family: 'Noto Sans JP', 'Noto Sans KR', sans-serif;
 }
+
+*{
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}

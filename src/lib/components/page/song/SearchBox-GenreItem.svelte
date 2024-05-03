@@ -68,7 +68,7 @@
         height: 30px;
         border-radius: 5px;
         color: white;
-        /*font-weight: bold;*/
+        font-weight: bold;
         font-size: 14px;
 
         box-sizing: border-box;

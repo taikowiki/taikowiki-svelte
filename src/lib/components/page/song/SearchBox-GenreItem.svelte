@@ -3,7 +3,7 @@
         if (group !== value) {
             return value;
         } else {
-            return group;
+            return undefined;
         }
     }
 </script>
@@ -68,7 +68,8 @@
         height: 30px;
         border-radius: 5px;
         color: white;
-        font-weight: bold;
+        /*font-weight: bold;*/
+        font-size: 14px;
 
         box-sizing: border-box;
 
@@ -76,7 +77,7 @@
     }
 
     .button.selected {
-        border: 2px solid 1c1c1c;
+        border: 2px solid #1c1c1c;
     }
     .button.unselected {
         opacity: 0.4;

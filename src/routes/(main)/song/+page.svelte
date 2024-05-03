@@ -18,7 +18,7 @@
 </script>
 
 <script lang="ts">
-    import { type SongLang } from "$lib/components/page/song/SongLanguageSelector.svelte";
+    import { type SongLang } from "$lib/module/common/song/types";
     import Loading from "$lib/components/common/Loading.svelte";
     import SearchBoxContainer from "$lib/components/page/song/SearchBoxContainer.svelte";
     import SongLanguageSelector from "$lib/components/page/song/SongLanguageSelector.svelte";
@@ -36,7 +36,6 @@
 
     $: if($page.state){
         pageNum = getPageNumFromUrl();
-        console.log(pageNum);
     }
 </script>
 

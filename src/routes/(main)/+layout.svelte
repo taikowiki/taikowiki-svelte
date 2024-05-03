@@ -22,7 +22,6 @@
     const isMobile = useIsMobile();
 </script>
 
-{i18n.en['/']['logo']['b']}
 {#if $theme}
     <Header>
         <svelte:fragment slot="left">

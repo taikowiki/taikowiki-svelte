@@ -2,30 +2,53 @@ import { type I18N, type RecursiveStringRecord } from "./types"
 
 const i18nProxyTarget: I18N = {
     'ko': {
-        
+        '/':{
+            header: 'asd',
+            body: {
+                'a': '1',
+                'b': '2'
+            }
+        }
+    },
+    en: {
+        '/':{
+            header: 'bsd'
+        }
     }
 }
 
 function getI18nProxy(target: I18N|any) {
     const proxy = new Proxy(target, {
         get(target, key, receiver) {
+            const koProxy = getRecursiveStringProxy(target[key]);
             if(key === "ko"){
-                return getRecursiveStringProxy(target[key]);
+                return koProxy
             }
             if(typeof(key) === "symbol"){
                 return Reflect.get(target, key, receiver);
             }
             if(Object.keys(target).includes(key)){
-                return getProxyWithRepresentative(target[key], target.ko);
+                return getProxyWithRepresentative(target[key], koProxy);
             }
-            return getRecursiveStringProxy(target.ko);
+            return getRecursiveStringProxy(koProxy);
         },
     })
 
     return proxy;
 }
 
-function getRecursiveStringProxy(target: RecursiveStringRecord): RecursiveStringRecord {
+function getRecursiveStringProxy(target: RecursiveStringRecord|string): RecursiveStringRecord {
+    if(typeof(target) === "string"){
+        const value = target;
+        return new Proxy({}, {
+            get(target, key){
+                if(key === Symbol.toPrimitive){
+                    return () => value;
+                }
+                return getRecursiveStringProxy({});
+            }
+        })
+    }
     const proxy: any = new Proxy(target, {
         get(target, key, receiver){
             if(key === "toString"){
@@ -38,9 +61,6 @@ function getRecursiveStringProxy(target: RecursiveStringRecord): RecursiveString
             if(value === undefined){
                 return getRecursiveStringProxy({});
             }
-            if(typeof(value) === "string"){
-                return value;
-            }
             return getRecursiveStringProxy(value);
         }
     })
@@ -52,6 +72,9 @@ function getProxyWithRepresentative(target: RecursiveStringRecord, representativ
     return new Proxy(target, {
         get(target, key, receiver){
             const value = Reflect.get(target, key, receiver);
+            if(typeof(key) === "symbol"){
+                return Reflect.get(target, key, receiver);
+            }
             if(value === undefined){
                 return Reflect.get(representative, key, receiver);
             }
@@ -60,7 +83,7 @@ function getProxyWithRepresentative(target: RecursiveStringRecord, representativ
                     return value;
                 }
                 else{
-                    return getProxyWithRepresentative(value, Reflect.get(representative, key, receiver))
+                    return getProxyWithRepresentative(value, Reflect.get(representative, key) as RecursiveStringRecord)
                 }
             }
         }

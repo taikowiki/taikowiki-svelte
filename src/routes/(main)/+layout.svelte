@@ -10,6 +10,7 @@
     import { useIsMobile } from "$lib/module/layout/isMobile.js";
     import { navigating } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
+    import i18n from "$lib/module/common/i18n/i18n.js";
 
     export let data;
 
@@ -21,6 +22,7 @@
     const isMobile = useIsMobile();
 </script>
 
+{i18n.en['/']['logo']['b']}
 {#if $theme}
     <Header>
         <svelte:fragment slot="left">

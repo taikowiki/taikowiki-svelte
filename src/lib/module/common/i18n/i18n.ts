@@ -41,7 +41,7 @@ function getRecursiveStringProxy(target: RecursiveStringRecord|string): Recursiv
     if(typeof(target) === "string"){
         const value = target;
         return new Proxy({}, {
-            get(target, key){
+            get(_, key){
                 if(key === Symbol.toPrimitive){
                     return () => value;
                 }

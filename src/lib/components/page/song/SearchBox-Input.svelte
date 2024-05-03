@@ -140,16 +140,16 @@
     }
 
     .search-container[data-theme="dark"] > .search-detail-toggler {
-        background-color: black;
+        background-color: #1c1c1c;
     }
     .search-container[data-theme="dark"] > .search-input {
-        border-color: black;
+        border-color: #1c1c1c;
     }
     .search-container[data-theme="dark"] > .search-input::placeholder {
         color: white;
         opacity: 0.7;
     }
     .search-container[data-theme="dark"] > .search-button {
-        background-color: black;
+        background-color: #1c1c1c;
     }
 </style>

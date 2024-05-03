@@ -1,7 +1,5 @@
 <script lang="ts">
-    import { afterUpdate } from "svelte";
-    import type { SongLang } from "./SongLanguageSelector.svelte";
-    import { browser } from "$app/environment";
+    import type { SongLang } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
 
     export let songLang: SongLang;
@@ -51,7 +49,7 @@
         transition: color 0.2s;
     }
     .button[data-theme="dark"]{
-        border-color: black;
+        border-color: #1c1c1c;
     }
     .button.selected{
         color:white;

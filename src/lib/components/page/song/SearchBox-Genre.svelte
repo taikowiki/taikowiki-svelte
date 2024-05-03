@@ -14,7 +14,7 @@
 
 <TitledContainer
     title="장르"
-    color={$theme === "light"? "#cf4844" : 'black'}
+    color={$theme === "light"? "#cf4844" : '#1c1c1c'}
     titleSize="16px"
     type={`${$isMobile ? 'vertical' : 'horizontal'}`}
 >

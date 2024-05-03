@@ -1,11 +1,22 @@
 <script lang="ts" context="module">
-    export type SongLang = "jp" | "ko" | "ako" | "en" | "aen";
+    function saveSongLang(songLang: SongLang) {
+        window.localStorage?.setItem("songLang", songLang);
+    }
+    function getResizeObserver(ghost: HTMLDivElement) {
+        return new ResizeObserver((entires) => {
+            const target = entires[0].target as HTMLElement;
+            ghost.style.width = `${target.offsetWidth}px`;
+            ghost.style.height = `${target.offsetHeight}px`;
+            ghost.style.top = `${target.offsetTop}px`;
+            ghost.style.left = `${target.offsetLeft}px`;
+        });
+    }
 </script>
 
 <script lang="ts">
+    import type { SongLang } from "$lib/module/common/song/types";
     import { browser } from "$app/environment";
     import { getTheme } from "$lib/module/layout/theme";
-    //import { onDestroy } from "svelte";
     import SongLanguageButton from "./SongLanguageButton.svelte";
 
     export let songLang: SongLang = "jp";
@@ -15,20 +26,13 @@
             songLang;
     }
 
-    $: window.localStorage?.setItem("songLang", songLang);
+    $: saveSongLang(songLang);
 
     let ghost: HTMLDivElement;
     let btn: HTMLElement;
 
-    let resizeObserver:ResizeObserver|null = new ResizeObserver((entires) => {
-        const target = entires[0].target as HTMLElement;
-        if (ghost) {
-            ghost.style.width = `${target.offsetWidth}px`;
-            ghost.style.height = `${target.offsetHeight}px`;
-            ghost.style.top = `${target.offsetTop}px`;
-            ghost.style.left = `${target.offsetLeft}px`;
-        }
-    });
+    $: resizeObserver = ghost ? getResizeObserver(ghost) : null
+
     $: if (btn && resizeObserver) {
         resizeObserver.disconnect();
         resizeObserver.observe(btn);
@@ -43,7 +47,7 @@
 </script>
 
 <div class="wrapper">
-    <div class="ghost" bind:this={ghost} data-theme={$theme}/>
+    <div class="ghost" bind:this={ghost} data-theme={$theme} />
     <div class="container">
         {#if ghost}
             <SongLanguageButton bind:btn bind:songLang value="jp">
@@ -89,7 +93,7 @@
 
         border-radius: 5px;
     }
-    .ghost[data-theme="dark"]{
-        background-color: black;
+    .ghost[data-theme="dark"] {
+        background-color: #1c1c1c;
     }
 </style>

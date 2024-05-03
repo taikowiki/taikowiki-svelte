@@ -10,6 +10,18 @@
 
         pushState(`/song?${searchParam}`, get(page).state);
     }
+
+    function getDisplayPages(pageNum: number, maxPage: number) {
+        let p: number[] = [];
+        for (
+            let i = Math.floor((pageNum - 1) / 10) * 10 + 1;
+            i <= Math.min(Math.ceil(pageNum / 10) * 10, maxPage);
+            i++
+        ) {
+            p.push(i);
+        }
+        return p;
+    }
 </script>
 
 <script lang="ts">
@@ -23,18 +35,6 @@
     $: displayPages = getDisplayPages(pageNum, maxPage);
 
     const isMobile = getIsMobile();
-
-    function getDisplayPages(pageNum: number, maxPage: number) {
-        let p: number[] = [];
-        for (
-            let i = Math.floor((pageNum - 1) / 10) * 10 + 1;
-            i <= Math.min(Math.ceil(pageNum / 10) * 10, maxPage);
-            i++
-        ) {
-            p.push(i);
-        }
-        return p;
-    }
 </script>
 
 <div class="wrapper">

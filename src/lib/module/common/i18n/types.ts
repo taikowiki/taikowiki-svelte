@@ -1,4 +1,4 @@
-export type Language = "jp" | "ko" | "en";
+export type Language = "jp" | "ko" | "en" | string;
 
 export interface SubLangFile{
     [key: string]: string|SubLangFile

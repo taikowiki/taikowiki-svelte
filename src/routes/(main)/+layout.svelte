@@ -10,7 +10,7 @@
     import { useIsMobile } from "$lib/module/layout/isMobile.js";
     import { navigating, page } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
-    import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n.js";
+    import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n";
     import LanguageSelector from "$lib/components/layout/main/LanguageSelector.svelte";
     import { writable } from "svelte/store";
     import { type PathLangFile } from "$lib/module/common/i18n/types.js";

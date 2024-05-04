@@ -115,6 +115,11 @@ export function setI18N(language:string, pathname:string ):any{
     return i18n[language][pathname];
 }
 
-export function getI18N(): Writable<any> {
-    return getContext('i18n')
+export function getI18N(): Writable<any>;
+export function getI18N(key: string, lang:string): any;
+export function getI18N(key?: string, lang?:string){
+    if(key === undefined || lang === undefined){
+        return getContext('i18n')
+    }
+    return i18n[lang][key];
 }

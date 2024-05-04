@@ -26,6 +26,7 @@
     import SongList from "$lib/components/page/song/SongList.svelte";
     import PageSelector from "$lib/components/page/song/PageSelector.svelte";
     import { page } from "$app/stores";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     let filteredSongs: (SongData & { order: number })[] | null = null;
 

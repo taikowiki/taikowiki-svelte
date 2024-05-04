@@ -1,5 +1,5 @@
 import { getContext, setContext } from "svelte";
-import { type I18N, type Language, type RecursiveStringRecord } from "./types"
+import { type I18N, type Language, type PathLangFile, type RecursiveStringRecord, type SubLangFile } from "./types"
 import { get, writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
 import ko from "./lang/ko";
@@ -111,6 +111,10 @@ export function getLang(): Writable<Language | string> {
     return getContext('lang')
 }
 
-export function getI18N(language: string, pathname: string){
-    return i18n[language][pathname]
+export function setI18N(language:string, pathname:string ):any{
+    return i18n[language][pathname];
+}
+
+export function getI18N(): Writable<any> {
+    return getContext('i18n')
 }

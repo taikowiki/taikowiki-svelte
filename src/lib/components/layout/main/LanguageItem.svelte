@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { getLang } from "$lib/module/common/i18n/i18n";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
 

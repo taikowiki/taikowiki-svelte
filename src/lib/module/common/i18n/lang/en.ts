@@ -6,6 +6,9 @@ const en:LangFile = {
             song: 'Songs',
             doc: 'Docs'
         }
+    },
+    '/song':{
+        placeholder: 'Search'
     }
 }
 

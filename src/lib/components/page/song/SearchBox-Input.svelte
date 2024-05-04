@@ -28,6 +28,7 @@
 <script lang="ts">
     import type { SongSearchOption } from "$lib/module/page/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import { getI18N } from "$lib/module/common/i18n/i18n";
 
     export let opened: boolean;
     export let tempOption: SongSearchOption;
@@ -37,6 +38,8 @@
     }
 
     const [theme] = getTheme();
+
+    const i18n = getI18N();
 </script>
 
 <div class="search-container" data-theme={$theme}>
@@ -47,7 +50,7 @@
         class="search-input"
         type="text"
         bind:value={tempOption.query}
-        placeholder="검색어"
+        placeholder={$i18n.placeholder}
         on:keypress={(event) => {
             if (event.key === "Enter") {
                 search(tempOption);

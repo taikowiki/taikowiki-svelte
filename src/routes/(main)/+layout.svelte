@@ -10,8 +10,11 @@
     import { useIsMobile } from "$lib/module/layout/isMobile.js";
     import { navigating, page } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
-    import { getI18N, useLang } from "$lib/module/common/i18n/i18n.js";
+    import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n.js";
     import LanguageSelector from "$lib/components/layout/main/LanguageSelector.svelte";
+    import { writable } from "svelte/store";
+    import { type PathLangFile } from "$lib/module/common/i18n/types.js";
+    import { setContext } from "svelte";
 
     export let data;
 
@@ -23,18 +26,20 @@
     useIsMobile();
 
     const lang = useLang();
-    $: i18n = getI18N($lang, 'layout').main;
-    
+    $: i18nLayout = i18n[$lang].layout.main
+    const i18nPage = writable<PathLangFile>(setI18N($lang, $page.url.pathname))
+    setContext('i18n', i18nPage);
+    $: $i18nPage = setI18N($lang, $page.url.pathname)
 </script>
 
 {#if $theme}
     <Header>
         <svelte:fragment slot="left">
             <HeaderItem icon="/assets/icon/song.svg" href="/song">
-                {i18n.song}
+                {i18nLayout.song}
             </HeaderItem>
             <HeaderItem icon="/assets/icon/document.svg" href="/">
-                {i18n.doc}
+                {i18nLayout.doc}
             </HeaderItem>
         </svelte:fragment>
         <svelte:fragment slot="right">

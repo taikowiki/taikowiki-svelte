@@ -6,4 +6,6 @@ This project is an wiki project for 太鼓の達人(Taiko no Tatsujin). This is 
 
 ## contribution
 
+This project is being developed on `dev/main` branch, and will be merged to `main` branch. So you should pull request to `dev/main` branch.
+
 - [translation(i18n)](/docs/ko/i18n.md);

@@ -9,6 +9,7 @@ export function useIsMobile():Writable<boolean>{
 
     onMount(() => {
         if (browser) {
+            isMobile.set(window.innerWidth <= 1000);
             window.addEventListener('resize', () => {
                 isMobile.set(window.innerWidth <= 1000)
             })

@@ -33,3 +33,4 @@ export interface Course {
         order: number;
     }[];
 }
+export type SongLang = "jp" | "ko" | "ako" | "en" | "aen";

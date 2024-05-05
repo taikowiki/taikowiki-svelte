@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { SongData } from "$lib/module/common/song/types";
     import SongItem from "./SongItem.svelte";
-    import type { SongLang } from "./SongLanguageSelector.svelte";
+    import type { SongLang } from "$lib/module/common/song/types";
 
     export let songLang: SongLang;
     export let filteredSongs: (SongData & { order: number })[];

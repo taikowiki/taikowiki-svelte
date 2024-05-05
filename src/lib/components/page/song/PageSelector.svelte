@@ -1,13 +1,21 @@
-<script lang="ts">
+<script lang="ts" context="module">
     import { pushState } from "$app/navigation";
     import { page } from "$app/stores";
+    import { get } from "svelte/store";
 
-    export let pageNum: number;
-    export let length: number;
+    function movePage(p: number) {
+        const searchParam = new URLSearchParams(location.search);
 
-    $: maxPage = Math.ceil(length / 30);
+        searchParam.set('page', p.toString());
 
-    $: displayPages = (function () {
+        pushState(`/song?${searchParam}`, get(page).state);
+
+        window.scrollTo({
+            top: 0
+        });
+    }
+
+    function getDisplayPages(pageNum: number, maxPage: number) {
         let p: number[] = [];
         for (
             let i = Math.floor((pageNum - 1) / 10) * 10 + 1;
@@ -17,26 +25,20 @@
             p.push(i);
         }
         return p;
-    })();
-
-    function movePage(p: number) {
-        $page.url.searchParams.set("page", p.toString());
-        let searchParams = new URLSearchParams(
-            $page.url.searchParams.toString(),
-        );
-        let url = new URL($page.url.href);
-        [...searchParams.entries()].forEach(([key, value]) => {
-            url.searchParams.set(key, value);
-        });
-        pushState(url.href, $page.state);
-        pageNum = p;
-
-        if (window) {
-            window.scrollTo({
-                top: 0,
-            });
-        }
     }
+</script>
+
+<script lang="ts">
+    import { getIsMobile } from "$lib/module/layout/isMobile";
+
+    export let pageNum: number;
+    export let length: number;
+
+    $: maxPage = Math.ceil(length / 30);
+
+    $: displayPages = getDisplayPages(pageNum, maxPage);
+
+    const isMobile = getIsMobile();
 </script>
 
 <div class="wrapper">
@@ -62,18 +64,28 @@
             <img src="/assets/icon/page_arrow1.svg" alt="" />
         </div>
     {/if}
-    {#each displayPages as pNum}
-        <div
-            class="btn"
-            on:click={() => {
-                movePage(pNum);
-            }}
-            role="presentation"
-            class:selected={pNum === pageNum}
-        >
-            <span>{pNum}</span>
-        </div>
-    {/each}
+    {#if $isMobile}
+        <select bind:value={pageNum} on:change={() => {movePage(pageNum)}}>
+            {#each displayPages as pNum}
+            <option value={pNum}>
+            {pNum}
+            </option>
+            {/each}
+        </select>
+    {:else}
+        {#each displayPages as pNum}
+            <div
+                class="btn"
+                on:click={() => {
+                    movePage(pNum);
+                }}
+                role="presentation"
+                class:selected={pNum === pageNum}
+            >
+                <span>{pNum}</span>
+            </div>
+        {/each}
+    {/if}
     {#if displayPages[displayPages.length - 1] !== maxPage}
         <div
             class="btn"
@@ -104,6 +116,8 @@
 
 <style>
     .wrapper {
+        width: 100%;
+
         display: flex;
 
         justify-content: center;
@@ -152,11 +166,11 @@
             width: 18px;
             height: 18px;
         }
-        .btn > span {
-            transform: translateY(-1px);
-        }
-        .wrapper {
-            column-gap: calc( (100% - 252px) / 11 );
+
+        select{
+            width: 60px;
+            height: 22px;
+            font-size: 16px;
         }
     }
 </style>

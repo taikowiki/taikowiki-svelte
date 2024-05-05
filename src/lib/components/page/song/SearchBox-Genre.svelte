@@ -1,5 +1,20 @@
+<script lang="ts" context="module">
+    const genres: Genre[] = [
+        "pops",
+        "anime",
+        "kids",
+        "vocaloid",
+        "game",
+        "namco",
+        "variety",
+        "classic",
+    ];
+</script>
+
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
+    import { getI18N } from "$lib/module/common/i18n/i18n";
+    import type { Genre } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import type { SongSearchOption } from "$lib/module/page/song/types";
@@ -10,39 +25,22 @@
     const isMobile = getIsMobile();
 
     const [theme] = getTheme();
+
+    const i18n = getI18N();
 </script>
 
 <TitledContainer
-    title="장르"
-    color={$theme === "light"? "#cf4844" : 'black'}
+    title={$i18n.genre}
+    color={$theme === "light" ? "#cf4844" : "#1c1c1c"}
     titleSize="16px"
-    type={`${$isMobile ? 'vertical' : 'horizontal'}`}
+    type={`${$isMobile ? "vertical" : "horizontal"}`}
 >
     <div class="wrapper">
-        <SearchBoxGenreItem bind:group={tempOption.genre} value="pops">
-            POPS
-        </SearchBoxGenreItem>
-        <SearchBoxGenreItem bind:group={tempOption.genre} value="anime">
-            애니메이션
-        </SearchBoxGenreItem>
-        <SearchBoxGenreItem bind:group={tempOption.genre} value="kids">
-            키즈
-        </SearchBoxGenreItem>
-        <SearchBoxGenreItem bind:group={tempOption.genre} value="vocaloid">
-            보컬로이드
-        </SearchBoxGenreItem>
-        <SearchBoxGenreItem bind:group={tempOption.genre} value="game">
-            게임 뮤직
-        </SearchBoxGenreItem>
-        <SearchBoxGenreItem bind:group={tempOption.genre} value="namco">
-            남코 오리지널
-        </SearchBoxGenreItem>
-        <SearchBoxGenreItem bind:group={tempOption.genre} value="variety">
-            버라이어티
-        </SearchBoxGenreItem>
-        <SearchBoxGenreItem bind:group={tempOption.genre} value="classic">
-            클래식
-        </SearchBoxGenreItem>
+        {#each genres as genre}
+            <SearchBoxGenreItem bind:group={tempOption.genre} value={genre}>
+                {$i18n.genres[genre]}
+            </SearchBoxGenreItem>
+        {/each}
     </div>
 </TitledContainer>
 

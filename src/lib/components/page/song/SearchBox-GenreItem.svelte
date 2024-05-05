@@ -1,3 +1,13 @@
+<script lang="ts" context="module">
+    function clickHandle(group: string | undefined, value: Genre) {
+        if (group !== value) {
+            return value;
+        } else {
+            return undefined;
+        }
+    }
+</script>
+
 <script lang="ts">
     import color from "$lib/module/common/color";
     import type { Genre } from "$lib/module/common/song/types";
@@ -6,29 +16,20 @@
     export let group: string | undefined;
     export let value: Genre;
 
-    function clickHandle() {
-        if (group !== value) {
-            group = value;
-        } else {
-            group = undefined;
-        }
-    }
-
     let data: HTMLElement;
     $: text = data?.innerText;
 
-    let transform = ''
-    $: if(text?.includes(' ')){
-        transform = 'transform: translateY(-1px);';
+    let transform = "";
+    $: if (text?.includes(" ")) {
+        transform = "transform: translateY(-1px);";
     }
 
-    let widthType:"long"|"short";
-    $: if(data?.clientWidth){
-        if(data.clientWidth > 60){
-            widthType="long"
-        }
-        else{
-            widthType="short"
+    let widthType: "long" | "short";
+    $: if (data?.clientWidth) {
+        if (data.clientWidth > 60 || data.innerText.includes(' ')) {
+            widthType = "long";
+        } else {
+            widthType = "short";
         }
     }
 
@@ -40,7 +41,9 @@
     class:selected={group === value}
     class:unselected={group !== value && group !== undefined}
     style={`background-color:${color.genre[value]};`}
-    on:click={clickHandle}
+    on:click={() => {
+        group = clickHandle(group, value);
+    }}
     role="presentation"
     data-theme={$theme}
 >
@@ -64,29 +67,30 @@
 
         height: 30px;
         border-radius: 5px;
-        color:white;
+        color: white;
         font-weight: bold;
-        
+        font-size: 14px;
+
         box-sizing: border-box;
 
         cursor: pointer;
     }
 
-    .button.selected{
-        border: 2px solid black;
+    .button.selected {
+        border: 2px solid #1c1c1c;
     }
-    .button.unselected{
+    .button.unselected {
         opacity: 0.4;
     }
 
-    .button.long{
+    .button.long {
         width: 110px;
     }
-    .button.short{
+    .button.short {
         width: 60px;
     }
 
-    .button.selected[data-theme="dark"]{
+    .button.selected[data-theme="dark"] {
         border-color: white;
     }
 </style>

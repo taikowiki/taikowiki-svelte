@@ -1,3 +1,16 @@
+<script lang="ts" context="module">
+    function clickHandle(
+        group: Difficulty | "oniura" | undefined,
+        value: Difficulty | "oniura",
+    ) {
+        if (group !== value) {
+            return value;
+        } else {
+            return undefined;
+        }
+    }
+</script>
+
 <script lang="ts">
     import type { Difficulty } from "$lib/module/common/song/types";
     import color from "$lib/module/common/color";
@@ -5,14 +18,6 @@
 
     export let value: Difficulty | "oniura";
     export let group: Difficulty | "oniura" | undefined;
-
-    function clickHandle() {
-        if (group !== value) {
-            group = value;
-        } else {
-            group = undefined;
-        }
-    }
 
     const [theme] = getTheme();
 </script>
@@ -22,7 +27,9 @@
     class:selected={group === value}
     class:unselected={group !== value && group !== undefined}
     style={`background:${color.difficulty[value]};`}
-    on:click={clickHandle}
+    on:click={() => {
+        group = clickHandle(group, value);
+    }}
     role="presentation"
     data-theme={$theme}
 >

@@ -3,6 +3,33 @@ import { runQuery } from "@sveltekit-board/db";
 import { type SongData } from "./types";
 
 export default class SongDB {
+    static async createTable() {
+        await runQuery(async (run) => {
+            await run(`CREATE TABLE \`song\` (
+                \`songNo\` int(11) NOT NULL,
+                \`order\` int(11) NOT NULL,
+                \`title\` text NOT NULL,
+                \`titleKo\` text DEFAULT NULL,
+                \`aliasKo\` text DEFAULT NULL,
+                \`titleEn\` text DEFAULT NULL,
+                \`aliasEn\` text DEFAULT NULL,
+                \`bpm\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`bpm\`)),
+                \`bpmShiver\` tinyint(1) NOT NULL,
+                \`version\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`version\`)),
+                \`isAsiaBanned\` tinyint(1) NOT NULL,
+                \`isKrBanned\` tinyint(1) NOT NULL,
+                \`genre\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`genre\`)),
+                \`artists\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`artists\`)),
+                \`addedDate\` bigint(20) NOT NULL,
+                \`courses\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`courses\`)),
+                \`isDeleted\` tinyint(1) NOT NULL DEFAULT 0
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+            `);
+            await run(`ALTER TABLE \`song\` ADD PRIMARY KEY (\`order\`);`);
+            await run("ALTER TABLE `song` MODIFY `order` int(11) NOT NULL AUTO_INCREMENT;");
+        })
+    }
+
     static async getAll(): Promise<SongData[]> {
         return await runQuery(async (run) => {
             let result = await run("SELECT * FROM `song` ORDER BY `addedDate` DESC;");
@@ -73,7 +100,7 @@ export default class SongDB {
 
     static async getUpdateTime(): Promise<number> {
         let result = await runQuery(async (run) => {
-            return run("SELECT `UPDATE_TIME` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'taikowiki_beta' AND TABLE_NAME = 'song';");
+            return run(`SELECT \`UPDATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
         })
 
         const updateTime = new Date(result[0]['UPDATE_TIME']).getTime();

@@ -1,16 +1,8 @@
-<script lang="ts">
-    import TitledContainer from "$lib/components/common/TitledContainer.svelte";
-    import color from "$lib/module/common/color";
-    import { getIsMobile } from "$lib/module/layout/isMobile";
-    import { getTheme } from "$lib/module/layout/theme";
-    import type { SongSearchOption } from "$lib/module/page/song/types";
-    import SearchBoxDifficultyItem from "./SearchBox-DifficultyItem.svelte";
-
-    export let tempOption: SongSearchOption;
-
-    $: modifyLevelByDifficulty(tempOption.difficulty);
-
-    function modifyLevelByDifficulty(difficulty: typeof tempOption.difficulty) {
+<script lang="ts" context="module">
+    function modifyLevelByDifficulty(
+        difficulty: SongSearchOption["difficulty"],
+        tempOption: SongSearchOption,
+    ) {
         switch (difficulty) {
             case undefined: {
                 tempOption.level = undefined;
@@ -46,15 +38,31 @@
             }
         }
     }
+</script>
+
+<script lang="ts">
+    import TitledContainer from "$lib/components/common/TitledContainer.svelte";
+    import color from "$lib/module/common/color";
+    import { getI18N } from "$lib/module/common/i18n/i18n";
+    import { getIsMobile } from "$lib/module/layout/isMobile";
+    import { getTheme } from "$lib/module/layout/theme";
+    import type { SongSearchOption } from "$lib/module/page/song/types";
+    import SearchBoxDifficultyItem from "./SearchBox-DifficultyItem.svelte";
+
+    export let tempOption: SongSearchOption;
+
+    $: modifyLevelByDifficulty(tempOption.difficulty, tempOption);
 
     const isMobile = getIsMobile();
 
     const [theme] = getTheme();
+
+    const i18n = getI18N();
 </script>
 
 <TitledContainer
-    title="난이도"
-    color={$theme === "light"? "#cf4844" : 'black'}
+    title={$i18n.difficulty}
+    color={$theme === "light" ? "#cf4844" : "#1c1c1c"}
     titleSize="16px"
     type={`${$isMobile ? "vertical" : "horizontal"}`}
 >
@@ -63,37 +71,31 @@
             value="easy"
             bind:group={tempOption.difficulty}
         >
-            쉬움
+            {$i18n.easy}
         </SearchBoxDifficultyItem>
         <SearchBoxDifficultyItem
             value="normal"
             bind:group={tempOption.difficulty}
         >
-            보통
+            {$i18n.normal}
         </SearchBoxDifficultyItem>
         <SearchBoxDifficultyItem
             value="hard"
             bind:group={tempOption.difficulty}
         >
-            어려움
+            {$i18n.hard}
         </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem
-            value="oni"
-            bind:group={tempOption.difficulty}
-        >
-            오니(앞)
+        <SearchBoxDifficultyItem value="oni" bind:group={tempOption.difficulty}>
+            {$i18n.omote}
         </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem
-            value="ura"
-            bind:group={tempOption.difficulty}
-        >
-            오니(뒤)
+        <SearchBoxDifficultyItem value="ura" bind:group={tempOption.difficulty}>
+            {$i18n.ura}
         </SearchBoxDifficultyItem>
         <SearchBoxDifficultyItem
             value="oniura"
             bind:group={tempOption.difficulty}
         >
-            오니
+            {$i18n.oni}
         </SearchBoxDifficultyItem>
         <div class="level-container">
             <img
@@ -136,7 +138,7 @@
         padding-bottom: 2px;
     }
 
-    .level-container{
+    .level-container {
         width: calc(100% - 375px);
         display: flex;
         flex-direction: row;
@@ -148,7 +150,7 @@
         width: 20px;
         height: 20px;
     }
-    .star[data-theme="dark"]{
+    .star[data-theme="dark"] {
         filter: invert(100%);
     }
 
@@ -160,15 +162,15 @@
         width: calc(100% - 35px);
         max-width: 300px;
     }
-    input:disabled{
-        opacity: 0.4
+    input:disabled {
+        opacity: 0.4;
     }
 
-    @media only screen and (max-width: 1000px){
-        .level-container{
-            width:100%;
+    @media only screen and (max-width: 1000px) {
+        .level-container {
+            width: 100%;
         }
-        input{
+        input {
             width: calc(100% - 55px);
             max-width: none;
         }

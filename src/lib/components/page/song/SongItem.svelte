@@ -2,7 +2,7 @@
     import color from "$lib/module/common/color";
     import type { Difficulty, SongData } from "$lib/module/common/song/types";
     import { onDestroy, onMount } from "svelte";
-    import type { SongLang } from "./SongLanguageSelector.svelte";
+    import type { SongLang } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
 
     export let song: SongData;
@@ -111,7 +111,7 @@
     .container[data-theme="dark"] {
         box-shadow: none;
 
-        background-color: black;
+        background-color: #1c1c1c;
     }
 
     .genre-container {

@@ -51,6 +51,7 @@
     .right {
         display: flex;
         column-gap: 10px;
+        align-items: center;
     }
     .left {
         flex-direction: row;

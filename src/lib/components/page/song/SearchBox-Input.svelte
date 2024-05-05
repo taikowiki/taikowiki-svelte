@@ -1,16 +1,45 @@
+<script lang="ts" context="module">
+    import { pushState } from "$app/navigation";
+    import { page } from "$app/stores";
+    import { get } from "svelte/store";
+
+    function search(option: SongSearchOption) {
+        const searchParams = new URLSearchParams();
+
+        if (option.query) {
+            searchParams.set("query", option.query);
+        }
+        if (option.difficulty && option.level) {
+            searchParams.set("difficulty", option.difficulty);
+            searchParams.set("level", option.level.toString());
+        }
+        if (option.genre) {
+            searchParams.set("genre", option.genre);
+        }
+
+        if (searchParams.size === 0) {
+            pushState("/song", get(page).state);
+        } else {
+            pushState(`/song?${searchParams.toString()}`, get(page).state);
+        }
+    }
+</script>
+
 <script lang="ts">
     import type { SongSearchOption } from "$lib/module/page/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import { getI18N } from "$lib/module/common/i18n/i18n";
 
     export let opened: boolean;
     export let tempOption: SongSearchOption;
-    export let search: () => void;
 
     function open() {
         opened = !opened;
     }
 
     const [theme] = getTheme();
+
+    const i18n = getI18N();
 </script>
 
 <div class="search-container" data-theme={$theme}>
@@ -21,16 +50,21 @@
         class="search-input"
         type="text"
         bind:value={tempOption.query}
-        placeholder="검색어"
+        placeholder={$i18n.placeholder}
         on:keypress={(event) => {
             if (event.key === "Enter") {
-                search();
+                search(tempOption);
             }
         }}
         enterkeyhint="search"
         data-theme={$theme}
     />
-    <button class="search-button" on:click={search}>
+    <button
+        class="search-button"
+        on:click={() => {
+            search(tempOption);
+        }}
+    >
         <img src="/assets/icon/search.svg" alt="" />
     </button>
 </div>
@@ -109,16 +143,16 @@
     }
 
     .search-container[data-theme="dark"] > .search-detail-toggler {
-        background-color: black;
+        background-color: #1c1c1c;
     }
     .search-container[data-theme="dark"] > .search-input {
-        border-color: black;
+        border-color: #1c1c1c;
     }
     .search-container[data-theme="dark"] > .search-input::placeholder {
-        color:white;
+        color: white;
         opacity: 0.7;
     }
     .search-container[data-theme="dark"] > .search-button {
-        background-color: black;
+        background-color: #1c1c1c;
     }
 </style>

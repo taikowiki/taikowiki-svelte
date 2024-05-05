@@ -70,7 +70,4 @@
     :global(body[data-theme="dark"] a){
         color: #e1a743;
     }
-    :global(body[data-theme="dark"] a:visited){
-        color: #4cc700;
-    }
 </style>

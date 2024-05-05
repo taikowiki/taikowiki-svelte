@@ -52,6 +52,8 @@
         color:white;
         
         cursor: pointer;
+
+        z-index: 10000;
     }
     .selector[data-theme="dark"]{
         border-color: #7a6f6f;

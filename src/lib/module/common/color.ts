@@ -8,7 +8,7 @@ export const genre: Record<Genre, string> = {
     game: "#b697d3",
     variety: "#40c977",
     classic: "#ccbd4a",
-    kids: "#ccbd4a"
+    kids: "#ebb850"
 }
 
 export const difficulty: Record<Difficulty | "oniura", string> = {

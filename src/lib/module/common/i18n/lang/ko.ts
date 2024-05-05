@@ -33,6 +33,18 @@ const ko: LangFile = {
             ko: '한국어',
             ako: '한국어(비공식)'
         }
+    },
+    '/song/[songNo]':{
+        genres: {
+            pops: '팝스',
+            anime: '애니메이션',
+            kids: '키즈',
+            vocaloid: '보컬로이드',
+            game: '게임 뮤직',
+            namco: '남코 오리지널',
+            variety: '버라이어티',
+            classic: '클래식'
+        }
     }
 }
 

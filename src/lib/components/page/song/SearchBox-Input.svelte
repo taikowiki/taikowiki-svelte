@@ -44,7 +44,7 @@
 
 <div class="search-container" data-theme={$theme}>
     <button class="search-detail-toggler" on:click={open} class:opened>
-        <span>〉</span>
+        <img src="/assets/icon/arrow.svg" alt=""/>
     </button>
     <input
         class="search-input"
@@ -90,6 +90,23 @@
         border: 0;
 
         cursor: pointer;
+
+        display:flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-detail-toggler > img{
+        width: 20px;
+        height: 20px;
+
+        filter: invert(100%);
+
+        transform: translate(2px, 1px);
+
+        transition: transform 0.2s;
+    }
+    .search-detail-toggler.opened > img{
+        transform: rotate(180deg) translate(-2px, 0px);;
     }
     .search-detail-toggler > span {
         display: block;

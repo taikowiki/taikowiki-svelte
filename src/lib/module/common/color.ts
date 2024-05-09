@@ -20,9 +20,18 @@ export const difficulty: Record<Difficulty | "oniura", string> = {
     "oniura": "linear-gradient(rgb(219, 24, 133) 0%, rgb(219, 24, 133) 50%, rgb(113, 53, 219) 50%, rgb(113, 53, 219) 100% )"
 }
 
+export const darkDifficulty: Record<Difficulty, string> = {
+    "easy": "#ff2703",
+    "normal": "#647e2f",
+    "hard": "#364938",
+    "oni": "#d64d9a",
+    "ura": "#946ade"
+}
+
 const color = {
     genre,
-    difficulty
+    difficulty,
+    darkDifficulty
 }
 
 function deepFreeze(target: Object) {

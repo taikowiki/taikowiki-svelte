@@ -18,7 +18,7 @@ export async function loadAllSongs(): Promise<SongData[]> {
     return (songs);
 }
 
-export async function loadSongBySongNo(songNo: number): Promise<SongData | null> {
+export async function loadSongBySongNo(songNo: string): Promise<SongData | null> {
     const recentUpdate = ((await axios.get('/api/song/recent_update')).data as number).toString()
     if (window.localStorage && window.localStorage.getItem('songs') !== null && window.localStorage.getItem('recentSongUpdateTime') === recentUpdate) {
         return (JSON.parse(window.localStorage.getItem('songs') as string) as SongData[]).find(song => song.songNo === songNo) ?? null

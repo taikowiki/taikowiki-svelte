@@ -58,6 +58,8 @@
 
             flex-direction: column;
             row-gap: 4px;
+
+            transform: translateY(-25px);
         }
     }
 </style>

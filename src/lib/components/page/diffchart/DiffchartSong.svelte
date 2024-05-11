@@ -33,7 +33,7 @@
 
 {#if useMobile}
     {#if $isMobile}
-        <DiffchartSongMobile {song} {genre} />
+        <DiffchartSongMobile {song} {genre} {krTitle} {theme} />
     {:else}
         <DiffchartSongPc {song} {genre} {krTitle} {theme} />
     {/if}

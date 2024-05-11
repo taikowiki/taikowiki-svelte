@@ -1,5 +1,6 @@
 <script lang="ts">
-    import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
+    import Loading from "$lib/components/common/Loading.svelte";
+import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
     import { loadAllSongs } from "$lib/module/common/song/song.client";
 
     export let data;
@@ -12,7 +13,9 @@
     {#if downloadImage}
         <button on:click={downloadImage}> 다운로드 </button>
     {/if}
-    {#await loadAllSongs() then songs}
+    {#await loadAllSongs()}
+        <Loading/>
+    {:then songs}
         <Diffchart
             {diffChart}
             {songs}

@@ -94,16 +94,17 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+
+        row-gap: 2px;
     }
 
     .title {
         width: 100%;
         font-weight: 900;
 
-        transform: translateY(-2px);
-
         box-sizing: border-box;
         padding-right: 5px;
+        line-height: 1.05;
     }
 
     .krTitle {

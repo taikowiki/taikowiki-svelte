@@ -41,6 +41,9 @@
             <HeaderItem icon="/assets/icon/document.svg" href="/">
                 {i18nLayout.doc}
             </HeaderItem>
+            <HeaderItem icon="/assets/icon/leaderboard.svg" href="/diffchart">
+                {i18nLayout.diffchart}
+            </HeaderItem>
         </svelte:fragment>
         <svelte:fragment slot="right">
             <ThemeToggler />

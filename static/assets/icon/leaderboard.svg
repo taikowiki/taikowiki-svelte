@@ -1,0 +1,13 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
+
+ <title>leaderboard</title>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_15" d="m139.32759,0.29223l120,0l0,400l-120,0l0,-400z" opacity="undefined" stroke="null"/>
+  <rect id="svg_16" height="300" width="120" y="100" x="0" stroke="null"/>
+  <rect id="svg_17" height="200" width="120" y="200" x="280" stroke="null"/>
+  <text font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Noto Sans JP" font-size="100" stroke-width="0" fill="#ffffff" id="svg_19" y="111.39534" x="170.95728" stroke="null">1</text>
+  <text font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Noto Sans JP" font-size="100" stroke-width="0" fill="#ffffff" id="svg_20" y="211.39523" x="31.07649" stroke="null">2</text>
+  <text font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Noto Sans JP" font-size="100" stroke-width="0" fill="#ffffff" id="svg_21" y="310.79988" x="313.21903" stroke="null">3</text>
+ </g>
+</svg>

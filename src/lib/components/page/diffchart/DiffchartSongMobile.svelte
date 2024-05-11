@@ -26,7 +26,7 @@
 
 <style>
     .container {
-        width: 100%;
+        width: calc(100% - 20px);
         height: 40px;
 
         display: flex;

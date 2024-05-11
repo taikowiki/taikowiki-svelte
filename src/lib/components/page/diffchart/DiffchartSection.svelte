@@ -57,6 +57,7 @@
             display:flex;
 
             flex-direction: column;
+            align-items: center;
             row-gap: 4px;
 
             transform: translateY(-25px);

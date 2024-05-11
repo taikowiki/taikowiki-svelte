@@ -14,6 +14,7 @@
     export let color: string | undefined = diffChart.color;
     export let backgroundColor: string | undefined = diffChart.backgroundColor;
     export let downloadImage: (() => Promise<void>) | null = null;
+    export let subname: string = '';
 
     const lang = getLang();
     $: i18n = getI18N("/diffchart/clear/[level]", $lang);
@@ -38,14 +39,14 @@
 </script>
 
 <div class="container">
-    <DiffchartName {name} {color} {backgroundColor} />
+    <DiffchartName {name} {color} {backgroundColor} {subname}/>
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
         <DiffchartSection {section} {songs} theme={$theme} />
     {/each}
 </div>
 
 <div class="replica" bind:this={replica}>
-    <DiffchartName {name} {color} {backgroundColor} />
+    <DiffchartName {name} {color} {backgroundColor}/>
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
         <DiffchartSection {section} {songs} theme={"light"} useMobile={false} />
     {/each}

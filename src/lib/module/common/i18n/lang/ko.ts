@@ -5,7 +5,8 @@ const ko: LangFile = {
         main: {
             song: '곡',
             doc: '문서',
-            newSong: '신곡'
+            newSong: '신곡',
+            diffchart: '서열표'
         }
     },
     '/song': {

@@ -17,9 +17,7 @@
     function setPageAsideDisplay(pageAside: Writable<HTMLDivElement | null>) {
         return () => {
             let p = get(pageAside);
-            console.log(0);
             if (p) {
-                console.log(1);
                 if (p.innerHTML === "") {
                     p.style.display = "none";
                 } else {

@@ -48,6 +48,7 @@
     }
 
     .title-container {
+        width: calc(100% - 21px);
         height: 100%;
 
         display: flex;

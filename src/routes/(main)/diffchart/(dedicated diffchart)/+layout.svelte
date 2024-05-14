@@ -16,42 +16,40 @@
     const isMobile = getIsMobile();
 </script>
 
-{#key $page.url}
-    <PageAside>
-        <DiffchartSelectorPc />
-        {#if $downloadImage}
-            <div style="display:flex;align-items:center;column-gap:5px;">
-                다운로드
-                <img
-                    class="download"
-                    data-theme={$theme}
-                    src="/assets/icon/download.svg"
-                    alt="다운로드"
-                    on:click={$downloadImage}
-                    role="presentation"
-                />
-            </div>
-        {/if}
-    </PageAside>
-
-    {#if $isMobile}
-        <div class="mobile">
-            <DiffchartSelectorMobile />
-            {#if $downloadImage}
-                <img
-                    class="download"
-                    data-theme={$theme}
-                    src="/assets/icon/download.svg"
-                    alt="다운로드"
-                    on:click={$downloadImage}
-                    role="presentation"
-                />
-            {/if}
+<PageAside>
+    <DiffchartSelectorPc />
+    {#if $downloadImage}
+        <div style="display:flex;align-items:center;column-gap:5px;">
+            다운로드
+            <img
+                class="download"
+                data-theme={$theme}
+                src="/assets/icon/download.svg"
+                alt="다운로드"
+                on:click={$downloadImage}
+                role="presentation"
+            />
         </div>
     {/if}
+</PageAside>
 
-    <slot />
-{/key}
+{#if $isMobile}
+    <div class="mobile">
+        <DiffchartSelectorMobile />
+        {#if $downloadImage}
+            <img
+                class="download"
+                data-theme={$theme}
+                src="/assets/icon/download.svg"
+                alt="다운로드"
+                on:click={$downloadImage}
+                role="presentation"
+            />
+        {/if}
+    </div>
+{/if}
+
+<slot />
 
 <style>
     .mobile {

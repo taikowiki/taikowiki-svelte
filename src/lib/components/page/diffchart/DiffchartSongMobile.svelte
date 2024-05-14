@@ -13,7 +13,10 @@
 <a class="container" href={`/song/${song.songNo}`} data-theme={theme}>
     <DiffchartSongGenre {genre} width="6px" height="26px" />
     <div class="title-container">
-        <div class="title" style={`color:${theme === "light"? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}>
+        <div
+            class="title"
+            style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
+        >
             {song.title}
         </div>
         {#if krTitle}
@@ -26,7 +29,7 @@
 
 <style>
     .container {
-        width: calc(100% - 20px);
+        width: calc(100% - 10px);
         height: 40px;
 
         display: flex;
@@ -54,6 +57,12 @@
         transform: translateY(-1px);
     }
 
+    .title-container * {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
     .title {
         font-size: 13px;
 
@@ -66,12 +75,11 @@
         font-weight: bold;
     }
 
-    .container[data-theme="dark"]{
+    .container[data-theme="dark"] {
         background-color: #1c1c1c;
     }
 
-    .container[data-theme="dark"] .sub-title{
-        color:rgb(193, 193, 193);
+    .container[data-theme="dark"] .sub-title {
+        color: rgb(193, 193, 193);
     }
 </style>
-

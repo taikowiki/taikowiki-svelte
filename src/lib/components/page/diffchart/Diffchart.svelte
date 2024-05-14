@@ -35,6 +35,7 @@
             a.href = url;
             a.click();
             a.remove();
+            canvas.remove();
         };
     });
 </script>

@@ -1,20 +1,52 @@
+<script lang="ts" context="module">
+    function usePageAside() {
+        let pageAside = writable<HTMLDivElement | null>(null);
+        setContext("pageAside", pageAside);
+
+        return pageAside;
+    }
+
+    function resetPageAside(pageAside: Writable<HTMLDivElement | null>) {
+        return () => {
+            let p = get(pageAside);
+            if (p) {
+                p.innerHTML = "";
+                p.style.display = "none";
+            }
+        };
+    }
+    function setPageAsideDisplay(pageAside: Writable<HTMLDivElement | null>) {
+        return () => {
+            let p = get(pageAside);
+            if (p) {
+                if (p.innerHTML === "") {
+                    p.style.display = "none";
+                } else {
+                    p.style.display = "block";
+                }
+            }
+        };
+    }
+</script>
+
 <script lang="ts">
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
+    import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
     import Header from "$lib/components/layout/main/Header.svelte";
     import HeaderItem from "$lib/components/layout/main/HeaderItem.svelte";
     import Main from "$lib/components/layout/main/Main.svelte";
     import ThemeToggler from "$lib/components/layout/main/ThemeToggler.svelte";
     import useTheme from "$lib/module/layout/theme";
-    import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
     import { useIsMobile } from "$lib/module/layout/isMobile.js";
     import { navigating, page } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
     import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n";
     import LanguageSelector from "$lib/components/layout/main/LanguageSelector.svelte";
-    import { writable } from "svelte/store";
+    import { writable, get, type Writable } from "svelte/store";
     import { type PathLangFile } from "$lib/module/common/i18n/types.js";
     import { setContext } from "svelte";
+    import { beforeNavigate, afterNavigate } from "$app/navigation";
 
     export let data;
 
@@ -26,10 +58,14 @@
     useIsMobile();
 
     const lang = useLang();
-    $: i18nLayout = i18n[$lang].layout.main
-    const i18nPage = writable<PathLangFile>(setI18N($lang, $page.url.pathname))
-    setContext('i18n', i18nPage);
-    $: $i18nPage = setI18N($lang, $page.url.pathname)
+    $: i18nLayout = i18n[$lang].layout.main;
+    const i18nPage = writable<PathLangFile>(setI18N($lang, $page.url.pathname));
+    setContext("i18n", i18nPage);
+    $: $i18nPage = setI18N($lang, $page.url.pathname);
+
+    const pageAside = usePageAside();
+    beforeNavigate(resetPageAside(pageAside));
+    afterNavigate(setPageAsideDisplay(pageAside));
 </script>
 
 {#if $theme}
@@ -47,7 +83,7 @@
         </svelte:fragment>
         <svelte:fragment slot="right">
             <ThemeToggler />
-            <LanguageSelector/>
+            <LanguageSelector />
         </svelte:fragment>
     </Header>
     <Main>
@@ -56,6 +92,7 @@
         {/if}
         <slot slot="main" />
         <Aside slot="aside">
+            <div bind:this={$pageAside} />
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
@@ -70,7 +107,7 @@
         background-color: black;
         color: white;
     }
-    :global(body[data-theme="dark"] a){
+    :global(body[data-theme="dark"] a) {
         color: #e1a743;
     }
 </style>

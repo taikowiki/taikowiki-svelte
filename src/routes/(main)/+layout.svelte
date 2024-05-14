@@ -11,14 +11,15 @@
             let p = get(pageAside);
             if (p) {
                 p.innerHTML = "";
-                p.style.display = "none";
             }
         };
     }
     function setPageAsideDisplay(pageAside: Writable<HTMLDivElement | null>) {
         return () => {
             let p = get(pageAside);
+            console.log(0);
             if (p) {
+                console.log(1);
                 if (p.innerHTML === "") {
                     p.style.display = "none";
                 } else {
@@ -65,7 +66,7 @@
 
     const pageAside = usePageAside();
     beforeNavigate(resetPageAside(pageAside));
-    afterNavigate(setPageAsideDisplay(pageAside));
+    //afterNavigate(setPageAsideDisplay(pageAside));
 </script>
 
 {#if $theme}
@@ -87,12 +88,15 @@
         </svelte:fragment>
     </Header>
     <Main>
-        {#if $navigating}
-            <Loading />
-        {/if}
-        <slot slot="main" />
+        <svelte:fragment slot="main">
+            {#if $navigating}
+                <Loading />
+            {:else}
+                <slot />
+            {/if}
+        </svelte:fragment>
         <Aside slot="aside">
-            <div bind:this={$pageAside} />
+            <div bind:this={$pageAside} class="page-aside"/>
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
@@ -109,5 +113,9 @@
     }
     :global(body[data-theme="dark"] a) {
         color: #e1a743;
+    }
+
+    .page-aside:empty{
+        display:none;
     }
 </style>

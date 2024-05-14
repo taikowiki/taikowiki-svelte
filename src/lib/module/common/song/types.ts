@@ -1,5 +1,5 @@
 export interface SongData {
-    songNo: number;
+    songNo: string;
     title: string;
     titleKo: string | null;
     aliasKo: string | null;

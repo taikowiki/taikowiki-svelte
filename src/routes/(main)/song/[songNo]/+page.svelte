@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    async function load(songNo: number) {
+    async function load(songNo: string) {
         const songdata = await loadSongBySongNo(songNo);
         if (songdata) {
             return songdata;
@@ -20,7 +20,7 @@
     import ArtistsDisplay from "$lib/components/page/song/[songNo]/ArtistsDisplay.svelte";
 </script>
 
-{#await load(Number($page.params.songNo))}
+{#await load($page.params.songNo)}
     <Loading />
 {:then song}
     <TitleDisplay title={song.title} />

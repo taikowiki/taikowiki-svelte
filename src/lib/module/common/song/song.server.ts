@@ -6,7 +6,7 @@ export default class SongDB {
     static async createTable() {
         await runQuery(async (run) => {
             await run(`CREATE TABLE \`song\` (
-                \`songNo\` int(11) NOT NULL,
+                \`songNo\` tinytext NOT NULL,
                 \`order\` int(11) NOT NULL,
                 \`title\` text NOT NULL,
                 \`titleKo\` text DEFAULT NULL,
@@ -44,7 +44,7 @@ export default class SongDB {
         })
     }
 
-    static async getBySongNo(songNo: number): Promise<SongData[]> {
+    static async getBySongNo(songNo: string): Promise<SongData[]> {
         return await runQuery(async (run) => {
             let result = await run("SELECT * FROM `song` WHERE `songNo` = ?", [songNo]);
             result.map((e: any) => {

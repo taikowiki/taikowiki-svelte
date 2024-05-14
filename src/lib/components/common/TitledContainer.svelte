@@ -8,6 +8,7 @@
 
     export let titleColor: string = "white";
     export let titleSize: string = "20px";
+    export let titleWidth: string = 'auto';
 
     export let type: "vertical" | "horizontal" = "vertical";
 
@@ -17,7 +18,7 @@
 <div class={`container ${type}`} style={`width: ${width}; height: ${height};`} class:noround={!round}>
     <div
         class="title-container"
-        style={`background-color:${color};font-size:${titleSize};color:${titleColor};`}
+        style={`background-color:${color};font-size:${titleSize};color:${titleColor};width:${titleWidth};`}
     >
         {title}
     </div>
@@ -41,7 +42,6 @@
 
     .container.vertical .title-container {
         min-width: 60px;
-
         
         display: flex;
         flex-direction: column;
@@ -64,6 +64,8 @@
         box-sizing: border-box;
 
         border-radius: 0px 5px 5px 5px;
+
+        flex: 1 1;
     }
 
     .container.horizontal .title-container{
@@ -81,7 +83,7 @@
         font-weight: bold;
     }
     .container.horizontal .content-container {
-        flex: 1 1 auto;
+        flex: 1 1;
         min-height: 100%;
 
         border-width: 3px;

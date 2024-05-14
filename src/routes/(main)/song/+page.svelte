@@ -18,7 +18,6 @@
 
 <script lang="ts">
     import { type SongLang } from "$lib/module/common/song/types";
-    import Loading from "$lib/components/common/Loading.svelte";
     import SearchBoxContainer from "$lib/components/page/song/SearchBoxContainer.svelte";
     import SongLanguageSelector from "$lib/components/page/song/SongLanguageSelector.svelte";
     import { loadAllSongs } from "$lib/module/common/song/song.client";
@@ -26,7 +25,7 @@
     import SongList from "$lib/components/page/song/SongList.svelte";
     import PageSelector from "$lib/components/page/song/PageSelector.svelte";
     import { page } from "$app/stores";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import SongLoading from "$lib/components/page/song/SongLoading.svelte";
 
     let filteredSongs: (SongData & { order: number })[] | null = null;
 
@@ -41,12 +40,12 @@
 {#await loadAllSongs()}
     <SearchBoxContainer songs={[]} bind:filteredSongs />
     <SongLanguageSelector bind:songLang />
-    <Loading />
+    <SongLoading/>
 {:then songs}
     <SearchBoxContainer {songs} bind:filteredSongs />
     <SongLanguageSelector bind:songLang />
     {#if filteredSongs === null}
-        <Loading />
+        <SongLoading/>
     {:else}
         <SongList
             {songLang}

@@ -9,6 +9,10 @@
         searchParam.set('page', p.toString());
 
         pushState(`/song?${searchParam}`, get(page).state);
+
+        window.scrollTo({
+            top: 0
+        });
     }
 
     function getDisplayPages(pageNum: number, maxPage: number) {
@@ -61,10 +65,10 @@
         </div>
     {/if}
     {#if $isMobile}
-        <select bind:value={pageNum}>
-            {#each displayPages as pNum}
-            <option value={pNum}>
-            {pNum}
+        <select bind:value={pageNum} on:change={() => {movePage(pageNum)}}>
+            {#each [...Array(maxPage).keys()] as pNum}
+            <option value={pNum+1}>
+            {pNum+1}
             </option>
             {/each}
         </select>

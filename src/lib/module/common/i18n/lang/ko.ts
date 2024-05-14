@@ -5,7 +5,15 @@ const ko: LangFile = {
         main: {
             song: '곡',
             doc: '문서',
-            newSong: '신곡'
+            newSong: '신곡',
+            diffchart: '서열표'
+        },
+        'dedicated diffchart': {
+            type: {
+                clear: '클리어',
+                fc: '풀콤보',
+                dfc: '전량'
+            }
         }
     },
     '/song': {
@@ -33,6 +41,45 @@ const ko: LangFile = {
             ko: '한국어',
             ako: '한국어(비공식)'
         }
+    },
+    '/song/[songNo]':{
+        genres: {
+            pops: '팝스',
+            anime: '애니메이션',
+            kids: '키즈',
+            vocaloid: '보컬로이드',
+            game: '게임 뮤직',
+            namco: '남코 오리지널',
+            variety: '버라이어티',
+            classic: '클래식'
+        }
+    },
+    '/diffchart': {
+        type: {
+            clear: '클리어',
+            fc: '풀콤보',
+            dfc: '전량'
+        }
+    },
+    '/diffchart/clear/[level]':{
+        '10 level clear': '★10 클리어 서열표',
+        '9 level clear': '★9 클리어 서열표',
+        '8 level clear': '★8 클리어 서열표',
+        '7 level clear': '★7 클리어 서열표',
+        '6 level clear': '★6 클리어 서열표',
+        sections:{
+            'SSS': '졸업+',
+            'SS': '졸업',
+            'S': '최상',
+            'A': '상',
+            'B': '중상',
+            'C': '중',
+            'D': '중하',
+            'E': '하',
+            'F': '최하',
+            'X': '개인차'
+        },
+        subname: "🔴 개인차가 왕 큼&nbsp;&nbsp;&nbsp;🟢 초견 주의&nbsp;&nbsp;&nbsp;🟣 클리어에 비해 풀콤보가 왕 어려움"
     }
 }
 

@@ -65,7 +65,7 @@
     </div>
     <div class="third-container">
         <div class="artists-container" data-theme={$theme}>
-            {song.artists.join(",")}
+            {song.artists.join(", ")}
         </div>
         <div class="level-container">
             {#each diffs as diff}

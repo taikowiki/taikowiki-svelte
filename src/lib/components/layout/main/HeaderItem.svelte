@@ -18,7 +18,7 @@
     a{
         width: auto;
 
-        color:white;
+        color:white !important;
         text-decoration: none;
 
         display:flex;

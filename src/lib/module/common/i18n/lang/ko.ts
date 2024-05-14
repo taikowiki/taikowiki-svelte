@@ -7,6 +7,13 @@ const ko: LangFile = {
             doc: '문서',
             newSong: '신곡',
             diffchart: '서열표'
+        },
+        'dedicated diffchart': {
+            type: {
+                clear: '클리어',
+                fc: '풀콤보',
+                dfc: '전량'
+            }
         }
     },
     '/song': {
@@ -47,6 +54,13 @@ const ko: LangFile = {
             classic: '클래식'
         }
     },
+    '/diffchart': {
+        type: {
+            clear: '클리어',
+            fc: '풀콤보',
+            dfc: '전량'
+        }
+    },
     '/diffchart/clear/[level]':{
         '10 level clear': '★10 클리어 서열표',
         '9 level clear': '★9 클리어 서열표',
@@ -64,7 +78,8 @@ const ko: LangFile = {
             'E': '하',
             'F': '최하',
             'X': '개인차'
-        }
+        },
+        subname: "🔴 개인차가 왕 큼&nbsp;&nbsp;&nbsp;🟢 초견 주의&nbsp;&nbsp;&nbsp;🟣 클리어에 비해 풀콤보가 왕 어려움"
     }
 }
 

@@ -14,7 +14,7 @@
     export let color: string | undefined = diffChart.color;
     export let backgroundColor: string | undefined = diffChart.backgroundColor;
     export let downloadImage: (() => Promise<void>) | null = null;
-    export let subname: string = '';
+    export let subname: string = "";
 
     const lang = getLang();
     $: i18n = getI18N("/diffchart/clear/[level]", $lang);
@@ -23,15 +23,16 @@
     const [theme] = getTheme();
 
     let replica: HTMLDivElement;
-    afterUpdate(() => {
+    afterUpdate(async () => {
         if (!browser) {
             return;
         }
         downloadImage = async () => {
             const canvas = await html2canvas(replica);
+            const url = canvas.toDataURL();
             const a = document.createElement("a");
             a.setAttribute("download", "서열표.png");
-            a.href = canvas.toDataURL();
+            a.href = url;
             a.click();
             a.remove();
         };
@@ -39,14 +40,14 @@
 </script>
 
 <div class="container">
-    <DiffchartName {name} {color} {backgroundColor} {subname}/>
+    <DiffchartName {name} {color} {backgroundColor} {subname} />
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
         <DiffchartSection {section} {songs} theme={$theme} />
     {/each}
 </div>
 
 <div class="replica" bind:this={replica}>
-    <DiffchartName {name} {color} {backgroundColor}/>
+    <DiffchartName {name} {color} {backgroundColor} />
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
         <DiffchartSection {section} {songs} theme={"light"} useMobile={false} />
     {/each}

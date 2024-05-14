@@ -59,6 +59,8 @@
         main {
             width: 100%;
             min-height: calc(100vh - 50px);
+
+            border-radius: 0;
         }
     }
 </style>

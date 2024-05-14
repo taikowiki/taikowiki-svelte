@@ -66,9 +66,9 @@
     {/if}
     {#if $isMobile}
         <select bind:value={pageNum} on:change={() => {movePage(pageNum)}}>
-            {#each displayPages as pNum}
-            <option value={pNum}>
-            {pNum}
+            {#each [...Array(maxPage).keys()] as pNum}
+            <option value={pNum+1}>
+            {pNum+1}
             </option>
             {/each}
         </select>

@@ -7,7 +7,7 @@
     import type { Writable } from "svelte/store";
 
     export let data;
-    const diffChart = data.diffChart;
+    $: diffChart = data.diffChart;
 
     let downloadImage: (() => Promise<void>) | null = null;
     $: (getContext('downloadImage') as Writable<(() => Promise<void>) | null>).set(downloadImage)
@@ -16,7 +16,7 @@
     $:i18n = getI18N('/diffchart', $lang);
 </script>
 
-{#if diffChart}
+{#key diffChart}
     {#await loadAllSongs()}
         <Loading />
     {:then songs}
@@ -28,4 +28,4 @@
             bind:downloadImage
         />
     {/await}
-{/if}
+{/key}

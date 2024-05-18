@@ -1,53 +1,52 @@
-<script lang="ts" context="module">
-    async function load(songNo: string) {
-        const songdata = await loadSongBySongNo(songNo);
-        if (songdata) {
-            return songdata;
-        } else {
-            throw new Error("songdata is null");
-        }
-    }
-</script>
-
 <script lang="ts">
-    import { loadSongBySongNo } from "$lib/module/common/song/song.client";
+    import { getSongFromContextBySongNo } from "$lib/module/common/song/song.client";
     import { page } from "$app/stores";
-    import Loading from "$lib/components/common/Loading.svelte";
     import TitleDisplay from "$lib/components/page/song/[songNo]/TitleDisplay.svelte";
     import MultipleTitleDisplay from "$lib/components/page/song/[songNo]/MultipleTitleDisplay.svelte";
+    import SongDataDisplay from "$lib/components/page/song/[songNo]/SongDataDisplay.svelte";
+    import { getIsMobile } from "$lib/module/layout/isMobile";
     import GenreDisplay from "$lib/components/page/song/[songNo]/GenreDisplay.svelte";
-    import BpmDisplay from "$lib/components/page/song/[songNo]/BpmDisplay.svelte";
-    import ArtistsDisplay from "$lib/components/page/song/[songNo]/ArtistsDisplay.svelte";
+    import AlertDisplay from "$lib/components/page/song/[songNo]/AlertDisplay.svelte";
+    import CourseContainer from "$lib/components/page/song/[songNo]/CourseContainer.svelte";
+
+    const song = getSongFromContextBySongNo($page.params.songNo);
+
+    const isMobile = getIsMobile();
 </script>
 
-{#await load($page.params.songNo)}
-    <Loading />
-{:then song}
+{#if song}
+    <AlertDisplay isAsiaBanned={song.isAsiaBanned} isKrBanned={song.isKrBanned} isDeleted={song.isDeleted}/>
+    <GenreDisplay genres={song.genre}/>
     <TitleDisplay title={song.title} />
-    <div class="wrapper">
+    <div class="wrapper" data-isMobile={$isMobile}>
         <MultipleTitleDisplay
-            title={song.title}
             titleKo={song.titleKo}
-            aliasKo={song.aliasKo}
             titleEn={song.titleEn}
+            aliasKo={song.aliasKo}
             aliasEn={song.aliasEn}
         />
-        <GenreDisplay genres={song.genre} />
-        <BpmDisplay bpm={song.bpm} bpmShiver={song.bpmShiver} />
-        <ArtistsDisplay artists={song.artists}/>
+        <SongDataDisplay
+            bpm={song.bpm}
+            bpmShiver={song.bpmShiver}
+            version={song.version}
+            artists={song.artists}
+            addedDate={song.addedDate}
+        />
     </div>
-{/await}
+    <CourseContainer courses={song.courses}/>
+{/if}
 
 <style>
     .wrapper {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+
+        column-gap: 10px;
+        row-gap: 10px;
     }
 
-    @media only screen and (max-width: 1000px) {
-        .wrapper {
-            row-gap: 5px;
-        }
+    .wrapper[data-isMobile="true"]{
+        flex-direction: column;
     }
 </style>

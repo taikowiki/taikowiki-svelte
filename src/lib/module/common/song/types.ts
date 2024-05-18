@@ -14,6 +14,7 @@ export interface SongData {
     artists: string[];
     addedDate: number;
     courses: Partial<Record<Difficulty, Course>>
+    isDeleted: 1 | 0;
 }
 
 export type Genre = "pops" | "anime" | "kids" | "game" | "variety" | "namco" | "vocaloid" | "classic"

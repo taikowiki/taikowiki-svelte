@@ -46,6 +46,7 @@
     import { type PathLangFile } from "$lib/module/common/i18n/types.js";
     import { setContext } from "svelte";
     import { beforeNavigate, afterNavigate } from "$app/navigation";
+    import { inject } from '@vercel/analytics';
 
     export let data;
 
@@ -65,10 +66,10 @@
     const pageAside = usePageAside();
     beforeNavigate(resetPageAside(pageAside));
     //afterNavigate(setPageAsideDisplay(pageAside));
-
     if(data.songs){
         setContext('songs', data.songs);
     }
+    inject();
 </script>
 
 {#if $theme}

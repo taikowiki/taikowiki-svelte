@@ -3,25 +3,36 @@
 
     const [theme] = getTheme();
 
-    export let icon:string = "";
-    export let href:string = ""
+    export let icon: string = "";
+    export let href: string = "";
 </script>
 
-<a {href} data-theme={$theme}>
-    {#if icon}
-        <img src={icon} alt=""/>
-    {/if}
-    <slot/>
-</a>
+{#if href}
+    <a {href} data-theme={$theme} class="btn">
+        {#if icon}
+            <img src={icon} alt="" />
+        {/if}
+        <slot />
+    </a>
+{:else}
+    <div data-theme={$theme} class="btn">
+        {#if icon}
+            <img src={icon} alt="" />
+        {/if}
+        <slot />
+    </div>
+{/if}
 
 <style>
-    a{
+    .btn {
         width: auto;
 
-        color:white !important;
+        cursor: pointer;
+
+        color: white !important;
         text-decoration: none;
 
-        display:flex;
+        display: flex;
         flex-direction: row;
         align-items: center;
         column-gap: 4px;
@@ -34,13 +45,13 @@
 
         padding-inline: 5px;
     }
-    a:hover{
+    .btn:hover {
         background-color: rgba(255, 255, 255, 0.219);
     }
 
-    a img{
-        width:17px;
-        height:17px;
+    .btn img {
+        width: 17px;
+        height: 17px;
 
         filter: invert(100%);
     }

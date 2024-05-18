@@ -41,7 +41,7 @@
         <tr>
             <td> 아티스트 </td>
             <td>
-                {#if isMobile}
+                {#if $isMobile}
                     {#each artists as artist}
                         <div>
                             {artist}

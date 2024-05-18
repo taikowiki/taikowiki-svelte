@@ -2,8 +2,6 @@
     export let isAsiaBanned: 1 | 0;
     export let isKrBanned: 1 | 0;
     export let isDeleted: 1 | 0;
-
-    console.log(isKrBanned);
 </script>
 
 <div class="container">

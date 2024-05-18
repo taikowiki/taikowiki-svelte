@@ -20,7 +20,7 @@
     import { type SongLang } from "$lib/module/common/song/types";
     import SearchBoxContainer from "$lib/components/page/song/SearchBoxContainer.svelte";
     import SongLanguageSelector from "$lib/components/page/song/SongLanguageSelector.svelte";
-    import { loadAllSongs } from "$lib/module/common/song/song.client";
+    import { getSongsFromContext } from "$lib/module/common/song/song.client";
     import type { SongData } from "$lib/module/common/song/types";
     import SongList from "$lib/components/page/song/SongList.svelte";
     import PageSelector from "$lib/components/page/song/PageSelector.svelte";
@@ -35,25 +35,21 @@
     $: if ($page.state) {
         pageNum = getPageNumFromUrl();
     }
+
+    const songs = getSongsFromContext();
 </script>
 
-{#await loadAllSongs()}
-    <SearchBoxContainer songs={[]} bind:filteredSongs />
-    <SongLanguageSelector bind:songLang />
-    <SongLoading/>
-{:then songs}
-    <SearchBoxContainer {songs} bind:filteredSongs />
-    <SongLanguageSelector bind:songLang />
-    {#if filteredSongs === null}
-        <SongLoading/>
-    {:else}
-        <SongList
-            {songLang}
-            filteredSongs={filteredSongs.slice(
-                Math.min((pageNum - 1) * 30, filteredSongs.length),
-                Math.min(pageNum * 30, filteredSongs.length),
-            )}
-        />
-        <PageSelector {pageNum} length={filteredSongs.length} />
-    {/if}
-{/await}
+<SearchBoxContainer {songs} bind:filteredSongs />
+<SongLanguageSelector bind:songLang />
+{#if filteredSongs === null}
+    <SongLoading />
+{:else}
+    <SongList
+        {songLang}
+        filteredSongs={filteredSongs.slice(
+            Math.min((pageNum - 1) * 30, filteredSongs.length),
+            Math.min(pageNum * 30, filteredSongs.length),
+        )}
+    />
+    <PageSelector {pageNum} length={filteredSongs.length} />
+{/if}

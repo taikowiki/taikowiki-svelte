@@ -1,29 +1,28 @@
-<script lang="ts">
-    import { getContext } from "svelte";
-    import type { Writable } from "svelte/store";
+<script>
+    import { getLang } from "$lib/module/common/i18n/i18n";
+    import UserItem from "./User-Item.svelte";
 
-    export let text:string;
-    export let value:string;
-    export let toggle:() => void;
-
-    const lang = getContext('lang') as Writable<string>;
+    const lang = getLang();
+    let currentLang = $lang;
 </script>
 
-<div class="item" role="presentation" on:click={() => {lang?.set(value); window.localStorage.lang = value; toggle()}}>
-    {text}
-</div>
+<UserItem separated height="30px">
+    <span slot="left"> 언어 </span>
+    <select
+        bind:value={currentLang}
+        on:change={() => {
+            $lang = currentLang;
+        }}
+        slot="right"
+    >
+        <option value="ko"> 한국어 </option>
+        <option value="jp"> 日本語 </option>
+        <option value="en"> English </option>
+    </select>
+</UserItem>
 
 <style>
-    
-
-    .item{
-        display:flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .item:hover{
-        width: 100%;
-        background-color: white;
-        color:black;
+    select{
+        height: 25px;
     }
 </style>

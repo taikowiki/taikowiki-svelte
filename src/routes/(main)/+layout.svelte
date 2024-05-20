@@ -35,17 +35,17 @@
     import Header from "$lib/components/layout/main/Header.svelte";
     import HeaderItem from "$lib/components/layout/main/HeaderItem.svelte";
     import Main from "$lib/components/layout/main/Main.svelte";
-    import ThemeToggler from "$lib/components/layout/main/ThemeToggler.svelte";
     import useTheme from "$lib/module/layout/theme";
     import { useIsMobile } from "$lib/module/layout/isMobile.js";
     import { navigating, page } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
     import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n";
-    import LanguageSelector from "$lib/components/layout/main/LanguageSelector.svelte";
     import { writable, get, type Writable } from "svelte/store";
     import { type PathLangFile } from "$lib/module/common/i18n/types.js";
     import { setContext } from "svelte";
-    import { beforeNavigate, afterNavigate } from "$app/navigation";
+    import { beforeNavigate } from "$app/navigation";
+    import User from "$lib/components/layout/main/User.svelte";
+    import axios from "axios";
 
     export let data;
 
@@ -66,8 +66,19 @@
     beforeNavigate(resetPageAside(pageAside));
     //afterNavigate(setPageAsideDisplay(pageAside));
 
-    if(data.songs){
-        setContext('songs', data.songs);
+    if (data.songs) {
+        setContext("songs", data.songs);
+    }
+
+    const user = writable<{ logined: boolean; nickname: string }>(data.user);
+    setContext("user", user);
+    $: if (($navigating || $page.state) && browser) {
+        axios({
+            method: "get",
+            url: "/api/user",
+        }).then(({ data }) => {
+            user.set(data);
+        });
     }
 </script>
 
@@ -85,8 +96,7 @@
             </HeaderItem>
         </svelte:fragment>
         <svelte:fragment slot="right">
-            <ThemeToggler />
-            <LanguageSelector />
+            <User />
         </svelte:fragment>
     </Header>
     <Main>
@@ -98,7 +108,7 @@
             {/if}
         </svelte:fragment>
         <Aside slot="aside">
-            <div bind:this={$pageAside} class="page-aside"/>
+            <div bind:this={$pageAside} class="page-aside" />
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
@@ -117,7 +127,7 @@
         color: #e1a743;
     }
 
-    .page-aside:empty{
-        display:none;
+    .page-aside:empty {
+        display: none;
     }
 </style>

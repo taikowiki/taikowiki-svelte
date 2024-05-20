@@ -1,5 +1,6 @@
 export async function load({parent}){
-    const newSongs = (await parent()).newSongs;
+    const parentData = await parent()
+    const newSongs = parentData.newSongs;
 
     return {
         newSongs

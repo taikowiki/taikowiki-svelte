@@ -12,7 +12,7 @@
             url: "/api/user/change_nickname",
         });
         replaceState(get(page).url.href, get(page).state);
-        return [result.data, newNickname];
+        return result.data;
     }
 </script>
 
@@ -29,6 +29,8 @@
 
     let nicknameFormatError = false;
     $: nicknameFormatError = !/^([a-zA-Z가-힣0-9\-]*)$/.test(nickname);
+
+    let error = '';
 </script>
 
 <tr>
@@ -37,11 +39,24 @@
         <input bind:value={nickname} class:error={nicknameFormatError} />
         <button
             on:click={() => {
-                changeNickname(UUID, nickname);
+                if(nicknameFormatError) return;
+                error = '';
+                changeNickname(UUID, nickname)
+                .then(result => {
+                    if(result.status === "success"){
+                        alert('변경 완료');
+                    }
+                    else{
+                        error = result.reason;
+                    }
+                });
             }}
         >
             변경
         </button>
+        {#if error}
+        <span style="color:red;">{error}</span>
+        {/if}
     </td>
 </tr>
 

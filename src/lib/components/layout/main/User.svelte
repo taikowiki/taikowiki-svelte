@@ -40,13 +40,14 @@
 </div>
 
 <style>
+    .container{
+        position: relative;
+    }
     .opener {
         width: 20px;
         height: 20px;
 
         cursor: pointer;
-
-        position: relative;
     }
     img {
         filter: invert(100%);
@@ -58,7 +59,7 @@
         position: absolute;
 
         right: 1px;
-        top: 50px;
+        top: 35px;
 
         background-color: white;
 

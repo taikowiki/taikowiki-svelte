@@ -29,6 +29,7 @@
 </script>
 
 <script lang="ts">
+    import VercelInject from '$lib/components/layout/vercel-inject.svelte';
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
@@ -81,6 +82,7 @@
     }
 </script>
 
+<VercelInject/>
 {#if $theme}
     <Header>
         <svelte:fragment slot="left">

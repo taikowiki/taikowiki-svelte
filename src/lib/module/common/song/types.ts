@@ -12,7 +12,7 @@ export interface SongData {
     isKrBanned: 1 | 0;
     genre: Genre[];
     artists: string[];
-    addedDate: number;
+    addedDate: number|null;
     courses: Partial<Record<Difficulty, Course>>
     isDeleted: 1 | 0;
 }

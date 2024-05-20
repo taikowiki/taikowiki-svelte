@@ -84,16 +84,22 @@
         </td>
     </tr>
     {#if course.daniUsed}
-        <div class="dani-container">
-            <div class="dani-opener" class:opened={daniOpened}>
-                단위 수록 목록
-            </div>
-            <div class="dani">
-                {#each course.dani as dani}
-                    {dani.version} {dani.dan} {dani.order}번째 곡
-                {/each}
-            </div>
-        </div>
+        <tr>
+            <td colspan="4" class="dani-td">
+                <div class="dani-container">
+                    <div class="dani-opener" class:opened={daniOpened} role="presentation" on:click={() => {daniOpened = !daniOpened}}>
+                        단위 수록 목록
+                    </div>
+                    {#if daniOpened}
+                        <div class="dani">
+                            {#each course.dani as dani}
+                                {dani.version} {dani.dan} {dani.order}번째 곡
+                            {/each}
+                        </div>
+                    {/if}
+                </div>
+            </td>
+        </tr>
     {:else}
         <tr>
             <td colspan="2">단위 수록</td>
@@ -113,7 +119,7 @@
         text-align: center;
         border: 1px solid #cf4844;
         box-sizing: border-box;
-        height: 42.5px;
+        height: 42px;
     }
     td:nth-child(2n-1) {
         background-color: #cf4844;
@@ -137,5 +143,38 @@
     }
     .detail {
         font-size: 13px;
+    }
+
+    .dani-td {
+        background-color: transparent !important;
+        padding: 0;
+        color: inherit !important;
+    }
+    .dani-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .dani-opener {
+        width: 100%;
+        height: 42.5px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 10px;
+
+        background-color: #cf4844;
+
+        color: white;
+
+        cursor: pointer;
+    }
+    .dani-opener:not(.opened)::after {
+        content: "▼";
+    }
+    .dani-opener.opened::after {
+        content: "▲";
     }
 </style>

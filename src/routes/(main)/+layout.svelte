@@ -78,6 +78,7 @@
         }).then(({ data }) => {
             user.set(data);
         });
+    }
 </script>
 
 {#if $theme}

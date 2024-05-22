@@ -4,9 +4,9 @@ export async function POST({request, locals}){
     const data = await request.json();
     if(locals.user && locals.userData && data && "UUID" in data && "newNickname" in data){
         if(locals.userData?.UUID !== data.UUID) return new Response(JSON.stringify({status: 'fail', reason:'UUID not matched'}));
-
+        
         try{
-            await UserController.changeNickname(locals.userData.UUID, data.newNickname);
+            await UserController.changeNickname(locals.userData.provider, locals.userData.providerId, data.newNickname);
             return new Response(JSON.stringify({status: 'success'}))
         }
         catch(err:any){

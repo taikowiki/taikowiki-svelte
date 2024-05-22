@@ -1,3 +1,5 @@
+import {GENRE, DIFFICULTY, VERSION} from './const'
+
 export interface SongData {
     songNo: string;
     title: string;
@@ -7,7 +9,7 @@ export interface SongData {
     aliasEn: string | null;
     bpm: Record<'min' | 'max', number>;
     bpmShiver: 1 | 0;
-    version: string[];
+    version: Version[];
     isAsiaBanned: 1 | 0;
     isKrBanned: 1 | 0;
     genre: Genre[];
@@ -17,8 +19,8 @@ export interface SongData {
     isDeleted: 1 | 0;
 }
 
-export type Genre = "pops" | "anime" | "kids" | "game" | "variety" | "namco" | "vocaloid" | "classic"
-export type Difficulty = "easy" | "normal" | "hard" | "oni" | "ura"
+export type Genre = typeof GENRE[number]
+export type Difficulty = typeof DIFFICULTY[number]
 export interface Course {
     level: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
     isBranched: 1 | 0;
@@ -34,4 +36,5 @@ export interface Course {
         order: number;
     }[];
 }
+export type Version = typeof VERSION[number][number]
 export type SongLang = "jp" | "ko" | "ako" | "en" | "aen";

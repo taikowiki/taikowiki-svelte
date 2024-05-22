@@ -7,7 +7,7 @@
     export let bpmShiver: SongData["bpmShiver"];
     export let version: string[];
     export let artists: string[];
-    export let addedDate: number;
+    export let addedDate: number | null;
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();

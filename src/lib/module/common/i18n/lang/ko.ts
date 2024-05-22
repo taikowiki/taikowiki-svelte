@@ -36,13 +36,25 @@ const ko: LangFile = {
             variety: '버라이어티',
             classic: '클래식'
         },
-        languages:{
+        languages: {
             jp: '일본어',
             ko: '한국어',
             ako: '한국어(비공식)'
         }
     },
-    '/song/[songNo]':{
+    '/song/[songNo]': {
+        genres: {
+            pops: '팝스',
+            anime: '애니메이션',
+            kids: '키즈',
+            vocaloid: '보컬로이드',
+            game: '게임 뮤직',
+            namco: '남코 오리지널',
+            variety: '버라이어티',
+            classic: '클래식'
+        }
+    },
+    '/song/add': {
         genres: {
             pops: '팝스',
             anime: '애니메이션',
@@ -61,13 +73,13 @@ const ko: LangFile = {
             dfc: '전량'
         }
     },
-    '/diffchart/clear/[level]':{
+    '/diffchart/clear/[level]': {
         '10 level clear': '★10 클리어 서열표',
         '9 level clear': '★9 클리어 서열표',
         '8 level clear': '★8 클리어 서열표',
         '7 level clear': '★7 클리어 서열표',
         '6 level clear': '★6 클리어 서열표',
-        sections:{
+        sections: {
             'SSS': '졸업+',
             'SS': '졸업',
             'S': '최상',
@@ -80,6 +92,12 @@ const ko: LangFile = {
             'X': '개인차'
         },
         subname: "🔴 개인차가 왕 큼&nbsp;&nbsp;&nbsp;🟢 초견 주의&nbsp;&nbsp;&nbsp;🟣 클리어에 비해 풀콤보가 왕 어려움"
+    },
+    '/auth/user': {
+        'error': {
+            'New nickname is not in the correct format': '닉네임이 형식에 올바르지 않습니다.',
+            'Duplicated Nickname': '이미 사용중인 닉네임입니다.'
+        }
     }
 }
 

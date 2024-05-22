@@ -43,11 +43,11 @@ export default class UserController {
         })
     }
 
-    static async changeNickname(UUID:string, newNickname:string){
+    static async changeNickname(provider:string, providerId:string, newNickname:string){
         if(!/^([a-zA-Z가-힣0-9\-]*)$/.test(newNickname)) throw new Error('New nickname is not in the correct format');
         return await runQuery(async (run) => {
             if((await run(`SELECT \`order\` FROM \`user/data\` WHERE \`nickname\` = ?`, [newNickname])).length !== 0) throw new Error('Duplicated Nickname');
-            return await run(`UPDATE \`user/data\` SET \`nickname\` = ? WHERE \`UUID\` = ?`, [newNickname, UUID])
+            return await run(`UPDATE \`user/data\` SET \`nickname\` = ? WHERE \`provider\` = ? AND \`providerId\` = ?`, [newNickname, provider, providerId])
         })
     }
 

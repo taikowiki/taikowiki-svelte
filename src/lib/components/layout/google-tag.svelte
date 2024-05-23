@@ -1,6 +1,7 @@
 <script>
+    import { browser } from "$app/environment";
     import { page } from "$app/stores";
-    $: if ($page.url || $page.state) {
+    $: if (browser && ($page.url || $page.state)) {
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });

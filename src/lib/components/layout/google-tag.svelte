@@ -14,7 +14,7 @@
         })(window, document, "script", "dataLayer", "GTM-PPRX86P3");
     }
     $: {
-        if (typeof gtag !== "undefined") {
+        if (browser && typeof gtag !== "undefined") {
             gtag("config", "G-S8TRY8QPYG", {
                 page_title: document.title,
                 page_path: $page.url.pathname,

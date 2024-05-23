@@ -13,4 +13,28 @@
             f.parentNode.insertBefore(j, f);
         })(window, document, "script", "dataLayer", "GTM-PPRX86P3");
     }
+    $: {
+        if (typeof gtag !== "undefined") {
+            gtag("config", "G-S8TRY8QPYG", {
+                page_title: document.title,
+                page_path: $page.url.pathname,
+            });
+        }
+    }
 </script>
+
+<svelte:head>
+    <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-S8TRY8QPYG"
+    ></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+
+        gtag("config", "G-S8TRY8QPYG");
+    </script>
+</svelte:head>

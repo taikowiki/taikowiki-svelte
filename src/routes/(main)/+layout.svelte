@@ -47,6 +47,7 @@
     import { beforeNavigate } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
     import axios from "axios";
+    import GoogleTag from '$lib/components/layout/google-tag.svelte';
 
     export let data;
 
@@ -83,6 +84,7 @@
 </script>
 
 <VercelInject/>
+<GoogleTag/>
 {#if $theme}
     <Header>
         <svelte:fragment slot="left">

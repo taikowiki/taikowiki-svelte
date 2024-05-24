@@ -9,10 +9,15 @@
 </script>
 
 <script lang="ts">
+    import { page } from "$app/stores";
+
     import SongEditor from "$lib/components/page/song/add/SongEditor.svelte";
+    import { getSongFromContextBySongNo } from "$lib/module/common/song/song.client";
     import type { SongData } from "$lib/module/common/song/types";
 
-    let songData: SongData = {
+    let songData: SongData = getSongFromContextBySongNo(
+        $page.params.songNo,
+    ) || {
         songNo: "",
         title: "",
         titleEn: null,
@@ -91,7 +96,7 @@
         <input type="text" name="song_no" bind:value={songNo} />
     </form>
 </div>
-<SongEditor bind:songData />
+<SongEditor bind:songData type="edit"/>
 
 <button
     on:click={() => {

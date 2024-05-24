@@ -4,6 +4,21 @@
     export let title: string;
     export let titleKo: string | null;
     export let aliasKo: string | null;
+
+    let titleKoChecked = titleKo !== null;
+    $:if(titleKoChecked){
+        titleKo = titleKo || '';
+    }
+    else{
+        titleKo = null;
+    }
+    let aliasKoChecked = aliasKo !== null;
+    $:if(aliasKoChecked){
+        aliasKo = aliasKo || '';
+    }
+    else{
+        aliasKo = null;
+    }
 </script>
 
 <TitledContainer title="제목" color="#cf4844">
@@ -19,14 +34,7 @@
             <td>
                 <input
                     type="checkbox"
-                    on:change={(event) => {
-                        if (!event.target) return;
-                        if (event.currentTarget.checked) {
-                            titleKo = "";
-                        } else {
-                            titleKo = null;
-                        }
-                    }}
+                    bind:checked={titleKoChecked}
                 />
                 <input type="text" bind:value={titleKo} disabled={titleKo === null} />
             </td>
@@ -36,14 +44,7 @@
             <td>
                 <input
                     type="checkbox"
-                    on:change={(event) => {
-                        if (!event.target) return;
-                        if (event.currentTarget.checked) {
-                            aliasKo = "";
-                        } else {
-                            aliasKo = null;
-                        }
-                    }}
+                    bind:checked={aliasKoChecked}
                 />
                 <input type="text" bind:value={aliasKo} disabled={aliasKo === null} />
             </td>
@@ -58,6 +59,7 @@
 
     td:nth-child(1){
         width: 150px;
+        font-weight: bold;
     }
     td:nth-child(2){
         display:flex;

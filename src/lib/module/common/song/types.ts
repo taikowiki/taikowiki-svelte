@@ -1,4 +1,4 @@
-import {GENRE, DIFFICULTY, VERSION} from './const'
+import { GENRE, DIFFICULTY, VERSION, DANIVERSION, DAN } from './const'
 
 export interface SongData {
     songNo: string;
@@ -14,8 +14,8 @@ export interface SongData {
     isKrBanned: 1 | 0;
     genre: Genre[];
     artists: string[];
-    addedDate: number|null;
-    courses: Partial<Record<Difficulty, Course>>
+    addedDate: number | null;
+    courses: Record<"easy" | "normal" | "hard" | "oni", Course> & Record<"ura", Course | null>
     isDeleted: 1 | 0;
 }
 
@@ -30,11 +30,14 @@ export interface Course {
     rollTime: number[];
     maxDensity: number;
     daniUsed: 1 | 0;
-    dani: {
-        version: string;
-        dan: string;
-        order: number;
-    }[];
+    dani: Dani[];
 }
 export type Version = typeof VERSION[number][number]
 export type SongLang = "jp" | "ko" | "ako" | "en" | "aen";
+export type DaniVersion = typeof DANIVERSION[number];
+export type Dan = typeof DAN[number];
+export interface Dani {
+    version: DaniVersion;
+    dan: Dan;
+    order: 1|2|3;
+}

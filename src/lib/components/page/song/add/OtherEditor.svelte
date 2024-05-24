@@ -6,7 +6,7 @@
     } from "$lib/module/common/song/types";
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import { GENRE, VERSION } from "$lib/module/common/song/const";
-    import { getI18N } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let bpm: SongData["bpm"];
     export let bpmShiver: 1 | 0;
@@ -27,12 +27,12 @@
         .map((e) => e.trim().replaceAll("\n", ""));
 
     let addedDATE = new Date(addedDate || Date.now()).toISOString().slice(0, 10);
-    console.log(addedDATE);
     $: if(addedDate !== null){
         addedDate = new Date(addedDATE).getTime()
     }
  
-    const i18n = getI18N();
+    const lang = getLang();
+    $: i18n = getI18N('/song/add', $lang);
 </script>
 
 <TitledContainer title="기타" color="#cf4844">
@@ -48,7 +48,7 @@
                                 value={gen}
                                 bind:group={genre}
                             />
-                            {$i18n.genres[gen]}
+                            {i18n.genres[gen]}
                         </label>
                     {/each}
                 </div>
@@ -204,6 +204,7 @@
     }
     td:nth-child(1) {
         width: 150px;
+        font-weight: bold;
     }
     td:nth-child(2) > div {
         display: flex;

@@ -39,12 +39,15 @@ export default class SongDB {
                 e.version = JSON.parse(e.version);
                 e.genre = JSON.parse(e.genre);
                 e.artists = JSON.parse(e.artists);
+                if (e.courses.ura === undefined) {
+                    e.courses.ura = null;
+                }
             })
             return JSON.parse(JSON.stringify(result))
         })
     }
 
-    static async getBySongNo(songNo: string): Promise<SongData[]> {
+    static async getBySongNo(songNo: string): Promise<SongData | null> {
         return await runQuery(async (run) => {
             let result = await run("SELECT * FROM `song` WHERE `songNo` = ?", [songNo]);
             result.map((e: any) => {
@@ -53,8 +56,11 @@ export default class SongDB {
                 e.version = JSON.parse(e.version);
                 e.genre = JSON.parse(e.genre);
                 e.artists = JSON.parse(e.artists);
+                if (e.courses.ura === undefined) {
+                    e.courses.ura = null;
+                }
             })
-            return JSON.parse(JSON.stringify(result))
+            return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
         })
     }
 

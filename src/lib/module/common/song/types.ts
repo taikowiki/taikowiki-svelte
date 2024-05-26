@@ -31,6 +31,7 @@ export interface Course {
     maxDensity: number;
     daniUsed: 1 | 0;
     dani: Dani[];
+    images: string[];
 }
 export type Version = typeof VERSION[number][number]
 export type SongLang = "jp" | "ko" | "ako" | "en" | "aen";

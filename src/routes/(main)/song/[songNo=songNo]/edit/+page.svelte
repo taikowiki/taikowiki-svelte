@@ -15,75 +15,9 @@
     import { getSongFromContextBySongNo } from "$lib/module/common/song/song.client";
     import type { SongData } from "$lib/module/common/song/types";
 
-    let songData: SongData = getSongFromContextBySongNo(
-        $page.params.songNo,
-    ) || {
-        songNo: "",
-        title: "",
-        titleEn: null,
-        titleKo: null,
-        aliasEn: null,
-        aliasKo: null,
-        bpm: {
-            min: 0,
-            max: 0,
-        },
-        bpmShiver: 0,
-        version: [],
-        isAsiaBanned: 0,
-        isKrBanned: 0,
-        isDeleted: 0,
-        genre: [],
-        artists: [],
-        addedDate: null,
-        courses: {
-            easy: {
-                level: 1,
-                isBranched: 0,
-                maxCombo: 0,
-                playTime: 0,
-                balloon: [],
-                rollTime: [],
-                maxDensity: 0,
-                daniUsed: 0,
-                dani: [],
-            },
-            normal: {
-                level: 1,
-                isBranched: 0,
-                maxCombo: 0,
-                playTime: 0,
-                balloon: [],
-                rollTime: [],
-                maxDensity: 0,
-                daniUsed: 0,
-                dani: [],
-            },
-            hard: {
-                level: 1,
-                isBranched: 0,
-                maxCombo: 0,
-                playTime: 0,
-                balloon: [],
-                rollTime: [],
-                maxDensity: 0,
-                daniUsed: 0,
-                dani: [],
-            },
-            oni: {
-                level: 1,
-                isBranched: 0,
-                maxCombo: 0,
-                playTime: 0,
-                balloon: [],
-                rollTime: [],
-                maxDensity: 0,
-                daniUsed: 0,
-                dani: [],
-            },
-            ura: null,
-        },
-    };
+    let maybeSongData: SongData|null = getSongFromContextBySongNo($page.params.songNo);
+    
+    let songData = maybeSongData as SongData;
 
     let form: HTMLFormElement;
     $: value = JSON.stringify(songData);
@@ -96,7 +30,7 @@
         <input type="text" name="song_no" bind:value={songNo} />
     </form>
 </div>
-<SongEditor bind:songData type="edit"/>
+<SongEditor bind:songData type="edit" />
 
 <button
     on:click={() => {

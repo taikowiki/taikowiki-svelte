@@ -39,9 +39,6 @@ export default class SongDB {
                 e.version = JSON.parse(e.version);
                 e.genre = JSON.parse(e.genre);
                 e.artists = JSON.parse(e.artists);
-                if (e.courses.ura === undefined) {
-                    e.courses.ura = null;
-                }
             })
             return JSON.parse(JSON.stringify(result))
         })

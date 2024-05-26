@@ -17,6 +17,7 @@
         maxDensity: 0,
         daniUsed: 0,
         dani: [],
+        images: [],
     };
 
     let daniUsed = Boolean(course?.daniUsed ?? 0);
@@ -28,12 +29,14 @@
     $: if (course) {
         course.isBranched = Number(isBranched) as 0 | 1;
     }
+
+    let imgsrc = "";
 </script>
 
-<div style={`border: 2px solid ${color.difficulty[difficulty]};width:100%;`}>
+<div style={`border: 2px solid ${color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}>
     <table class="wrapper">
         <tr>
-            <td style="font-weight:bold;width:150px;">
+            <td class="r" style="font-weight:bold">
                 {difficulty}
                 {#if difficulty === "ura"}
                     <input
@@ -108,9 +111,12 @@
                                 <button
                                     on:click={() => {
                                         if (course.playTime !== 0) {
-                                            course.maxDensity = Math.round(
-                                                course.maxCombo / course.playTime * 100
-                                            ) / 100;
+                                            course.maxDensity =
+                                                Math.round(
+                                                    (course.maxCombo /
+                                                        course.playTime) *
+                                                        100,
+                                                ) / 100;
                                         } else {
                                             course.maxDensity = 0;
                                         }
@@ -188,10 +194,58 @@
                                             course.dani = course.dani;
                                         }}>추가</button
                                     >
-                                    {#each course.dani as dani}
-                                        <DaniEditor bind:dani />
-                                    {/each}
+                                    <div class="dani-container-container">
+                                        {#each course.dani as dani, i}
+                                            <div class="dani-container">
+                                                <DaniEditor bind:dani />
+                                                <button
+                                                    on:click={() => {
+                                                        course.dani =
+                                                            course.dani.filter(
+                                                                (_, index) =>
+                                                                    index !== i,
+                                                            );
+                                                    }}>X</button
+                                                >
+                                            </div>
+                                        {/each}
+                                    </div>
                                 {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> 보면 이미지 </td>
+                            <td>
+                                <div class="image-container-container">
+                                    <div
+                                        style="display:flex;align-items:center;"
+                                    >
+                                        <button
+                                            on:click={() => {
+                                                course.images.push('');
+                                                course.images = course.images;
+                                            }}>추가</button
+                                        >
+                                    </div>
+                                    {#each course.images as image, i}
+                                        <div class="image-container">
+                                            <input
+                                                type="text"
+                                                bind:value={image}
+                                                placeholder="이미지 주소"
+                                            />
+                                            <button
+                                                on:click={() => {
+                                                    course.images =
+                                                        course.images.filter(
+                                                            (_, index) =>
+                                                                index !== i,
+                                                        );
+                                                }}>X</button
+                                            >
+                                        </div>
+                                    {/each}
+                                </div>
                             </td>
                         </tr>
                     </table>
@@ -220,7 +274,7 @@
         border-collapse: collapse;
     }
 
-    table td:nth-child(1) {
+    table td:nth-child(1):not(.r) {
         width: 120px;
     }
 
@@ -233,5 +287,75 @@
         border: 1px solid black;
         width: calc(100% - 5px);
         resize: vertical;
+    }
+
+    .r {
+        width: 150px;
+    }
+    @media only screen and (max-width: 1000px) {
+        .r {
+            width: 80px;
+        }
+    }
+
+    .dani-container {
+        display: flex;
+        align-items: center;
+    }
+    .dani-container > button {
+        width: 17px;
+        height: 17px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border: 0;
+        background-color: #cf4844;
+        color: white;
+
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .dani-container-container {
+        display: flex;
+        flex-direction: column;
+
+        row-gap: 3px;
+    }
+
+    .image-container {
+        display: flex;
+        align-items: center;
+    }
+    .image-container > input {
+        height: 15px;
+    }
+    .image-container > button {
+        width: 20px;
+        height: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border: 0;
+        background-color: #cf4844;
+        color: white;
+
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .image-container-container {
+        display: flex;
+        flex-direction: column;
+        row-gap: 3px;
+    }
+
+    .image-container-container input{
+        max-width: 300px;
+        width: 100%;
     }
 </style>

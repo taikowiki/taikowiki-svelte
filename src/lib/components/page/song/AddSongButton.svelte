@@ -12,7 +12,7 @@
         align-items: center;
         column-gap: 5px;
 
-        color:white;
+        color:white !important;
 
         text-decoration: none;
 

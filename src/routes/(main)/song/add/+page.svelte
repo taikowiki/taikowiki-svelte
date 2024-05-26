@@ -9,11 +9,13 @@
 </script>
 
 <script lang="ts">
+    import { page } from "$app/stores";
+
     import SongEditor from "$lib/components/page/song/add/SongEditor.svelte";
     import type { SongData } from "$lib/module/common/song/types";
 
     let songData: SongData = {
-        songNo: "",
+        songNo: $page.url.searchParams.get('song_no') || "",
         title: "",
         titleEn: null,
         titleKo: null,
@@ -42,6 +44,7 @@
                 maxDensity: 0,
                 daniUsed: 0,
                 dani: [],
+                images: []
             },
             normal: {
                 level: 1,
@@ -53,6 +56,7 @@
                 maxDensity: 0,
                 daniUsed: 0,
                 dani: [],
+                images: []
             },
             hard: {
                 level: 1,
@@ -64,6 +68,7 @@
                 maxDensity: 0,
                 daniUsed: 0,
                 dani: [],
+                images: []
             },
             oni: {
                 level: 1,
@@ -75,6 +80,7 @@
                 maxDensity: 0,
                 daniUsed: 0,
                 dani: [],
+                images: []
             },
             ura: null,
         },

@@ -9,6 +9,7 @@
     import AlertDisplay from "$lib/components/page/song/[songNo]/AlertDisplay.svelte";
     import CourseContainer from "$lib/components/page/song/[songNo]/CourseContainer.svelte";
     import AddSongButton from '$lib/components/page/song/AddSongButton.svelte';
+    import FumenDisplay from "$lib/components/page/song/[songNo]/FumenDisplay.svelte";
 
     const song = getSongFromContextBySongNo($page.params.songNo);
 

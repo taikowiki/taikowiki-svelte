@@ -1,6 +1,10 @@
 <script lang="ts">
     import type { Genre } from "$lib/module/common/song/types";
-    import type { Song } from "$lib/module/page/diffchart/types";
+    import type {
+        Song,
+        SongScore,
+        SongScoreDetail,
+    } from "$lib/module/page/diffchart/types";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
     import color from "$lib/module/common/color";
 
@@ -8,9 +12,10 @@
     export let genre: Genre[];
     export let krTitle: string;
     export let theme: string;
+    export let userScore: SongScoreDetail | null = null;
 </script>
 
-<a class="container" href={`/song/${song.songNo}`} data-theme={theme}>
+<a class="container" href={`/song/${song.songNo}`} data-theme={theme} data-crown={userScore?.crown || ""}>
     <DiffchartSongGenre {genre} width="6px" height="26px" />
     <div class="title-container">
         <div
@@ -20,9 +25,16 @@
             {song.title}
         </div>
         {#if krTitle}
-            <div class="sub-title">
+            <div class="title-kr">
                 {krTitle}
             </div>
+        {/if}
+        {#if userScore?.badge}
+            <img
+                src={`/assets/img/badge/badge-${userScore.badge}.png`}
+                alt=""
+                class="badge"
+            />
         {/if}
     </div>
 </a>
@@ -69,7 +81,7 @@
 
         font-weight: 900;
     }
-    .sub-title {
+    .title-kr {
         font-size: 10px;
         color: #5b5b5b;
 
@@ -80,7 +92,35 @@
         background-color: #1c1c1c;
     }
 
-    .container[data-theme="dark"] .sub-title {
+    .container[data-theme="dark"] .title-kr {
         color: rgb(193, 193, 193);
+    }
+    
+    .container[data-crown="gold"] {
+        background-color: #ffe972;
+    }
+    .container[data-crown="silver"] {
+        background-color: #d4e8ff;
+    }
+    .container[data-crown="donderfull"] {
+        background: linear-gradient(
+            45deg,
+            #ffb3ba,
+            /* pink */ #ffdfba,
+            /* peach */ #ffffba,
+            /* yellow */ #baffc9,
+            /* mint */ #bae1ff /* light blue */
+        );
+    }
+    .container[data-crown="silver"] .title-kr, .container[data-crown="gold"] .title-kr, .container[data-crown="donderfull"] .title-kr{
+        color: #5b5b5b;
+    }
+
+    .badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 22px;
+        height: 22px;
     }
 </style>

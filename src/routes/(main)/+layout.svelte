@@ -65,7 +65,6 @@
     const pageAside = usePageAside();
     beforeNavigate(resetPageAside(pageAside));
     //afterNavigate(setPageAsideDisplay(pageAside));
-
     if (data.songs) {
         setContext("songs", data.songs);
     }

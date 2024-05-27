@@ -5,7 +5,7 @@ import groupBy from "object.groupby";
 export default class UserController {
     static async getBasicData(provider: string, providerId: string): Promise<UserBasicData> {
         return await runQuery(async (run) => {
-            const result = await run(`SELECT * FROM \`user/basicData\` WHERE \`provider\` = ? AND \`providerId\` = ?`, [provider, providerId]);
+            const result = await run(`SELECT * FROM \`user/basic_data\` WHERE \`provider\` = ? AND \`providerId\` = ?`, [provider, providerId]);
 
             if (result.length !== 0) return result[0]; //유저 존재
 
@@ -16,9 +16,9 @@ export default class UserController {
                 grade: 2
             }
 
-            const r = await run(`INSERT INTO \`user/basicData\` (\`provider\`, \`providerId\`, \`registerTime\`, \`grade\`) VALUES (?, ?, ?, ?)`, [userBasicData.provider, userBasicData.providerId, userBasicData.registerTime, userBasicData.grade]);
+            const r = await run(`INSERT INTO \`user/basic_data\` (\`provider\`, \`providerId\`, \`registerTime\`, \`grade\`) VALUES (?, ?, ?, ?)`, [userBasicData.provider, userBasicData.providerId, userBasicData.registerTime, userBasicData.grade]);
 
-            return (await run(`SELECT * FROM \`user/basicData\` WHERE \`order\` = ?`, [r.insertId]) as UserBasicData[])[0]
+            return (await run(`SELECT * FROM \`user/basic_data\` WHERE \`order\` = ?`, [r.insertId]) as UserBasicData[])[0]
         })
     }
 
@@ -39,7 +39,7 @@ export default class UserController {
 
             const r = await run(`INSERT INTO \`user/data\` (\`provider\`, \`providerId\`, \`nickname\`, \`UUID\`) VALUES (?, ?, ?, ?)`, [userData.provider, userData.providerId, userData.nickname, userData.UUID]);
 
-            return (await run(`SELECT * FROM \`user/basicData\` WHERE \`order\` = ?`, [r.insertId]) as UserData[])[0]
+            return (await run(`SELECT * FROM \`user/basic_data\` WHERE \`order\` = ?`, [r.insertId]) as UserData[])[0]
         })
     }
 
@@ -54,7 +54,7 @@ export default class UserController {
     static async deleteUser(provider:string, providerId:string){
         return await runQuery(async(run) => {
             await run(`DELETE FROM \`user/data\` WHERE \`provider\` = ? AND \`providerId\` = ?;`, [provider, providerId]);
-            await run(`DELETE FROM \`user/basicData\` WHERE \`provider\` = ? AND \`providerId\` = ?;`, [provider, providerId]);
+            await run(`DELETE FROM \`user/basic_data\` WHERE \`provider\` = ? AND \`providerId\` = ?;`, [provider, providerId]);
         })
     }
 }

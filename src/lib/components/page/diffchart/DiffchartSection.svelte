@@ -1,14 +1,40 @@
+<script lang="ts" context="module">
+    function getClearedSongScores(scoreData: SongScore[] | null, songs: Song[]): SongScore[] | null{
+        if(scoreData === null) return null;
+        return scoreData.filter(
+            (score) =>
+                songs.find(
+                    (song) =>
+                        (song.songNo === score.songNo &&
+                            score.details[uraToOniUra(song.difficulty)]
+                                ?.crown === "silver") ||
+                        "gold" ||
+                        "donderfull",
+                ) !== undefined,
+        );
+    }
+
+    function uraToOniUra(diff: Difficulty) {
+        if (diff === "ura") {
+            return "oni_ura";
+        }
+        return diff;
+    }
+</script>
+
 <script lang="ts">
-    import type { Section } from "$lib/module/page/diffchart/types";
+    import type { Section, Song, SongScore } from "$lib/module/page/diffchart/types";
     import { getLang, getI18N } from "$lib/module/common/i18n/i18n";
     import DiffchartSectionName from "./DiffchartSectionName.svelte";
     import DiffchartSong from "./DiffchartSong.svelte";
-    import type { SongData } from "$lib/module/common/song/types";
+    import type { Difficulty, SongData } from "$lib/module/common/song/types";
+    import { difficulty } from "$lib/module/common/color";
 
     export let section: Section;
     export let songs:SongData[];
     export let theme: string;
     export let useMobile:boolean = true;
+    export let userScoreData:SongScore[] | null;
 
     const lang = getLang();
     $: i18n = getI18N("/diffchart/clear/[level]", $lang);
@@ -25,17 +51,20 @@
         E: '#4161D8',
         X: '#adadad'
     }
+
+    let clearedSongScores = getClearedSongScores(userScoreData, section.songs);
 </script>
 
 <div class="section">
     <DiffchartSectionName
         {name}
+        {clearedSongScores}
         color={section.color}
         backgroundColor={sectionColor[section.name] || section.backgroundColor}
     />
-    <div class="song-container" class:useMobile={useMobile}>
+    <div class="song-container" class:useMobile>
         {#each section.songs.toSorted((a, b) => a.order - b.order) as song}
-            <DiffchartSong {song} {songs} {theme} {useMobile}/>
+            <DiffchartSong {song} {songs} {theme} {useMobile} userScore={clearedSongScores?.find(score => score.songNo === song.songNo)?.details[uraToOniUra(song.difficulty)] ?? null}/>
         {/each}
     </div>
 </div>
@@ -52,9 +81,9 @@
         transform: translateY(-25px);
     }
 
-    @media only screen and (max-width: 1000px){
-        .song-container.useMobile{
-            display:flex;
+    @media only screen and (max-width: 1000px) {
+        .song-container.useMobile {
+            display: flex;
 
             flex-direction: column;
             align-items: center;

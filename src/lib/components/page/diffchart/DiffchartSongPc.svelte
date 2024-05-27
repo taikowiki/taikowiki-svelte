@@ -1,6 +1,10 @@
 <script lang="ts">
     import type { Genre } from "$lib/module/common/song/types";
-    import type { Song } from "$lib/module/page/diffchart/types";
+    import type {
+        Song,
+        SongScore,
+        SongScoreDetail,
+    } from "$lib/module/page/diffchart/types";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
     import color from "$lib/module/common/color";
     import { getLang } from "$lib/module/common/i18n/i18n";
@@ -10,7 +14,8 @@
     export let song: Song;
     export let genre: Genre[];
     export let krTitle: string;
-    export let theme:string;
+    export let theme: string;
+    export let userScore: SongScoreDetail | null = null;
 
     const lang = getLang();
 
@@ -29,8 +34,7 @@
                 titleDiv.style.fontSize = `${fontSize}px`;
                 fontSize--;
             }
-        }
-        else if(titleDiv.clientHeight > 48){
+        } else if (titleDiv.clientHeight > 48) {
             if (krTitleDiv) {
                 krTitleDiv.style.fontSize = "10px";
             }
@@ -45,10 +49,10 @@
 
 <a class="container" href={`/song/${song.songNo}`} data-theme={theme}>
     <DiffchartSongGenre {genre} width="6px" height="36px" />
-    <div class="title-container">
+    <div class="title-container" data-crown={userScore?.crown || ""}>
         <div
             class="title"
-            style={`color:${theme === "light"? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
+            style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
             bind:this={titleDiv}
         >
             {song.title}
@@ -57,6 +61,9 @@
             <div class="krTitle" bind:this={krTitleDiv}>
                 {krTitle}
             </div>
+        {/if}
+        {#if userScore?.badge}
+            <img src={`/assets/img/badge/badge-${userScore.badge}.png`} alt="" class="badge"/>
         {/if}
     </div>
 </a>
@@ -83,7 +90,7 @@
         text-decoration: none;
     }
 
-    .container[data-theme="dark"]{
+    .container[data-theme="dark"] {
         background-color: #1c1c1c;
     }
 
@@ -96,6 +103,8 @@
         justify-content: center;
 
         row-gap: 2px;
+
+        position: relative;
     }
 
     .title {
@@ -123,7 +132,32 @@
         text-overflow: ellipsis;
     }
 
-    .container[data-theme="dark"] .krTitle{
-        color:rgb(193, 193, 193);
+    .container[data-theme="dark"] .krTitle {
+        color: rgb(193, 193, 193);
+    }
+
+    .title-container[data-crown="gold"] {
+        background-color: #ffe972;
+    }
+    .title-container[data-crown="silver"] {
+        background-color: #d4e8ff;
+    }
+    .title-container[data-crown="donderfull"] {
+        background: linear-gradient(
+            45deg,
+            #ffb3ba,
+            /* pink */ #ffdfba,
+            /* peach */ #ffffba,
+            /* yellow */ #baffc9,
+            /* mint */ #bae1ff /* light blue */
+        );
+    }
+
+    .badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 22px;
+        height: 22px;
     }
 </style>

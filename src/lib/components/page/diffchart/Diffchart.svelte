@@ -1,5 +1,22 @@
+<script lang="ts" context="module">
+    function parseSongScoreJSON(json: string): SongScore[] | null {
+        try {
+            let result = JSON.parse(json);
+            if (Array.isArray(result)) {
+                return result;
+            }
+            return null;
+        } catch {
+            return null;
+        }
+    }
+</script>
+
 <script lang="ts">
-    import type { DiffChart } from "$lib/module/page/diffchart/types";
+    import type {
+        DiffChart,
+        SongScore,
+    } from "$lib/module/page/diffchart/types";
     import DiffchartName from "./DiffchartName.svelte";
     import DiffchartSection from "./DiffchartSection.svelte";
     import { getLang, getI18N } from "$lib/module/common/i18n/i18n";
@@ -38,19 +55,29 @@
             canvas.remove();
         };
     });
+
+    let userScoreDataJSON: string = "";
+    $: userScoreData = parseSongScoreJSON(userScoreDataJSON);
 </script>
+
+<input
+    type="text"
+    bind:value={userScoreDataJSON}
+    
+    id="scoredata_input"
+/>
 
 <div class="container">
     <DiffchartName {name} {color} {backgroundColor} {subname} />
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
-        <DiffchartSection {section} {songs} theme={$theme} />
+        <DiffchartSection {section} {songs} theme={$theme} {userScoreData}/>
     {/each}
 </div>
 
 <div class="replica" bind:this={replica}>
     <DiffchartName {name} {color} {backgroundColor} />
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
-        <DiffchartSection {section} {songs} theme={"light"} useMobile={false} />
+        <DiffchartSection {section} {songs} theme={"light"} useMobile={false} {userScoreData}/>
     {/each}
 </div>
 

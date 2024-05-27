@@ -4,7 +4,7 @@
     export let name: string;
     export let color: string = "white";
     export let backgroundColor: string = "#7f7f7f";
-    export let clearedSongScores: SongScore[] | null = null;
+    export let clearedSongScores: Partial<SongScore>[] | null = null;
 </script>
 
 <div class="name" style={`color:${color};background-color:${backgroundColor};`}>

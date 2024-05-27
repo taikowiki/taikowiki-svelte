@@ -47,9 +47,9 @@
     });
 </script>
 
-<a class="container" href={`/song/${song.songNo}`} data-theme={theme}>
+<a class="container" href={`/song/${song.songNo}`} data-theme={theme} data-crown={userScore?.crown || ""}>
     <DiffchartSongGenre {genre} width="6px" height="36px" />
-    <div class="title-container" data-crown={userScore?.crown || ""}>
+    <div class="title-container">
         <div
             class="title"
             style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
@@ -58,7 +58,7 @@
             {song.title}
         </div>
         {#if krTitle && $lang === "ko"}
-            <div class="krTitle" bind:this={krTitleDiv}>
+            <div class="title-kr" bind:this={krTitleDiv}>
                 {krTitle}
             </div>
         {/if}
@@ -116,7 +116,7 @@
         line-height: 1.05;
     }
 
-    .krTitle {
+    .title-kr {
         width: 100%;
         font-size: 12px;
         color: #5b5b5b;
@@ -132,17 +132,17 @@
         text-overflow: ellipsis;
     }
 
-    .container[data-theme="dark"] .krTitle {
+    .container[data-theme="dark"] .title-kr {
         color: rgb(193, 193, 193);
     }
-
-    .title-container[data-crown="gold"] {
+    
+    .container[data-crown="gold"] {
         background-color: #ffe972;
     }
-    .title-container[data-crown="silver"] {
+    .container[data-crown="silver"] {
         background-color: #d4e8ff;
     }
-    .title-container[data-crown="donderfull"] {
+    .container[data-crown="donderfull"] {
         background: linear-gradient(
             45deg,
             #ffb3ba,
@@ -151,6 +151,9 @@
             /* yellow */ #baffc9,
             /* mint */ #bae1ff /* light blue */
         );
+    }
+    .container[data-crown="silver"] .title-kr, .container[data-crown="gold"] .title-kr, .container[data-crown="donderfull"] .title-kr{
+        color: #5b5b5b;
     }
 
     .badge {

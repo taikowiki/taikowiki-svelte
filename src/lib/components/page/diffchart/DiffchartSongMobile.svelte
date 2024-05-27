@@ -15,9 +15,9 @@
     export let userScore: SongScoreDetail | null = null;
 </script>
 
-<a class="container" href={`/song/${song.songNo}`} data-theme={theme}>
+<a class="container" href={`/song/${song.songNo}`} data-theme={theme} data-crown={userScore?.crown || ""}>
     <DiffchartSongGenre {genre} width="6px" height="26px" />
-    <div class="title-container" data-crown={userScore?.crown || ""}>
+    <div class="title-container">
         <div
             class="title"
             style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
@@ -25,7 +25,7 @@
             {song.title}
         </div>
         {#if krTitle}
-            <div class="sub-title">
+            <div class="title-kr">
                 {krTitle}
             </div>
         {/if}
@@ -81,7 +81,7 @@
 
         font-weight: 900;
     }
-    .sub-title {
+    .title-kr {
         font-size: 10px;
         color: #5b5b5b;
 
@@ -92,17 +92,17 @@
         background-color: #1c1c1c;
     }
 
-    .container[data-theme="dark"] .sub-title {
+    .container[data-theme="dark"] .title-kr {
         color: rgb(193, 193, 193);
     }
-
-    .title-container[data-crown="gold"] {
+    
+    .container[data-crown="gold"] {
         background-color: #ffe972;
     }
-    .title-container[data-crown="silver"] {
+    .container[data-crown="silver"] {
         background-color: #d4e8ff;
     }
-    .title-container[data-crown="donderfull"] {
+    .container[data-crown="donderfull"] {
         background: linear-gradient(
             45deg,
             #ffb3ba,
@@ -111,6 +111,9 @@
             /* yellow */ #baffc9,
             /* mint */ #bae1ff /* light blue */
         );
+    }
+    .container[data-crown="silver"] .title-kr, .container[data-crown="gold"] .title-kr, .container[data-crown="donderfull"] .title-kr{
+        color: #5b5b5b;
     }
 
     .badge {

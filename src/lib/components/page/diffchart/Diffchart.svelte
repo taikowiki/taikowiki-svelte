@@ -6,7 +6,8 @@
                 return result;
             }
             return null;
-        } catch {
+        } catch(err){
+            console.log(err);
             return null;
         }
     }
@@ -62,11 +63,12 @@
 
 <input
     type="text"
-    bind:value={userScoreDataJSON}
-    
+    on:change={(event) => {
+        userScoreDataJSON = event.currentTarget.value;
+    }}
     id="scoredata_input"
+    style="display:none;"
 />
-
 <div class="container">
     <DiffchartName {name} {color} {backgroundColor} {subname} />
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}

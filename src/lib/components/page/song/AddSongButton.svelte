@@ -1,4 +1,8 @@
-<a href='/song/add'>
+<script lang="ts">
+    import { page } from "$app/stores";
+</script>
+
+<a href={`/song/add?song_no=${$page.params.songNo}`}>
     <img src='/assets/icon/plus.svg' alt=""/>
     곡 추가
 </a>

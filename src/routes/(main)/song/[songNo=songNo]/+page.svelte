@@ -8,10 +8,10 @@
     import AlertDisplay from "$lib/components/page/song/[songNo]/AlertDisplay.svelte";
     import CourseContainer from "$lib/components/page/song/[songNo]/CourseContainer.svelte";
     import AddSongButton from '$lib/components/page/song/AddSongButton.svelte';
-    import FumenDisplay from "$lib/components/page/song/[songNo]/FumenDisplay.svelte";
+    import type { SongData } from "$lib/module/common/song/types.js";
 
     export let data;
-    const song = data.songs.find(song => song.songNo === $page.params.songNo) ?? null;
+    const song = data.songs.find((song: SongData) => song.songNo === $page.params.songNo) ?? null;
 
     const isMobile = getIsMobile();
 </script>

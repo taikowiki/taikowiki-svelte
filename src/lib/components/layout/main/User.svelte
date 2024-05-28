@@ -40,6 +40,9 @@
 </div>
 
 <style>
+    .container{
+        position:relative;
+    }
     .opener {
         width: 20px;
         height: 20px;
@@ -57,8 +60,8 @@
 
         position: absolute;
 
-        right: 1px;
-        top: 50px;
+        right: -9px;
+        top: 35px;
 
         background-color: white;
 

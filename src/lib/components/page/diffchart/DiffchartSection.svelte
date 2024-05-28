@@ -9,7 +9,7 @@
         );
     }
 
-    function uraToOniUra(diff: Difficulty) {
+    function uraToOniUra(diff: Difficulty): DifficultyType {
         if (diff === "ura") {
             return "oni_ura";
         }
@@ -19,10 +19,11 @@
 
 <script lang="ts">
     import type {
+    DifficultyType,
         Section,
         Song,
         SongScore,
-    } from "$lib/module/page/diffchart/types";
+    } from "$lib/module/common/diffchart/types";
     import { getLang, getI18N } from "$lib/module/common/i18n/i18n";
     import DiffchartSectionName from "./DiffchartSectionName.svelte";
     import DiffchartSong from "./DiffchartSong.svelte";

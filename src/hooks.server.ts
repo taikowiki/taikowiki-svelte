@@ -4,6 +4,7 @@ import auth, { providers } from '@sveltekit-board/oauth'
 import UserController from "$lib/module/common/user/user-controller.server";
 
 import { config } from 'dotenv';
+import checkPermissions from "$lib/module/common/permissionCheck.server";
 
 config();
 
@@ -33,9 +34,13 @@ const getUserData: Handle = async ({ event, resolve }) => {
     return await resolve(event);
 }
 
-const test:Handle = async({event, resolve}) => {
-    console.log(event.request.url);
-    return await resolve(event);
-}
+const checkPermission = checkPermissions([
+    {
+        path: '/admin',
+        level: 9,
+        rule: 'startsWith',
+        redirectPath: '/auth/login'
+    }
+])
 
-export const handle = sequence(authHandle, getUserData);
+export const handle = sequence(authHandle, getUserData, checkPermission);

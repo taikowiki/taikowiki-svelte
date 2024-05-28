@@ -17,7 +17,7 @@
     import type {
         DiffChart,
         SongScore,
-    } from "$lib/module/page/diffchart/types";
+    } from "$lib/module/common/diffchart/types";
     import DiffchartName from "./DiffchartName.svelte";
     import DiffchartSection from "./DiffchartSection.svelte";
     import { getLang, getI18N } from "$lib/module/common/i18n/i18n";

@@ -6,7 +6,7 @@ export interface Song {
     order: number;
     title: string;
     difficulty: Difficulty;
-    option: Option;
+    option?: Option;
 }
 
 export interface Option {

@@ -1,6 +1,5 @@
 <script lang="ts">
     import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
-    import { getSongsFromContext } from "$lib/module/common/song/song.client";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
@@ -16,7 +15,7 @@
     const lang = getLang();
     $: i18n = getI18N("/diffchart", $lang);
 
-    const songs = getSongsFromContext();
+    const songs = data.songs;
 </script>
 
 {#key diffChart}

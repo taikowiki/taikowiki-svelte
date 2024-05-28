@@ -30,6 +30,7 @@
 
 <script lang="ts">
     import VercelInject from '$lib/components/layout/vercel-inject.svelte';
+    import GoogleTag from '$lib/components/layout/google-tag.svelte';
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
@@ -47,7 +48,6 @@
     import { beforeNavigate } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
     import axios from "axios";
-    import GoogleTag from '$lib/components/layout/google-tag.svelte';
 
     export let data;
     //deepFreeze songs

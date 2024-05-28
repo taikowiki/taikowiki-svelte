@@ -46,29 +46,38 @@
     import { beforeNavigate } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
     import axios from "axios";
+    import Footer from "$lib/components/layout/main/Footer.svelte";
 
     export let data;
+    //deepFreeze songs
 
+    //theme
     let [theme, _] = useTheme();
     $: if (browser) {
         document.body.setAttribute("data-theme", $theme);
     }
 
+    //usemobile
     useIsMobile();
 
+    //lang
     const lang = useLang();
     $: i18nLayout = i18n[$lang].layout.main;
     const i18nPage = writable<PathLangFile>(setI18N($lang, $page.url.pathname));
     setContext("i18n", i18nPage);
     $: $i18nPage = setI18N($lang, $page.url.pathname);
 
+    //page aside
     const pageAside = usePageAside();
     beforeNavigate(resetPageAside(pageAside));
-    //afterNavigate(setPageAsideDisplay(pageAside));
+    /*afterNavigate(setPageAsideDisplay(pageAside));*/
+
+    //setContext songs
     if (data.songs) {
         setContext("songs", data.songs);
     }
 
+    //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);
     $: if (($navigating || $page.state) && browser) {
@@ -84,14 +93,17 @@
 {#if $theme}
     <Header>
         <svelte:fragment slot="left">
+            <HeaderItem href="/" useHover={false}>
+                <img class="logo" src="/assets/img/logo.png" alt="logo" />
+            </HeaderItem>
             <HeaderItem icon="/assets/icon/song.svg" href="/song">
-                {i18nLayout.song}
+                <span class="header-text">{i18nLayout.song}</span>
             </HeaderItem>
             <HeaderItem icon="/assets/icon/document.svg" href="/">
-                {i18nLayout.doc}
+                <span class="header-text">{i18nLayout.doc}</span>
             </HeaderItem>
             <HeaderItem icon="/assets/icon/leaderboard.svg" href="/diffchart">
-                {i18nLayout.diffchart}
+                <span class="header-text">{i18nLayout.diffchart}</span>
             </HeaderItem>
         </svelte:fragment>
         <svelte:fragment slot="right">
@@ -111,6 +123,7 @@
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
+    <Footer/>
 {/if}
 
 <style>
@@ -128,5 +141,12 @@
 
     .page-aside:empty {
         display: none;
+    }
+
+    .logo {
+        height: 30px;
+    }
+    span.header-text {
+        transform: translateY(-1px);
     }
 </style>

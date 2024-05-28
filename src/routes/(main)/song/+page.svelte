@@ -28,6 +28,8 @@
     import SongLoading from "$lib/components/page/song/SongLoading.svelte";
     import AddSongButton from "$lib/components/page/song/AddSongButton.svelte";
 
+    export let data;
+
     let filteredSongs: (SongData & { order: number })[] | null = null;
 
     let songLang: SongLang;
@@ -37,7 +39,7 @@
         pageNum = getPageNumFromUrl();
     }
 
-    const songs = getSongsFromContext();
+    const songs = data.songs
 </script>
 
 <SearchBoxContainer {songs} bind:filteredSongs />

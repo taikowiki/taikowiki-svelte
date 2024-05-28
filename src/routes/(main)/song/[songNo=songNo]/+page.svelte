@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { getSongFromContextBySongNo } from "$lib/module/common/song/song.client";
     import { page } from "$app/stores";
     import TitleDisplay from "$lib/components/page/song/[songNo]/TitleDisplay.svelte";
     import MultipleTitleDisplay from "$lib/components/page/song/[songNo]/MultipleTitleDisplay.svelte";
@@ -11,7 +10,8 @@
     import AddSongButton from '$lib/components/page/song/AddSongButton.svelte';
     import FumenDisplay from "$lib/components/page/song/[songNo]/FumenDisplay.svelte";
 
-    const song = getSongFromContextBySongNo($page.params.songNo);
+    export let data;
+    const song = data.songs.find(song => song.songNo === $page.params.songNo) ?? null;
 
     const isMobile = getIsMobile();
 </script>

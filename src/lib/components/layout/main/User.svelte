@@ -41,7 +41,7 @@
 
 <style>
     .container{
-        position: relative;
+        position:relative;
     }
     .opener {
         width: 20px;
@@ -58,7 +58,7 @@
 
         position: absolute;
 
-        right: 1px;
+        right: -9px;
         top: 35px;
 
         background-color: white;

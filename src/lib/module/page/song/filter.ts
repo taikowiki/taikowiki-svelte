@@ -1,5 +1,5 @@
 import type { Difficulty, Genre, SongData } from "$lib/module/common/song/types";
-import type { SearchOption } from "./types";
+import type { SongSearchOption } from "./types";
 //@ts-expect-error
 import r from 'regex-escape';
 
@@ -7,7 +7,7 @@ function regexEscape(str: string): string{
     return r(str)
 }
 
-export default function filter(songs: SongData[], option: SearchOption): SongData[] {
+export default function filter(songs: SongData[], option: SongSearchOption): SongData[] {
     let filteredSongs = [...songs];
 
     if (option.query) {

@@ -1,3 +1,4 @@
+import deepFreeze from "./deepFreeze";
 import type { Difficulty, Genre } from "./song/types";
 
 export const genre: Record<Genre, string> = {
@@ -32,15 +33,6 @@ const color = {
     genre,
     difficulty,
     darkDifficulty
-}
-
-function deepFreeze(target: Object) {
-    Object.values(target).forEach(child => {
-        if (typeof (child) === "object") {
-            deepFreeze(child)
-        }
-    })
-    Object.freeze(target);
 }
 
 deepFreeze(color);

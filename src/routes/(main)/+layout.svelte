@@ -46,6 +46,7 @@
     import { beforeNavigate } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
     import axios from "axios";
+    import Footer from "$lib/components/layout/main/Footer.svelte";
 
     export let data;
 
@@ -114,6 +115,7 @@
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
+    <Footer/>
 {/if}
 
 <style>

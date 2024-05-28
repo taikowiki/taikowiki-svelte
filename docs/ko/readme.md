@@ -6,4 +6,5 @@
 
 이 프로젝트는 `dev/main` 분기에서 개발되고, 이후에 `main` 브랜치로 병합됩니다. 따라서 풀 리퀘스트는 `dev/main` 브랜치로 보내주십시오.
 
-- [번역(i18n)](/docs/ko/i18n.md);
+- [번역(i18n)](/docs/ko/i18n.md)
+- [API](/docs/ko/api.md)

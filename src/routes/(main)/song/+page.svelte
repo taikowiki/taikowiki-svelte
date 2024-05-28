@@ -27,6 +27,8 @@
     import { page } from "$app/stores";
     import SongLoading from "$lib/components/page/song/SongLoading.svelte";
 
+    export let data;
+
     let filteredSongs: (SongData & { order: number })[] | null = null;
 
     let songLang: SongLang;
@@ -36,7 +38,7 @@
         pageNum = getPageNumFromUrl();
     }
 
-    const songs = getSongsFromContext();
+    const songs = data.songs
 </script>
 
 <SearchBoxContainer {songs} bind:filteredSongs />

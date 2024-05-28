@@ -50,27 +50,35 @@
     import GoogleTag from '$lib/components/layout/google-tag.svelte';
 
     export let data;
+    //deepFreeze songs
 
+    //theme
     let [theme, _] = useTheme();
     $: if (browser) {
         document.body.setAttribute("data-theme", $theme);
     }
 
+    //usemobile
     useIsMobile();
 
+    //lang
     const lang = useLang();
     $: i18nLayout = i18n[$lang].layout.main;
     const i18nPage = writable<PathLangFile>(setI18N($lang, $page.url.pathname));
     setContext("i18n", i18nPage);
     $: $i18nPage = setI18N($lang, $page.url.pathname);
 
+    //page aside
     const pageAside = usePageAside();
     beforeNavigate(resetPageAside(pageAside));
-    //afterNavigate(setPageAsideDisplay(pageAside));
+    /*afterNavigate(setPageAsideDisplay(pageAside));*/
+
+    //setContext songs
     if (data.songs) {
         setContext("songs", data.songs);
     }
 
+    //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);
     $: if (($navigating || $page.state) && browser) {

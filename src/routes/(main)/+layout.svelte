@@ -46,6 +46,7 @@
     import { beforeNavigate } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
     import axios from "axios";
+    import Footer from "$lib/components/layout/main/Footer.svelte";
 
     export let data;
     //deepFreeze songs
@@ -92,14 +93,17 @@
 {#if $theme}
     <Header>
         <svelte:fragment slot="left">
+            <HeaderItem href="/" useHover={false}>
+                <img class="logo" src="/assets/img/logo.png" alt="logo" />
+            </HeaderItem>
             <HeaderItem icon="/assets/icon/song.svg" href="/song">
-                {i18nLayout.song}
+                <span class="header-text">{i18nLayout.song}</span>
             </HeaderItem>
             <HeaderItem icon="/assets/icon/document.svg" href="/">
-                {i18nLayout.doc}
+                <span class="header-text">{i18nLayout.doc}</span>
             </HeaderItem>
             <HeaderItem icon="/assets/icon/leaderboard.svg" href="/diffchart">
-                {i18nLayout.diffchart}
+                <span class="header-text">{i18nLayout.diffchart}</span>
             </HeaderItem>
         </svelte:fragment>
         <svelte:fragment slot="right">
@@ -119,6 +123,7 @@
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
+    <Footer/>
 {/if}
 
 <style>
@@ -136,5 +141,12 @@
 
     .page-aside:empty {
         display: none;
+    }
+
+    .logo {
+        height: 30px;
+    }
+    span.header-text {
+        transform: translateY(-1px);
     }
 </style>

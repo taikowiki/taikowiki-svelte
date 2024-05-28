@@ -5,17 +5,18 @@
 
     export let icon: string = "";
     export let href: string = "";
+    export let useHover:boolean = true;
 </script>
 
 {#if href}
-    <a {href} data-theme={$theme} class="btn">
+    <a {href} data-theme={$theme} class="btn" class:hover={useHover}>
         {#if icon}
             <img src={icon} alt="" />
         {/if}
         <slot />
     </a>
 {:else}
-    <div data-theme={$theme} class="btn">
+    <div data-theme={$theme} class="btn" class:hover={useHover}>
         {#if icon}
             <img src={icon} alt="" />
         {/if}
@@ -45,7 +46,7 @@
 
         padding-inline: 5px;
     }
-    .btn:hover {
+    .hover:hover {
         background-color: rgba(255, 255, 255, 0.219);
     }
 

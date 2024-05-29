@@ -1,4 +1,4 @@
-import { getClearByLevel } from "$lib/module/page/diffchart/diffchart.server";
+import DiffchartDB from "$lib/module/common/diffchart/diffchart.server";
 import { error } from "@sveltejs/kit";
 
 export async function load({params}){
@@ -8,7 +8,7 @@ export async function load({params}){
         throw error(500);
     }
 
-    const diffChart = await getClearByLevel(level)
+    const diffChart = await DiffchartDB.getClearByLevel(level)
 
     return {
         diffChart

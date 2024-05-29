@@ -4,7 +4,7 @@
         Song,
         SongScore,
         SongScoreDetail,
-    } from "$lib/module/page/diffchart/types";
+    } from "$lib/module/common/diffchart/types";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
     import color from "$lib/module/common/color";
 

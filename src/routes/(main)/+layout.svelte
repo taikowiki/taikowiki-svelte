@@ -123,7 +123,7 @@
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
-    <Footer/>
+    <Footer version={data.version}/>
 {/if}
 
 <style>

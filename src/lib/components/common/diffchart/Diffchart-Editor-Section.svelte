@@ -6,7 +6,7 @@
     export let section: Section;
     export let index;
     export let intercept: (from: number, to: number) => any;
-    export let remove: (index:number) => any;
+    export let remove: (index: number) => any;
 
     section.order = index;
 </script>
@@ -18,22 +18,31 @@
                 intercept(section.order, section.order - 1);
             }}>↑</button
         >
-        <input class="bold" type="text" bind:value={section.name} style="width:80px;display:inline-block;text-align:center;"/>
+        <input
+            class="bold"
+            type="text"
+            bind:value={section.name}
+            style="width:80px;display:inline-block;text-align:center;"
+        />
         <button
             on:click={() => {
                 intercept(section.order, section.order + 1);
             }}>↓</button
         >
 
-        <button on:click={() => {
-            remove(index)
-        }}>삭제</button>
+        <button
+            on:click={() => {
+                remove(index);
+            }}>삭제</button
+        >
     </td>
     <td style="padding:0;">
         <table>
             <tr>
                 <td>
-                    <div class="layer" style="justify-content:center;">색상</div>
+                    <div class="layer" style="justify-content:center;">
+                        색상
+                    </div>
                 </td>
                 <td>
                     <div class="layer" style="column-gap:5px;">
@@ -77,7 +86,12 @@
                                     section.songs = intercepted;
                                 }}
                                 remove={(index) => {
-                                    section.songs = section.songs.filter((_,i) => i !== index);
+                                    section.songs = section.songs
+                                        .filter((_, i) => i !== index)
+                                        .map((song, i) => {
+                                            song.order = i;
+                                            return song;
+                                        });
                                 }}
                             />
                         {/each}
@@ -85,14 +99,17 @@
                             <td colspan="5">
                                 <button
                                     on:click={() => {
-                                        section.songs = [...section.songs, {
-                                            order: section.songs.length,
-                                            songNo: '0',
-                                            title: '',
-                                            difficulty: 'oni'
-                                        }]
-                                    }}
-                                >곡 추가</button>
+                                        section.songs = [
+                                            ...section.songs,
+                                            {
+                                                order: section.songs.length,
+                                                songNo: "0",
+                                                title: "",
+                                                difficulty: "oni",
+                                            },
+                                        ];
+                                    }}>곡 추가</button
+                                >
                             </td>
                         </tr>
                     </table>
@@ -103,7 +120,7 @@
 </tr>
 
 <style>
-    .container:hover{
+    .container:hover {
         background-color: rgba(156, 156, 255, 0.495);
     }
     table {

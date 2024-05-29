@@ -64,7 +64,7 @@
                         섹션
                     </div>
                     <table>
-                        {#each diffchart.sections.sort((a, b) => a.order - b.order) as section, index}
+                        {#each diffchart.sections.sort((a, b) => a.order - b.order) as section, index (section)}
                             <DiffchartEditorSection
                                 bind:section
                                 {index}
@@ -80,7 +80,10 @@
                                     diffchart.sections = intercepted;
                                 }}
                                 remove={(index) => {
-                                    diffchart.sections = diffchart.sections.filter((_, i) => i !== index);
+                                    diffchart.sections = diffchart.sections.filter((_, i) => i !== index).map((section, i) => {
+                                        section.order = i;
+                                        return section;
+                                    });
                                 }}
                             />
                         {/each}

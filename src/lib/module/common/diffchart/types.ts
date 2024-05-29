@@ -30,6 +30,13 @@ export interface DiffChart {
     sections: Section[];
 }
 
+export interface DiffchartData {
+    name: string;
+    level: number;
+    type: string;
+    data: DiffChart;
+}
+
 //user score data
 export interface SongScore {
     title: string

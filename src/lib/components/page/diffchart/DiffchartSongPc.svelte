@@ -4,7 +4,7 @@
         Song,
         SongScore,
         SongScoreDetail,
-    } from "$lib/module/page/diffchart/types";
+    } from "$lib/module/common/diffchart/types";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
     import color from "$lib/module/common/color";
     import { getLang } from "$lib/module/common/i18n/i18n";
@@ -113,7 +113,7 @@
 
         box-sizing: border-box;
         padding-right: 5px;
-        line-height: 1.05;
+        line-height: 1.2;
     }
 
     .title-kr {

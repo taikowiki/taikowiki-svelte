@@ -1,17 +1,11 @@
 <script lang="ts">
     export let name: string;
-    export let subname: string = '';
     export let color: string = "black";
     export let backgroundColor: string = "grey";
 </script>
 
 <div class="name" style={`color:${color};background-color:${backgroundColor};`}>
     {name}
-    {#if subname}
-    <div class="subname">
-        {subname}
-    </div>
-    {/if}
 </div>
 
 <style>
@@ -37,10 +31,5 @@
 
     .name:has(.subname){
         height: 90px;
-    }
-
-    .subname{
-        font-size: 13px;
-        font-weight: normal;
     }
 </style>

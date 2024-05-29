@@ -5,6 +5,7 @@ export async function load({ fetch }) {
     return {
         newSongs: await SongDB.getNewSongs(),
         songs: await SongDB.getAll(),
-        user
+        user,
+        version: process.env.npm_package_version
     }
 }

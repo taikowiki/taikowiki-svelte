@@ -23,7 +23,7 @@
         {diffChart}
         {songs}
         subname={i18n.subname}
-        backgroundColor="#c9c9c9"
+        backgroundColor="#cf4844"
         bind:downloadImage
     />
 {/key}

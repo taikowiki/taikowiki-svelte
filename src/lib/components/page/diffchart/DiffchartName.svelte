@@ -1,42 +1,49 @@
 <script lang="ts">
     export let name: string;
     export let subname: string = '';
-    export let color: string = "black";
-    export let backgroundColor: string = "grey";
+    export let color: string = "white";
+    export let backgroundColor: string = "#cf4844";
 </script>
 
-<div class="name" style={`color:${color};background-color:${backgroundColor};`}>
-    {name}
-    {#if subname}
-    <div class="subname">
-        {subname}
+<div class="name-container" style={`color:${color};background-color:${backgroundColor};`}>
+    <div class="name">
+        {name}
+        {#if subname}
+        <div class="subname">
+            {subname}
+        </div>
+        {/if}
     </div>
-    {/if}
 </div>
 
+
 <style>
-    .name{
-        width: 100%;
-        height: 70px;
-
+    .name-container{
         display:flex;
-        flex-direction: column;
         justify-content: center;
+       
+        align-items: center;
+        border-radius: 15px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 50px;
+        
+    }
 
-        font-size: 25px;
+    .name{
+        margin-left: 10px;
+        margin-right: 10px;
+
+        font-size: 30px;
         font-weight: bold;
-
-        border-radius: 10px;
 
         box-sizing: border-box;
 
-        padding-inline: 10px;
 
-        margin-bottom: 10px;
-    }
+        
 
-    .name:has(.subname){
-        height: 90px;
     }
 
     .subname{

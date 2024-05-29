@@ -40,7 +40,7 @@
 
         box-sizing: border-box;
 
-        border-radius: 10px;
+        border-radius: 20px;
 
         padding: 15px
     }

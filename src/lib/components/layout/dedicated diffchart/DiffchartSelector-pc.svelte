@@ -63,6 +63,11 @@
     select {
         height: 25px;
         border-radius: 3px;
+        border-color: white;
+        background-color: #f5f1f1;
+        color: #3d3d3d;
+        font-weight: 600;
+        font-family: 'Noto Sans KR';
     }
     select[data-theme="dark"] {
         background-color: #1c1c1c;
@@ -79,12 +84,13 @@
         height: 25px;
 
         font-size: 14px;
+        font-weight: bold;
 
         box-sizing: border-box;
-        border: 1px solid #767676;
+        border: 2px solid #ff6c6c;
         border-radius: 3px;
 
-        color: black;
+        color: #494949;
 
         text-decoration: none;
     }

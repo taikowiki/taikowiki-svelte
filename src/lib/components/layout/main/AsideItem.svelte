@@ -32,7 +32,7 @@
     .item {
         width: 100%;
         box-sizing: border-box;
-        border-radius: 10px;
+        border-radius: 20px;
         padding-inline: 15px;
 
         display: flex;

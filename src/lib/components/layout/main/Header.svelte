@@ -45,6 +45,9 @@
         box-sizing: border-box;
 
         padding-inline: 10px;
+
+        padding-left: 25px;
+        padding-right: 35px;
     }
 
     .left,

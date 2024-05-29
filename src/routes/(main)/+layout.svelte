@@ -128,7 +128,7 @@
 
 <style>
     :global(body[data-theme="light"]) {
-        background-color: #e8e8e8;
+        background-color: #f5f1f1;
         color: black;
     }
     :global(body[data-theme="dark"]) {

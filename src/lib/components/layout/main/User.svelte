@@ -79,7 +79,7 @@
         padding-block: 10px;
     }
     .item-container[data-theme="dark"] {
-        box-shadow: 0px 0px 3px black;
+        box-shadow: 0px 0px 3px rgb(255, 255, 255);
 
         background-color: #1c1c1c;
     }

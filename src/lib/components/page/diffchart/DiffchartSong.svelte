@@ -11,7 +11,7 @@
 <script lang="ts">
     import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
-    import type { Song, SongScore, SongScoreDetail } from "$lib/module/page/diffchart/types";
+    import type { Song, SongScore, SongScoreDetail } from "$lib/module/common/diffchart/types";
     import DiffchartSongMobile from "./DiffchartSongMobile.svelte";
     import DiffchartSongPc from "./DiffchartSongPc.svelte";
 

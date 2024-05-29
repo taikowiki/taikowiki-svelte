@@ -6,7 +6,7 @@ export interface Song {
     order: number;
     title: string;
     difficulty: Difficulty;
-    option: Option;
+    option?: Option;
 }
 
 export interface Option {
@@ -28,6 +28,13 @@ export interface DiffChart {
     color?: string;
     backgroundColor?: string;
     sections: Section[];
+}
+
+export interface DiffchartData {
+    name: string;
+    level: number;
+    type: string;
+    data: DiffChart;
 }
 
 //user score data

@@ -113,7 +113,7 @@
 
         box-sizing: border-box;
         padding-right: 5px;
-        line-height: 1.05;
+        line-height: 1.2;
     }
 
     .title-kr {

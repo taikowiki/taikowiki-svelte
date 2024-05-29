@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { page } from "$app/stores";
     import DiffchartSelectorMobile from "$lib/components/layout/dedicated diffchart/DiffchartSelector-mobile.svelte";
     import DiffchartSelectorPc from "$lib/components/layout/dedicated diffchart/DiffchartSelector-pc.svelte";
     import PageAside from "$lib/components/layout/main/PageAside.svelte";

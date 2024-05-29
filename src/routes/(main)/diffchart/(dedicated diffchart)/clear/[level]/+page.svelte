@@ -16,7 +16,6 @@
 
         replica.name = i18n[diffChart.name];
         replica.sections.forEach((section) => {
-            console.log(section.name);
             section.backgroundColor = sectionColor[section.name];
             section.color = "white";
             section.name = i18n.sections[section.name];

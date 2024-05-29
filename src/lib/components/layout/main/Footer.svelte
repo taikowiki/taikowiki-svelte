@@ -7,7 +7,7 @@
         © 2024 <a href="https://github.com/hotsixman">Hotsixman</a>
     </div>
     <div>
-        <a href="https://github.com/taikowiki/taikowiki-svelte">Taikowiki-Svelte</a>{version ? `@${version}` : ""}
+        <a href="https://github.com/taikowiki/taikowiki-svelte">Taikowiki-Svelte{version ? `@${version}` : ""}</a>
     </div>
     <div>
         <a href="https://github.com/taikowiki">Github</a> /

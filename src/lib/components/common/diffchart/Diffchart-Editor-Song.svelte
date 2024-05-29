@@ -5,6 +5,7 @@
     export let song: Song;
     export let index: number;
     export let intercept: (from: number, to: number) => any;
+    export let remove: (index: number) => any;
 
     song.order = index;
 </script>
@@ -36,10 +37,14 @@
         </div>
     </td>
     <td>
-        <input type="text" bind:value={song.songNo} />
+        <div class="layer">
+            <input type="text" bind:value={song.songNo} />
+        </div>
     </td>
     <td>
-        <input type="text" bind:value={song.title} />
+        <div class="layer">
+            <input type="text" bind:value={song.title} />
+        </div>
     </td>
     <td>
         <div class="layer" style="column-gap: 5px;justify-content:center;">
@@ -54,10 +59,17 @@
             </select>
         </div>
     </td>
+    <td> 
+        <div class="layer">
+            <button on:click={() => {
+                remove(index)
+            }}>삭제</button>
+        </div>
+    </td>
 </tr>
 
 <style>
-    .container:hover{
+    .container:hover {
         background-color: rgba(255, 162, 162, 0.553);
     }
 

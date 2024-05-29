@@ -20,7 +20,6 @@
     } from "$lib/module/common/diffchart/types";
     import DiffchartName from "./DiffchartName.svelte";
     import DiffchartSection from "./DiffchartSection.svelte";
-    import { getLang, getI18N } from "$lib/module/common/i18n/i18n";
     import type { SongData } from "$lib/module/common/song/types";
     import { afterUpdate } from "svelte";
     import { getTheme } from "$lib/module/layout/theme";
@@ -32,11 +31,6 @@
     export let color: string | undefined = diffChart.color;
     export let backgroundColor: string | undefined = diffChart.backgroundColor;
     export let downloadImage: (() => Promise<void>) | null = null;
-    export let subname: string = "";
-
-    const lang = getLang();
-    $: i18n = getI18N("/diffchart/clear/[level]", $lang);
-    $: name = i18n[diffChart.name];
 
     const [theme] = getTheme();
 
@@ -70,14 +64,14 @@
     style="display:none;"
 />
 <div class="container">
-    <DiffchartName {name} {color} {backgroundColor} {subname} />
+    <DiffchartName name={diffChart.name} {color} {backgroundColor}/>
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
         <DiffchartSection {section} {songs} theme={$theme} {userScoreData}/>
     {/each}
 </div>
 
 <div class="replica" bind:this={replica}>
-    <DiffchartName {name} {color} {backgroundColor} />
+    <DiffchartName name={diffChart.name} {color} {backgroundColor} />
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
         <DiffchartSection {section} {songs} theme={"light"} useMobile={false} {userScoreData}/>
     {/each}

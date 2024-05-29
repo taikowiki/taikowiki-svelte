@@ -36,6 +36,11 @@ const getUserData: Handle = async ({ event, resolve }) => {
 
 const checkPermission = checkPermissions([
     {
+        path: '/admin/api',
+        level:9,
+        rule:'startsWith',
+    },
+    {
         path: '/admin',
         level: 9,
         rule: 'startsWith',

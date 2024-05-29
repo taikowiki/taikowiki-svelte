@@ -32,12 +32,6 @@
             }}
             >복사하기
         </button>
-        <button
-            on:click={() => {
-                
-            }}
-            >저장하기
-        </button>
     </div>
     <div class="layer">
         <table>
@@ -71,27 +65,40 @@
                     </div>
                     <table>
                         {#each diffchart.sections.sort((a, b) => a.order - b.order) as section, index}
-                            <DiffchartEditorSection bind:section {index} intercept={
-                            (from, to) => {
-                                const intercepted = intercept(diffchart.sections, from , to);
-                                intercepted.forEach((section, index) => {
-                                    section.order = index;
-                                })
-                                diffchart.sections = intercepted;
-                            }}/>
+                            <DiffchartEditorSection
+                                bind:section
+                                {index}
+                                intercept={(from, to) => {
+                                    const intercepted = intercept(
+                                        diffchart.sections,
+                                        from,
+                                        to,
+                                    );
+                                    intercepted.forEach((section, index) => {
+                                        section.order = index;
+                                    });
+                                    diffchart.sections = intercepted;
+                                }}
+                                remove={(index) => {
+                                    diffchart.sections = diffchart.sections.filter((_, i) => i !== index);
+                                }}
+                            />
                         {/each}
                         <tr>
                             <td colspan="4">
-                                <button on:click={() => {
-                                    diffchart.sections = [
-                                        ...diffchart.sections,
-                                        {
-                                            order: diffchart.sections.length,
-                                            name: '',
-                                            songs: []
-                                        }
-                                    ]
-                                }}>
+                                <button
+                                    on:click={() => {
+                                        diffchart.sections = [
+                                            ...diffchart.sections,
+                                            {
+                                                order: diffchart.sections
+                                                    .length,
+                                                name: "",
+                                                songs: [],
+                                            },
+                                        ];
+                                    }}
+                                >
                                     섹션 추가
                                 </button>
                             </td>

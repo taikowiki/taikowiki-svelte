@@ -6,6 +6,7 @@
     export let section: Section;
     export let index;
     export let intercept: (from: number, to: number) => any;
+    export let remove: (index:number) => any;
 
     section.order = index;
 </script>
@@ -23,6 +24,10 @@
                 intercept(section.order, section.order + 1);
             }}>↓</button
         >
+
+        <button on:click={() => {
+            remove(index)
+        }}>삭제</button>
     </td>
     <td style="padding:0;">
         <table>
@@ -54,6 +59,7 @@
                             <th style="width:110px;"> 곡 번호 </th>
                             <th> 제목 </th>
                             <th style="width:110px;"> 난이도 </th>
+                            <th style="width: 110px;">삭제</th>
                         </tr>
                         {#each section.songs.sort((a, b) => a.order - b.order) as song, index (song)}
                             <DiffchartEditorSong
@@ -70,10 +76,13 @@
                                     });
                                     section.songs = intercepted;
                                 }}
+                                remove={(index) => {
+                                    section.songs = section.songs.filter((_,i) => i !== index);
+                                }}
                             />
                         {/each}
                         <tr>
-                            <td colspan="4">
+                            <td colspan="5">
                                 <button
                                     on:click={() => {
                                         section.songs = [...section.songs, {

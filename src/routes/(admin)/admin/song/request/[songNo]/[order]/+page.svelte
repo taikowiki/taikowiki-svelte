@@ -13,8 +13,24 @@
             });
             alert("저장 성공");
         } catch (err) {
-            console.log(err);
             alert("저장 실패");
+            throw err;
+        }
+    }
+
+    async function disapprove(order:number) {
+        try {
+            await axios({
+                method: "POST",
+                url: "/admin/api/song/disapprove",
+                data: {
+                    order
+                },
+            });
+            alert("삭제 성공");
+        } catch (err) {
+            alert("삭제 실패");
+            throw err;
         }
     }
 </script>
@@ -49,4 +65,15 @@
     }}
 >
     저장
+</button>
+
+<button
+    on:click={() => {
+        disapprove(data.request.order)
+        .then(() => {
+            goto(`/admin/song/request/${$page.params.songNo}`)
+        });
+    }}
+>
+    삭제
 </button>

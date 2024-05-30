@@ -2,7 +2,7 @@
     import { page } from "$app/stores";
 </script>
 
-<a href={`/song/add?song_no=${$page.params.songNo}`}>
+<a href={$page.params.songNo? `/song/add?song_no=${$page.params.songNo}` : '/song/add'}>
     <img src='/assets/icon/plus.svg' alt=""/>
     곡 추가
 </a>

@@ -40,10 +40,6 @@
         font-weight: bold;
 
         box-sizing: border-box;
-
-
-        
-
     }
 
     .subname{

@@ -16,7 +16,7 @@
         width: 100%;
         height: 70px;
 
-        border-radius: 10px;
+        border-radius: 15px;
 
         display: flex;
         justify-content: center;

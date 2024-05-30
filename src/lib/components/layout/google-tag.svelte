@@ -24,6 +24,7 @@
 </script>
 
 <svelte:head>
+    <meta name="google-adsense-account" content="ca-pub-1629193017650416">
     <script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-S8TRY8QPYG"

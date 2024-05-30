@@ -127,6 +127,29 @@ export default class SongDB {
         })
     }
 
+    static async uploadSong(songData: SongData){
+        return await runQuery(async(run) => {
+            const count = (await run("SELECT COUNT(*) FROM `song` WHERE `songNo` = ?", [songData.songNo]))[0]['COUNT(*)'];
+            if(count == 0){
+                return await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])
+            }
+            else{
+                return await run("UPDATE `song` SET `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songData.songNo])
+            }
+        })
+    }
+    
+    static async getRequests(songNo:string, order?:string){
+        if(order !== undefined){
+            return await runQuery(async(run) => {
+                return await run("SELECT * FROM `song/request` WHERE `songNo` = ? AND `order` = ?", [songNo, order])
+            })
+        }
+        return await runQuery(async(run) => {
+            return await run("SELECT * FROM `song/request` WHERE `songNo` = ? ORDER BY createdTime DESC", [songNo])
+        })
+    }
+
     /*
     static async search(option: SongSearchOption): Promise<SongData[]> {
         let title = option.title?.replace('%', '\\%').replace('_', '\\_') ?? '%';

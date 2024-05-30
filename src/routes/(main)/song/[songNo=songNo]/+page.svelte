@@ -19,7 +19,7 @@
 {#if song}
     <AlertDisplay isAsiaBanned={song.isAsiaBanned} isKrBanned={song.isKrBanned} isDeleted={song.isDeleted}/>
     <GenreDisplay genres={song.genre}/>
-    <TitleDisplay title={song.title} />
+    <TitleDisplay title={song.title} songNo={song.songNo}/>
     <div class="wrapper" data-isMobile={$isMobile}>
         <MultipleTitleDisplay
             titleKo={song.titleKo}

@@ -1,10 +1,24 @@
 <script lang="ts" context="module">
-    function submit(songData: SongData, form: HTMLFormElement) {
-        if (!songData.songNo || !songData.title) {
-            alert("곡 제목과 곡 번호를 확인해주세요.");
-            return;
+    import { goto } from "$app/navigation";
+    import axios from "axios";
+
+    async function submit(songNo:string, songData:SongData) {
+        try{
+            await axios({
+                method:'POST',
+                data:{
+                    songNo,
+                    songData
+                },
+                url:'/api/song/request'
+            });
+            alert('제출 성공');
+            await goto(`/song/${songNo}`)
         }
-        form.submit();
+        catch(err){
+            console.log(err);
+            alert('제출 실패');
+        }
     }
 </script>
 
@@ -18,23 +32,13 @@
     let maybeSongData: SongData|null = getSongFromContextBySongNo($page.params.songNo);
     
     let songData = maybeSongData as SongData;
-
-    let form: HTMLFormElement;
-    $: value = JSON.stringify(songData);
-    $: songNo = songData.songNo;
 </script>
 
-<div class="form-container">
-    <form method="post" action="/api/song/submit" bind:this={form}>
-        <input type="text" name="data" bind:value />
-        <input type="text" name="song_no" bind:value={songNo} />
-    </form>
-</div>
 <SongEditor bind:songData type="edit" />
 
 <button
     on:click={() => {
-        submit(songData, form);
+        submit(songData.songNo, songData);
     }}
 >
     <img src="/assets/icon/plus.svg" alt="" />
@@ -69,9 +73,5 @@
         width: 20px;
 
         filter: invert(100%);
-    }
-
-    .form-container {
-        display: none;
     }
 </style>

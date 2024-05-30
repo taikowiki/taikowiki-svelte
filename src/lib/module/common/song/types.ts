@@ -42,3 +42,12 @@ export interface Dani {
     dan: Dan;
     order: 1|2|3;
 }
+
+//request
+export interface SongRequest{
+    UUID: string;
+    songNo: string;
+    createdTime: number;
+    type: 'edit' | 'new';
+    data: SongData;
+}

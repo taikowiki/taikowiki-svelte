@@ -48,8 +48,6 @@
         height: 20px;
 
         cursor: pointer;
-
-        position: relative;
     }
     img {
         filter: invert(100%);

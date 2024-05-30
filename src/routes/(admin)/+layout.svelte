@@ -8,14 +8,19 @@
     import axios from 'axios';
     import { navigating, page } from "$app/stores";
     import { setContext } from "svelte";
+    import { useLang } from "$lib/module/common/i18n/i18n.js";
 
     export let data;
 
+    //theme
     let [theme, _] = useTheme();
     $: if($theme === "dark") $theme = "light"
     $: if (browser) {
         document.body.setAttribute("data-theme", $theme);
     }
+
+    //lang
+    useLang();
 
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);

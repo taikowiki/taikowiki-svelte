@@ -4,7 +4,7 @@
             await axios({
                 method: "POST",
                 data,
-                url: "/admin/api/diffchart",
+                url: "/admin/api/diffchart/upload",
             });
             alert("저장 성공");
         } catch (err) {

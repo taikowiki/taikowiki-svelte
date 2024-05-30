@@ -7,9 +7,11 @@
     import GenreDisplay from "$lib/components/page/song/[songNo]/GenreDisplay.svelte";
     import AlertDisplay from "$lib/components/page/song/[songNo]/AlertDisplay.svelte";
     import CourseContainer from "$lib/components/page/song/[songNo]/CourseContainer.svelte";
+    import AddSongButton from '$lib/components/page/song/AddSongButton.svelte';
+    import type { SongData } from "$lib/module/common/song/types.js";
 
     export let data;
-    const song = data.songs.find(song => song.songNo === $page.params.songNo) ?? null;
+    const song = data.songs.find((song: SongData) => song.songNo === $page.params.songNo) ?? null;
 
     const isMobile = getIsMobile();
 </script>
@@ -17,7 +19,7 @@
 {#if song}
     <AlertDisplay isAsiaBanned={song.isAsiaBanned} isKrBanned={song.isKrBanned} isDeleted={song.isDeleted}/>
     <GenreDisplay genres={song.genre}/>
-    <TitleDisplay title={song.title} />
+    <TitleDisplay title={song.title} songNo={song.songNo}/>
     <div class="wrapper" data-isMobile={$isMobile}>
         <MultipleTitleDisplay
             titleKo={song.titleKo}
@@ -34,6 +36,9 @@
         />
     </div>
     <CourseContainer courses={song.courses}/>
+{:else}
+    해당 곡이 존재하지 않습니다.
+    <AddSongButton/>
 {/if}
 
 <style>

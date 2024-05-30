@@ -1,17 +1,17 @@
 <script lang="ts">
-    import type { Course, Difficulty } from "$lib/module/common/song/types";
+    import type { Course } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import CourseDisplayMobile from "./CourseDisplay-mobile.svelte";
     import CourseDisplayPc from "./CourseDisplay-pc.svelte";
-    import color from "$lib/module/common/color";
+    import FumenDisplay from "./FumenDisplay.svelte";
 
     //export let difficulty: Difficulty;
-    export let course: Course | undefined;
+    export let course: Course | null;
 
     const isMobile = getIsMobile();
 </script>
 
-{#if course}
+{#if course !== null}
     <!--
         <div class="border" style={`border-color:${color.difficulty[difficulty]};`}>
         

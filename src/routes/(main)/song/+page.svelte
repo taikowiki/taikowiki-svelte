@@ -26,6 +26,7 @@
     import PageSelector from "$lib/components/page/song/PageSelector.svelte";
     import { page } from "$app/stores";
     import SongLoading from "$lib/components/page/song/SongLoading.svelte";
+    import AddSongButton from "$lib/components/page/song/AddSongButton.svelte";
 
     export let data;
 
@@ -54,4 +55,5 @@
         )}
     />
     <PageSelector {pageNum} length={filteredSongs.length} />
+    <AddSongButton/>
 {/if}

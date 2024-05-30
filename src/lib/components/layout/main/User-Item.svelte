@@ -3,9 +3,10 @@
     export let isButton: boolean = false;
     export let separated: boolean = false;
     export let height: string = "50px"
+    export let reload:boolean = false;
 </script>
 
-<svelte:element this={href ? "a" : "div"} {href}>
+<svelte:element this={href ? "a" : "div"} {href} data-sveltekit-reload={reload}>
     <div class="item" class:button={isButton} style={`height:${height};`}>
         {#if separated}
             <div class="left">

@@ -16,6 +16,8 @@
     const { songs } = data;
 </script>
 
+<a href="/admin/song/add">곡 추가</a>
+<a href="/admin/song/request">수정 요청 목록</a>
 <table>
     <tr>
         <th>

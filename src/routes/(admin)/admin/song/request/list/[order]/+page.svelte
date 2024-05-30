@@ -60,7 +60,7 @@
     on:click={() => {
         approve(data.request.data, data.request.order)
         .then(() => {
-            goto(`/admin/song/request/${$page.params.songNo}`)
+            goto(`/admin/song/request`)
         });
     }}
 >

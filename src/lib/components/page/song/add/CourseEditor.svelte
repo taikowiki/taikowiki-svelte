@@ -33,7 +33,9 @@
     let imgsrc = "";
 </script>
 
-<div style={`border: 2px solid ${color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}>
+<div
+    style={`border: 2px solid ${color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}
+>
     <table class="wrapper">
         <tr>
             <td class="r" style="font-weight:bold">
@@ -41,6 +43,7 @@
                 {#if difficulty === "ura"}
                     <input
                         type="checkbox"
+                        checked={!(course === null)}
                         on:change={(event) => {
                             if (event.currentTarget.checked) {
                                 course = init;
@@ -133,6 +136,7 @@
                             </td>
                             <td>
                                 <textarea
+                                    value={course?.balloon?.join(",") ?? ''}
                                     on:change={(event) => {
                                         const text = event.currentTarget.value;
 
@@ -157,6 +161,7 @@
                             </td>
                             <td>
                                 <textarea
+                                    value={course?.rollTime?.join(",") ?? ''}
                                     on:change={(event) => {
                                         const text = event.currentTarget.value;
 
@@ -222,7 +227,7 @@
                                     >
                                         <button
                                             on:click={() => {
-                                                course.images.push('');
+                                                course.images.push("");
                                                 course.images = course.images;
                                             }}>추가</button
                                         >
@@ -354,7 +359,7 @@
         row-gap: 3px;
     }
 
-    .image-container-container input{
+    .image-container-container input {
         max-width: 300px;
         width: 100%;
     }

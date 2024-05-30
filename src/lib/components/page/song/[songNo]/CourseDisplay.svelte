@@ -22,7 +22,6 @@
     {:else}
         <CourseDisplayPc {course} />
     {/if}
-    <FumenDisplay images={course.images} />
 {/if}
 
 <style>

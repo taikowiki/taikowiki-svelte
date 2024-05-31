@@ -4,55 +4,765 @@
 
     export let data;
 
-    const dani:Dani = {
-        dan: "tatsujin",
-        name: null,
-        version: "23",
-        songs: [
-            {
-                songNo: "116",
-                difficulty: "ura",
-            },
-            {
-                songNo: "1016",
-                difficulty: "normal",
-            },
-            {
-                songNo: "84",
-                difficulty: "normal",
-            },
-        ],
-        conditions: [
-            {
-                isIndividualCondition: false,
-                type: "gauge",
-                criteria:{
-                    red: [933, 112, 331],
-                    gold: []
-                }
-            },
-            {
-                isIndividualCondition: false,
-                type: "hit",
-                criteria:{
-                    red: [852],
-                    gold: [902]
-                }
-            }
-        ]
-    };
+    const danis: Dani[] = [
+        {
+            dan: "5kyu",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "1228",
+                    difficulty: "normal",
+                },
+                {
+                    songNo: "1209",
+                    difficulty: "normal",
+                },
+                {
+                    songNo: "1218",
+                    difficulty: "hard",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [92],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "hit",
+                    criteria: {
+                        red: [724],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "4kyu",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "1234",
+                    difficulty: "normal",
+                },
+                {
+                    songNo: "97",
+                    difficulty: "normal",
+                },
+                {
+                    songNo: "1194",
+                    difficulty: "hard",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [94],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "hit",
+                    criteria: {
+                        red: [1122],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [112],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "3kyu",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "981",
+                    difficulty: "hard",
+                },
+                {
+                    songNo: "1217",
+                    difficulty: "hard",
+                },
+                {
+                    songNo: "1141",
+                    difficulty: "hard",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [96],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "hit",
+                    criteria: {
+                        red: [1247],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [96],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "2kyu",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "1242",
+                    difficulty: "hard",
+                },
+                {
+                    songNo: "1211",
+                    difficulty: "hard",
+                },
+                {
+                    songNo: "1144",
+                    difficulty: "oni",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [97],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "hit",
+                    criteria: {
+                        red: [1512],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [91],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "1kyu",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "1231",
+                    difficulty: "hard",
+                },
+                {
+                    songNo: "882",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "39",
+                    difficulty: "hard",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [98],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "hit",
+                    criteria: {
+                        red: [1589],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [59],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "1dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "318",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "613",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "741",
+                    difficulty: "oni",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [98],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [866],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [28],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "roll",
+                    criteria: {
+                        red: [293],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "2dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "1230",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "469",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "107",
+                    difficulty: "oni",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [98],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [965],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [26],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "roll",
+                    criteria: {
+                        red: [210],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "3dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "1033",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "149",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "1019",
+                    difficulty: "oni",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [99],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [1086],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [24],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "roll",
+                    criteria: {
+                        red: [344],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "4dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "703",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "652",
+                    difficulty: "ura",
+                },
+                {
+                    songNo: "266",
+                    difficulty: "oni",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [99],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [1484],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [28],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "roll",
+                    criteria: {
+                        red: [143],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "5dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "626",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "459",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "108",
+                    difficulty: "oni",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [99],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [1708],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [26],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "roll",
+                    criteria: {
+                        red: [117],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "6dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "95",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "1082",
+                    difficulty: "ura",
+                },
+                {
+                    songNo: "970",
+                    difficulty: "oni",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [100],
+                        gold: [100],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [1613],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [18],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: true,
+                    type: "roll",
+                    criteria: {
+                        red: [21, 62, 158],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "7dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "356",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "944",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "1069",
+                    difficulty: "oni",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [100],
+                        gold: [100],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [1720],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [15],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: true,
+                    type: "roll",
+                    criteria: {
+                        red: [81, 90, 257],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "8dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "588",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "31",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "418",
+                    difficulty: "oni",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [100],
+                        gold: [100],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [2051],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [13],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: true,
+                    type: "roll",
+                    criteria: {
+                        red: [149, 68, 150],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "9dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "572",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "1067",
+                    difficulty: "ura",
+                },
+                {
+                    songNo: "938",
+                    difficulty: "ura",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [100],
+                        gold: [100],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [2067],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [8],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: true,
+                    type: "roll",
+                    criteria: {
+                        red: [45, 32, 200],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+        {
+            dan: "10dan",
+            name: null,
+            version: "24",
+            songs: [
+                {
+                    songNo: "499",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "994",
+                    difficulty: "oni",
+                },
+                {
+                    songNo: "1308",
+                    difficulty: "ura",
+                },
+            ],
+            conditions: [
+                {
+                    isIndividualCondition: false,
+                    type: "gauge",
+                    criteria: {
+                        red: [100],
+                        gold: [100],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "good",
+                    criteria: {
+                        red: [75],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: false,
+                    type: "bad",
+                    criteria: {
+                        red: [8],
+                        gold: [],
+                    },
+                },
+                {
+                    isIndividualCondition: true,
+                    type: "roll",
+                    criteria: {
+                        red: [174, 64, 56],
+                        gold: [],
+                    },
+                },
+            ],
+        },
+    ];
 </script>
 
 <div class="container">
-    <DaniDisplay {dani} songDatas={data.songs}/>
-    <DaniDisplay {dani} songDatas={data.songs}/>
-    <DaniDisplay {dani} songDatas={data.songs}/>
-    <DaniDisplay {dani} songDatas={data.songs}/>
-    <DaniDisplay {dani} songDatas={data.songs}/>
+    {#each danis as dani}
+        <DaniDisplay {dani} songDatas={data.songs} />
+    {/each}
 </div>
 
 <style>
-    .container{
+    .container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -61,8 +771,8 @@
         row-gap: 20px;
     }
 
-    @media only screen and (max-width:1000px){
-        .container{
+    @media only screen and (max-width: 1000px) {
+        .container {
             flex-direction: column;
             justify-content: center;
         }

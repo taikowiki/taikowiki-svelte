@@ -6,6 +6,6 @@ export async function load({ fetch }) {
         newSongs: await SongDB.getNewSongs(),
         songs: await SongDB.getAll(),
         user,
-        version: process.env.npm_package_version
+        version: (await import('../../../package.json')).version
     }
 }

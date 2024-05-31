@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let version: string|undefined;
+    export let version:string|undefined;
 </script>
 
 <div class="container">

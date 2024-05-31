@@ -1,37 +1,85 @@
 import type { LangFile } from "../types";
 
-const en:LangFile = {
+const en: LangFile = {
     layout: {
         main: {
-            song: 'Songs',
-            doc: 'Docs'
+            song: 'Song',
+            doc: 'Documents',
+            newSong: 'New Song',
+            diffchart: 'Difficulty Chart'
+        },
+        'dedicated diffchart': {
+            type: {
+                clear: 'Clear',
+                fc: 'Full Combo',
+                dfc: 'Donder Full Combo'
+            }
         }
     },
     '/song': {
-        placeholder: 'Search',
-        difficulty: '난이도',
-        easy: '쉬움',
-        normal: '보통',
-        hard: '어려움',
-        oni: 'oni',
-        omote: '오니(앞)',
-        ura: '오니(뒤)',
-        genre: '장르',
+        placeholder: 'Keywords',
+        difficulty: 'Difficulty',
+        easy: 'Easy',
+        normal: 'Normal',
+        hard: 'Hard',
+        oni: 'Oni',
+        omote: 'Oni(Front)',
+        ura: 'Oni(Inner)',
+        genre: 'Genre',
         genres: {
-            pops: '팝스',
-            anime: '애니메이션',
-            kids: '키즈',
-            vocaloid: '보컬로이드',
-            game: '게임 뮤직',
-            namco: '남코 오리지널',
-            variety: '버라이어티',
-            classic: '클래식'
+            pops: 'POPS',
+            anime: 'Anime',
+            kids: 'Kids',
+            vocaloid: 'Vocaloid',
+            game: 'Game Music',
+            namco: 'Namco Original',
+            variety: 'Variety',
+            classic: 'Classic'
         },
         languages:{
-            jp: '일본어',
-            ko: '한국어',
-            ako: '한국어(비공식)'
+            jp: 'Japanese',
+            ko: 'Korean',
+            ako: 'Korean(Unofficial)'
         }
+    },
+    '/song/[songNo]':{
+        genres: {
+            pops: 'POPS',
+            anime: 'Anime',
+            kids: 'Kids',
+            vocaloid: 'Vocaloid',
+            game: 'Game Music',
+            namco: 'Namco Original',
+            variety: 'Variety',
+            classic: 'Classic'
+        }
+    },
+    '/diffchart': {
+        type: {
+            clear: 'Clear',
+            fc: 'Full Combo',
+            dfc: 'Donder Full Combo'
+        }
+    },
+    '/diffchart/clear/[level]':{
+        '10 level clear': '★10 Clear Difficulty Chart',
+        '9 level clear': '★9 Clear Difficulty Chart',
+        '8 level clear': '★8 Clear Difficulty Chart',
+        '7 level clear': '★7 Clear Difficulty Chart',
+        '6 level clear': '★6Clear Difficulty Chart',
+        sections:{
+            'SSS': 'SSS',
+            'SS': 'SS',
+            'S': 'S',
+            'A': 'A',
+            'B': 'V',
+            'C': 'C',
+            'D': 'D',
+            'E': 'E',
+            'F': 'F',
+            'X': 'Personal'
+        },
+        subname: "🔴 Makes big difference between person&nbsp;&nbsp;&nbsp;🟢 Care on first play&nbsp;&nbsp;&nbsp;🟣 Hard to full combo"
     }
 }
 

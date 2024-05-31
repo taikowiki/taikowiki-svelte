@@ -16,6 +16,17 @@ const ko: LangFile = {
             }
         }
     },
+    component:{
+        SongEditor: {
+            difficulties: {
+                easy: '쉬움',
+                normal: '보통',
+                hard: '어려움',
+                oni: '오니(앞)',
+                ura: '오니(뒤)'
+            }
+        }
+    },
     '/song': {
         placeholder: '검색어',
         difficulty: '난이도',

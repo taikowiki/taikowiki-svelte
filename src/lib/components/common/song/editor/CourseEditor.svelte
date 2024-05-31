@@ -1,6 +1,7 @@
 <script lang="ts">
     // @ts-nocheck
     import color from "$lib/module/common/color";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Course, Difficulty } from "$lib/module/common/song/types";
     import DaniEditor from "./DaniEditor.svelte";
 
@@ -30,7 +31,8 @@
         course.isBranched = Number(isBranched) as 0 | 1;
     }
 
-    let imgsrc = "";
+    const lang = getLang();
+    $: i18n = getI18N('component', $lang).SongEditor;
 </script>
 
 <div
@@ -39,7 +41,7 @@
     <table class="wrapper">
         <tr>
             <td class="r" style="font-weight:bold">
-                {difficulty}
+                {i18n.difficulties[difficulty]}
                 {#if difficulty === "ura"}
                     <input
                         type="checkbox"

@@ -1,33 +1,6 @@
-<script lang="ts" context="module">
-    import { goto } from "$app/navigation";
-    import axios from "axios";
-
-    async function submit(songNo:string, songData:SongData) {
-        if(!confirm(`제출할 시 사용자의 ip 주소가 수집됩니다.\n동의하십니까?`)){
-            alert('동의하지 않아 제출이 실패되었습니다.');
-            return;
-        }
-        try{
-            await axios({
-                method:'POST',
-                data:{
-                    songNo,
-                    songData
-                },
-                url:'/api/song/request'
-            });
-            alert('제출 성공');
-            await goto(`/song/${songNo}`)
-        }
-        catch(err){
-            console.log(err);
-            alert('제출 실패');
-        }
-    }
-</script>
-
 <script lang="ts">
     import { page } from "$app/stores";
+    import submit from "$lib/module/page/song/submit.client";
 
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import { getSongFromContextBySongNo } from "$lib/module/common/song/song.client";
@@ -42,7 +15,7 @@
 
 <button
     on:click={() => {
-        submit(songData.songNo, songData);
+        submit(songData.songNo, songData, `/song/${$page.params.songNo}`);
     }}
 >
     <img src="/assets/icon/plus.svg" alt="" />

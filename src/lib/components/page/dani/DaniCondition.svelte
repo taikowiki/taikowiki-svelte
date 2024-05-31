@@ -86,6 +86,8 @@
         background-color: white;
 
         border-radius: 5px;
+
+        column-gap: 4px;
     }
     .layer[data-theme="dark"] {
         background-color: #1c1c1c;
@@ -99,9 +101,11 @@
         align-items: center;
 
         font-weight: bold;
+
+        margin-left: 4px;
     }
     .item {
-        width: calc((100% - 80px) / 2);
+        width: calc((100% - 88px) / 2);
 
         display: flex;
         justify-content: center;
@@ -112,8 +116,8 @@
 
     .red,
     .gold {
-        width: calc(100% - 8px);
-        height: calc(100% - 4px);
+        width: calc(100%);
+        height: calc(100%);
 
         display: flex;
         justify-content: center;
@@ -124,8 +128,6 @@
         color: white;
 
         box-sizing: border-box;
-
-        padding-inline: 5px;
     }
 
     .red {

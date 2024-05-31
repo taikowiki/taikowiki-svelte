@@ -1,11 +1,14 @@
 <script lang="ts">
+    import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
+    const isMobile = getIsMobile();
     const [theme] = getTheme();
 
     export let icon: string = "";
     export let href: string = "";
-    export let useHover:boolean = true;
+    export let useHover: boolean = true;
+    export let mobileHideSlot: boolean = false;
 </script>
 
 {#if href}
@@ -13,14 +16,18 @@
         {#if icon}
             <img src={icon} alt="" />
         {/if}
-        <slot />
+        {#if !mobileHideSlot || !$isMobile}
+            <slot />
+        {/if}
     </a>
 {:else}
     <div data-theme={$theme} class="btn" class:hover={useHover}>
         {#if icon}
             <img src={icon} alt="" />
         {/if}
-        <slot />
+        {#if !mobileHideSlot || !$isMobile}
+            <slot />
+        {/if}
     </div>
 {/if}
 

@@ -28,7 +28,7 @@
                 type: "gauge",
                 criteria:{
                     red: [933, 112, 331],
-                    gold: [95]
+                    gold: []
                 }
             },
             {

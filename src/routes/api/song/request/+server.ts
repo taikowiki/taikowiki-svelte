@@ -1,9 +1,8 @@
-import SongDB from '$lib/module/common/song/song.server.js';
+import { SongRequestController } from '$lib/module/common/song/song.server.js';
 import type { SongData } from '$lib/module/common/song/types.js';
-import { error, redirect } from '@sveltejs/kit';
-import { runQuery } from '@sveltekit-board/db';
+import { error } from '@sveltejs/kit';
 
-export async function POST({ request, locals }) {
+export async function POST({ request, locals, getClientAddress }) {
     if (!locals.user || !locals.userBasicData || !locals.userData) throw error(403);
 
     const data = await request.json();
@@ -16,18 +15,12 @@ export async function POST({ request, locals }) {
         course.images = course.images.filter(e => e !== '');
     })
 
-    if (await SongDB.getBySongNo(songNo as string)) { //새곡 아님
-        await runQuery(async (run) => {
-            await run(`INSERT INTO \`song/request\` (\`UUID\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?)`, [locals.userData?.UUID, songNo, Date.now(), 'edit', JSON.stringify(songData)])
-        })
+    await SongRequestController.createRequest({
+        UUID: locals.userData.UUID,
+        songNo,
+        data: songData,
+        ip: getClientAddress()
+    })
 
-        return new Response();
-    }
-    else {//새곡
-        await runQuery(async (run) => {
-            await run(`INSERT INTO \`song/request\` (\`UUID\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?)`, [locals.userData?.UUID, songNo, Date.now(), 'new', JSON.stringify(songData)])
-        })
-
-        return new Response();
-    }
+    return new Response();
 }

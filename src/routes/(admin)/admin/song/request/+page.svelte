@@ -4,12 +4,14 @@
     export let data;
 </script>
 
+<a href="/admin/song">곡 목록으로 돌아가기</a>
 <table>
     <tr>
         <th style="width: 300px;"> createdTime </th>
         <th> 곡 번호 </th>
         <th> uuid </th>
-        <th style="width: 150px;"> </th>
+        <th> ip </th>
+        <th style="width: 150px;">-</th>
     </tr>
     {#each data.requests as request}
         <tr>
@@ -23,8 +25,10 @@
                 {request.UUID}
             </td>
             <td>
-                <a
-                    href={`/admin/song/request/list/${request.order}`}
+                {request.ip}
+            </td>
+            <td>
+                <a href={`/admin/song/request/list/${request.order}`}
                     >살펴보기</a
                 >
             </td>

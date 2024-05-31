@@ -46,12 +46,24 @@
     </svelte:fragment>
 </Header>
 
-<main style="background-color:white;">
-    <slot />
-</main>
+<div class="container">
+    <main style="background-color:white;">
+        <slot />
+    </main>
+</div>
 
 <style>
     .logo {
         height: 30px;
+    }
+
+    .container{
+        display:flex;
+        justify-content: center;
+    }
+
+    main{
+        width: 100%;
+        max-width: 1400px;
     }
 </style>

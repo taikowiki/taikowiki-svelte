@@ -24,20 +24,11 @@
         transform = "transform: translateY(-1px);";
     }
 
-    let widthType: "long" | "short";
-    $: if (data?.clientWidth) {
-        if (data.clientWidth > 60 || data.innerText.includes(' ')) {
-            widthType = "long";
-        } else {
-            widthType = "short";
-        }
-    }
-
     const [theme] = getTheme();
 </script>
 
 <div
-    class={`button ${widthType}`}
+    class={`button`}
     class:selected={group === value}
     class:unselected={group !== value && group !== undefined}
     style={`background-color:${color.genre[value]};`}
@@ -63,7 +54,10 @@
         justify-content: center;
         align-items: center;
 
-        padding: 5px;
+        min-width: 53px;
+
+        padding-block: 5px;
+        padding-inline: 7px;
 
         height: 30px;
         border-radius: 5px;
@@ -78,6 +72,9 @@
 
     .button.selected {
         border: 2px solid #1c1c1c;
+
+        padding-block: 3px;
+        padding-inline: 5px;
     }
     .button.unselected {
         opacity: 0.4;

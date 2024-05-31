@@ -138,6 +138,7 @@
 
     span {
         transform: translateY(-1px);
+        word-break: keep-all;
         text-align: center;
     }
 </style>

@@ -17,6 +17,26 @@
         );
     }
 
+    function countClearedSongs(scoreData: SongScore[] | null, songs: Song[]) {
+        if (scoreData === null) return null;
+        let count = 0;
+        songs.forEach((song) => {
+            if (
+                scoreData.find(
+                    (score) =>
+                        score.songNo === song.songNo &&
+                        score.details[uraToOniUra(song.difficulty)] !==
+                            undefined &&
+                        score.details[uraToOniUra(song.difficulty)]?.crown !==
+                            "none",
+                ) !== undefined
+            ){  
+                count++;
+            }
+        });
+        return count;
+    }
+
     function uraToOniUra(diff: Difficulty): DifficultyType {
         if (diff === "ura") {
             return "oni_ura";
@@ -43,12 +63,13 @@
     export let userScoreData: SongScore[] | null;
 
     $: clearedSongScores = getClearedSongScores(userScoreData, section.songs);
+    $: clearedSongsCount = countClearedSongs(userScoreData, section.songs);
 </script>
 
 <div class="section">
     <DiffchartSectionName
         name={section.name}
-        {clearedSongScores}
+        {clearedSongsCount}
         color={section.color}
         backgroundColor={section.backgroundColor}
     />

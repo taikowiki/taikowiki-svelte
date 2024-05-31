@@ -4,6 +4,7 @@
     import color from "$lib/module/common/color";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
+    import FumenDisplay from "./FumenDisplay.svelte";
 
     export let courses: SongData["courses"];
 
@@ -13,6 +14,8 @@
 
     const isMobile = getIsMobile();
     const [theme] = getTheme();
+
+    $: course = courses[selectedDifficulty];
 </script>
 
 <div class="container" data-isMobile={$isMobile}>
@@ -34,11 +37,12 @@
         {/each}
     </div>
     {#key selectedDifficulty}
-        <CourseDisplay
-            course={courses[selectedDifficulty]}
-        />
+        <CourseDisplay {course} />
     {/key}
 </div>
+{#if course?.images !== undefined}
+    <FumenDisplay images={course.images} />
+{/if}
 
 <style>
     .container {
@@ -82,7 +86,7 @@
         transition:
             width 0.1s,
             height 0.1s;
-            padding-bottom: 0.1s;
+        padding-bottom: 0.1s;
 
         padding-left: 3px;
         padding-bottom: 1px;

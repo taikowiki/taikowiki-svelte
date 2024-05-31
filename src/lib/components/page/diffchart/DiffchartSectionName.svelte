@@ -4,11 +4,11 @@
     export let name: string;
     export let color: string = "white";
     export let backgroundColor: string = "#7f7f7f";
-    export let clearedSongScores: Partial<SongScore>[] | null = null;
+    export let clearedSongsCount: number|null;
 </script>
 
 <div class="name" style={`color:${color};background-color:${backgroundColor};`}>
-    {name}{clearedSongScores !== null ? ` (${clearedSongScores.length})` : ""}
+    {name}{clearedSongsCount !== null ? ` (${clearedSongsCount})` : ""}
 </div>
 
 <style>

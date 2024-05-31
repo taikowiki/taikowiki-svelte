@@ -1,3 +1,5 @@
+import { GENRE, DIFFICULTY, VERSION, DANIVERSION, DAN } from './const'
+
 export interface SongData {
     songNo: string;
     title: string;
@@ -7,18 +9,18 @@ export interface SongData {
     aliasEn: string | null;
     bpm: Record<'min' | 'max', number>;
     bpmShiver: 1 | 0;
-    version: string[];
+    version: Version[];
     isAsiaBanned: 1 | 0;
     isKrBanned: 1 | 0;
     genre: Genre[];
     artists: string[];
-    addedDate: number|null;
-    courses: Partial<Record<Difficulty, Course>>
+    addedDate: number | null;
+    courses: Record<"easy" | "normal" | "hard" | "oni", Course> & Record<"ura", Course | null>
     isDeleted: 1 | 0;
 }
 
-export type Genre = "pops" | "anime" | "kids" | "game" | "variety" | "namco" | "vocaloid" | "classic"
-export type Difficulty = "easy" | "normal" | "hard" | "oni" | "ura"
+export type Genre = typeof GENRE[number]
+export type Difficulty = typeof DIFFICULTY[number]
 export interface Course {
     level: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
     isBranched: 1 | 0;
@@ -28,10 +30,25 @@ export interface Course {
     rollTime: number[];
     maxDensity: number;
     daniUsed: 1 | 0;
-    dani: {
-        version: string;
-        dan: string;
-        order: number;
-    }[];
+    dani: Dani[];
+    images: string[];
 }
+export type Version = typeof VERSION[number][number]
 export type SongLang = "jp" | "ko" | "ako" | "en" | "aen";
+export type DaniVersion = typeof DANIVERSION[number];
+export type Dan = typeof DAN[number];
+export interface Dani {
+    version: DaniVersion;
+    dan: Dan;
+    order: 1|2|3;
+}
+
+//request
+export interface SongRequest{
+    UUID: string;
+    ip: string;
+    songNo: string;
+    createdTime: number;
+    type: 'edit' | 'new';
+    data: SongData;
+}

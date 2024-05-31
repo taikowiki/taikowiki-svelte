@@ -15,7 +15,12 @@
     export let userScore: SongScoreDetail | null = null;
 </script>
 
-<a class="container" href={`/song/${song.songNo}`} data-theme={theme} data-crown={userScore?.crown || ""}>
+<a
+    class="container"
+    href={`/song/${song.songNo}`}
+    data-theme={theme}
+    data-crown={userScore?.crown || ""}
+>
     <DiffchartSongGenre {genre} width="6px" height="26px" />
     <div class="title-container">
         <div
@@ -80,12 +85,15 @@
         font-size: 13px;
 
         font-weight: 900;
+
+        z-index: 1;
     }
     .title-kr {
         font-size: 10px;
         color: #5b5b5b;
 
         font-weight: bold;
+        z-index: 1;
     }
 
     .container[data-theme="dark"] {
@@ -95,7 +103,7 @@
     .container[data-theme="dark"] .title-kr {
         color: rgb(193, 193, 193);
     }
-    
+
     .container[data-crown="gold"] {
         background-color: #ffe972;
     }
@@ -112,7 +120,9 @@
             /* mint */ #bae1ff /* light blue */
         );
     }
-    .container[data-crown="silver"] .title-kr, .container[data-crown="gold"] .title-kr, .container[data-crown="donderfull"] .title-kr{
+    .container[data-crown="silver"] .title-kr,
+    .container[data-crown="gold"] .title-kr,
+    .container[data-crown="donderfull"] .title-kr {
         color: #5b5b5b;
     }
 
@@ -122,5 +132,7 @@
         right: 2px;
         width: 22px;
         height: 22px;
+
+        z-index: 0;
     }
 </style>

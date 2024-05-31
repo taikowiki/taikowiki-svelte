@@ -16,7 +16,7 @@ const ko: LangFile = {
             }
         }
     },
-    component:{
+    component: {
         SongEditor: {
             difficulties: {
                 easy: '쉬움',
@@ -24,6 +24,53 @@ const ko: LangFile = {
                 hard: '어려움',
                 oni: '오니(앞)',
                 ura: '오니(뒤)'
+            }
+        },
+        DaniDisplay: {
+            dan: {
+                '5kyu': '5급',
+                '4kyu': '4급',
+                '3kyu': '3급',
+                '2kyu': '2급',
+                '1kyu': '1급',
+                '1dan': '초단',
+                '2dan': '2단',
+                '3dan': '3단',
+                '4dan': '4단',
+                '5dan': '5단',
+                '6dan': '6단',
+                '7dan': '7단',
+                '8dan': '8단',
+                '9dan': '9단',
+                '10dan': '10단',
+                'kuroto': '현인',
+                'meijin': '명인',
+                'chojin': '초인',
+                'tatsujin': '달인'
+            },
+            version: {
+                '23': '니지이로 2023',
+                '24': '니지이로 2024'
+            },
+            type: {
+                "gauge": "혼 게이지",
+                "combo": "콤보 수",
+                "score": "점수",
+                "roll": "연타 수",
+                "hit": "두드린 횟수",
+                "good": "량 개수",
+                "ok": "가 개수",
+                "bad": "불가 개수"
+            },
+            suffix1:{
+                percent: "%",
+                times: "회",
+                point: "점",
+                count: "개"
+            },
+            suffix2: {
+                up: '이상',
+                down: '미만'
             }
         }
     },

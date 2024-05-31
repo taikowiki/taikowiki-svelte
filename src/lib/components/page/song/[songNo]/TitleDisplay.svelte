@@ -28,6 +28,7 @@
     }
     .title {
         flex: 1 0 auto;
+        max-width: calc(100% - 30px);
 
         font-weight: bold;
         font-size: 35px;

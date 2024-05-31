@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { SongData } from "$lib/module/common/song/types";
 
-    import OtherEditor from "$lib/components/page/song/add/OtherEditor.svelte";
-    import TitleEditor from "$lib/components/page/song/add/TitleEditor.svelte";
-    import CoursesEditor from "$lib/components/page/song/add/CoursesEditor.svelte";
+    import OtherEditor from "$lib/components/common/song/editor/OtherEditor.svelte";
+    import TitleEditor from "$lib/components/common/song/editor/TitleEditor.svelte";
+    import CoursesEditor from "$lib/components/common/song/editor/CoursesEditor.svelte";
     import BasicEditor from "./BasicEditor.svelte";
 
     export let songData: SongData;

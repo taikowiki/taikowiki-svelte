@@ -1,6 +1,7 @@
 <script lang="ts">
     // @ts-nocheck
     import color from "$lib/module/common/color";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Course, Difficulty } from "$lib/module/common/song/types";
     import DaniEditor from "./DaniEditor.svelte";
 
@@ -30,7 +31,8 @@
         course.isBranched = Number(isBranched) as 0 | 1;
     }
 
-    let imgsrc = "";
+    const lang = getLang();
+    $: i18n = getI18N('component', $lang).SongEditor;
 </script>
 
 <div
@@ -39,7 +41,7 @@
     <table class="wrapper">
         <tr>
             <td class="r" style="font-weight:bold">
-                {difficulty}
+                {i18n.difficulties[difficulty]}
                 {#if difficulty === "ura"}
                     <input
                         type="checkbox"
@@ -136,7 +138,7 @@
                             </td>
                             <td>
                                 <textarea
-                                    value={course?.balloon?.join(",") ?? ''}
+                                    value={course?.balloon?.join(",") ?? ""}
                                     on:change={(event) => {
                                         const text = event.currentTarget.value;
 
@@ -161,7 +163,7 @@
                             </td>
                             <td>
                                 <textarea
-                                    value={course?.rollTime?.join(",") ?? ''}
+                                    value={course?.rollTime?.join(",") ?? ""}
                                     on:change={(event) => {
                                         const text = event.currentTarget.value;
 
@@ -281,6 +283,9 @@
 
     table td:nth-child(1):not(.r) {
         width: 120px;
+    }
+    td:nth-child(1).r {
+        padding-inline: 5px;
     }
 
     .sub {

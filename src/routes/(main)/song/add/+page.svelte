@@ -1,32 +1,9 @@
-<script lang="ts" context="module">
-    import { goto } from "$app/navigation";
-
-    async function submit(songNo:string, songData:SongData) {
-        try{
-            await axios({
-                method:'POST',
-                data:{
-                    songNo,
-                    songData
-                },
-                url:'/api/song/request'
-            });
-            alert('제출 성공');
-            await goto('/song')
-        }
-        catch(err){
-            console.log(err);
-            alert('제출 실패');
-        }
-    }
-</script>
-
 <script lang="ts">
     import { page } from "$app/stores";
+    import submit from "$lib/module/page/song/submit.client";
 
-    import SongEditor from "$lib/components/page/song/add/SongEditor.svelte";
+    import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import type { SongData } from "$lib/module/common/song/types";
-    import axios from "axios";
 
     let songData: SongData = {
         songNo: $page.url.searchParams.get("song_no") || "",
@@ -105,7 +82,7 @@
 
 <button
     on:click={() => {
-        submit(songData.songNo, songData);
+        submit(songData.songNo, songData, '/song');
     }}
 >
     <img src="/assets/icon/plus.svg" alt="" />

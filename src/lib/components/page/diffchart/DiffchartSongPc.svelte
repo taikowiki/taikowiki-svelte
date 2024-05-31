@@ -114,6 +114,8 @@
         box-sizing: border-box;
         padding-right: 5px;
         line-height: 1.2;
+
+        z-index: 1;
     }
 
     .title-kr {
@@ -130,6 +132,8 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
+        z-index: 1;
     }
 
     .container[data-theme="dark"] .title-kr {
@@ -162,5 +166,7 @@
         right: 2px;
         width: 22px;
         height: 22px;
+
+        z-index: 0;
     }
 </style>

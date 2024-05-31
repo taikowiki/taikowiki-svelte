@@ -1,18 +1,16 @@
-import SongDB from '$lib/module/common/song/song.server.js';
+import SongDB, { SongRequestController } from '$lib/module/common/song/song.server.js';
+import type { SongData } from '$lib/module/common/song/types.js';
 import { error } from '@sveltejs/kit';
-import { runQuery } from '@sveltekit-board/db';
 
 export async function POST({ request }) {
     const data = await request.json();
     
-    const songData = data.songData;
+    const songData = data.songData as SongData;
     const order = data.order;
     if(songData === undefined || order === undefined) throw error(400);
 
     await SongDB.uploadSong(songData);
-    await runQuery(async(run) => {
-        return await run("DELETE FROM `song/request` WHERE `order` <= ? AND `songNo` = ?", [order, songData.songNo]);
-    })
+    await SongRequestController.removeRequest(order, songData.songNo);
     
     return new Response();
 }

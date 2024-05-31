@@ -14,10 +14,16 @@ export interface LayoutLangFile{
     };
 }
 
+export interface ComponentLangFile{
+    component?:{
+        [componentName: string]: SubLangFile
+    }
+}
+
 export interface RecursiveStringRecord{
     [key: string]: string|RecursiveStringRecord
 }
 
-export type LangFile = LayoutLangFile & PathLangFile
+export type LangFile = LayoutLangFile & PathLangFile & ComponentLangFile
 
 export type I18N = Record<'ko', LangFile>&Partial<Record<Language, LangFile>>;

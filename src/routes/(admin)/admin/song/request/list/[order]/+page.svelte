@@ -36,7 +36,7 @@
 </script>
 
 <script lang="ts">
-    import SongEditor from "$lib/components/page/song/add/SongEditor.svelte";
+    import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
 
@@ -50,6 +50,14 @@
         </td>
         <td>
             {data.requester}
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 150px;">
+            ip
+        </td>
+        <td>
+            {data.request.ip}
         </td>
     </tr>
 </table>

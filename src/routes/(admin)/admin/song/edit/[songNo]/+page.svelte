@@ -18,7 +18,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
 
-    import SongEditor from "$lib/components/page/song/add/SongEditor.svelte";
+    import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import type { SongData } from "$lib/module/common/song/types";
     import axios from "axios";
 

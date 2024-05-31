@@ -1,14 +1,14 @@
 <script lang="ts" context="module">
     import axios from "axios";
     import type { SongData } from "$lib/module/common/song/types";
-    async function approve(songData: SongData, order:number) {
+    async function approve(songData: SongData, order: number) {
         try {
             await axios({
                 method: "POST",
                 url: "/admin/api/song/approve",
                 data: {
                     songData,
-                    order
+                    order,
                 },
             });
             alert("저장 성공");
@@ -18,13 +18,13 @@
         }
     }
 
-    async function disapprove(order:number) {
+    async function disapprove(order: number) {
         try {
             await axios({
                 method: "POST",
                 url: "/admin/api/song/disapprove",
                 data: {
-                    order
+                    order,
                 },
             });
             alert("삭제 성공");
@@ -36,7 +36,7 @@
 </script>
 
 <script lang="ts">
-    import SongEditor from "$lib/components/page/song/add/SongEditor.svelte";
+    import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
 
@@ -45,22 +45,25 @@
 
 <table>
     <tr>
-        <td style="width: 150px;">
-            요청자
-        </td>
+        <td style="width: 150px;"> 요청자 </td>
         <td>
             {data.requester}
         </td>
     </tr>
+    <tr>
+        <td style="width: 150px;"> ip </td>
+        <td>
+            {data.request.ip}
+        </td>
+    </tr>
 </table>
 
-<SongEditor bind:songData={data.request.data} type="edit"/>
+<SongEditor bind:songData={data.request.data} type="edit" />
 
 <button
     on:click={() => {
-        approve(data.request.data, data.request.order)
-        .then(() => {
-            goto(`/admin/song/request/${$page.params.songNo}`)
+        approve(data.request.data, data.request.order).then(() => {
+            goto(`/admin/song/request/${$page.params.songNo}`);
         });
     }}
 >
@@ -69,9 +72,8 @@
 
 <button
     on:click={() => {
-        disapprove(data.request.order)
-        .then(() => {
-            goto(`/admin/song/request/${$page.params.songNo}`)
+        disapprove(data.request.order).then(() => {
+            goto(`/admin/song/request/${$page.params.songNo}`);
         });
     }}
 >
@@ -79,12 +81,11 @@
 </button>
 
 <style>
-    table{
+    table {
         width: 100%;
         border-collapse: collapse;
     }
-    td{
-
+    td {
         border: 1px solid black;
     }
 </style>

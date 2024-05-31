@@ -728,7 +728,7 @@
                 },
                 {
                     isIndividualCondition: false,
-                    type: "good",
+                    type: "ok",
                     criteria: {
                         red: [75],
                         gold: [],

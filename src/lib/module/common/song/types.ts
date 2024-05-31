@@ -46,6 +46,7 @@ export interface Dani {
 //request
 export interface SongRequest{
     UUID: string;
+    ip: string;
     songNo: string;
     createdTime: number;
     type: 'edit' | 'new';

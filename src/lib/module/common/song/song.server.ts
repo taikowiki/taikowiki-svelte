@@ -203,17 +203,18 @@ export class SongRequestController {
         UUID: string;
         songNo: string;
         data: SongData;
+        ip:string;
     }) {
         const song = await SongDB.getBySongNo(request.songNo);
 
         if (song !== null) {//새곡아님
             return await runQuery(async (run) => {
-                await run(`INSERT INTO \`song/request\` (\`UUID\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?)`, [request.UUID, request.songNo, Date.now(), 'edit', JSON.stringify(request.data)])
+                await run(`INSERT INTO \`song/request\` (\`UUID\`, \`ip\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?, ?)`, [request.UUID, request.ip, request.songNo, Date.now(), 'edit', JSON.stringify(request.data)])
             })
         }
         else {//새곡임
             return await runQuery(async (run) => {
-                await run(`INSERT INTO \`song/request\` (\`UUID\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?)`, [request.UUID, request.songNo, Date.now(), 'new', JSON.stringify(request.data)])
+                await run(`INSERT INTO \`song/request\` (\`UUID\`, \`ip\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?, ?)`, [request.UUID, request.ip, request.songNo, Date.now(), 'new', JSON.stringify(request.data)])
             })
         }
     }

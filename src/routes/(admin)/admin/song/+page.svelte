@@ -52,8 +52,16 @@
 </table>
 
 <style>
-    table{
+    table {
         width: 100%;
+        border-collapse: collapse;
+    }
+    td {
+        border: 1px solid black;
+    }
+
+    tr:hover{
+        background-color: rgba(255, 146, 146, 0.747);
     }
 
     .hc{

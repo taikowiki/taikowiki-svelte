@@ -52,6 +52,14 @@
             {data.requester}
         </td>
     </tr>
+    <tr>
+        <td style="width: 150px;">
+            ip
+        </td>
+        <td>
+            {data.request.ip}
+        </td>
+    </tr>
 </table>
 
 <SongEditor bind:songData={data.request.data} type="edit"/>

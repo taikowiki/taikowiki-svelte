@@ -3,6 +3,10 @@
     import axios from "axios";
 
     async function submit(songNo:string, songData:SongData) {
+        if(!confirm(`제출할 시 사용자의 ip 주소가 수집됩니다.\n동의하십니까?`)){
+            alert('동의하지 않아 제출이 실패되었습니다.');
+            return;
+        }
         try{
             await axios({
                 method:'POST',

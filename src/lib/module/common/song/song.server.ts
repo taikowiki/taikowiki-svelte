@@ -1,6 +1,6 @@
 import { runQuery } from "@sveltekit-board/db";
 //import {escape} from 'mysql';
-import { type SongData } from "./types";
+import { type SongData, type SongRequest } from "./types";
 
 export default class SongDB {
     static async createTable() {
@@ -138,30 +138,6 @@ export default class SongDB {
             }
         })
     }
-
-    static async getAllRequests(): Promise<SongRequest[]> {
-        return await runQuery(async (run) => {
-            return await run("SELECT * FROM `song/request` ORDER BY createdTime DESC")
-        })
-    }
-
-    static async getRequestByOrder(order: string): Promise<SongRequest[]> {
-        return await runQuery(async (run) => {
-            return await run("SELECT * FROM `song/request` WHERE `order` = ? ORDER BY createdTime DESC", [order])
-        })
-    }
-
-    static async getRequests(songNo: string, order?: string): Promise<SongRequest[]> {
-        if (order !== undefined) {
-            return await runQuery(async (run) => {
-                return await run("SELECT * FROM `song/request` WHERE `songNo` = ? AND `order` = ? ORDER BY createdTime DESC", [songNo, order])
-            })
-        }
-        return await runQuery(async (run) => {
-            return await run("SELECT * FROM `song/request` WHERE `songNo` = ? ORDER BY createdTime DESC", [songNo])
-        })
-    }
-
     /*
     static async search(option: SongSearchOption): Promise<SongData[]> {
         let title = option.title?.replace('%', '\\%').replace('_', '\\_') ?? '%';
@@ -182,6 +158,77 @@ export default class SongDB {
         return JSON.parse(JSON.stringify(result))
     }
     */
+}
+
+export class SongRequestController {
+    static async getAll(): Promise<(SongRequest & { order: number })[]> {
+        return await runQuery(async (run) => {
+            return (await run("SELECT * FROM `song/request` ORDER BY createdTime DESC")).map((request: any) => {
+                request.data = JSON.parse(request.data);
+                return request;
+            })
+        })
+    }
+
+    static async getRequestsBySongNo(songNo: string, order?: string): Promise<(SongRequest & { order: number })[]> {
+        if (order !== undefined) {
+            return await runQuery(async (run) => {
+                return (await run("SELECT * FROM `song/request` WHERE `songNo` = ? AND `order` = ? ORDER BY createdTime DESC", [songNo, order])).map((request: any) => {
+                    request.data = JSON.parse(request.data);
+                    return request;
+                })
+            })
+        }
+        return await runQuery(async (run) => {
+            return (await run("SELECT * FROM `song/request` WHERE `songNo` = ? ORDER BY createdTime DESC", [songNo])).map((request: any) => {
+                request.data = JSON.parse(request.data);
+                return request;
+            })
+        })
+    }
+
+    static async getRequestByOrder(order: string): Promise<(SongRequest & { order: number }) | null> {
+        return await runQuery(async (run) => {
+            const result = await run("SELECT * FROM `song/request` WHERE `order` = ? ORDER BY createdTime DESC", [order]);
+            if (result.length === 0) return null;
+
+            const request = result[0];
+            request.data = JSON.parse(request.data);
+
+            return request;
+        }) as (SongRequest & { order: number }) | null
+    }
+
+    static async createRequest(request: {
+        UUID: string;
+        songNo: string;
+        data: SongData;
+    }) {
+        const song = await SongDB.getBySongNo(request.songNo);
+
+        if (song !== null) {//새곡아님
+            return await runQuery(async (run) => {
+                await run(`INSERT INTO \`song/request\` (\`UUID\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?)`, [request.UUID, request.songNo, Date.now(), 'edit', JSON.stringify(request.data)])
+            })
+        }
+        else {//새곡임
+            return await runQuery(async (run) => {
+                await run(`INSERT INTO \`song/request\` (\`UUID\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?)`, [request.UUID, request.songNo, Date.now(), 'new', JSON.stringify(request.data)])
+            })
+        }
+    }
+
+    static async removeRequest(order: string, songNo?: string) {
+        if (songNo !== undefined) {
+            return await runQuery(async (run) => {
+                return await run("DELETE FROM `song/request` WHERE `order` <= ? AND `songNo` = ?", [order, songNo]);
+            })
+        }
+
+        return await runQuery(async (run) => {
+            return await run("DELETE FROM `song/request` WHERE `order` = ?", [order]);
+        })
+    }
 }
 
 /*

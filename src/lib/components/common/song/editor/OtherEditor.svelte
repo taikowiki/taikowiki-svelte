@@ -26,13 +26,15 @@
         .split(",")
         .map((e) => e.trim().replaceAll("\n", ""));
 
-    let addedDATE = new Date(addedDate || Date.now()).toISOString().slice(0, 10);
-    $: if(addedDate !== null){
-        addedDate = new Date(addedDATE).getTime()
+    let addedDATE = new Date(addedDate || Date.now())
+        .toISOString()
+        .slice(0, 10);
+    $: if (addedDate !== null) {
+        addedDate = new Date(addedDATE).getTime();
     }
- 
+
     const lang = getLang();
-    $: i18n = getI18N('/song/add', $lang);
+    $: i18n = getI18N("/song/add", $lang);
 </script>
 
 <TitledContainer title="기타" color="#cf4844">
@@ -205,6 +207,8 @@
     td:nth-child(1) {
         width: 150px;
         font-weight: bold;
+
+        padding-inline: 5px;
     }
     td:nth-child(2) > div {
         display: flex;

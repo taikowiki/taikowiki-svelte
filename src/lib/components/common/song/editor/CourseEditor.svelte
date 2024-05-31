@@ -136,7 +136,7 @@
                             </td>
                             <td>
                                 <textarea
-                                    value={course?.balloon?.join(",") ?? ''}
+                                    value={course?.balloon?.join(",") ?? ""}
                                     on:change={(event) => {
                                         const text = event.currentTarget.value;
 
@@ -161,7 +161,7 @@
                             </td>
                             <td>
                                 <textarea
-                                    value={course?.rollTime?.join(",") ?? ''}
+                                    value={course?.rollTime?.join(",") ?? ""}
                                     on:change={(event) => {
                                         const text = event.currentTarget.value;
 
@@ -281,6 +281,9 @@
 
     table td:nth-child(1):not(.r) {
         width: 120px;
+    }
+    td:nth-child(1).r {
+        padding-inline: 5px;
     }
 
     .sub {

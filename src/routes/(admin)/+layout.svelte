@@ -8,14 +8,19 @@
     import axios from 'axios';
     import { navigating, page } from "$app/stores";
     import { setContext } from "svelte";
+    import { useLang } from "$lib/module/common/i18n/i18n.js";
 
     export let data;
 
+    //theme
     let [theme, _] = useTheme();
     $: if($theme === "dark") $theme = "light"
     $: if (browser) {
         document.body.setAttribute("data-theme", $theme);
     }
+
+    //lang
+    useLang();
 
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
@@ -41,12 +46,24 @@
     </svelte:fragment>
 </Header>
 
-<main style="background-color:white;">
-    <slot />
-</main>
+<div class="container">
+    <main style="background-color:white;">
+        <slot />
+    </main>
+</div>
 
 <style>
     .logo {
         height: 30px;
+    }
+
+    .container{
+        display:flex;
+        justify-content: center;
+    }
+
+    main{
+        width: 100%;
+        max-width: 1400px;
     }
 </style>

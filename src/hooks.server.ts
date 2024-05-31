@@ -4,7 +4,9 @@ import auth, { providers } from '@sveltekit-board/oauth'
 import UserController from "$lib/module/common/user/user-controller.server";
 
 import { config } from 'dotenv';
-import checkPermissions from "$lib/module/common/permissionCheck.server";
+import checkPermissions from "$lib/module/server/hooks/permissionCheck.server";
+import BanController from "$lib/module/server/hooks/ban-controller.server";
+//import logger from "$lib/module/server/hooks/logger.server";
 
 config();
 
@@ -37,8 +39,8 @@ const getUserData: Handle = async ({ event, resolve }) => {
 const checkPermission = checkPermissions([
     {
         path: '/admin/api',
-        level:9,
-        rule:'startsWith',
+        level: 9,
+        rule: 'startsWith',
     },
     {
         path: '/admin',
@@ -48,4 +50,4 @@ const checkPermission = checkPermissions([
     }
 ])
 
-export const handle = sequence(authHandle, getUserData, checkPermission);
+export const handle = sequence(BanController.checkIpHandle ,authHandle, getUserData, checkPermission);

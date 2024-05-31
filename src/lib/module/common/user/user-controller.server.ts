@@ -43,16 +43,22 @@ export default class UserController {
         })
     }
 
-    static async changeNickname(UUID:string, newNickname:string){
-        if(!/^([a-zA-Z가-힣0-9\-]*)$/.test(newNickname)) throw new Error('New nickname is not in the correct format');
+    static async getNickname(UUID: string): Promise<string | null> {
         return await runQuery(async (run) => {
-            if((await run(`SELECT \`order\` FROM \`user/data\` WHERE \`nickname\` = ?`, [newNickname])).length !== 0) throw new Error('Duplicated Nickname');
-            return await run(`UPDATE \`user/data\` SET \`nickname\` = ? WHERE \`UUID\` = ?`, [newNickname, UUID])
+            return (await run("SELECT `nickname` FROM `user/data` WHERE `UUID` = ?", [UUID]))[0]?.nickname ?? null
         })
     }
 
-    static async deleteUser(provider:string, providerId:string){
-        return await runQuery(async(run) => {
+    static async changeNickname(provider: string, providerId: string, newNickname: string) {
+        if (!/^([a-zA-Z가-힣0-9\-]*)$/.test(newNickname)) throw new Error('New nickname is not in the correct format');
+        return await runQuery(async (run) => {
+            if ((await run(`SELECT \`order\` FROM \`user/data\` WHERE \`nickname\` = ?`, [newNickname])).length !== 0) throw new Error('Duplicated Nickname');
+            return await run(`UPDATE \`user/data\` SET \`nickname\` = ? WHERE \`provider\` = ? AND \`providerId\` = ?`, [newNickname, provider, providerId])
+        })
+    }
+
+    static async deleteUser(provider: string, providerId: string) {
+        return await runQuery(async (run) => {
             await run(`DELETE FROM \`user/data\` WHERE \`provider\` = ? AND \`providerId\` = ?;`, [provider, providerId]);
             await run(`DELETE FROM \`user/basic_data\` WHERE \`provider\` = ? AND \`providerId\` = ?;`, [provider, providerId]);
         })

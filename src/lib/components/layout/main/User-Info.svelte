@@ -19,7 +19,7 @@
             <div class="n">{$user.nickname}</div>
         </div>
     </UserItem>
-    <UserItem href="/auth/logout" isButton height="30px">
+    <UserItem href="/auth/logout" isButton height="30px" reload>
         <div class="container" role="presentation">
             로그아웃
         </div>

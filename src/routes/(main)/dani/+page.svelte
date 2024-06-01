@@ -37,7 +37,7 @@
                     type: "hit",
                     criteria: {
                         red: [724],
-                        gold: [],
+                        gold: [748],
                     },
                 },
             ],
@@ -254,7 +254,7 @@
                     type: "good",
                     criteria: {
                         red: [866],
-                        gold: [],
+                        gold: [917],
                     },
                 },
                 {
@@ -270,7 +270,7 @@
                     type: "roll",
                     criteria: {
                         red: [293],
-                        gold: [],
+                        gold: [327],
                     },
                 },
             ],
@@ -307,7 +307,7 @@
                     type: "good",
                     criteria: {
                         red: [965],
-                        gold: [],
+                        gold: [1017],
                     },
                 },
                 {
@@ -323,7 +323,7 @@
                     type: "roll",
                     criteria: {
                         red: [210],
-                        gold: [],
+                        gold: [235],
                     },
                 },
             ],
@@ -360,7 +360,7 @@
                     type: "good",
                     criteria: {
                         red: [1086],
-                        gold: [],
+                        gold: [1138],
                     },
                 },
                 {
@@ -376,7 +376,7 @@
                     type: "roll",
                     criteria: {
                         red: [344],
-                        gold: [],
+                        gold: [386],
                     },
                 },
             ],
@@ -413,7 +413,7 @@
                     type: "good",
                     criteria: {
                         red: [1484],
-                        gold: [],
+                        gold: [1548],
                     },
                 },
                 {
@@ -429,7 +429,7 @@
                     type: "roll",
                     criteria: {
                         red: [143],
-                        gold: [],
+                        gold: [161],
                     },
                 },
             ],
@@ -466,7 +466,7 @@
                     type: "good",
                     criteria: {
                         red: [1708],
-                        gold: [],
+                        gold: [1771],
                     },
                 },
                 {
@@ -482,7 +482,7 @@
                     type: "roll",
                     criteria: {
                         red: [117],
-                        gold: [],
+                        gold: [132],
                     },
                 },
             ],
@@ -519,7 +519,7 @@
                     type: "good",
                     criteria: {
                         red: [1613],
-                        gold: [],
+                        gold: [1664],
                     },
                 },
                 {
@@ -535,7 +535,7 @@
                     type: "roll",
                     criteria: {
                         red: [21, 62, 158],
-                        gold: [],
+                        gold: [25, 74, 185],
                     },
                 },
             ],
@@ -571,7 +571,7 @@
                     isIndividualCondition: false,
                     type: "good",
                     criteria: {
-                        red: [1720],
+                        red: [1720, 1765],
                         gold: [],
                     },
                 },
@@ -588,7 +588,7 @@
                     type: "roll",
                     criteria: {
                         red: [81, 90, 257],
-                        gold: [],
+                        gold: [88, 105, 293],
                     },
                 },
             ],
@@ -625,7 +625,7 @@
                     type: "good",
                     criteria: {
                         red: [2051],
-                        gold: [],
+                        gold: [2094],
                     },
                 },
                 {
@@ -641,7 +641,7 @@
                     type: "roll",
                     criteria: {
                         red: [149, 68, 150],
-                        gold: [],
+                        gold: [174, 72, 180],
                     },
                 },
             ],
@@ -678,7 +678,7 @@
                     type: "good",
                     criteria: {
                         red: [2067],
-                        gold: [],
+                        gold: [2099],
                     },
                 },
                 {
@@ -694,7 +694,7 @@
                     type: "roll",
                     criteria: {
                         red: [45, 32, 200],
-                        gold: [],
+                        gold: [52, 35, 240],
                     },
                 },
             ],
@@ -731,7 +731,7 @@
                     type: "ok",
                     criteria: {
                         red: [75],
-                        gold: [],
+                        gold: [50],
                     },
                 },
                 {
@@ -739,7 +739,7 @@
                     type: "bad",
                     criteria: {
                         red: [8],
-                        gold: [],
+                        gold: [4],
                     },
                 },
                 {
@@ -747,7 +747,7 @@
                     type: "roll",
                     criteria: {
                         red: [174, 64, 56],
-                        gold: [],
+                        gold: [208, 69, 62],
                     },
                 },
             ],

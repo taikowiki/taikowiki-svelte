@@ -86,8 +86,15 @@
     {#if course.daniUsed}
         <tr>
             <td colspan="4" class="dani-td">
-                <div class="dani-container">
-                    <div class="dani-opener" class:opened={daniOpened} role="presentation" on:click={() => {daniOpened = !daniOpened}}>
+                <div class="dani-container" data-theme={$theme}>
+                    <div
+                        class="dani-opener"
+                        class:opened={daniOpened}
+                        role="presentation"
+                        on:click={() => {
+                            daniOpened = !daniOpened;
+                        }}
+                    >
                         단위 수록 목록
                     </div>
                     {#if daniOpened}
@@ -176,5 +183,9 @@
     }
     .dani-opener.opened::after {
         content: "▲";
+    }
+
+    .dani-container[data-theme="dark"] > .dani-opener{
+        background-color: #1c1c1c;
     }
 </style>

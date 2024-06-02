@@ -5,25 +5,13 @@ export interface DaniSong{
 
 export type DaniConditionType = "gauge" | "combo" | "score" | "roll" | "hit" | "good" | "ok" | "bad"
 
-export interface GroupDaniCondition{
-    isIndividualCondition: false;
+export type DaniCondition = {
     type: DaniConditionType;
     criteria: {
         red: number[],
         gold: number[]
     };
-}
-
-export interface IndividualDaniCondition{
-    isIndividualCondition: true;
-    type: DaniConditionType;
-    criteria: {
-        red: number[],
-        gold: number[]
-    };
-}
-
-export type DaniCondition = GroupDaniCondition | IndividualDaniCondition;
+};
 
 export interface DaniBase{
     version: "katsudon" | "sorairo" | "momoiro" | "kimidori" | "murasaki" | "white" | "red" | "yellow" | "blue" | "green" | "20" | "21" | "22" | "23" | "24"; //추후에 추가될 지도?

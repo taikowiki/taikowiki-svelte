@@ -13,7 +13,6 @@
     let selectedDifficulty: Difficulty = "oni";
 
     const isMobile = getIsMobile();
-    const [theme] = getTheme();
 
     $: course = courses[selectedDifficulty];
 </script>

@@ -64,10 +64,12 @@
                 role="presentation"
             >
                 총 <span style="font-weight:bold;"
-                    >{course.rollTime.reduce(
-                        (partial, current) => partial + current,
-                        0,
-                    )}</span
+                    >{Math.round(
+                        course.rollTime.reduce(
+                            (partial, current) => partial + current,
+                            0,
+                        ) * 1000
+                    ) / 1000}</span
                 >초
             </div>
             {#if rollOpened}

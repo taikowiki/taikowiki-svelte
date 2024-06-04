@@ -164,7 +164,7 @@
                     type: "hit",
                     criteria: {
                         red: [1512],
-                        gold: [],
+                        gold: [1560],
                     },
                 },
                 {
@@ -527,7 +527,7 @@
                     type: "bad",
                     criteria: {
                         red: [18],
-                        gold: [],
+                        gold: [9],
                     },
                 },
                 {
@@ -571,8 +571,8 @@
                     isIndividualCondition: false,
                     type: "good",
                     criteria: {
-                        red: [1720, 1765],
-                        gold: [],
+                        red: [1720],
+                        gold: [1765],
                     },
                 },
                 {
@@ -580,7 +580,7 @@
                     type: "bad",
                     criteria: {
                         red: [15],
-                        gold: [],
+                        gold: [8],
                     },
                 },
                 {
@@ -633,7 +633,7 @@
                     type: "bad",
                     criteria: {
                         red: [13],
-                        gold: [],
+                        gold: [7],
                     },
                 },
                 {
@@ -686,7 +686,7 @@
                     type: "bad",
                     criteria: {
                         red: [8],
-                        gold: [],
+                        gold: [4],
                     },
                 },
                 {

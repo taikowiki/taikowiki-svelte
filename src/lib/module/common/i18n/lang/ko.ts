@@ -28,7 +28,42 @@ const ko: LangFile = {
             }
         },
         DaniDisplay: {
+            type: {
+                "gauge": "혼 게이지",
+                "combo": "콤보 수",
+                "score": "점수",
+                "roll": "연타 수",
+                "hit": "두드린 횟수",
+                "good": "량 개수",
+                "ok": "가 개수",
+                "bad": "불가 개수"
+            },
+            suffix1: {
+                percent: "%",
+                times: "회",
+                point: "점",
+                count: "개"
+            },
+            suffix2: {
+                up: '이상',
+                down: '미만'
+            }
+        }
+    },
+    other: {
+        dani: {
             dan: {
+                "senpo": "선봉",
+                "jiho": "차봉",
+                "chiuken": "중견",
+                "fukusho": "부장",
+                "taisho": "대장",
+                "beginner": "초급",
+                "10kyu": "10급",
+                "9kyu": "9급",
+                "8kyu": "8급",
+                "7kyu": "7급",
+                "6kyu": "6급",
                 '5kyu': '5급',
                 '4kyu': '4급',
                 '3kyu': '3급',
@@ -50,28 +85,21 @@ const ko: LangFile = {
                 'tatsujin': '달인'
             },
             version: {
+                'katsudon': '카츠동',
+                'sorairo': '소라이로',
+                'momoiro': '모모이로',
+                'kimidori': '키미도리',
+                'murasaki': '무라사키',
+                'white': '화이트',
+                'red': '레드',
+                'yellow': '옐로우',
+                'blue': '블루',
+                'green': '그린',
+                '20': '니지이로 2020',
+                '21': '니지이로 2021',
+                '22': '니지이로 2022',
                 '23': '니지이로 2023',
                 '24': '니지이로 2024'
-            },
-            type: {
-                "gauge": "혼 게이지",
-                "combo": "콤보 수",
-                "score": "점수",
-                "roll": "연타 수",
-                "hit": "두드린 횟수",
-                "good": "량 개수",
-                "ok": "가 개수",
-                "bad": "불가 개수"
-            },
-            suffix1:{
-                percent: "%",
-                times: "회",
-                point: "점",
-                count: "개"
-            },
-            suffix2: {
-                up: '이상',
-                down: '미만'
             }
         }
     },

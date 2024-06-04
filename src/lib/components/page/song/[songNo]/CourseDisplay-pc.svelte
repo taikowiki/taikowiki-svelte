@@ -60,10 +60,12 @@
                 role="presentation"
             >
                 총 <span style="font-weight:bold;"
-                    >{course.rollTime.reduce(
-                        (partial, current) => partial + current,
-                        0,
-                    )}</span
+                    >{Math.round(
+                        course.rollTime.reduce(
+                            (partial, current) => partial + current,
+                            0,
+                        ) * 1000
+                    ) / 1000}</span
                 >초
             </div>
             {#if rollOpened}
@@ -185,7 +187,7 @@
         content: "▲";
     }
 
-    .dani-container[data-theme="dark"] > .dani-opener{
+    .dani-container[data-theme="dark"] > .dani-opener {
         background-color: #1c1c1c;
     }
 </style>

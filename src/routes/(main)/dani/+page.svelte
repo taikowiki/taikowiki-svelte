@@ -25,7 +25,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [92],
@@ -33,7 +32,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "hit",
                     criteria: {
                         red: [724],
@@ -62,7 +60,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [94],
@@ -70,7 +67,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "hit",
                     criteria: {
                         red: [1122],
@@ -78,7 +74,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [112],
@@ -107,7 +102,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [96],
@@ -115,7 +109,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "hit",
                     criteria: {
                         red: [1247],
@@ -123,7 +116,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [96],
@@ -152,7 +144,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [97],
@@ -160,7 +151,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "hit",
                     criteria: {
                         red: [1512],
@@ -168,7 +158,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [91],
@@ -197,7 +186,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [98],
@@ -205,7 +193,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "hit",
                     criteria: {
                         red: [1589],
@@ -213,7 +200,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [59],
@@ -242,7 +228,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [98],
@@ -250,7 +235,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "good",
                     criteria: {
                         red: [866],
@@ -258,7 +242,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [28],
@@ -266,7 +249,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "roll",
                     criteria: {
                         red: [293],
@@ -295,7 +277,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [98],
@@ -303,7 +284,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "good",
                     criteria: {
                         red: [965],
@@ -311,7 +291,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [26],
@@ -319,7 +298,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "roll",
                     criteria: {
                         red: [210],
@@ -348,7 +326,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [99],
@@ -356,7 +333,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "good",
                     criteria: {
                         red: [1086],
@@ -364,7 +340,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [24],
@@ -372,7 +347,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "roll",
                     criteria: {
                         red: [344],
@@ -401,7 +375,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [99],
@@ -409,7 +382,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "good",
                     criteria: {
                         red: [1484],
@@ -417,7 +389,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [28],
@@ -425,7 +396,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "roll",
                     criteria: {
                         red: [143],
@@ -454,7 +424,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [99],
@@ -462,7 +431,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "good",
                     criteria: {
                         red: [1708],
@@ -470,7 +438,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [26],
@@ -478,7 +445,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "roll",
                     criteria: {
                         red: [117],
@@ -507,7 +473,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [100],
@@ -515,7 +480,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "good",
                     criteria: {
                         red: [1613],
@@ -523,7 +487,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [18],
@@ -531,7 +494,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: true,
                     type: "roll",
                     criteria: {
                         red: [21, 62, 158],
@@ -560,7 +522,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [100],
@@ -568,7 +529,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "good",
                     criteria: {
                         red: [1720, 1765],
@@ -576,7 +536,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [15],
@@ -584,7 +543,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: true,
                     type: "roll",
                     criteria: {
                         red: [81, 90, 257],
@@ -613,7 +571,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [100],
@@ -621,7 +578,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "good",
                     criteria: {
                         red: [2051],
@@ -629,7 +585,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [13],
@@ -637,7 +592,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: true,
                     type: "roll",
                     criteria: {
                         red: [149, 68, 150],
@@ -666,7 +620,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [100],
@@ -674,7 +627,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "good",
                     criteria: {
                         red: [2067],
@@ -682,7 +634,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [8],
@@ -690,7 +641,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: true,
                     type: "roll",
                     criteria: {
                         red: [45, 32, 200],
@@ -719,7 +669,6 @@
             ],
             conditions: [
                 {
-                    isIndividualCondition: false,
                     type: "gauge",
                     criteria: {
                         red: [100],
@@ -727,7 +676,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "ok",
                     criteria: {
                         red: [75],
@@ -735,7 +683,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: false,
                     type: "bad",
                     criteria: {
                         red: [8],
@@ -743,7 +690,6 @@
                     },
                 },
                 {
-                    isIndividualCondition: true,
                     type: "roll",
                     criteria: {
                         red: [174, 64, 56],

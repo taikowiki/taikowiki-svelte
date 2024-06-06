@@ -49,7 +49,7 @@
     .container {
         width: 100%;
 
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
 
@@ -67,7 +67,7 @@
         background-color: #f5f1f1;
         color: #3d3d3d;
         font-weight: 600;
-        font-family: 'Noto Sans KR';
+        font-family: "Noto Sans KR";
     }
     select[data-theme="dark"] {
         background-color: #1c1c1c;
@@ -97,5 +97,7 @@
     a[data-theme="dark"] {
         background-color: #1c1c1c;
         color: white;
+
+        border-color: white;
     }
 </style>

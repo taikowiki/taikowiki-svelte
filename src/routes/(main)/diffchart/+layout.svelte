@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { page } from "$app/stores";
     import DiffchartSelectorMobile from "$lib/components/layout/dedicated diffchart/DiffchartSelector-mobile.svelte";
     import DiffchartSelectorPc from "$lib/components/layout/dedicated diffchart/DiffchartSelector-pc.svelte";
     import PageAside from "$lib/components/layout/main/PageAside.svelte";
@@ -19,8 +18,11 @@
 <PageAside>
     <DiffchartSelectorPc />
     {#if $downloadImage}
-        <button style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;" on:click={$downloadImage}>
-            <div style="font-family: 'Noto Sans KR', 'Noto Sans JP';font-weight:700;color:#cf4844;">다운로드</div>
+        <button
+            style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;"
+            on:click={$downloadImage}
+        >
+            <div class="download-text" data-theme={$theme}>다운로드</div>
             <img
                 class="download"
                 data-theme={$theme}
@@ -68,6 +70,15 @@
         height: 25px;
     }
     .download[data-theme="dark"] {
-        filter: invert(100%);
+        filter: brightness(0) invert(100%);
+    }
+
+    .download-text {
+        font-family: "Noto Sans KR", "Noto Sans JP";
+        font-weight: 700;
+        color: #cf4844;
+    }
+    .download-text[data-theme="dark"] {
+        color: white;
     }
 </style>

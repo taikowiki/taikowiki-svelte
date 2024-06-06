@@ -2,7 +2,6 @@
     import type { Genre } from "$lib/module/common/song/types";
     import type {
         Song,
-        SongScore,
         SongScoreDetail,
     } from "$lib/module/page/diffchart/types";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";

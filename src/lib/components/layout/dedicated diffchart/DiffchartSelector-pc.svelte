@@ -49,7 +49,7 @@
     .container {
         width: 100%;
 
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
 
@@ -63,6 +63,11 @@
     select {
         height: 25px;
         border-radius: 3px;
+        border-color: white;
+        background-color: #e8e8e8;
+        color: #3d3d3d;
+        font-weight: 600;
+        font-family: "Noto Sans KR";
     }
     select[data-theme="dark"] {
         background-color: #1c1c1c;
@@ -79,17 +84,20 @@
         height: 25px;
 
         font-size: 14px;
+        font-weight: bold;
 
         box-sizing: border-box;
-        border: 1px solid #767676;
+        border: 2px solid #ff6c6c;
         border-radius: 3px;
 
-        color: black;
+        color: #494949;
 
         text-decoration: none;
     }
     a[data-theme="dark"] {
         background-color: #1c1c1c;
         color: white;
+
+        border-color: white;
     }
 </style>

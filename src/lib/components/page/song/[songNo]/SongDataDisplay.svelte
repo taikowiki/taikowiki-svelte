@@ -2,7 +2,7 @@
     import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
-    import SongDataDisplayTag from "./SongDataDisplayTag.svelte";
+    import SongDataDisplayTag from "$lib/components/page/song/[songNo]/SongDataDisplayTag.svelte";
     import dayjs from 'dayjs';
 
     export let bpm: SongData["bpm"];

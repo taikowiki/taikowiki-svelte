@@ -33,6 +33,7 @@
     import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
+    import dayjs from 'dayjs';
 
     export let bpm: SongData["bpm"];
     export let bpmShiver: SongData["bpmShiver"];
@@ -95,7 +96,7 @@
         <tr>
             <td> 추가된 날짜 </td>
             <td>
-                {new Date(addedDate).toDateString()}
+                {dayjs(addedDate).format("YYYY-MM-DD")}
             </td>
         </tr>
     {/if}

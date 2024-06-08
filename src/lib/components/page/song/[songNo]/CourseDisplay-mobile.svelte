@@ -42,7 +42,7 @@
                     >{course.balloon.reduce(
                         (partial, current) => partial + current,
                         0,
-                    ).toFixed(2)}</span
+                    )}</span
                 >개
             </div>
             {#if balloonOpened}
@@ -67,7 +67,7 @@
                     >{course.rollTime.reduce(
                         (partial, current) => partial + current,
                         0,
-                    ).toFixed(2)}</span
+                    )}</span
                 >초
             </div>
             {#if rollOpened}

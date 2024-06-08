@@ -1,3 +1,34 @@
+<script lang="ts" context="module">
+    function setTdMinWidth(node: HTMLTableElement, isMobile: boolean) {
+        function updateFunc(isMobile: boolean) {
+            if (!isMobile && node.clientHeight > 30) {
+                let max = 100;
+                const tdList = node.querySelectorAll("td:nth-child(1)");
+                tdList.forEach((td) => {
+                    if (td.clientWidth > max) {
+                        max = td.clientWidth;
+                    }
+                });
+                tdList.forEach((td) => {
+                    (td as HTMLElement).style.width = `${max}px`;
+                });
+            } else {
+                node.querySelectorAll("td:nth-child(1)").forEach((e) => {
+                    (e as HTMLElement).style.width = "";
+                });
+            }
+        }
+
+        updateFunc(isMobile);
+
+        return {
+            update(isMobile: boolean) {
+                updateFunc(isMobile);
+            },
+        };
+    }
+</script>
+
 <script lang="ts">
     import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
@@ -13,9 +44,16 @@
     const isMobile = getIsMobile();
 
     artists = [...new Set(artists)];
+
+    let table: HTMLTableElement;
 </script>
 
-<table data-theme={$theme} data-isMobile={$isMobile}>
+<table
+    data-theme={$theme}
+    data-isMobile={$isMobile}
+    bind:this={table}
+    use:setTdMinWidth={$isMobile}
+>
     <tr>
         <td> BPM </td>
         <td>
@@ -66,30 +104,50 @@
 <style>
     table {
         border-collapse: collapse;
-        display: flex;
-        flex-wrap: wrap;
-    }
-    table[data-isMobile="true"] {
         width: 100%;
         display: table;
+    }
+    table[data-isMobile="false"] {
+        width: auto;
+        display: flex;
+        flex-wrap: wrap;
+        height: min-content;
+    }
+
+    table[data-isMobile="false"] > tr {
+        display: flex;
+        flex: 1 1 auto;
+        min-height: 30px;
+    }
+    table[data-isMobile="false"] > tr > td {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+    }
+
+    table[data-isMobile="false"] > tr > td:nth-child(2) {
+        flex: 1 1;
     }
 
     td {
         border: 1px solid #cf4844;
 
         padding-inline: 5px;
-
+        height: 30px;
         text-align: center;
-        height: 29px;
         box-sizing: border-box;
     }
     table[data-theme="dark"] td {
         border: 1px solid #1c1c1c;
     }
+
     td:nth-child(1) {
         background-color: #cf4844;
         color: white;
+        text-wrap: nowrap;
     }
+
     table[data-theme="dark"] td:nth-child(1) {
         background-color: #1c1c1c;
     }

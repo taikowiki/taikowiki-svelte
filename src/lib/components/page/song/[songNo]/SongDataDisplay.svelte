@@ -2,7 +2,6 @@
     import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
-    import SongDataDisplayTag from "$lib/components/page/song/[songNo]/SongDataDisplayTag.svelte";
     import dayjs from 'dayjs';
 
     export let bpm: SongData["bpm"];
@@ -17,54 +16,82 @@
     artists = [...new Set(artists)];
 </script>
 
-<div class="container" data-theme={$theme} data-isMobile={$isMobile}>
-        <div class="item first">BPM</div>
-        <div class="item second">
-            <SongDataDisplayTag item= {bpm.min === bpm.max ? `${bpm.min}` :`${bpm.min} - ${bpm.max}`}/>
-            {#if bpmShiver}<SongDataDisplayTag item="변동"/>{/if}
-        </div>
+<table data-theme={$theme} data-isMobile={$isMobile}>
+    <tr>
+        <td> BPM </td>
+        <td>
+            {#if bpm.min === bpm.max}
+                {bpm.min}
+            {:else}
+                {bpm.min} - {bpm.max}
+            {/if}
+            {#if bpmShiver}
+                ※
+            {/if}
+        </td>
+    </tr>
     {#if version.length}
-    <div class="item first">수록 버전</div>
-    <div class="item second">
-        {#each version as versionItem}
-            <SongDataDisplayTag item={versionItem}/>
-        {/each}
-        </div>
+        <tr>
+            <td> 수록 버전 </td>
+            <td>
+                {version.join(", ")}
+            </td>
+        </tr>
     {/if}
     {#if artists.length}
-    <div class="item first">아티스트</div>
-    <div class="item second">
-        {#each artists as artistItem}
-        <SongDataDisplayTag item={artistItem}/>
-        {/each}
-    </div>
+        <tr>
+            <td> 아티스트 </td>
+            <td>
+                {#if $isMobile}
+                    {#each artists as artist}
+                        <div>
+                            {artist}
+                        </div>
+                    {/each}
+                {:else}
+                    {artists.join(", ")}
+                {/if}
+            </td>
+        </tr>
     {/if}
     {#if addedDate}
-    <div class="item first">추가일</div>
-    <div class="item second">
-        <SongDataDisplayTag item={dayjs(addedDate).format("YYYY-MM-DD")}/>
-    </div>
+        <tr>
+            <td> 추가된 날짜 </td>
+            <td>
+                {dayjs(addedDate).format("YYYY-MM-DD")}
+            </td>
+        </tr>
     {/if}
-    </div>
+</table>
 
 <style>
-    .container{
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0,1fr));
-        grid-template-rows: repeat(2, minmax(0,1fr));
-        border-radius: 0.5em;
-        box-shadow: 0px 0px 3px #d4d4d4;
-        width: 100%;
-        gap: 1em;
-        padding: 1em;
-
+    table {
+        border-collapse: collapse;
+        display: flex;
+        flex-wrap: wrap;
     }
-    .container[data-theme=dark]{
-        box-shadow: none;
+    table[data-isMobile="true"] {
+        width: 100%;
+        display: table;
+    }
+
+    td {
+        border: 1px solid #cf4844;
+
+        padding-inline: 5px;
+
+        text-align: center;
+        height: 29px;
+        box-sizing: border-box;
+    }
+    table[data-theme="dark"] td {
+        border: 1px solid #1c1c1c;
+    }
+    td:nth-child(1) {
+        background-color: #cf4844;
+        color: white;
+    }
+    table[data-theme="dark"] td:nth-child(1) {
         background-color: #1c1c1c;
     }
-    .item{
-        display: flexbox;
-    }
-
 </style>

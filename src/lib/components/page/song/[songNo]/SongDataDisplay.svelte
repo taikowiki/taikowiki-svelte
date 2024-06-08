@@ -33,7 +33,8 @@
     import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
-    import dayjs from 'dayjs';
+    import SongDataDisplayTag from "./SongDataDisplayTag.svelte";
+    import dayjs from "dayjs";
 
     export let bpm: SongData["bpm"];
     export let bpmShiver: SongData["bpmShiver"];
@@ -72,7 +73,9 @@
         <tr>
             <td> 수록 버전 </td>
             <td>
-                {version.join(", ")}
+                {#each version as v}
+                    <SongDataDisplayTag item={v} />
+                {/each}
             </td>
         </tr>
     {/if}
@@ -80,15 +83,9 @@
         <tr>
             <td> 아티스트 </td>
             <td>
-                {#if $isMobile}
-                    {#each artists as artist}
-                        <div>
-                            {artist}
-                        </div>
-                    {/each}
-                {:else}
-                    {artists.join(", ")}
-                {/if}
+                {#each artists as artist}
+                    <SongDataDisplayTag item={artist} />
+                {/each}
             </td>
         </tr>
     {/if}
@@ -129,6 +126,8 @@
 
     table[data-isMobile="false"] > tr > td:nth-child(2) {
         flex: 1 1;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
 
     td {

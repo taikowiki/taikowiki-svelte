@@ -67,7 +67,7 @@
                     >{course.rollTime.reduce(
                         (partial, current) => partial + current,
                         0,
-                    )}</span
+                    ).toFixed(2)}</span
                 >초
             </div>
             {#if rollOpened}

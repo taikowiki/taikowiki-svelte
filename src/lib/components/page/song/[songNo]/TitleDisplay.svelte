@@ -49,6 +49,7 @@
 
         background-color: #cf4844;
 
+        border-radius: 5px;
         margin-top: 10px;
     }
     .icon-container[data-theme="dark"]{

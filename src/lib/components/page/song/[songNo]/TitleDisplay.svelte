@@ -50,6 +50,7 @@
         background-color: #cf4844;
 
         margin-top: 10px;
+        border-radius: 5px;
     }
     .icon-container[data-theme="dark"]{
         background-color: #1c1c1c;

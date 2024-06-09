@@ -106,9 +106,17 @@ export default class SongDB {
             return run(`SELECT \`UPDATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
         })
 
-        console.log(result);
-
         const updateTime = new Date(result[0]['UPDATE_TIME']).getTime();
+
+        return updateTime;
+    }
+
+    static async getCreateTime(): Promise<number> {
+        let result = await runQuery(async (run) => {
+            return run(`SELECT \`CREATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
+        })
+
+        const updateTime = new Date(result[0]['CREATE_TIME']).getTime();
 
         return updateTime;
     }

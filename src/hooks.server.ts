@@ -50,4 +50,8 @@ const checkPermission = checkPermissions([
     }
 ])
 
+Array.prototype.toSorted = function(compareFn?:any){
+    return [...this].sort(compareFn);
+}
+
 export const handle = sequence(BanController.checkIpHandle ,authHandle, getUserData, checkPermission);

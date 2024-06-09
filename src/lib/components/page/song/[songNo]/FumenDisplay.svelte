@@ -70,10 +70,10 @@
         column-gap: 5px;
     }
     .opener[data-opened="true"]::after {
-        content: "▼";
+        content: "▲";
     }
     .opener[data-opened="false"]::after {
-        content: "▲";
+        content: "▼";
     }
     .opener[data-theme="dark"] {
         background-color: #1c1c1c;

@@ -31,7 +31,7 @@
     const isMobile = getIsMobile();
 
     const lang = getLang();
-    $: i18n = getI18N("component", $lang).DaniDisplay;
+    $: i18n = getI18N("other", $lang).dani;
 </script>
 
 <div

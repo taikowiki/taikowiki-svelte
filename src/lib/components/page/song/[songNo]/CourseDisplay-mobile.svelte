@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Course } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
 
@@ -12,6 +13,9 @@
     let balloonOpened = false;
     let rollOpened = false;
     let daniOpened = false;
+
+    const lang = getLang();
+    $: daniI18n = getI18N("other", $lang).dani;
 </script>
 
 <table data-theme={$theme}>
@@ -64,10 +68,12 @@
                 role="presentation"
             >
                 총 <span style="font-weight:bold;"
-                    >{course.rollTime.reduce(
-                        (partial, current) => partial + current,
-                        0,
-                    )}</span
+                    >{Math.round(
+                        course.rollTime.reduce(
+                            (partial, current) => partial + current,
+                            0,
+                        ) * 1000,
+                    ) / 1000}</span
                 >초
             </div>
             {#if rollOpened}
@@ -106,7 +112,11 @@
                     {#if daniOpened}
                         <div class="dani">
                             {#each course.dani as dani}
-                                {dani.version} {dani.dan} {dani.order}번째 곡
+                                <span>
+                                    {daniI18n.version[dani.version]}
+                                    {daniI18n.dan[dani.dan]}
+                                    {dani.order}번째 곡
+                                </span>
                             {/each}
                         </div>
                     {/if}
@@ -193,5 +203,15 @@
 
     .dani-container[data-theme="dark"] > .dani-opener {
         background-color: #1c1c1c;
+    }
+
+    .dani {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+    .dani > span {
+        transform: translateY(-1px);
     }
 </style>

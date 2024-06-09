@@ -1,29 +1,35 @@
 export type Language = "jp" | "ko" | "en" | string;
 
-export interface SubLangFile{
-    [key: string]: string|SubLangFile
+export interface SubLangFile {
+    [key: string]: string | SubLangFile
 }
 
-export interface PathLangFile{
+export interface PathLangFile {
     [pathname: string]: SubLangFile
 }
 
-export interface LayoutLangFile{
+export interface LayoutLangFile {
     layout?: {
         [layoutName: string]: SubLangFile
     };
 }
 
-export interface ComponentLangFile{
-    component?:{
+export interface ComponentLangFile {
+    component?: {
         [componentName: string]: SubLangFile
     }
 }
 
-export interface RecursiveStringRecord{
-    [key: string]: string|RecursiveStringRecord
+export interface OtherLangFile {
+    other?: {
+        [other: string]: SubLangFile
+    }
 }
 
-export type LangFile = LayoutLangFile & PathLangFile & ComponentLangFile
+export interface RecursiveStringRecord {
+    [key: string]: string | RecursiveStringRecord
+}
 
-export type I18N = Record<'ko', LangFile>&Partial<Record<Language, LangFile>>;
+export type LangFile = LayoutLangFile & PathLangFile & ComponentLangFile & OtherLangFile
+
+export type I18N = Record<'ko', LangFile> & Partial<Record<Language, LangFile>>;

@@ -2,19 +2,20 @@ import axios from "axios";
 import { type SongData } from "./types";
 import { getContext } from "svelte";
 
-export async function loadAllSongs(): Promise<SongData[]> {
-    const recentUpdate = ((await axios.get('/api/song/recent_update')).data as number).toString()
+export async function loadAllSongs(fetch: ((input: string | URL | globalThis.Request,
+    init?: RequestInit) => Promise<Response>)): Promise<SongData[]> {
+    const recentUpdate = (Number(await (await fetch('/api/song/recent_update')).text())).toString();
     if (window.localStorage && window.localStorage.getItem('songs') !== null && window.localStorage.getItem('recentSongUpdateTime') === recentUpdate) {
         try {
             let result = JSON.parse(window.localStorage.getItem('songs') as string);
-            if(Array.isArray(result)){
+            if (Array.isArray(result)) {
                 return result;
             }
         }
-        catch{}
+        catch { }
     }
     window.localStorage?.setItem('recentSongUpdateTime', recentUpdate);
-    const songs = (await axios.get('/api/song')).data;
+    const songs = await (await fetch('/api/song')).json();
     window.localStorage?.setItem('songs', JSON.stringify(songs));
     return (songs);
 }
@@ -37,6 +38,6 @@ export function getSongsFromContext(): SongData[] {
     return getContext('songs') as SongData[];
 }
 
-export function getSongFromContextBySongNo(songNo:string): SongData | null{
+export function getSongFromContextBySongNo(songNo: string): SongData | null {
     return (getContext('songs') as SongData[]).find(song => song.songNo === songNo) ?? null;
 }

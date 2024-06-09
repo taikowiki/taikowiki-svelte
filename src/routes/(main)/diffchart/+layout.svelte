@@ -18,17 +18,19 @@
 <PageAside>
     <DiffchartSelectorPc />
     {#if $downloadImage}
-        <div style="display:flex;align-items:center;column-gap:5px;">
-            다운로드
+        <button
+            style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;"
+            on:click={$downloadImage}
+        >
+            <div class="download-text" data-theme={$theme}>다운로드</div>
             <img
                 class="download"
                 data-theme={$theme}
                 src="/assets/icon/download.svg"
                 alt="다운로드"
-                on:click={$downloadImage}
                 role="presentation"
             />
-        </div>
+        </button>
     {/if}
 </PageAside>
 
@@ -66,10 +68,18 @@
     .download {
         width: 25px;
         height: 25px;
-
         cursor: pointer;
     }
     .download[data-theme="dark"] {
-        filter: invert(100%);
+        filter: brightness(0) invert(100%);
+    }
+
+    .download-text {
+        font-family: "Noto Sans KR", "Noto Sans JP";
+        font-weight: 700;
+        color: #cf4844;
+    }
+    .download-text[data-theme="dark"] {
+        color: white;
     }
 </style>

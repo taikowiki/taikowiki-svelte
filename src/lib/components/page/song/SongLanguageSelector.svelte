@@ -20,7 +20,7 @@
     import { browser } from "$app/environment";
     import { getTheme } from "$lib/module/layout/theme";
     import SongLanguageButton from "./SongLanguageButton.svelte";
-    import { getI18N } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let songLang: SongLang = "jp";
     if (browser) {
@@ -47,8 +47,9 @@
     })
     */
     const [theme] = getTheme();
+    const lang = getLang();
+    $: i18n = getI18N("/song", $lang);
 
-    const i18n = getI18N();
 </script>
 
 <div class="wrapper">
@@ -57,7 +58,7 @@
         {#if ghost}
             {#each languages as language}
                 <SongLanguageButton bind:btn bind:songLang value={language}>
-                    {$i18n.languages[language]}
+                    {i18n.languages[language]}
                 </SongLanguageButton>
             {/each}
             <!--

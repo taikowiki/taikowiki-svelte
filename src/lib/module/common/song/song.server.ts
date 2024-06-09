@@ -1,6 +1,11 @@
 import { runQuery } from "@sveltekit-board/db";
-//import {escape} from 'mysql';
-import { type SongData, type SongRequest } from "./types";
+import { escape } from 'mysql2';
+import { type SongData, type SongRequest, type SongSearchOption } from "./types";
+//@ts-expect-error
+import r from 'regex-escape';
+function regexEscape(str: string): string {
+    return r(str)
+}
 
 export default class SongDB {
     static async createTable() {
@@ -58,6 +63,47 @@ export default class SongDB {
                 }
             })
             return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
+        })
+    }
+
+    static async search(page: number | null, option?: SongSearchOption): Promise<{
+        songs: (SongData & { order: number })[],
+        count: number
+    }> {
+        let sqlWhereQuery = "WHERE (1)";
+        if (option?.difficulty && option?.level) {
+            if (option.difficulty === "oniura") {
+                sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.oni.level') = ${option.level} OR JSON_EXTRACT(\`courses\`, '$.ura.level') = ${option.level})`;
+            }
+            else {
+                sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.${option.difficulty}.level') = ${option.level})`;
+            }
+        }
+        if (option?.genre) {
+            sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
+        }
+        if (option?.query) {
+            const regexp = `${option.query.split(' ').map(regexEscape).join('.*?')}`
+            sqlWhereQuery += `AND (\`title\` REGEXP ${escape(regexp)} OR \`titleKo\` REGEXP ${escape(regexp)} OR \`aliasKo\` REGEXP ${escape(regexp)})`
+        }
+
+        return await runQuery(async (run) => {
+            const songs = (page === null) ? await run(`SELECT * FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC`) : await run(`SELECT * FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC LIMIT ${(page - 1) * 30}, 30`);
+            songs.map((e: any) => {
+                e.courses = JSON.parse(e.courses);
+                e.bpm = JSON.parse(e.bpm);
+                e.version = JSON.parse(e.version);
+                e.genre = JSON.parse(e.genre);
+                e.artists = JSON.parse(e.artists);
+                if (e.courses.ura === undefined) {
+                    e.courses.ura = null;
+                }
+            })
+            const count = Object.values((await run(`SELECT COUNT(\`order\`) FROM \`song\` ${sqlWhereQuery}`))[0])?.[0] ?? 0
+            return {
+                songs,
+                count
+            };
         })
     }
 
@@ -121,9 +167,9 @@ export default class SongDB {
         return updateTime;
     }
 
-    static async getNewSongs(): Promise<SongData[]> {
+    static async getNewSongs(limit: number = 3): Promise<SongData[]> {
         return await runQuery(async (run) => {
-            let result = await run("SELECT * FROM `song` ORDER BY `addedDate` DESC LIMIT 3");
+            let result = await run(`SELECT * FROM \`song\` ORDER BY \`addedDate\` DESC LIMIT ${limit}`);
             result.map((e: any) => {
                 e.courses = JSON.parse(e.courses);
                 e.bpm = JSON.parse(e.bpm);
@@ -146,26 +192,6 @@ export default class SongDB {
             }
         })
     }
-    /*
-    static async search(option: SongSearchOption): Promise<SongData[]> {
-        let title = option.title?.replace('%', '\\%').replace('_', '\\_') ?? '%';
-        let difficultyQuery = option.difficulty && option.level? `AND JSON_EXTRACT(courses, ${escape(`$.${option.difficulty}.level`)}) = ${escape(option.level)}` : '';
-
-        let result = await runQuery(async (run) => {
-            return await run(`SELECT * FROM \`song\`
-            WHERE
-                (\`title\` LIKE ? OR \`titleKo\` LIKE ? OR \`titleEn\` LIKE ? OR \`aliasKo\` LIKE ? OR \`aliasEn\` LIKE ?)
-                ${difficultyQuery}
-            `, [title, title, title, title, title])
-        })
-
-        result.map((song:any) => {
-            song.courses = JSON.parse(song.courses)
-        })
-
-        return JSON.parse(JSON.stringify(result))
-    }
-    */
 }
 
 export class SongRequestController {
@@ -211,7 +237,7 @@ export class SongRequestController {
         UUID: string;
         songNo: string;
         data: SongData;
-        ip:string;
+        ip: string;
     }) {
         const song = await SongDB.getBySongNo(request.songNo);
 

@@ -4,12 +4,12 @@
     import type { SongLang } from "$lib/module/common/song/types";
 
     export let songLang: SongLang;
-    export let filteredSongs: (SongData & { order: number })[];
+    export let songs: (SongData & { order: number })[];
 </script>
 
 <div class="container">
-    {#each filteredSongs as song (song.order)}
-        <SongItem {song} {songLang}/>
+    {#each songs as song (song.order)}
+        <SongItem {song} {songLang} />
     {/each}
 </div>
 

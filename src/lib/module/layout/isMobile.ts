@@ -1,24 +1,24 @@
 import { getContext, setContext } from "svelte";
 import { writable, type Writable } from "svelte/store";
-import { onMount } from "svelte";
 import { browser } from "$app/environment";
 
-export function useIsMobile():Writable<boolean>{
+export function useIsMobile(): Writable<boolean> {
     let isMobile = writable<boolean>();
     setContext('isMobile', isMobile);
 
-    onMount(() => {
-        if (browser) {
-            isMobile.set(window.innerWidth <= 1000);
-            window.addEventListener('resize', () => {
-                isMobile.set(window.innerWidth <= 1000)
-            })
-        }
-    })
+    if (browser) {
+        isMobile.set(window.innerWidth <= 1000);
+        window.addEventListener('resize', () => {
+            isMobile.set(window.innerWidth <= 1000)
+        })
+    }
+    else{
+        isMobile.set(false);
+    }
 
     return isMobile
 }
 
-export function getIsMobile():Writable<boolean>{
+export function getIsMobile(): Writable<boolean> {
     return getContext('isMobile')
 }

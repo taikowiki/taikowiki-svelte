@@ -17,10 +17,10 @@
     import type { Genre } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { SongSearchOption } from "$lib/module/page/song/types";
+    import type { SongSearchOption } from "$lib/module/common/song/types";
     import SearchBoxGenreItem from "./SearchBox-GenreItem.svelte";
 
-    export let tempOption: SongSearchOption;
+    export let option: SongSearchOption;
 
     const isMobile = getIsMobile();
 
@@ -37,7 +37,7 @@
 >
     <div class="wrapper">
         {#each genres as genre}
-            <SearchBoxGenreItem bind:group={tempOption.genre} value={genre}>
+            <SearchBoxGenreItem bind:group={option.genre} value={genre}>
                 {$i18n.genres[genre]}
             </SearchBoxGenreItem>
         {/each}

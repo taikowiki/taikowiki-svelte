@@ -6,8 +6,10 @@
                 return result;
             }
             return null;
-        } catch(err){
-            console.log(err);
+        } catch (err) {
+            if (browser) {
+                console.log(err);
+            }
             return null;
         }
     }
@@ -40,14 +42,17 @@
             return;
         }
         downloadImage = async () => {
-            const canvas = await html2canvas(replica);
-            const url = canvas.toDataURL();
-            const a = document.createElement("a");
-            a.setAttribute("download", "서열표.png");
-            a.href = url;
-            a.click();
-            a.remove();
-            canvas.remove();
+            (async () => {
+                const canvas = await html2canvas(replica);
+                const url = canvas.toDataURL();
+                const a = document.createElement("a");
+                a.setAttribute("download", "서열표.png");
+                a.href = url;
+                a.click();
+                a.remove();
+                canvas.remove();
+            })();
+            alert('이미지가 곧 다운로드됩니다.')
         };
     });
 
@@ -64,16 +69,22 @@
     style="display:none;"
 />
 <div class="container">
-    <DiffchartName name={diffChart.name} {color} {backgroundColor}/>
+    <DiffchartName name={diffChart.name} {color} {backgroundColor} />
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
-        <DiffchartSection {section} {songs} theme={$theme} {userScoreData}/>
+        <DiffchartSection {section} {songs} theme={$theme} {userScoreData} />
     {/each}
 </div>
 
 <div class="replica" bind:this={replica}>
     <DiffchartName name={diffChart.name} {color} {backgroundColor} />
     {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
-        <DiffchartSection {section} {songs} theme={"light"} useMobile={false} {userScoreData}/>
+        <DiffchartSection
+            {section}
+            {songs}
+            theme={"light"}
+            useMobile={false}
+            {userScoreData}
+        />
     {/each}
 </div>
 

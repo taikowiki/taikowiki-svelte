@@ -72,11 +72,6 @@
     beforeNavigate(resetPageAside(pageAside));
     /*afterNavigate(setPageAsideDisplay(pageAside));*/
 
-    //setContext songs
-    if (data.songs) {
-        setContext("songs", data.songs);
-    }
-
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);
@@ -90,12 +85,16 @@
     }
 </script>
 
-{#if $theme}
+<div style={browser ? "" : "transform:translateX(-100%);"}>
     <Header>
         <svelte:fragment slot="left">
             <HeaderItem href="/" useHover={false}>
                 {#if $isMobile}
-                    <img class="logo" src="/assets/img/logo_mobile.png" alt="logo" />
+                    <img
+                        class="logo"
+                        src="/assets/img/logo_mobile.png"
+                        alt="logo"
+                    />
                 {:else}
                     <img class="logo" src="/assets/img/logo.png" alt="logo" />
                 {/if}
@@ -135,7 +134,7 @@
     </Header>
     <Main>
         <svelte:fragment slot="main">
-            {#if $navigating}
+            {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
                 <slot />
@@ -147,7 +146,7 @@
         </Aside>
     </Main>
     <Footer version={data.version} />
-{/if}
+</div>
 
 <style>
     :global(body[data-theme="light"]) {

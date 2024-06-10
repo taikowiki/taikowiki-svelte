@@ -1,10 +1,10 @@
 <script lang="ts">
-    import type { SongData } from "$lib/module/common/song/types";
     import SongItem from "./SongItem.svelte";
     import type { SongLang } from "$lib/module/common/song/types";
+    import type { SongDataPickedForSearch } from "$lib/module/page/song/types";
 
     export let songLang: SongLang;
-    export let songs: (SongData & { order: number })[];
+    export let songs: SongDataPickedForSearch[];
 </script>
 
 <div class="container">

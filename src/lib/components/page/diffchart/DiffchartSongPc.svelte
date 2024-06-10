@@ -1,5 +1,8 @@
 <script lang="ts" context="module">
-    function resizeTitle(node: HTMLDivElement, browser: boolean) {
+    function resizeTitle(
+        node: HTMLDivElement,
+        value: [browser: boolean, theme: string],
+    ) {
         function resize(browser: boolean) {
             const titleDiv = node.querySelector<HTMLDivElement>(".title");
             const krTitleDiv = node.querySelector<HTMLDivElement>(".title-kr");
@@ -31,12 +34,11 @@
             }
         }
 
-        resize(browser);
+        resize(value[0]);
 
         return {
-            update(browser: any) {
-                console.log(browser);
-                resize(browser);
+            update(value: [browser: boolean, theme: string]) {
+                resize(value[0]);
             },
         };
     }
@@ -52,7 +54,6 @@
     import color from "$lib/module/common/color";
     import { getLang } from "$lib/module/common/i18n/i18n";
     import { browser } from "$app/environment";
-    import { afterUpdate, onMount } from "svelte";
 
     export let song: Song;
     export let genre: Genre[];
@@ -94,15 +95,15 @@
     data-crown={userScore?.crown || ""}
 >
     <DiffchartSongGenre {genre} width="6px" height="36px" />
-    <div class="title-container" use:resizeTitle={browser}>
+    <div class="title-container" use:resizeTitle={[browser, theme]}>
         <div
             class="title"
             style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
         >
             {song.title}
         </div>
-        {#if krTitle && $lang === "ko"}
-            <div class="title-kr">
+        {#if krTitle}
+            <div class="title-kr" class:hidden={$lang !== "ko"}>
                 {krTitle}
             </div>
         {/if}
@@ -218,5 +219,9 @@
         height: 22px;
 
         z-index: 0;
+    }
+
+    .hidden{
+        display:none;
     }
 </style>

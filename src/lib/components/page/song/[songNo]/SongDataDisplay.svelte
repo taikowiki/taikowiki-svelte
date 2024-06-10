@@ -12,6 +12,10 @@
                 tdList.forEach((td) => {
                     (td as HTMLElement).style.width = `${max}px`;
                 });
+
+                node.querySelectorAll("tr:not(:nth-last-child(1)) td:nth-child(2)").forEach(td => {
+                    (td as HTMLElement).style.borderBottom = `0`;
+                })
             } else {
                 node.querySelectorAll("td:nth-child(1)").forEach((e) => {
                     (e as HTMLElement).style.width = "";
@@ -122,6 +126,8 @@
         align-items: center;
         justify-content: center;
         height: auto;
+        column-gap: 5px;
+        row-gap: 2px;
     }
 
     table[data-isMobile="false"] > tr > td:nth-child(2) {

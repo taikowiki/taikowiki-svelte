@@ -2,6 +2,7 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Course } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import FumenDisplay from "./FumenDisplay.svelte";
 
     export let course: Course;
     const [theme] = getTheme();
@@ -15,10 +16,13 @@
     let daniOpened = false;
 
     const lang = getLang();
-    $: daniI18n = getI18N('other', $lang).dani
+    $: daniI18n = getI18N("other", $lang).dani;
 </script>
 
-<table data-theme={$theme}>
+<table
+    data-theme={$theme}
+    style={course.images.length === 0 ? "height:170px;" : "height: 136px;"}
+>
     <tr>
         <td> 최대 노트 수 </td>
         <td>
@@ -136,7 +140,6 @@
         text-align: center;
         border: 1px solid #cf4844;
         box-sizing: border-box;
-        height: 42px;
     }
     td:nth-child(2n-1) {
         background-color: #cf4844;

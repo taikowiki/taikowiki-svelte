@@ -157,6 +157,9 @@
         background-color: black;
         color: white;
     }
+    :global(body[data-theme="light"] a) {
+        color: #cf4844;
+    }
     :global(body[data-theme="dark"] a) {
         color: #e1a743;
     }

@@ -39,7 +39,7 @@
         <CourseDisplay {course} />
     {/key}
 </div>
-{#if course?.images !== undefined}
+{#if course?.images}
     <FumenDisplay images={course.images} />
 {/if}
 
@@ -56,6 +56,7 @@
 
     .difficulty-container {
         width: 80px;
+        height: 170px;
 
         display: flex;
         flex-direction: column;

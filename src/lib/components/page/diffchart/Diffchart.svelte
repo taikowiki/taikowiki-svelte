@@ -22,14 +22,14 @@
     } from "$lib/module/common/diffchart/types";
     import DiffchartName from "./DiffchartName.svelte";
     import DiffchartSection from "./DiffchartSection.svelte";
-    import type { SongData } from "$lib/module/common/song/types";
     import { afterUpdate } from "svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { browser } from "$app/environment";
     import html2canvas from "html2canvas";
+    import type { SongDataPickedForDiffchart } from "$lib/module/page/diffchart/types";
 
     export let diffChart: DiffChart;
-    export let songs: SongData[];
+    export let songs: SongDataPickedForDiffchart[];
     export let color: string | undefined = diffChart.color;
     export let backgroundColor: string | undefined = diffChart.backgroundColor;
     export let downloadImage: (() => Promise<void>) | null = null;
@@ -56,7 +56,7 @@
         };
     });
 
-    let userScoreDataJSON: string = "";
+    let userScoreDataJSON: string = '';
     $: userScoreData = parseSongScoreJSON(userScoreDataJSON);
 </script>
 

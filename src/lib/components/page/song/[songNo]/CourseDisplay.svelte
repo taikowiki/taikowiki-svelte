@@ -22,7 +22,6 @@
         <CourseDisplayPc {course} />
     {/if}
 {/if}
-
 <style>
     /*.border {
         flex: 1 1 auto;

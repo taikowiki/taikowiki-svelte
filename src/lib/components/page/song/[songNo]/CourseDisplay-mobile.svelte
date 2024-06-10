@@ -2,6 +2,7 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Course } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import FumenDisplay from "./FumenDisplay.svelte";
 
     export let course: Course;
     const [theme] = getTheme();
@@ -130,6 +131,9 @@
         </tr>
     {/if}
 </table>
+{#if course?.images}
+    <FumenDisplay images={course.images} />
+{/if}
 
 <style>
     table {

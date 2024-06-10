@@ -29,7 +29,9 @@
             songLang;
     }
 
-    $: saveSongLang(songLang);
+    $: if (browser) {
+        saveSongLang(songLang);
+    }
 
     let ghost: HTMLDivElement;
     let btn: HTMLElement;
@@ -49,7 +51,6 @@
     const [theme] = getTheme();
     const lang = getLang();
     $: i18n = getI18N("/song", $lang);
-
 </script>
 
 <div class="wrapper">

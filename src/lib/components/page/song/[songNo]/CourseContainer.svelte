@@ -30,7 +30,9 @@
                     }}
                     style={`background-color:${color.difficulty[difficulty]};`}
                 >
-                    ★ {courses[difficulty]?.level}
+                    <span data-isMobile={$isMobile}>
+                        ★ {courses[difficulty]?.level}
+                    </span>
                 </div>
             {/if}
         {/each}
@@ -39,9 +41,6 @@
         <CourseDisplay {course} />
     {/key}
 </div>
-{#if course?.images !== undefined}
-    <FumenDisplay images={course.images} />
-{/if}
 
 <style>
     .container {
@@ -56,6 +55,7 @@
 
     .difficulty-container {
         width: 80px;
+        height: 170px;
 
         display: flex;
         flex-direction: column;
@@ -117,5 +117,9 @@
     .difficulty-container[data-isMobile="true"] .difficulty.selected {
         height: 50px;
         padding-bottom: 10px;
+    }
+
+    span[data-isMobile="false"]{
+        transform: translateY(-1px);
     }
 </style>

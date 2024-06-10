@@ -1,39 +1,39 @@
 <script lang="ts" context="module">
     function modifyLevelByDifficulty(
         difficulty: SongSearchOption["difficulty"],
-        tempOption: SongSearchOption,
+        option: SongSearchOption,
     ) {
         switch (difficulty) {
             case undefined: {
-                tempOption.level = undefined;
+                option.level = undefined;
                 break;
             }
             case "easy": {
-                !tempOption.level
-                    ? (tempOption.level = 1)
-                    : (tempOption.level as number) > 5
-                      ? (tempOption.level = 5)
+                !option.level
+                    ? (option.level = 1)
+                    : (option.level as number) > 5
+                      ? (option.level = 5)
                       : {};
                 break;
             }
             case "normal": {
-                !tempOption.level
-                    ? (tempOption.level = 1)
-                    : (tempOption.level as number) > 7
-                      ? (tempOption.level = 7)
+                !option.level
+                    ? (option.level = 1)
+                    : (option.level as number) > 7
+                      ? (option.level = 7)
                       : {};
                 break;
             }
             case "hard": {
-                !tempOption.level
-                    ? (tempOption.level = 1)
-                    : (tempOption.level as number) > 8
-                      ? (tempOption.level = 8)
+                !option.level
+                    ? (option.level = 1)
+                    : (option.level as number) > 8
+                      ? (option.level = 8)
                       : {};
                 break;
             }
             default: {
-                !tempOption.level ? (tempOption.level = 1) : {};
+                !option.level ? (option.level = 1) : {};
                 break;
             }
         }
@@ -46,12 +46,12 @@
     import { getI18N } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { SongSearchOption } from "$lib/module/page/song/types";
+    import type { SongSearchOption } from "$lib/module/common/song/types";
     import SearchBoxDifficultyItem from "./SearchBox-DifficultyItem.svelte";
 
-    export let tempOption: SongSearchOption;
+    export let option: SongSearchOption;
 
-    $: modifyLevelByDifficulty(tempOption.difficulty, tempOption);
+    $: modifyLevelByDifficulty(option.difficulty, option);
 
     const isMobile = getIsMobile();
 
@@ -69,31 +69,31 @@
     <div class="wrapper">
         <SearchBoxDifficultyItem
             value="easy"
-            bind:group={tempOption.difficulty}
+            bind:group={option.difficulty}
         >
             {$i18n.easy}
         </SearchBoxDifficultyItem>
         <SearchBoxDifficultyItem
             value="normal"
-            bind:group={tempOption.difficulty}
+            bind:group={option.difficulty}
         >
             {$i18n.normal}
         </SearchBoxDifficultyItem>
         <SearchBoxDifficultyItem
             value="hard"
-            bind:group={tempOption.difficulty}
+            bind:group={option.difficulty}
         >
             {$i18n.hard}
         </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem value="oni" bind:group={tempOption.difficulty}>
+        <SearchBoxDifficultyItem value="oni" bind:group={option.difficulty}>
             {$i18n.omote}
         </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem value="ura" bind:group={tempOption.difficulty}>
+        <SearchBoxDifficultyItem value="ura" bind:group={option.difficulty}>
             {$i18n.ura}
         </SearchBoxDifficultyItem>
         <SearchBoxDifficultyItem
             value="oniura"
-            bind:group={tempOption.difficulty}
+            bind:group={option.difficulty}
         >
             {$i18n.oni}
         </SearchBoxDifficultyItem>
@@ -102,20 +102,20 @@
                 src="/assets/icon/star-full.svg"
                 alt="level"
                 class="star"
-                style={tempOption.difficulty === undefined ? "opacity:0.4" : ""}
+                style={option.difficulty === undefined ? "opacity:0.4" : ""}
                 data-theme={$theme}
             />
             <div class="level-indicator">
-                {tempOption.level || ""}
+                {option.level || ""}
             </div>
             <input
                 type="range"
                 min="1"
                 max="10"
                 step="1"
-                bind:value={tempOption.level}
-                disabled={tempOption.difficulty === undefined ? true : false}
-                style={`accent-color:${color.difficulty[tempOption.difficulty || "oni"]};`}
+                bind:value={option.level}
+                disabled={option.difficulty === undefined ? true : false}
+                style={`accent-color:${color.difficulty[option.difficulty || "oni"]};`}
             />
         </div>
     </div>

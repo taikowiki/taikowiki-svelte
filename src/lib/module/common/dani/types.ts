@@ -34,3 +34,9 @@ export type GaidenDan = "gaiden";
 export type Dan = RegularDan | GaidenDan;
 
 export type Dani = RegularDani | GaidenDani;
+
+export interface DaniDBData {
+    order:number;
+    version: string;
+    data: Dani[];
+}

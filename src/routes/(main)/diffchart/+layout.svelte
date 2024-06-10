@@ -1,7 +1,8 @@
 <script lang="ts">
-    import DiffchartSelectorMobile from "$lib/components/layout/dedicated diffchart/DiffchartSelector-mobile.svelte";
-    import DiffchartSelectorPc from "$lib/components/layout/dedicated diffchart/DiffchartSelector-pc.svelte";
+    import DiffchartSelectorMobile from "$lib/components/page/diffchart/DiffchartSelector-mobile.svelte";
+    import DiffchartSelectorPc from "$lib/components/page/diffchart/DiffchartSelector-pc.svelte";
     import PageAside from "$lib/components/layout/main/PageAside.svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import { setContext } from "svelte";
@@ -13,6 +14,9 @@
     const [theme] = getTheme();
 
     const isMobile = getIsMobile();
+
+    const lang = getLang();
+    $: i18n = getI18N('/diffchart', $lang);
 </script>
 
 <PageAside>
@@ -22,7 +26,7 @@
             style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;"
             on:click={$downloadImage}
         >
-            <div class="download-text" data-theme={$theme}>다운로드</div>
+            <div class="download-text" data-theme={$theme}>{i18n.download}</div>
             <img
                 class="download"
                 data-theme={$theme}

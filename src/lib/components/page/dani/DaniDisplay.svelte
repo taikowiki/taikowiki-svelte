@@ -23,12 +23,12 @@
     import DaniHead from "./DaniHead.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import DaniSongContainer from "./DaniSongContainer.svelte";
-    import type { SongData } from "$lib/module/common/song/types";
     import DaniConditionContainer from "./DaniConditionContainer.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile";
+    import type { SongDataPickedForDani } from "$lib/module/page/dani/types";
 
     export let dani: Dani;
-    export let songDatas: SongData[];
+    export let songDatas: SongDataPickedForDani[];
 
     let opened: boolean = false;
 

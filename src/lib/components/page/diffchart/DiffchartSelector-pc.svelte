@@ -17,7 +17,7 @@
     let level = $page.params.level;
 
     const lang = getLang();
-    $: i18n = getI18N("layout", $lang)["dedicated diffchart"];
+    $: i18n = getI18N("/diffchart", $lang);
 
     const [theme] = getTheme();
 </script>
@@ -42,7 +42,7 @@
         {/each}
     </select>
 
-    <a href={getUrl(type, level)} data-theme={$theme}>이동</a>
+    <a href={getUrl(type, level)} data-theme={$theme}>{i18n.go}</a>
 </div>
 
 <style>

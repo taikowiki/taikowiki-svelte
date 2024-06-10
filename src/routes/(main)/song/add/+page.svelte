@@ -1,7 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import submit from "$lib/module/page/song/submit.client";
-
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import type { SongData } from "$lib/module/common/song/types";
 

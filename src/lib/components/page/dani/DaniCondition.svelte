@@ -48,14 +48,14 @@
         <div class="item">
             <div class="red">
                 <span>
-                    {condition.criteria.red.length === 0? '' : `${condition.criteria.red.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
+                    {condition.criteria.red.length === 0? '?' : `${condition.criteria.red.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
                 </span>
             </div>
         </div>
         <div class="item">
             <div class="gold">
                 <span>
-                    {condition.criteria.gold.length === 0? '' : `${condition.criteria.gold.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
+                    {condition.criteria.gold.length === 0? '?' : `${condition.criteria.gold.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
                 </span>
             </div>
         </div>
@@ -139,6 +139,7 @@
     span {
         transform: translateY(-1px);
         text-align: center;
-        word-break: break-all;
+        word-wrap: break-word;
+        word-break:keep-all;
     }
 </style>

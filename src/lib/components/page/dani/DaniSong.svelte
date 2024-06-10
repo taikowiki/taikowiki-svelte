@@ -19,14 +19,14 @@
 <script lang="ts">
     import type { DaniSong } from "$lib/module/common/dani/types";
     import type {
-        SongData,
         Genre,
         Difficulty,
     } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import type { SongDataPickedForDani } from "$lib/module/page/dani/types";
 
     export let song: DaniSong;
-    export let songDatas: SongData[];
+    export let songDatas: SongDataPickedForDani[];
 
     const [theme] = getTheme();
 

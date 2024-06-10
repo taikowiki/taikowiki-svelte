@@ -158,7 +158,9 @@ const ko: LangFile = {
             clear: '클리어',
             fc: '풀콤보',
             dfc: '전량'
-        }
+        },
+        download: "다운로드",
+        go: "이동"
     },
     '/diffchart/clear/[level]': {
         '10 level clear': '★10 클리어 서열표',

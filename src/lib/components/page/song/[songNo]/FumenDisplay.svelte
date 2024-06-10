@@ -1,10 +1,17 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
     export let images: string[];
 
     let opened = true;
+    if(browser){
+        const fumenImageOpened = window.localStorage.getItem("fumenImageOpened");
+        if(fumenImageOpened !== null){
+            opened = fumenImageOpened === "true";
+        }
+    }
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
@@ -17,6 +24,12 @@
             role="presentation"
             on:click={() => {
                 opened = !opened;
+                if (typeof window !== undefined) {
+                    window.localStorage.setItem(
+                        "fumenImageOpened",
+                        `${opened}`,
+                    );
+                }
             }}
             data-opened={opened}
             data-theme={$theme}

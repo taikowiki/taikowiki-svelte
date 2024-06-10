@@ -41,9 +41,6 @@
         <CourseDisplay {course} />
     {/key}
 </div>
-{#if course?.images}
-    <FumenDisplay images={course.images} />
-{/if}
 
 <style>
     .container {

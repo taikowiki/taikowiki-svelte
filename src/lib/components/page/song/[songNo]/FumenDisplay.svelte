@@ -44,11 +44,12 @@
         flex-direction: column;
         align-items: center;
     }
-    .container[data-isMobile="false"] {
+    /*
+     .container[data-isMobile="false"] {
         width: calc(100% - 80px);
         margin-left: 80px;
         transform: translateY(-34px);
-    }
+    }*/
 
     img {
         width: 100%;

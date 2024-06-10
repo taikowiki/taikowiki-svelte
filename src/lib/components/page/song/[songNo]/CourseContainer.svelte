@@ -30,7 +30,9 @@
                     }}
                     style={`background-color:${color.difficulty[difficulty]};`}
                 >
-                    ★ {courses[difficulty]?.level}
+                    <span data-isMobile={$isMobile}>
+                        ★ {courses[difficulty]?.level}
+                    </span>
                 </div>
             {/if}
         {/each}
@@ -118,5 +120,9 @@
     .difficulty-container[data-isMobile="true"] .difficulty.selected {
         height: 50px;
         padding-bottom: 10px;
+    }
+
+    span[data-isMobile="false"]{
+        transform: translateY(-1px);
     }
 </style>

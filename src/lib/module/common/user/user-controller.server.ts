@@ -18,7 +18,7 @@ export default class UserController {
                 providerUserData: JSON.stringify(providerUserData)
             }
 
-            const r = await run(`INSERT INTO \`user/data\` (\`provider\`, \`providerId\`, \`nickname\`, \`UUID\`) VALUES (?, ?, ?, ?)`, [userData.provider, userData.providerId, userData.nickname, userData.UUID]);
+            const r = await run(`INSERT INTO \`user/data\` (\`provider\`, \`providerId\`, \`nickname\`, \`UUID\`, \`registerTime\`, \`grade\`, \`providerUserData\`) VALUES (?, ?, ?, ?)`, [userData.provider, userData.providerId, userData.nickname, userData.UUID, userData.registerTime, userData.grade, userData.providerUserData]);
 
             return (await run(`SELECT * FROM \`user/basic_data\` WHERE \`order\` = ?`, [r.insertId]) as UserData[])[0]
         })

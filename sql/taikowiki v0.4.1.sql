@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- 생성 시간: 24-06-10 10:17
+-- 생성 시간: 24-06-11 04:41
 -- 서버 버전: 10.4.32-MariaDB
 -- PHP 버전: 8.2.12
 
@@ -118,20 +118,6 @@ CREATE TABLE `song/request` (
 -- --------------------------------------------------------
 
 --
--- 테이블 구조 `user/basic_data`
---
-
-CREATE TABLE `user/basic_data` (
-  `order` int(11) NOT NULL,
-  `provider` text NOT NULL,
-  `providerId` text NOT NULL,
-  `registerTime` bigint(20) NOT NULL,
-  `grade` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- 테이블 구조 `user/data`
 --
 
@@ -140,7 +126,10 @@ CREATE TABLE `user/data` (
   `provider` text NOT NULL,
   `providerId` text NOT NULL,
   `nickname` tinytext NOT NULL,
-  `UUID` text NOT NULL
+  `UUID` text NOT NULL,
+  `grade` int(11) NOT NULL,
+  `registerTime` bigint(20) NOT NULL,
+  `providerUserData` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -183,12 +172,6 @@ ALTER TABLE `song`
 ALTER TABLE `song/request`
   ADD PRIMARY KEY (`order`),
   ADD KEY `createdTime` (`createdTime`);
-
---
--- 테이블의 인덱스 `user/basic_data`
---
-ALTER TABLE `user/basic_data`
-  ADD PRIMARY KEY (`order`);
 
 --
 -- 테이블의 인덱스 `user/data`
@@ -235,12 +218,6 @@ ALTER TABLE `song`
 -- 테이블의 AUTO_INCREMENT `song/request`
 --
 ALTER TABLE `song/request`
-  MODIFY `order` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- 테이블의 AUTO_INCREMENT `user/basic_data`
---
-ALTER TABLE `user/basic_data`
   MODIFY `order` int(11) NOT NULL AUTO_INCREMENT;
 
 --

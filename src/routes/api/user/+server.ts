@@ -1,11 +1,11 @@
-export async function GET({locals, getClientAddress}){
-    if(locals.user){
+export async function GET({ locals, getClientAddress }) {
+    if (locals.user && locals.userData) {
         return new Response(JSON.stringify({
             logined: true,
-            nickname: locals.userData?.nickname
+            nickname: locals.userData.nickname
         }))
     }
-    else{
+    else {
         return new Response(JSON.stringify({
             logined: false,
             nickname: getClientAddress()

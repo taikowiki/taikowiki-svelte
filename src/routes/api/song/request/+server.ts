@@ -3,7 +3,7 @@ import type { SongData } from '$lib/module/common/song/types.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request, locals, getClientAddress }) {
-    if (!locals.user || !locals.userBasicData || !locals.userData) throw error(403);
+    if (!locals.user || !locals.userData) throw error(403);
 
     const data = await request.json();
     const songData = data.songData as SongData;

@@ -31,8 +31,14 @@ const authHandle = auth(Object.values(provider), {
 
 const getUserData: Handle = async ({ event, resolve }) => {
     if (event.locals.user) {
-        event.locals.userBasicData = await UserController.getBasicData(event.locals.user.provider, event.locals.user.providerId);
-        event.locals.userData = await UserController.getData(event.locals.user.provider, event.locals.user.providerId);
+        let userData = await UserController.getData(event.locals.user.provider, event.locals.user.providerId);
+        if (!userData) {
+            userData = await UserController.setData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)
+        }
+        event.locals.userData = userData;
+    }
+    else {
+        event.locals.userData = null;
     }
 
     return await resolve(event);

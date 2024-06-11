@@ -6,8 +6,10 @@ export default function allowOrigin(allowedOrigins: string[]) {
         if (!origin) return await resolve(event);
 
         if (allowedOrigins.includes(origin)) {
-            event.request.headers.set("Access-Control-Allow-Origin", origin);
-            event.request.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            event.setHeaders({
+                "Access-Control-Allow-Origin": origin,
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+            });
         }
 
         return await resolve(event);

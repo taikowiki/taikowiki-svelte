@@ -1,6 +1,5 @@
 import DaniDB from '$lib/module/common/dani/daniDB.server.js';
 import SongDB from '$lib/module/common/song/song.server.js';
-import type { SongData } from '$lib/module/common/song/types.js';
 import type { SongDataPickedForDani } from '$lib/module/page/dani/types.js';
 import { error } from '@sveltejs/kit';
 

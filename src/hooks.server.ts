@@ -6,6 +6,8 @@ import UserController from "$lib/module/common/user/user-controller.server";
 import { config } from 'dotenv';
 import checkPermissions from "$lib/module/server/hooks/permissionCheck.server";
 import BanController from "$lib/module/server/hooks/ban-controller.server";
+import allowOrigin from "$lib/module/server/hooks/allow-origin";
+
 //import logger from "$lib/module/server/hooks/logger.server";
 
 config();
@@ -50,8 +52,10 @@ const checkPermission = checkPermissions([
     }
 ])
 
-Array.prototype.toSorted = function(compareFn?:any){
+const cors = allowOrigin([]);
+
+Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(BanController.checkIp ,authHandle, getUserData, checkPermission);
+export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission);

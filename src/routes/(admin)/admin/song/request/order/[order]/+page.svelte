@@ -25,10 +25,10 @@
                 },
                 url: "/admin/api/song/disapprove",
             });
-            alert("거절 성공");
+            alert("거부 성공");
             await goto("/admin/song/request");
         } catch {
-            alert("거절 실패");
+            alert("거부 실패");
         }
     }
 </script>
@@ -47,6 +47,21 @@
         compare = compareSong(song, request.data);
     }
 </script>
+
+<table>
+    <tr>
+        <td style="width: 150px;"> 요청자 </td>
+        <td>
+            {data.requestor}
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 150px;"> ip </td>
+        <td>
+            {data.request.ip}
+        </td>
+    </tr>
+</table>
 
 <AdminRequestEditor
     bind:songData={request.data}
@@ -67,12 +82,20 @@
             disapprove(request);
         }}
     >
-        거절
+        거부
     </button>
 </div>
 
 <style>
-    .button-container{
-        display:flex;
+    .button-container {
+        display: flex;
+    }
+    table{
+        width: 100%;
+        border-collapse: collapse;
+    }
+    td{
+
+        border: 1px solid black;
     }
 </style>

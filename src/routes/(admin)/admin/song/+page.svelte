@@ -40,7 +40,7 @@
                 </a>
             </td>
             <td>
-                <a class="vc hc" href={`/admin/song/request/song/${song.songNo}`}>
+                <a class="vc hc" href={`/admin/song/request/songno/${song.songNo}`}>
                     수정 요청 목록
                 </a>
             </td>

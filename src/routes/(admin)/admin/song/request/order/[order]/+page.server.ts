@@ -1,4 +1,5 @@
 import SongDB, { SongRequestController } from "$lib/module/common/song/song.server";
+import UserController from "$lib/module/common/user/user-controller.server.js";
 import { error } from "@sveltejs/kit";
 
 export async function load({ params }) {
@@ -14,8 +15,11 @@ export async function load({ params }) {
 
     const song = await SongDB.getBySongNo(request.songNo);
 
+    const requestor = await UserController.getNickname(request.UUID)
+
     return {
         request,
-        song
+        song,
+        requestor
     }
 }

@@ -300,9 +300,14 @@ export class SongRequestController {
         })
     }
 
-    static async disapprove(order: number) {
+    static async disapprove(order: number | number[]) {
         return await runQuery(async (run) => {
-            await run("UPDATE `song/request` SET `status` = 'disapproved' WHERE `order` = ?", [order])
+            if (Array.isArray(order)) {
+                await run(`UPDATE \`song/request\` SET \`status\` = 'disapproved' WHERE \`order\` IN (${order.map(escape).join(', ')})`)
+            }
+            else {
+                await run("UPDATE `song/request` SET `status` = 'disapproved' WHERE `order` = ?", [order])
+            }
         })
     }
 

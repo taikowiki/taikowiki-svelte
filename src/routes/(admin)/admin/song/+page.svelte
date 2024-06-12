@@ -1,7 +1,10 @@
 <script lang="ts" context="module">
     import type { SongData } from "$lib/module/common/song/types";
 
-    function songSortCallback(a: SongData, b: SongData) {
+    function songSortCallback(
+        a: Pick<SongData, "songNo" | "title">,
+        b: Pick<SongData, "songNo" | "title">,
+    ) {
         const numberRegexp = /^([0-9]*)$/;
         if (numberRegexp.test(a.songNo) && numberRegexp.test(b.songNo)) {
             return Number(a.songNo) - Number(b.songNo);
@@ -20,15 +23,9 @@
 <a href="/admin/song/request">수정 요청 목록</a>
 <table>
     <tr>
-        <th>
-            곡 번호
-        </th>
-        <th>
-            제목
-        </th>
-        <th>
-            수정 요청 보기
-        </th>
+        <th> 곡 번호 </th>
+        <th> 제목 </th>
+        <th> 수정 요청 보기 </th>
     </tr>
     {#each songs.sort(songSortCallback) as song}
         <tr>
@@ -43,7 +40,7 @@
                 </a>
             </td>
             <td>
-                <a class="vc hc" href={`/admin/song/request/${song.songNo}`}>
+                <a class="vc hc" href={`/admin/song/request/song/${song.songNo}`}>
                     수정 요청 목록
                 </a>
             </td>
@@ -60,17 +57,17 @@
         border: 1px solid black;
     }
 
-    tr:hover{
+    tr:hover {
         background-color: rgba(255, 146, 146, 0.747);
     }
 
-    .hc{
-        display:flex;
+    .hc {
+        display: flex;
         height: 100%;
         justify-content: center;
     }
-    .vc{
-        display:flex;
+    .vc {
+        display: flex;
         height: 100%;
         align-items: center;
     }

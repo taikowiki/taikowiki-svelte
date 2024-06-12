@@ -1,6 +1,10 @@
 <script lang="ts" context="module">
     import axios from "axios";
-    async function upload(songData: SongData) {
+    async function upload(songData: Partial<SongData>) {
+        if (!songData.title || !songData.songNo) {
+            alert("곡 번호와 제목을 입력해주세요.");
+            return;
+        }
         try {
             await axios({
                 method: "POST",
@@ -94,13 +98,12 @@
     };
 </script>
 
-<SongEditor bind:songData type="new"/>
+<SongEditor bind:songData type="new" />
 
 <button
     on:click={() => {
-        upload(songData)
-        .then(() => {
-            goto('/admin/song')
+        upload(songData).then(() => {
+            goto("/admin/song");
         });
     }}
 >

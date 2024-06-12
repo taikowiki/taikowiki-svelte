@@ -28,7 +28,7 @@
                 {request.ip}
             </td>
             <td>
-                <a href={`/admin/song/request/list/${request.order}`}
+                <a href={`/admin/song/request/order/${request.order}`}
                     >살펴보기</a
                 >
             </td>

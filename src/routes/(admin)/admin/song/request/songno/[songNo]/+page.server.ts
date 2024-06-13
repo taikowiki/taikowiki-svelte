@@ -1,8 +1,11 @@
 import SongDB, { SongRequestController } from "$lib/module/common/song/song.server";
-import type { SongRequest } from "$lib/module/common/song/types.js";
+import { error } from "@sveltejs/kit";
 
 export async function load({ params }) {
-    let requests = await SongRequestController.getRequestsBySongNo(params.songNo)
+    const { songNo } = params;
+
+    const requests = await SongRequestController.getRequestsBySongNo(songNo, "none");
+
     return {
         requests
     }

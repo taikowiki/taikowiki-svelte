@@ -3,10 +3,11 @@
     import color from "$lib/module/common/color";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Course, Difficulty } from "$lib/module/common/song/types";
-    import DaniEditor from "./DaniEditor.svelte";
+    import DaniEditor from "./admin-DaniEditor.svelte";
 
     export let difficulty: Difficulty;
     export let course: Course | null;
+    export let different: boolean;
 
     const init: Course = {
         level: 1,
@@ -36,7 +37,8 @@
 </script>
 
 <div
-    style={`${`border: 2px solid ${color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}`}
+    style={`border: 2px solid ${color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;` +
+        `${different ? "background-color:#ff9999" : ""}`}
 >
     <table class="wrapper">
         <tr>
@@ -113,22 +115,6 @@
                                     min="1"
                                     bind:value={course.maxDensity}
                                 />
-                                <button
-                                    on:click={() => {
-                                        if (course.playTime !== 0) {
-                                            course.maxDensity =
-                                                Math.round(
-                                                    (course.maxCombo /
-                                                        course.playTime) *
-                                                        100,
-                                                ) / 100;
-                                        } else {
-                                            course.maxDensity = 0;
-                                        }
-                                    }}
-                                >
-                                    계산하기
-                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -191,29 +177,10 @@
                             </td>
                             <td>
                                 {#if Boolean(course.daniUsed)}
-                                    <button
-                                        on:click={() => {
-                                            course.dani.push({
-                                                version: "katsudon",
-                                                dan: "senpo",
-                                                order: 1,
-                                            });
-                                            course.dani = course.dani;
-                                        }}>추가</button
-                                    >
                                     <div class="dani-container-container">
                                         {#each course.dani as dani, i}
                                             <div class="dani-container">
                                                 <DaniEditor bind:dani />
-                                                <button
-                                                    on:click={() => {
-                                                        course.dani =
-                                                            course.dani.filter(
-                                                                (_, index) =>
-                                                                    index !== i,
-                                                            );
-                                                    }}>X</button
-                                                >
                                             </div>
                                         {/each}
                                     </div>
@@ -226,14 +193,7 @@
                                 <div class="image-container-container">
                                     <div
                                         style="display:flex;align-items:center;"
-                                    >
-                                        <button
-                                            on:click={() => {
-                                                course.images.push("");
-                                                course.images = course.images;
-                                            }}>추가</button
-                                        >
-                                    </div>
+                                    ></div>
                                     {#each course.images as image, i}
                                         <div class="image-container">
                                             <input
@@ -241,15 +201,6 @@
                                                 bind:value={image}
                                                 placeholder="이미지 주소"
                                             />
-                                            <button
-                                                on:click={() => {
-                                                    course.images =
-                                                        course.images.filter(
-                                                            (_, index) =>
-                                                                index !== i,
-                                                        );
-                                                }}>X</button
-                                            >
                                         </div>
                                     {/each}
                                 </div>
@@ -312,21 +263,6 @@
         display: flex;
         align-items: center;
     }
-    .dani-container > button {
-        width: 17px;
-        height: 17px;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        border: 0;
-        background-color: #cf4844;
-        color: white;
-
-        border-radius: 3px;
-        cursor: pointer;
-    }
 
     .dani-container-container {
         display: flex;
@@ -341,21 +277,6 @@
     }
     .image-container > input {
         height: 15px;
-    }
-    .image-container > button {
-        width: 20px;
-        height: 20px;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        border: 0;
-        background-color: #cf4844;
-        color: white;
-
-        border-radius: 3px;
-        cursor: pointer;
     }
 
     .image-container-container {

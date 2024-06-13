@@ -59,4 +59,5 @@ export interface SongRequest {
     createdTime: number;
     type: 'edit' | 'new';
     data: SongData;
+    status: 'none' | 'approved' | 'disapproved'
 }

@@ -108,7 +108,7 @@ export function isSameCourse(course1: Course, course2: Course) {
         return false;
     }
 
-    if (course1?.balloon.length !== course2?.balloon.length) {
+    if (course1?.balloon?.length !== course2?.balloon?.length) {
         return false;
     }
     if (course1.balloon) {
@@ -119,7 +119,7 @@ export function isSameCourse(course1: Course, course2: Course) {
         }
     }
 
-    if (course1?.rollTime.length !== course2?.rollTime.length) {
+    if (course1?.rollTime?.length !== course2?.rollTime?.length) {
         return false;
     }
     if (course1.rollTime) {
@@ -130,7 +130,7 @@ export function isSameCourse(course1: Course, course2: Course) {
         }
     }
 
-    if (course1?.images.length !== course2?.images.length) {
+    if (course1?.images?.length !== course2?.images?.length) {
         return false;
     }
     if (course1.images) {
@@ -141,7 +141,7 @@ export function isSameCourse(course1: Course, course2: Course) {
         }
     }
 
-    if (course1?.dani.length !== course2?.dani.length) {
+    if (course1?.dani?.length !== course2?.dani?.length) {
         return false;
     }
     if (course1.dani) {

@@ -92,9 +92,7 @@
     }
 </script>
 
-<VercelInject/>
-<GoogleTag/>
-{#if $theme}
+<div style={browser ? "" : "transform:translateX(-100%);"}>
     <Header>
         <svelte:fragment slot="left">
             <HeaderItem href="/" useHover={false}>
@@ -128,7 +126,10 @@
         </Aside>
     </Main>
     <Footer version={data.version}/>
-{/if}
+</div>
+
+<VercelInject/>
+<GoogleTag/>
 
 <style>
     :global(body[data-theme="light"]) {

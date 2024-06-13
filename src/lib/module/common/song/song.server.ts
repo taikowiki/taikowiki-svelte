@@ -63,6 +63,16 @@ export default class SongDB {
         })
     }
 
+    static async getAfter(after: number): Promise<SongData[]> {
+        return await runQuery(async (run) => {
+            const result = await run("SELECT `songNo` FROM `song/log` WHERE `updatedTime` >= ?", [after]);
+
+            const songNos = [...new Set(result.map((e: any) => e.songNo))];
+
+            return await this.getBySongNo(songNos as string[]);
+        })
+    }
+
     static async getBySongNo(songNo: string): Promise<SongData | null>;
     static async getBySongNo(songNos: string[]): Promise<SongData[]>;
     static async getBySongNo<T extends Partial<SongData> = Partial<SongData>>(songNo: string, columns: string[]): Promise<T | null>;

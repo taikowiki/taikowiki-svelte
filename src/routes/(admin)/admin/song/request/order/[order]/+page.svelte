@@ -61,6 +61,14 @@
             {data.request.ip}
         </td>
     </tr>
+    <tr>
+        <td>
+            타입
+        </td>
+        <td>
+            {data.request.type}
+        </td>
+    </tr>
 </table>
 
 <AdminRequestEditor

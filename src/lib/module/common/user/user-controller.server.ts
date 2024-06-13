@@ -60,4 +60,23 @@ export default class UserController {
             await run(`DELETE FROM \`user/basic_data\` WHERE \`provider\` = ? AND \`providerId\` = ?;`, [provider, providerId]);
         })
     }
+
+    static async getAll(): Promise<(UserData & {order:number})[]>
+    static async getAll(grade: number): Promise<(UserData & {order:number})[]>
+    static async getAll(grade?: number): Promise<(UserData & {order:number})[]> {
+        return await runQuery(async (run) => {
+            if (grade) {
+                return await run("SELECT * FROM `user/data` WHERE `grade` < ?", [grade]);
+            }
+            else {
+                return await run("SELECT * FROM `user/data`");
+            }
+        })
+    }
+
+    static async setGrade(UUID:string, grade:number){
+        return await runQuery(async(run) => {
+            await run("UPDATE `user/data` SET `grade` = ? WHERE `UUID` = ?", [grade, UUID]);
+        })
+    }
 }

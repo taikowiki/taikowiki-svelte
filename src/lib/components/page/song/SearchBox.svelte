@@ -1,22 +1,21 @@
 <script lang="ts">
-    import type { SongSearchOption } from "$lib/module/page/song/types";
+    import type { SongSearchOption } from "$lib/module/common/song/types";
     import SearchBoxDifficulty from "./SearchBox-Difficulty.svelte";
     import SearchBoxGenre from "./SearchBox-Genre.svelte";
     import SearchBoxInput from "./SearchBox-Input.svelte";
 
-    let tempOption: SongSearchOption;
-    export { tempOption as option };
+    export let option: SongSearchOption;
 
-    let opened = false;
+    export let opened = false;
 </script>
 
 <div class="wrapper">
     <div class="container">
-        <SearchBoxInput bind:opened bind:tempOption/>
+        <SearchBoxInput bind:opened bind:option/>
     </div>
     <div class="details-container" class:opened>
-        <SearchBoxGenre bind:tempOption />
-        <SearchBoxDifficulty bind:tempOption />
+        <SearchBoxGenre bind:option />
+        <SearchBoxDifficulty bind:option />
     </div>
 </div>
 

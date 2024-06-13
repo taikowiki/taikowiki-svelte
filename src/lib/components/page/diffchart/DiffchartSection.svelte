@@ -30,7 +30,7 @@
                         score.details[uraToOniUra(song.difficulty)]?.crown !==
                             "none",
                 ) !== undefined
-            ){  
+            ) {
                 count++;
             }
         });
@@ -54,10 +54,11 @@
     } from "$lib/module/common/diffchart/types";
     import DiffchartSectionName from "./DiffchartSectionName.svelte";
     import DiffchartSong from "./DiffchartSong.svelte";
-    import type { Difficulty, SongData } from "$lib/module/common/song/types";
+    import type { Difficulty } from "$lib/module/common/song/types";
+    import type { SongDataPickedForDiffchart } from "$lib/module/page/diffchart/types";
 
     export let section: Section;
-    export let songs: SongData[];
+    export let songs: SongDataPickedForDiffchart[];
     export let theme: string;
     export let useMobile: boolean = true;
     export let userScoreData: SongScore[] | null;

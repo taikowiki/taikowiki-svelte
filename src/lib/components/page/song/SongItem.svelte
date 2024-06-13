@@ -4,8 +4,9 @@
     import { onDestroy, onMount } from "svelte";
     import type { SongLang } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import type { SongDataPickedForSearch } from "$lib/module/page/song/types";
 
-    export let song: SongData;
+    export let song: SongDataPickedForSearch;
     export let songLang: SongLang;
 
     const diffs: Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];

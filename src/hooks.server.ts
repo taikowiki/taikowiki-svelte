@@ -6,6 +6,8 @@ import UserController from "$lib/module/common/user/user-controller.server";
 import { config } from 'dotenv';
 import checkPermissions from "$lib/module/server/hooks/permissionCheck.server";
 import BanController from "$lib/module/server/hooks/ban-controller.server";
+import allowOrigin from "$lib/module/server/hooks/allow-origin";
+
 //import logger from "$lib/module/server/hooks/logger.server";
 
 config();
@@ -29,8 +31,14 @@ const authHandle = auth(Object.values(provider), {
 
 const getUserData: Handle = async ({ event, resolve }) => {
     if (event.locals.user) {
-        event.locals.userBasicData = await UserController.getBasicData(event.locals.user.provider, event.locals.user.providerId);
-        event.locals.userData = await UserController.getData(event.locals.user.provider, event.locals.user.providerId);
+        let userData = await UserController.getData(event.locals.user.provider, event.locals.user.providerId);
+        if (!userData) {
+            userData = await UserController.setData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)
+        }
+        event.locals.userData = userData;
+    }
+    else {
+        event.locals.userData = null;
     }
 
     return await resolve(event);
@@ -50,4 +58,10 @@ const checkPermission = checkPermissions([
     }
 ])
 
-export const handle = sequence(BanController.checkIpHandle ,authHandle, getUserData, checkPermission);
+const cors = allowOrigin([]);
+
+Array.prototype.toSorted = function (compareFn?: any) {
+    return [...this].sort(compareFn);
+}
+
+export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission);

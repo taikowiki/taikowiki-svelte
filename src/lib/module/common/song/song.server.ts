@@ -1,6 +1,24 @@
 import { runQuery } from "@sveltekit-board/db";
-//import {escape} from 'mysql';
-import { type SongData, type SongRequest } from "./types";
+import { escape, escapeId } from 'mysql2';
+import { type SongData, type SongRequest, type SongSearchOption } from "./types";
+//@ts-expect-error
+import r from 'regex-escape';
+function regexEscape(str: string): string {
+    return r(str)
+}
+
+/**
+ * db에서 불러온 songData를 SongData 타입에 맞게 파싱
+ */
+function parseSongDataFromDB(songDataFromDB: any) {
+    if (songDataFromDB.courses) songDataFromDB.courses = JSON.parse(songDataFromDB.courses)
+    if (songDataFromDB.bpm) songDataFromDB.bpm = JSON.parse(songDataFromDB.bpm);
+    if (songDataFromDB.version) songDataFromDB.version = JSON.parse(songDataFromDB.version);
+    if (songDataFromDB.genre) songDataFromDB.genre = JSON.parse(songDataFromDB.genre);
+    if (songDataFromDB.artists) songDataFromDB.artists = JSON.parse(songDataFromDB.artists);
+    if (songDataFromDB.courses && songDataFromDB.courses.ura === undefined) songDataFromDB.courses.ura = null;
+    return songDataFromDB
+}
 
 export default class SongDB {
     static async createTable() {
@@ -30,34 +48,99 @@ export default class SongDB {
         })
     }
 
-    static async getAll(): Promise<SongData[]> {
+    static async getAll(): Promise<SongData[]>
+    static async getAll<T extends Partial<SongData> = Partial<SongData>>(columns: string[]): Promise<T[]>
+    static async getAll(columns?: string[]) {
+        let columnsQuery = '*';
+        if (columns) {
+            columnsQuery = columns.map(e => escapeId(e)).join(', ');
+        }
+
         return await runQuery(async (run) => {
-            let result = await run("SELECT * FROM `song` ORDER BY `addedDate` DESC;");
-            result.forEach((e: any) => {
-                e.courses = JSON.parse(e.courses);
-                e.bpm = JSON.parse(e.bpm);
-                e.version = JSON.parse(e.version);
-                e.genre = JSON.parse(e.genre);
-                e.artists = JSON.parse(e.artists);
-            })
+            let result = await run(`SELECT ${columnsQuery} FROM \`song\` ORDER BY \`addedDate\` DESC;`);
+            result.forEach(parseSongDataFromDB)
             return JSON.parse(JSON.stringify(result))
         })
     }
 
-    static async getBySongNo(songNo: string): Promise<SongData | null> {
+    static async getAfter(after: number): Promise<SongData[]> {
         return await runQuery(async (run) => {
-            let result = await run("SELECT * FROM `song` WHERE `songNo` = ?", [songNo]);
-            result.map((e: any) => {
-                e.courses = JSON.parse(e.courses);
-                e.bpm = JSON.parse(e.bpm);
-                e.version = JSON.parse(e.version);
-                e.genre = JSON.parse(e.genre);
-                e.artists = JSON.parse(e.artists);
-                if (e.courses.ura === undefined) {
-                    e.courses.ura = null;
-                }
+            const result = await run("SELECT `songNo` FROM `song/log` WHERE `updatedTime` >= ?", [after]);
+
+            const songNos = [...new Set(result.map((e: any) => e.songNo))];
+
+            return await this.getBySongNo(songNos as string[]);
+        })
+    }
+
+    static async getBySongNo(songNo: string): Promise<SongData | null>;
+    static async getBySongNo(songNos: string[]): Promise<SongData[]>;
+    static async getBySongNo<T extends Partial<SongData> = Partial<SongData>>(songNo: string, columns: string[]): Promise<T | null>;
+    static async getBySongNo<T extends Partial<SongData> = Partial<SongData>>(songNos: string[], columns: string[]): Promise<T[]>;
+    static async getBySongNo(songNo: string | string[], columns?: string[]) {
+        let columnsQuery = '*';
+        if (columns) {
+            columnsQuery = columns.map(e => escapeId(e)).join(', ');
+        }
+
+        if (typeof (songNo) === "string") {
+            return await runQuery(async (run) => {
+                let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` = ?`, [songNo]);
+                result.forEach(parseSongDataFromDB);
+                return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
             })
-            return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
+        }
+        else if (songNo.length === 0) {
+            return [];
+        }
+        else {
+            return await runQuery(async (run) => {
+                let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${songNo.map(() => '?').join(', ')})`, [...songNo]);
+                result.forEach(parseSongDataFromDB);
+                return JSON.parse(JSON.stringify(result));
+            })
+        }
+    }
+
+    static async search(page: number | null, option?: SongSearchOption): Promise<{
+        songs: (SongData & { order: number })[],
+        count: number
+    }>
+    static async search<T extends Partial<SongData & { order: number }> = Partial<SongData>>(page: number | null, option: SongSearchOption | undefined, columns?: string[]): Promise<{
+        songs: T[],
+        count: number
+    }>;
+    static async search(page: number | null, option: SongSearchOption | undefined = undefined, columns?: string[]) {
+        let sqlWhereQuery = "WHERE (1)";
+        if (option?.difficulty && option?.level) {
+            if (option.difficulty === "oniura") {
+                sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.oni.level') = ${option.level} OR JSON_EXTRACT(\`courses\`, '$.ura.level') = ${option.level})`;
+            }
+            else {
+                sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.${option.difficulty}.level') = ${option.level})`;
+            }
+        }
+        if (option?.genre) {
+            sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
+        }
+        if (option?.query) {
+            const regexp = `${option.query.split(' ').map(regexEscape).join('.*?')}`
+            sqlWhereQuery += `AND (\`title\` REGEXP ${escape(regexp)} OR \`titleKo\` REGEXP ${escape(regexp)} OR \`aliasKo\` REGEXP ${escape(regexp)})`
+        }
+
+        let columnsQuery = '*';
+        if (columns) {
+            columnsQuery = columns.map(e => escapeId(e)).join(', ')
+        }
+
+        return await runQuery(async (run) => {
+            const songs = (page === null || page < 1) ? await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC`) : await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC LIMIT ${(page - 1) * 30}, 30`);
+            songs.forEach(parseSongDataFromDB);
+            const count = Object.values((await run(`SELECT COUNT(\`order\`) FROM \`song\` ${sqlWhereQuery}`))[0])?.[0] ?? 0
+            return {
+                songs: JSON.parse(JSON.stringify(songs)),
+                count
+            };
         })
     }
 
@@ -106,104 +189,102 @@ export default class SongDB {
             return run(`SELECT \`UPDATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
         })
 
-        console.log(result);
-
         const updateTime = new Date(result[0]['UPDATE_TIME']).getTime();
 
         return updateTime;
     }
 
-    static async getNewSongs(): Promise<SongData[]> {
+    static async getCreateTime(): Promise<number> {
+        let result = await runQuery(async (run) => {
+            return run(`SELECT \`CREATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
+        })
+
+        const updateTime = new Date(result[0]['CREATE_TIME']).getTime();
+
+        return updateTime;
+    }
+
+    static async getNewSongs(limit: number = 3): Promise<SongData[]> {
         return await runQuery(async (run) => {
-            let result = await run("SELECT * FROM `song` ORDER BY `addedDate` DESC LIMIT 3");
-            result.map((e: any) => {
-                e.courses = JSON.parse(e.courses);
-                e.bpm = JSON.parse(e.bpm);
-                e.version = JSON.parse(e.version);
-                e.genre = JSON.parse(e.genre);
-                e.artists = JSON.parse(e.artists);
-            })
+            let result = await run(`SELECT * FROM \`song\` ORDER BY \`addedDate\` DESC LIMIT ${limit}`);
+            result.forEach(parseSongDataFromDB);
             return JSON.parse(JSON.stringify(result))
         })
     }
 
     static async uploadSong(songData: SongData) {
+        const song = await this.getBySongNo(songData.songNo);
         return await runQuery(async (run) => {
-            const count = (await run("SELECT COUNT(*) FROM `song` WHERE `songNo` = ?", [songData.songNo]))[0]['COUNT(*)'];
-            if (count == 0) {
-                return await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])
+            if (song === null) {
+                await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])
             }
             else {
-                return await run("UPDATE `song` SET `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songData.songNo])
+                await run("UPDATE `song` SET `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songData.songNo])
             }
+
+            await run("INSERT INTO `song/log` (`songNo`, `before`, `after`, `updatedTime`) VALUES (?, ?, ?, ?)", [songData.songNo, song ? JSON.stringify(song) : null, JSON.stringify(songData), Date.now()]);
         })
     }
-    /*
-    static async search(option: SongSearchOption): Promise<SongData[]> {
-        let title = option.title?.replace('%', '\\%').replace('_', '\\_') ?? '%';
-        let difficultyQuery = option.difficulty && option.level? `AND JSON_EXTRACT(courses, ${escape(`$.${option.difficulty}.level`)}) = ${escape(option.level)}` : '';
-
-        let result = await runQuery(async (run) => {
-            return await run(`SELECT * FROM \`song\`
-            WHERE
-                (\`title\` LIKE ? OR \`titleKo\` LIKE ? OR \`titleEn\` LIKE ? OR \`aliasKo\` LIKE ? OR \`aliasEn\` LIKE ?)
-                ${difficultyQuery}
-            `, [title, title, title, title, title])
-        })
-
-        result.map((song:any) => {
-            song.courses = JSON.parse(song.courses)
-        })
-
-        return JSON.parse(JSON.stringify(result))
-    }
-    */
 }
 
 export class SongRequestController {
-    static async getAll(): Promise<(SongRequest & { order: number })[]> {
+    static async getAll(status?: SongRequest['status']): Promise<(SongRequest & { order: number })[]> {
         return await runQuery(async (run) => {
-            return (await run("SELECT * FROM `song/request` ORDER BY createdTime DESC")).map((request: any) => {
-                request.data = JSON.parse(request.data);
-                return request;
-            })
-        })
-    }
-
-    static async getRequestsBySongNo(songNo: string, order?: string): Promise<(SongRequest & { order: number })[]> {
-        if (order !== undefined) {
-            return await runQuery(async (run) => {
-                return (await run("SELECT * FROM `song/request` WHERE `songNo` = ? AND `order` = ? ORDER BY createdTime DESC", [songNo, order])).map((request: any) => {
+            if (status) {
+                return (await run("SELECT * FROM `song/request` WHERE `status` = ? ORDER BY createdTime DESC", [status])).map((request: any) => {
                     request.data = JSON.parse(request.data);
                     return request;
                 })
-            })
-        }
-        return await runQuery(async (run) => {
-            return (await run("SELECT * FROM `song/request` WHERE `songNo` = ? ORDER BY createdTime DESC", [songNo])).map((request: any) => {
-                request.data = JSON.parse(request.data);
-                return request;
-            })
+            }
+            else {
+                return (await run("SELECT * FROM `song/request` ORDER BY createdTime DESC")).map((request: any) => {
+                    request.data = JSON.parse(request.data);
+                    return request;
+                })
+            }
         })
     }
 
-    static async getRequestByOrder(order: string): Promise<(SongRequest & { order: number }) | null> {
+    static async getRequestsBySongNo(songNo: string, status?: SongRequest['status']): Promise<(SongRequest & { order: number })[]> {
         return await runQuery(async (run) => {
-            const result = await run("SELECT * FROM `song/request` WHERE `order` = ? ORDER BY createdTime DESC", [order]);
+            if (status) {
+                return (await run("SELECT * FROM `song/request` WHERE `songNo` = ? AND `status` = ? ORDER BY createdTime DESC", [songNo, status])).map((request: any) => {
+                    request.data = JSON.parse(request.data);
+                    return request;
+                })
+            }
+            else {
+                return (await run("SELECT * FROM `song/request` WHERE `songNo` = ? ORDER BY createdTime DESC", [songNo])).map((request: any) => {
+                    request.data = JSON.parse(request.data);
+                    return request;
+                })
+            }
+        })
+    }
+
+    static async getRequestByOrder(order: number, status?: SongRequest['status']): Promise<(SongRequest & { order: number }) | null> {
+        return await runQuery(async (run) => {
+            let result
+            if (status) {
+                result = await run("SELECT * FROM `song/request` WHERE `order` = ? AND `status` = ? ORDER BY createdTime DESC", [order, status]);
+            }
+            else {
+                result = await run("SELECT * FROM `song/request` WHERE `order` = ? ORDER BY createdTime DESC", [order]);
+            }
             if (result.length === 0) return null;
 
             const request = result[0];
             request.data = JSON.parse(request.data);
 
             return request;
-        }) as (SongRequest & { order: number }) | null
+        })
     }
 
     static async createRequest(request: {
         UUID: string;
         songNo: string;
         data: SongData;
-        ip:string;
+        ip: string;
     }) {
         const song = await SongDB.getBySongNo(request.songNo);
 
@@ -219,13 +300,28 @@ export class SongRequestController {
         }
     }
 
-    static async removeRequest(order: string, songNo?: string) {
-        if (songNo !== undefined) {
-            return await runQuery(async (run) => {
-                return await run("DELETE FROM `song/request` WHERE `order` <= ? AND `songNo` = ?", [order, songNo]);
-            })
-        }
+    static async approve(order: number) {
+        const songRequest = await this.getRequestByOrder(order)
+        if (!songRequest) return;
+        const { data } = songRequest;
+        await SongDB.uploadSong(data);
+        return await runQuery(async (run) => {
+            await run("UPDATE `song/request` SET `status` = 'approved' WHERE `order` = ?", [order])
+        })
+    }
 
+    static async disapprove(order: number | number[]) {
+        return await runQuery(async (run) => {
+            if (Array.isArray(order)) {
+                await run(`UPDATE \`song/request\` SET \`status\` = 'disapproved' WHERE \`order\` IN (${order.map(escape).join(', ')})`)
+            }
+            else {
+                await run("UPDATE `song/request` SET `status` = 'disapproved' WHERE `order` = ?", [order])
+            }
+        })
+    }
+
+    static async removeRequest(order: number) {
         return await runQuery(async (run) => {
             return await run("DELETE FROM `song/request` WHERE `order` = ?", [order]);
         })

@@ -1,7 +1,5 @@
 <script lang="ts" context="module">
-    import { pushState } from "$app/navigation";
-    import { page } from "$app/stores";
-    import { get } from "svelte/store";
+    import { goto } from "$app/navigation";
 
     function search(option: SongSearchOption) {
         const searchParams = new URLSearchParams();
@@ -18,20 +16,20 @@
         }
 
         if (searchParams.size === 0) {
-            pushState("/song", get(page).state);
+            goto("/song");
         } else {
-            pushState(`/song?${searchParams.toString()}`, get(page).state);
+            goto(`/song?${searchParams.toString()}`);
         }
     }
 </script>
 
 <script lang="ts">
-    import type { SongSearchOption } from "$lib/module/page/song/types";
+    import type { SongSearchOption } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N } from "$lib/module/common/i18n/i18n";
 
     export let opened: boolean;
-    export let tempOption: SongSearchOption;
+    export let option: SongSearchOption;
 
     function open() {
         opened = !opened;
@@ -44,16 +42,16 @@
 
 <div class="search-container" data-theme={$theme}>
     <button class="search-detail-toggler" on:click={open} class:opened>
-        <img src="/assets/icon/arrow.svg" alt=""/>
+        <img src="/assets/icon/arrow.svg" alt="" />
     </button>
     <input
         class="search-input"
         type="text"
-        bind:value={tempOption.query}
+        bind:value={option.query}
         placeholder={$i18n.placeholder}
         on:keypress={(event) => {
             if (event.key === "Enter") {
-                search(tempOption);
+                search(option);
             }
         }}
         enterkeyhint="search"
@@ -62,7 +60,7 @@
     <button
         class="search-button"
         on:click={() => {
-            search(tempOption);
+            search(option);
         }}
     >
         <img src="/assets/icon/search.svg" alt="" />
@@ -91,11 +89,11 @@
 
         cursor: pointer;
 
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
     }
-    .search-detail-toggler > img{
+    .search-detail-toggler > img {
         width: 20px;
         height: 20px;
 
@@ -105,9 +103,10 @@
 
         transition: transform 0.2s;
     }
-    .search-detail-toggler.opened > img{
-        transform: rotate(180deg) translate(-2px, 0px);;
+    .search-detail-toggler.opened > img {
+        transform: rotate(180deg) translate(-2px, 0px);
     }
+    /*
     .search-detail-toggler > span {
         display: block;
         transform: rotate(90deg) translate(2px, -2px);
@@ -117,6 +116,7 @@
         display: block;
         transform: rotate(270deg) translate(1px, 0px);
     }
+    */
 
     .search-input {
         width: calc(100% - 80px);

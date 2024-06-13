@@ -40,7 +40,7 @@ function createPermissionChecker(path: string, level: number, rule: 'match' | 's
             throw redirect(302, url.origin + redirectPath + "?" + param)
         }
 
-        if (!locals.userBasicData || locals.userBasicData.grade < level) {
+        if (!locals.userData || locals.userData.grade < level) {
             throw error(403, "You have no permission to access admin page")
         }
 

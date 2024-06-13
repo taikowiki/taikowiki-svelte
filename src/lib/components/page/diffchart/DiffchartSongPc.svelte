@@ -1,14 +1,58 @@
+<script lang="ts" context="module">
+    function resizeTitle(
+        node: HTMLDivElement,
+        value: [browser: boolean, theme: string],
+    ) {
+        function resize(browser: boolean) {
+            const titleDiv = node.querySelector<HTMLDivElement>(".title");
+            const krTitleDiv = node.querySelector<HTMLDivElement>(".title-kr");
+            if (!titleDiv) {
+                return;
+            }
+            if (!browser) {
+                return;
+            }
+
+            if (titleDiv.clientHeight > 24 && titleDiv.clientHeight < 48) {
+                if (krTitleDiv) {
+                    krTitleDiv.style.fontSize = "10px";
+                }
+                let fontSize = 16;
+                while (titleDiv.clientHeight > 24 && fontSize >= 12) {
+                    titleDiv.style.fontSize = `${fontSize}px`;
+                    fontSize--;
+                }
+            } else if (titleDiv.clientHeight > 48) {
+                if (krTitleDiv) {
+                    krTitleDiv.style.fontSize = "10px";
+                }
+                let fontSize = 16;
+                while (titleDiv.clientHeight > 30 && fontSize >= 10) {
+                    titleDiv.style.fontSize = `${fontSize}px`;
+                    fontSize--;
+                }
+            }
+        }
+
+        resize(value[0]);
+
+        return {
+            update(value: [browser: boolean, theme: string]) {
+                resize(value[0]);
+            },
+        };
+    }
+</script>
+
 <script lang="ts">
     import type { Genre } from "$lib/module/common/song/types";
     import type {
         Song,
-        SongScore,
         SongScoreDetail,
     } from "$lib/module/common/diffchart/types";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
     import color from "$lib/module/common/color";
     import { getLang } from "$lib/module/common/i18n/i18n";
-    import { afterUpdate } from "svelte";
     import { browser } from "$app/environment";
 
     export let song: Song;
@@ -19,12 +63,8 @@
 
     const lang = getLang();
 
-    let titleDiv: HTMLDivElement;
-    let krTitleDiv: HTMLDivElement;
+    /*
     afterUpdate(() => {
-        if (!browser) {
-            return;
-        }
         if (titleDiv.clientHeight > 24 && titleDiv.clientHeight < 48) {
             if (krTitleDiv) {
                 krTitleDiv.style.fontSize = "10px";
@@ -45,25 +85,34 @@
             }
         }
     });
+    */
 </script>
 
-<a class="container" href={`/song/${song.songNo}`} data-theme={theme} data-crown={userScore?.crown || ""}>
+<a
+    class="container"
+    href={`/song/${song.songNo}`}
+    data-theme={theme}
+    data-crown={userScore?.crown || ""}
+>
     <DiffchartSongGenre {genre} width="6px" height="36px" />
-    <div class="title-container">
+    <div class="title-container" use:resizeTitle={[browser, theme]}>
         <div
             class="title"
             style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
-            bind:this={titleDiv}
         >
             {song.title}
         </div>
-        {#if krTitle && $lang === "ko"}
-            <div class="title-kr" bind:this={krTitleDiv}>
+        {#if krTitle}
+            <div class="title-kr" class:hidden={$lang !== "ko"}>
                 {krTitle}
             </div>
         {/if}
         {#if userScore?.badge}
-            <img src={`/assets/img/badge/badge-${userScore.badge}.png`} alt="" class="badge"/>
+            <img
+                src={`/assets/img/badge/badge-${userScore.badge}.png`}
+                alt=""
+                class="badge"
+            />
         {/if}
     </div>
 </a>
@@ -139,7 +188,7 @@
     .container[data-theme="dark"] .title-kr {
         color: rgb(193, 193, 193);
     }
-    
+
     .container[data-crown="gold"] {
         background-color: #ffe972;
     }
@@ -156,7 +205,9 @@
             /* mint */ #bae1ff /* light blue */
         );
     }
-    .container[data-crown="silver"] .title-kr, .container[data-crown="gold"] .title-kr, .container[data-crown="donderfull"] .title-kr{
+    .container[data-crown="silver"] .title-kr,
+    .container[data-crown="gold"] .title-kr,
+    .container[data-crown="donderfull"] .title-kr {
         color: #5b5b5b;
     }
 
@@ -168,5 +219,9 @@
         height: 22px;
 
         z-index: 0;
+    }
+
+    .hidden{
+        display:none;
     }
 </style>

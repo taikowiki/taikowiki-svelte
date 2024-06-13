@@ -32,7 +32,7 @@
 <script lang="ts">
     import type { Difficulty, Genre, SongData } from "$lib/module/common/song/types";
     import filter from "$lib/module/page/song/filter";
-    import type { SongSearchOption } from "$lib/module/page/song/types";
+    import type { SongSearchOption } from "$lib/module/common/song/types";
     import SearchBox from "./SearchBox.svelte";
     import { page } from "$app/stores";
 
@@ -40,10 +40,7 @@
     export let filteredSongs: SongData[] | null;
 
     let option: SongSearchOption = getOptionFromUrl($page.url);
-
-    $: if($page.state){
-        option = getOptionFromUrl();
-    }    
+ 
     $: {
         filteredSongs = null;
         filteredSongs = filter(songs, option);

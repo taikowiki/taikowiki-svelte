@@ -1,6 +1,8 @@
 <script lang="ts">
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Course } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import FumenDisplay from "./FumenDisplay.svelte";
 
     export let course: Course;
     const [theme] = getTheme();
@@ -12,6 +14,9 @@
     let balloonOpened = false;
     let rollOpened = false;
     let daniOpened = false;
+
+    const lang = getLang();
+    $: daniI18n = getI18N("other", $lang).dani;
 </script>
 
 <table data-theme={$theme}>
@@ -64,10 +69,12 @@
                 role="presentation"
             >
                 총 <span style="font-weight:bold;"
-                    >{course.rollTime.reduce(
-                        (partial, current) => partial + current,
-                        0,
-                    )}</span
+                    >{Math.round(
+                        course.rollTime.reduce(
+                            (partial, current) => partial + current,
+                            0,
+                        ) * 1000,
+                    ) / 1000}</span
                 >초
             </div>
             {#if rollOpened}
@@ -90,16 +97,33 @@
         </td>
     </tr>
     {#if course.daniUsed}
-        <div class="dani-container">
-            <div class="dani-opener" class:opened={daniOpened}>
-                단위 수록 목록
-            </div>
-            <div class="dani">
-                {#each course.dani as dani}
-                    {dani.version} {dani.dan} {dani.order}번째 곡
-                {/each}
-            </div>
-        </div>
+        <tr>
+            <td colspan="4" class="dani-td">
+                <div class="dani-container" data-theme={$theme}>
+                    <div
+                        class="dani-opener"
+                        class:opened={daniOpened}
+                        role="presentation"
+                        on:click={() => {
+                            daniOpened = !daniOpened;
+                        }}
+                    >
+                        단위 수록 목록
+                    </div>
+                    {#if daniOpened}
+                        <div class="dani">
+                            {#each course.dani as dani}
+                                <span>
+                                    {daniI18n.version[dani.version]}
+                                    {daniI18n.dan[dani.dan]}
+                                    {dani.order}번째 곡
+                                </span>
+                            {/each}
+                        </div>
+                    {/if}
+                </div>
+            </td>
+        </tr>
     {:else}
         <tr>
             <td>단위 수록</td>
@@ -107,6 +131,9 @@
         </tr>
     {/if}
 </table>
+{#if course?.images}
+    <FumenDisplay images={course.images} />
+{/if}
 
 <style>
     table {
@@ -143,5 +170,52 @@
     }
     .detail {
         font-size: 13px;
+    }
+
+    .dani-td {
+        background-color: transparent !important;
+        padding: 0;
+        color: inherit !important;
+    }
+    .dani-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .dani-opener {
+        width: 100%;
+        height: 30px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 10px;
+
+        background-color: #cf4844;
+
+        color: white;
+
+        cursor: pointer;
+    }
+    .dani-opener:not(.opened)::after {
+        content: "▼";
+    }
+    .dani-opener.opened::after {
+        content: "▲";
+    }
+
+    .dani-container[data-theme="dark"] > .dani-opener {
+        background-color: #1c1c1c;
+    }
+
+    .dani {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+    .dani > span {
+        transform: translateY(-1px);
     }
 </style>

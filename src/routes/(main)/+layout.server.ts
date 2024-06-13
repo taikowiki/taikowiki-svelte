@@ -1,11 +1,10 @@
-import SongDB from "$lib/module/common/song/song.server";
+import SongDB from '$lib/module/common/song/song.server.js';
 
 export async function load({ fetch }) {
-    const user = JSON.parse(await (await fetch('/api/user')).text());
+    const user = await (await fetch('/api/user')).json()
     return {
         newSongs: await SongDB.getNewSongs(),
-        songs: await SongDB.getAll(),
         user,
-        version: process.env.npm_package_version
+        version: (await import('../../../package.json')).version
     }
 }

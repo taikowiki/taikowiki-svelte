@@ -61,9 +61,9 @@ export default class UserController {
         })
     }
 
-    static async getAll(): Promise<(UserData & {order:number})[]>
-    static async getAll(grade: number): Promise<(UserData & {order:number})[]>
-    static async getAll(grade?: number): Promise<(UserData & {order:number})[]> {
+    static async getAll(): Promise<(UserData & { order: number })[]>
+    static async getAll(grade: number): Promise<(UserData & { order: number })[]>
+    static async getAll(grade?: number): Promise<(UserData & { order: number })[]> {
         return await runQuery(async (run) => {
             if (grade) {
                 return await run("SELECT * FROM `user/data` WHERE `grade` < ?", [grade]);
@@ -74,9 +74,27 @@ export default class UserController {
         })
     }
 
-    static async setGrade(UUID:string, grade:number){
-        return await runQuery(async(run) => {
+    static async setGrade(UUID: string, grade: number) {
+        return await runQuery(async (run) => {
             await run("UPDATE `user/data` SET `grade` = ? WHERE `UUID` = ?", [grade, UUID]);
+        })
+    }
+
+    static async setLang(UUID: string, lang: string) {
+        return await runQuery(async (run) => {
+            await run("UPDATE `user/data` SET `lang` = ? WHERE `UUID` = ?", [lang, UUID]);
+        })
+    }
+
+    static async getLang(UUID: string): Promise<string | null> {
+        return await runQuery(async (run) => {
+            const result = await run("SELECT `lang` FROM `user/data` WHERE `UUID` = ?", [UUID]);
+
+            if (result.length === 0) {
+                return null;
+            }
+
+            return Object.values(result[0])[0];
         })
     }
 }

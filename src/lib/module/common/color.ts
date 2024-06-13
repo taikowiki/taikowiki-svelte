@@ -29,10 +29,46 @@ export const darkDifficulty: Record<Difficulty, string> = {
     "ura": "#946ade"
 }
 
+export const dani = {
+    backgroundColor: {
+        light: {
+            kyu: '#FFF0D3',
+            lowdan: '#E2EBEE',
+            highdan: '#EEE2E2',
+            jin: '#E5F2F5',
+            tatsujin: '#F8EDC8'
+        },
+        dark: {
+            kyu: '#5D5A40',
+            lowdan: '#40565D',
+            highdan: '#5F4242',
+            jin: '#80959C',
+            tatsujin: '#8E8C51'
+        }
+    },
+    color: {
+        light: {
+            kyu: '#edc16f',
+            lowdan: '#73C5FF',
+            highdan: '#E65252',
+            jin: '#AED0DB',
+            tatsujin: '#F4BC2B'
+        },
+        dark: {
+            kyu: '#D8B97F',
+            lowdan: '#4F92CF',
+            highdan: '#BC5353',
+            jin: '#B0C6CD',
+            tatsujin: '#F4BC2B'
+        }
+    }
+}
+
 const color = {
     genre,
     difficulty,
-    darkDifficulty
+    darkDifficulty,
+    dani
 }
 
 deepFreeze(color);

@@ -28,6 +28,7 @@
     }
     .title {
         flex: 1 0 auto;
+        max-width: calc(100% - 30px);
 
         font-weight: bold;
         font-size: 35px;
@@ -49,6 +50,7 @@
 
         background-color: #cf4844;
 
+        border-radius: 5px;
         margin-top: 10px;
     }
     .icon-container[data-theme="dark"]{

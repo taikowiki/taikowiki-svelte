@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 
-export async function load({locals}){
-    if(locals.userData === undefined){
+export async function load({ locals }) {
+    if (!locals.userData) {
         redirect(302, `/auth/login?redirect_to=${encodeURIComponent('/auth/user')}`)
     }
 

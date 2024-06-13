@@ -32,11 +32,11 @@
     }
 
     const lang = getLang();
-    $: i18n = getI18N('component', $lang).SongEditor;
+    $: i18n = getI18N("component", $lang).SongEditor;
 </script>
 
 <div
-    style={`border: 2px solid ${color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}
+    style={`${`border: 2px solid ${color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}`}
 >
     <table class="wrapper">
         <tr>

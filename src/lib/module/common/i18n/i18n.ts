@@ -5,6 +5,7 @@ import { browser } from "$app/environment";
 import ko from "./lang/ko";
 import en from './lang/en';
 import jp from './lang/jp';
+import axios, { type AxiosResponse } from "axios";
 
 const i18nProxyTarget: I18N = {
     ko,
@@ -90,13 +91,37 @@ const i18n = getI18nProxy(i18nProxyTarget);
 export default i18n;
 
 export function useLang() {
-    let lang;
-    if(browser){
-        lang = writable<Language | string>(window?.localStorage.lang ?? 'ko');
+    let lang: Writable<Language | string>;
+    if (browser) {
+        lang = writable<Language | string>(window.localStorage.getItem('lang') ?? 'ko');
+        axios({
+            url: '/api/user/lang/get',
+            method: 'get'
+        }).then((response: AxiosResponse) => {
+            lang.set(response.data);
+        }).catch((err) => {
+            console.log(err);
+        })
     }
-    else{
+    else {
         lang = writable<Language | string>('ko');
     }
+
+    lang.subscribe((value) => {
+        if (browser && typeof (window) !== "undefined") {
+            window.localStorage.setItem('lang', value);
+            axios({
+                url: '/api/user/lang/set',
+                data: {
+                    lang: value
+                },
+                method: 'post'
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
+    })
+
     setContext('lang', lang);
     return lang;
 }
@@ -111,14 +136,14 @@ export function getLang(): Writable<Language | string> {
     return getContext('lang')
 }
 
-export function setI18N(language:string, pathname:string ):any{
+export function setI18N(language: string, pathname: string): any {
     return i18n[language][pathname];
 }
 
 export function getI18N(): Writable<any>;
-export function getI18N(key: string, lang:string): any;
-export function getI18N(key?: string, lang?:string){
-    if(key === undefined || lang === undefined){
+export function getI18N(key: string, lang: string): any;
+export function getI18N(key?: string, lang?: string) {
+    if (key === undefined || lang === undefined) {
         return getContext('i18n')
     }
     return i18n[lang][key];

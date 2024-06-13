@@ -1,10 +1,17 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
     export let images: string[];
 
     let opened = true;
+    if(browser){
+        const fumenImageOpened = window.localStorage.getItem("fumenImageOpened");
+        if(fumenImageOpened !== null){
+            opened = fumenImageOpened === "true";
+        }
+    }
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
@@ -17,6 +24,12 @@
             role="presentation"
             on:click={() => {
                 opened = !opened;
+                if (typeof window !== undefined) {
+                    window.localStorage.setItem(
+                        "fumenImageOpened",
+                        `${opened}`,
+                    );
+                }
             }}
             data-opened={opened}
             data-theme={$theme}
@@ -44,10 +57,12 @@
         flex-direction: column;
         align-items: center;
     }
-    .container[data-isMobile="false"] {
+    /*
+     .container[data-isMobile="false"] {
         width: calc(100% - 80px);
         margin-left: 80px;
-    }
+        transform: translateY(-34px);
+    }*/
 
     img {
         width: 100%;
@@ -56,7 +71,7 @@
 
     .opener {
         width: 100%;
-        height: 40px;
+        height: 34px;
 
         display: flex;
         justify-content: center;
@@ -70,10 +85,10 @@
         column-gap: 5px;
     }
     .opener[data-opened="true"]::after {
-        content: "▼";
+        content: "▲";
     }
     .opener[data-opened="false"]::after {
-        content: "▲";
+        content: "▼";
     }
     .opener[data-theme="dark"] {
         background-color: #1c1c1c;

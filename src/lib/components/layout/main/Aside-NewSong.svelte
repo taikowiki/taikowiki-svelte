@@ -1,12 +1,11 @@
 <script lang="ts">
     import AsideItem from "./AsideItem.svelte";
-    import { useLang } from "$lib/module/common/i18n/i18n";
-    import i18n from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang, useLang } from "$lib/module/common/i18n/i18n";
 
     export let newSongs;
 
-    const lang = useLang();
-    $: i18nLayout = i18n[$lang].layout.main
+    const lang = getLang();
+    $: i18nLayout = getI18N("layout", $lang).main;
 </script>
 
 <AsideItem title={i18nLayout.newSong}>
@@ -18,8 +17,8 @@
 </AsideItem>
 
 <style>
-    a{
+    a {
         text-decoration: none;
-        color:inherit;
+        color: inherit;
     }
 </style>

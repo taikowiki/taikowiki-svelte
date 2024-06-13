@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- 생성 시간: 24-06-11 04:41
+-- 생성 시간: 24-06-13 06:44
 -- 서버 버전: 10.4.32-MariaDB
 -- PHP 버전: 8.2.12
 
@@ -102,6 +102,20 @@ CREATE TABLE `song` (
 -- --------------------------------------------------------
 
 --
+-- 테이블 구조 `song/log`
+--
+
+CREATE TABLE `song/log` (
+  `order` int(11) NOT NULL,
+  `songNo` text NOT NULL,
+  `before` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `after` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`after`)),
+  `updatedTime` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- 테이블 구조 `song/request`
 --
 
@@ -112,7 +126,8 @@ CREATE TABLE `song/request` (
   `songNo` tinytext NOT NULL,
   `createdTime` bigint(20) NOT NULL,
   `type` tinytext NOT NULL,
-  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`data`))
+  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`data`)),
+  `status` tinytext NOT NULL DEFAULT 'none'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -129,7 +144,8 @@ CREATE TABLE `user/data` (
   `UUID` text NOT NULL,
   `grade` int(11) NOT NULL,
   `registerTime` bigint(20) NOT NULL,
-  `providerUserData` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
+  `providerUserData` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `lang` tinytext NOT NULL DEFAULT 'ko'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -164,6 +180,12 @@ ALTER TABLE `log`
 -- 테이블의 인덱스 `song`
 --
 ALTER TABLE `song`
+  ADD PRIMARY KEY (`order`);
+
+--
+-- 테이블의 인덱스 `song/log`
+--
+ALTER TABLE `song/log`
   ADD PRIMARY KEY (`order`);
 
 --
@@ -212,6 +234,12 @@ ALTER TABLE `log`
 -- 테이블의 AUTO_INCREMENT `song`
 --
 ALTER TABLE `song`
+  MODIFY `order` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 테이블의 AUTO_INCREMENT `song/log`
+--
+ALTER TABLE `song/log`
   MODIFY `order` int(11) NOT NULL AUTO_INCREMENT;
 
 --

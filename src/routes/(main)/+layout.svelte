@@ -58,7 +58,7 @@
     }
 
     //usemobile
-    useIsMobile();
+    const isMobile = useIsMobile();
 
     //lang
     const lang = useLang();
@@ -71,11 +71,6 @@
     const pageAside = usePageAside();
     beforeNavigate(resetPageAside(pageAside));
     /*afterNavigate(setPageAsideDisplay(pageAside));*/
-
-    //setContext songs
-    if (data.songs) {
-        setContext("songs", data.songs);
-    }
 
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
@@ -90,20 +85,47 @@
     }
 </script>
 
-{#if $theme}
+<div style={browser ? "" : "transform:translateX(-100%);"}>
     <Header>
         <svelte:fragment slot="left">
             <HeaderItem href="/" useHover={false}>
-                <img class="logo" src="/assets/img/logo.png" alt="logo" />
+                {#if $isMobile}
+                    <img
+                        class="logo"
+                        src="/assets/img/logo_mobile.png"
+                        alt="logo"
+                    />
+                {:else}
+                    <img class="logo" src="/assets/img/logo.png" alt="logo" />
+                {/if}
             </HeaderItem>
-            <HeaderItem icon="/assets/icon/song.svg" href="/song">
+            <HeaderItem
+                icon="/assets/icon/song.svg"
+                href="/song"
+                mobileHideSlot
+            >
                 <span class="header-text">{i18nLayout.song}</span>
             </HeaderItem>
-            <HeaderItem icon="/assets/icon/document.svg" href="/">
+            <HeaderItem
+                icon="/assets/icon/document.svg"
+                href="/"
+                mobileHideSlot
+            >
                 <span class="header-text">{i18nLayout.doc}</span>
             </HeaderItem>
-            <HeaderItem icon="/assets/icon/leaderboard.svg" href="/diffchart">
+            <HeaderItem
+                icon="/assets/icon/leaderboard.svg"
+                href="/diffchart"
+                mobileHideSlot
+            >
                 <span class="header-text">{i18nLayout.diffchart}</span>
+            </HeaderItem>
+            <HeaderItem
+                icon="/assets/icon/dani.svg"
+                href="/dani"
+                mobileHideSlot
+            >
+                <span class="header-text">{i18nLayout.dani}</span>
             </HeaderItem>
         </svelte:fragment>
         <svelte:fragment slot="right">
@@ -112,7 +134,7 @@
     </Header>
     <Main>
         <svelte:fragment slot="main">
-            {#if $navigating}
+            {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
                 <slot />
@@ -123,8 +145,8 @@
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
-    <Footer version={data.version}/>
-{/if}
+    <Footer version={data.version} />
+</div>
 
 <style>
     :global(body[data-theme="light"]) {
@@ -134,6 +156,9 @@
     :global(body[data-theme="dark"]) {
         background-color: black;
         color: white;
+    }
+    :global(body[data-theme="light"] a) {
+        color: #cf4844;
     }
     :global(body[data-theme="dark"] a) {
         color: #e1a743;

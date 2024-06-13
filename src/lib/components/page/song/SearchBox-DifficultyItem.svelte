@@ -33,7 +33,7 @@
     role="presentation"
     data-theme={$theme}
 >
-    <slot />
+    <span><slot /></span>
 </div>
 <input type="radio" bind:group {value} />
 
@@ -43,7 +43,7 @@
     }
 
     .button {
-        width: 55px;
+        min-width: 55px;
 
         display: flex;
         justify-content: center;
@@ -57,11 +57,14 @@
 
         box-sizing: border-box;
 
+        padding-inline: 5px;
+
         cursor: pointer;
     }
 
     .button.selected {
         border: 2px solid black;
+        padding-inline: 3px;
     }
     .button.unselected {
         opacity: 0.4;
@@ -76,5 +79,9 @@
 
     .button.selected[data-theme="dark"] {
         border-color: white;
+    }
+
+    span{
+        transform: translateY(-1px);
     }
 </style>

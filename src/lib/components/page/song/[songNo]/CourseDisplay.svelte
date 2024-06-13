@@ -3,7 +3,6 @@
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import CourseDisplayMobile from "./CourseDisplay-mobile.svelte";
     import CourseDisplayPc from "./CourseDisplay-pc.svelte";
-    import FumenDisplay from "./FumenDisplay.svelte";
 
     //export let difficulty: Difficulty;
     export let course: Course | null;
@@ -23,7 +22,6 @@
         <CourseDisplayPc {course} />
     {/if}
 {/if}
-
 <style>
     /*.border {
         flex: 1 1 auto;

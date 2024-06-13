@@ -1,5 +1,9 @@
 <script lang="ts" context="module">
     async function upload(songData: SongData) {
+        if (!songData.title || !songData.songNo) {
+            alert("곡 번호와 제목을 입력해주세요.");
+            return;
+        }
         try {
             await axios({
                 method: "POST",
@@ -28,9 +32,8 @@
 <SongEditor bind:songData={data.song} type="edit" />
 <button
     on:click={() => {
-        upload(data.song)
-        .then(() => {
-            goto('/admin/song')
+        upload(data.song).then(() => {
+            goto("/admin/song");
         });
     }}
 >

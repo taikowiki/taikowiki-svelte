@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { page } from "$app/stores";
     import TitleDisplay from "$lib/components/page/song/[songNo]/TitleDisplay.svelte";
     import MultipleTitleDisplay from "$lib/components/page/song/[songNo]/MultipleTitleDisplay.svelte";
     import SongDataDisplay from "$lib/components/page/song/[songNo]/SongDataDisplay.svelte";
@@ -7,19 +6,21 @@
     import GenreDisplay from "$lib/components/page/song/[songNo]/GenreDisplay.svelte";
     import AlertDisplay from "$lib/components/page/song/[songNo]/AlertDisplay.svelte";
     import CourseContainer from "$lib/components/page/song/[songNo]/CourseContainer.svelte";
-    import AddSongButton from '$lib/components/page/song/AddSongButton.svelte';
-    import type { SongData } from "$lib/module/common/song/types.js";
+    import AddSongButton from "$lib/components/page/song/AddSongButton.svelte";
 
     export let data;
-    const song = data.songs.find((song: SongData) => song.songNo === $page.params.songNo) ?? null;
-
+    const song = data.song;
     const isMobile = getIsMobile();
 </script>
 
 {#if song}
-    <AlertDisplay isAsiaBanned={song.isAsiaBanned} isKrBanned={song.isKrBanned} isDeleted={song.isDeleted}/>
-    <GenreDisplay genres={song.genre}/>
-    <TitleDisplay title={song.title} songNo={song.songNo}/>
+    <AlertDisplay
+        isAsiaBanned={song.isAsiaBanned}
+        isKrBanned={song.isKrBanned}
+        isDeleted={song.isDeleted}
+    />
+    <GenreDisplay genres={song.genre} />
+    <TitleDisplay title={song.title} songNo={song.songNo} />
     <div class="wrapper" data-isMobile={$isMobile}>
         <MultipleTitleDisplay
             titleKo={song.titleKo}
@@ -35,10 +36,10 @@
             addedDate={song.addedDate}
         />
     </div>
-    <CourseContainer courses={song.courses}/>
+    <CourseContainer courses={song.courses} />
 {:else}
     해당 곡이 존재하지 않습니다.
-    <AddSongButton/>
+    <AddSongButton />
 {/if}
 
 <style>
@@ -51,7 +52,7 @@
         row-gap: 10px;
     }
 
-    .wrapper[data-isMobile="true"]{
+    .wrapper[data-isMobile="true"] {
         flex-direction: column;
     }
 </style>

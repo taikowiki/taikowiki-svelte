@@ -8,8 +8,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			user?: User<any>,
-			userBasicData?: UserBasicData,
-			userData?: UserData
+			userData: UserData | null
 		}
 		// interface PageData {}
 		// interface PageState {}

@@ -40,15 +40,24 @@ export type Dan = typeof DAN[number];
 export interface Dani {
     version: DaniVersion;
     dan: Dan;
-    order: 1|2|3;
+    order: 1 | 2 | 3;
+}
+
+//song search option
+export interface SongSearchOption {
+    query?: string;
+    difficulty?: Difficulty | "oniura";
+    level?: number;
+    genre?: Genre;
 }
 
 //request
-export interface SongRequest{
+export interface SongRequest {
     UUID: string;
     ip: string;
     songNo: string;
     createdTime: number;
     type: 'edit' | 'new';
     data: SongData;
+    status: 'none' | 'approved' | 'disapproved'
 }

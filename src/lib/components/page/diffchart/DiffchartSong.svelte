@@ -9,14 +9,14 @@
 </script>
 
 <script lang="ts">
-    import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
-    import type { Song, SongScore, SongScoreDetail } from "$lib/module/common/diffchart/types";
+    import type { Song,  SongScoreDetail } from "$lib/module/common/diffchart/types";
     import DiffchartSongMobile from "./DiffchartSongMobile.svelte";
     import DiffchartSongPc from "./DiffchartSongPc.svelte";
+    import type { SongDataPickedForDiffchart } from "$lib/module/page/diffchart/types";
 
     export let song: Song;
-    export let songs: SongData[];
+    export let songs: SongDataPickedForDiffchart[];
     export let theme: string;
     export let useMobile: boolean = true;
     export let userScore: SongScoreDetail | null = null;

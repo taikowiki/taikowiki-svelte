@@ -29,6 +29,8 @@
 </script>
 
 <script lang="ts">
+    import GoogleTag from "$lib/components/layout/google-tag.svelte";
+    import VercelInject from "$lib/components/layout/vercel-inject.svelte";
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
@@ -147,6 +149,9 @@
     </Main>
     <Footer version={data.version} />
 </div>
+
+<GoogleTag/>
+<VercelInject/>
 
 <style>
     :global(body[data-theme="light"]) {

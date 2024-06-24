@@ -58,7 +58,7 @@ const checkPermission = checkPermissions([
     }
 ])
 
-const cors = allowOrigin([]);
+const cors = allowOrigin(["https://donderhiroba.jp"]);
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);

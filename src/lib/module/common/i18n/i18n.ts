@@ -100,7 +100,7 @@ export function useLang() {
         }).then((response: AxiosResponse) => {
             lang.set(response.data);
         }).catch((err) => {
-            console.log(err);
+            console.warn(err);
         })
     }
     else {

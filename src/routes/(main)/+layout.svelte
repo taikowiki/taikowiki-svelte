@@ -85,6 +85,13 @@
     }
 </script>
 
+<svelte:head>
+    <script
+        type="text/javascript"
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${data.kakaoKey}`}
+    ></script>
+</svelte:head>
+
 <div style={browser ? "" : "transform:translateX(-100%);"}>
     <Header>
         <svelte:fragment slot="left">

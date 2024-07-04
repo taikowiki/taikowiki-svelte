@@ -5,6 +5,7 @@ export async function load({ fetch }) {
     return {
         newSongs: await SongDB.getNewSongs(),
         user,
-        version: (await import('../../../package.json')).version
+        version: (await import('../../../package.json')).version,
+        kakaoKey: process.env.KAKAO_JAVASCRIPT_KEY
     }
 }

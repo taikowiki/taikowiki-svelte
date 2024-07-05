@@ -5,10 +5,7 @@
     export let titleKo: string | null;
     export let aliasKo: string | null;
 
-    export let compare: {
-        keys: string[];
-        courseKeys: string[];
-    } | null;
+    export let compare: any;
 
     let titleKoChecked = titleKo !== null;
     $: if (titleKoChecked) {
@@ -26,21 +23,13 @@
 
 <TitledContainer title="제목" color="#cf4844">
     <table>
-        <tr
-            style={compare?.keys.includes("title")
-                ? "background-color:#ff9999"
-                : ""}
-        >
+        <tr class:different={compare?.title === true}>
             <td> 곡 제목 </td>
             <td class="title">
                 <input type="text" bind:value={title} />
             </td>
         </tr>
-        <tr
-            style={compare?.keys.includes("titleKo")
-                ? "background-color:#ff9999"
-                : ""}
-        >
+        <tr class:different={compare?.titleKo === true}>
             <td> 한국어 제목 </td>
             <td>
                 <input type="checkbox" bind:checked={titleKoChecked} />
@@ -51,11 +40,7 @@
                 />
             </td>
         </tr>
-        <tr
-            style={compare?.keys.includes("aliasKo")
-                ? "background-color:#ff9999"
-                : ""}
-        >
+        <tr class:different={compare?.aliasKo === true}>
             <td> 한국어 비공식 </td>
             <td>
                 <input type="checkbox" bind:checked={aliasKoChecked} />
@@ -95,5 +80,9 @@
         font-size: 17px;
 
         background-color: inherit;
+    }
+
+    .different {
+        background-color: #ff9999;
     }
 </style>

@@ -1,28 +1,36 @@
 import type { Course, SongData } from "./types";
 
 export default function compareSong(song1: SongData, song2: SongData) {
-    const keys: (Exclude<keyof SongData, "courses">)[] = [];
-
-    const primitiveKeys: (Exclude<keyof SongData, "courses">)[] = ["songNo", "title", "titleKo", "aliasKo", "bpmShiver", "isAsiaBanned", "isDeleted", "isKrBanned", "addedDate"];
-    primitiveKeys.forEach(key => {
-        if (song1[key] !== song2[key]) {
-            keys.push(key);
-        }
-    })
+    const keys: any = {
+        songNo: song1.songNo !== song2.songNo,
+        title: song1.title !== song2.title,
+        titleKo: song1.titleKo !== song2.titleKo,
+        aliasKo: song1.aliasKo !== song2.aliasKo,
+        bpmShiver: song1.bpmShiver !== song2.bpmShiver,
+        isAsiaBanned: song1.isAsiaBanned !== song2.isAsiaBanned,
+        isDeleted: song1.isDeleted !== song2.isDeleted,
+        isKrBanned: song1.isKrBanned !== song2.isKrBanned,
+        addedDate: song1.addedDate !== song2.addedDate,
+        bpm: false,
+        version: false,
+        genre: false,
+        artists: false,
+        courses: {}
+    }
 
     //bpm
     if (song1?.bpm?.min !== song2?.bpm?.min || song1?.bpm?.max !== song2?.bpm?.max) {
-        keys.push('bpm');
+        keys.bpm = true;
     }
 
     //version
     if (song1?.version?.length !== song2?.version?.length) {
-        keys.push("version");
+        keys.version = true;
     }
     else if (song1.version) {
         for (const version of song1.version) {
             if (!song2?.version?.includes(version)) {
-                keys.push("version");
+                keys.version = true;
                 break;
             }
         }
@@ -30,12 +38,12 @@ export default function compareSong(song1: SongData, song2: SongData) {
 
     //genre
     if (song1?.genre?.length !== song2?.genre?.length) {
-        keys.push("genre");
+        keys.genre = true;
     }
     else if (song1.genre) {
         for (const genre of song1.genre) {
             if (!song2.genre.includes(genre)) {
-                keys.push("genre");
+                keys.genre = true;
                 break;
             }
         }
@@ -43,116 +51,98 @@ export default function compareSong(song1: SongData, song2: SongData) {
 
     //artist
     if (song1?.artists?.length !== song2?.artists?.length) {
-        keys.push("artists");
+        keys.artists = true
     }
     else if (song1.artists) {
         for (const artist of song1.artists) {
             if (!song2.artists.includes(artist)) {
-                keys.push("artists");
+                keys.artists = true
                 break;
             }
         }
     }
 
-    const courseKeys: ("easy" | "normal" | "hard" | "oni" | "ura")[] = [];
-    (["easy", "normal", "hard", "oni", "ura"] as (keyof SongData['courses'])[]).forEach(diff => {
-        const diff1 = song1?.courses?.[diff];
-        const diff2 = song2?.courses?.[diff];
-
-        if (diff1 === null || diff1 === undefined) {
-            if (diff1 !== diff2) {
-                courseKeys.push(diff);
-            }
+    (['easy', 'normal', 'hard', 'oni', 'ura'] as (keyof SongData['courses'])[]).forEach((diff) => {
+        if (song1.courses[diff] === null && song2.courses[diff] === null) {
             return;
         }
 
-        if (diff2 === null || diff2 === undefined) {
-            courseKeys.push(diff);
+        if ((song1.courses[diff] === null && song2.courses[diff] !== null) || (song1.courses[diff] !== null && song2.courses[diff] === null)) {
+            keys.courses[diff] = {
+                exists: true
+            };
             return;
         }
 
-        if (!isSameCourse(diff1, diff2)) {
-            courseKeys.push(diff);
-            return;
-        }
+        keys.courses[diff] = compareCourse(song1.courses[diff] as Course, song2.courses[diff] as Course)
     })
 
-    return {
-        keys,
-        courseKeys
-    }
+    return keys;
 }
 
-export function isSameCourse(course1: Course, course2: Course) {
+export function compareCourse(course1: Course, course2: Course) {
+    const course = {
+        level: false,
+        isBranched: false,
+        maxCombo: false,
+        playTime: false,
+        maxDensity: false,
+        daniUsed: false,
+        balloon: false,
+        rollTime: false,
+        images: false,
+        dani: false
+    }
+
     if (course1?.level !== course2?.level) {
-        return false;
+        course.level = true;
     }
 
     if (course1?.isBranched !== course2?.isBranched) {
-        return false;
+        course.isBranched = true;
     }
 
     if (course1?.maxCombo !== course2?.maxCombo) {
-        return false;
+        course.maxCombo = true;
     }
 
     if (course1?.playTime !== course2?.playTime) {
-        return false;
+        course.playTime = true;
     }
 
     if (course1?.maxDensity !== course2?.maxDensity) {
-        return false;
+        course.maxDensity = true;
     }
 
     if (course1?.daniUsed !== course2?.daniUsed) {
-        return false;
+        course.daniUsed = true;
     }
 
-    if (course1?.balloon?.length !== course2?.balloon?.length) {
-        return false;
-    }
-    if (course1.balloon) {
-        for (const balloon of course1.balloon) {
-            if (!course2?.balloon.includes(balloon)) {
-                return false;
-            }
-        }
+    if (JSON.stringify(course1?.balloon) !== JSON.stringify(course2?.balloon)) {
+        course.balloon = true;
     }
 
-    if (course1?.rollTime?.length !== course2?.rollTime?.length) {
-        return false;
-    }
-    if (course1.rollTime) {
-        for (const rollTime of course1.rollTime) {
-            if (!course2?.rollTime.includes(rollTime)) {
-                return false;
-            }
-        }
+    if (JSON.stringify(course1?.rollTime) !== JSON.stringify(course2?.rollTime)) {
+        course.rollTime = true;
     }
 
-    if (course1?.images?.length !== course2?.images?.length) {
-        return false;
-    }
-    if (course1.images) {
-        for (const image of course1.images) {
-            if (!course2?.images.includes(image)) {
-                return false;
-            }
-        }
+    if (JSON.stringify(course1?.images) !== JSON.stringify(course2?.images)) {
+        course.images = true;
     }
 
     if (course1?.dani?.length !== course2?.dani?.length) {
-        return false;
+        course.dani = true;
     }
     if (course1.dani) {
         for (const dani of course1.dani) {
             if (!course2?.dani.find(d => {
                 return dani.dan === d.dan && dani.order === d.order && dani.version === d.version
             })) {
-                return false;
+                course.dani = true;
+                break;
             }
         }
     }
 
-    return true;
+    return course;
 }

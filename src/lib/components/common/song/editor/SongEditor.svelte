@@ -8,10 +8,11 @@
 
     export let songData: SongData;
     export let type: 'edit'|'new' = 'new';
+    export let isAdmin: boolean = false;
 </script>
 
 <div class="container">
-    <BasicEditor bind:songNo={songData.songNo} {type}/>
+    <BasicEditor bind:songNo={songData.songNo} {type} {isAdmin}/>
     <TitleEditor
         bind:title={songData.title}
         bind:titleKo={songData.titleKo}

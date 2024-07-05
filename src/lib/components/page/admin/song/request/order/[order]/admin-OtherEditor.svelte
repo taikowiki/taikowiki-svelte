@@ -17,10 +17,7 @@
     export let isKrBanned: 1 | 0;
     export let isDeleted: 1 | 0;
     export let addedDate: number | null;
-    export let compare: {
-        keys: string[];
-        courseKeys: string[];
-    } | null;
+    export let compare: any;
     $: if (genre.length > 3) {
         genre = genre.slice(genre.length - 3, genre.length);
     }
@@ -43,11 +40,7 @@
 
 <TitledContainer title="기타" color="#cf4844">
     <table>
-        <tr
-            style={compare?.keys.includes("genre")
-                ? "background-color:#ff9999"
-                : ""}
-        >
+        <tr class:different={compare?.genre === true}>
             <td> 장르 </td>
             <td>
                 <div class="genre">
@@ -65,10 +58,8 @@
             </td>
         </tr>
         <tr
-            style={compare?.keys.includes("bpm") ||
-            compare?.keys.includes("bpmShiver")
-                ? "background-color:#ff9999"
-                : ""}
+            class:different={compare?.bpm === true ||
+                compare.bpmShiver === true}
         >
             <td> BPM </td>
             <td>
@@ -95,11 +86,7 @@
                 </div>
             </td>
         </tr>
-        <tr
-            style={compare?.keys.includes("version")
-                ? "background-color:#ff9999"
-                : ""}
-        >
+        <tr class:different={compare?.version === true}>
             <td>
                 <div>수록 버전</div>
             </td>
@@ -122,11 +109,7 @@
                 </div>
             </td>
         </tr>
-        <tr
-            style={compare?.keys.includes("artists")
-                ? "background-color:#ff9999"
-                : ""}
-        >
+        <tr class:different={compare?.artists === true}>
             <td>
                 <div>아티스트</div>
                 <div class="sub">쉼표로 구분하여 작성해주세요.</div>
@@ -136,11 +119,9 @@
             </td>
         </tr>
         <tr
-            style={compare?.keys.includes("isDeleted") ||
-            compare?.keys.includes("isAsiaBanned") ||
-            compare?.keys.includes("isKrBanned")
-                ? "background-color:#ff9999"
-                : ""}
+            class:different={compare?.isDeleted === true ||
+                compare?.isKrBanned === true ||
+                compare?.isAsiaBanned === true}
         >
             <td>
                 <div>수록 여부</div>
@@ -192,11 +173,7 @@
                 </div>
             </td>
         </tr>
-        <tr
-            style={compare?.keys.includes("addedDate")
-                ? "background-color:#ff9999"
-                : ""}
-        >
+        <tr class:different={compare?.addedDate === true}>
             <td> <div>추가 날짜</div> </td>
             <td>
                 <div>
@@ -284,5 +261,9 @@
         border: 1px solid black;
         width: calc(100% - 5px);
         resize: vertical;
+    }
+
+    .different {
+        background-color: #ff9999;
     }
 </style>

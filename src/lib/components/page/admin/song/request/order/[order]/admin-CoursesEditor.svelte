@@ -6,10 +6,7 @@
     import type { SongData } from "$lib/module/common/song/types";
 
     export let courses: SongData["courses"];
-    export let compare: {
-        keys: string[];
-        courseKeys: string[];
-    } | null;
+    export let compare: any;
 </script>
 
 <TitledContainer title="보면" color="#cf4844">
@@ -18,7 +15,7 @@
             <CourseEditor
                 {difficulty}
                 bind:course={courses[difficulty]}
-                different={compare?.courseKeys.includes(difficulty)}
+                compare={compare.courses?.[difficulty]}
             />
         {/each}
     </table>

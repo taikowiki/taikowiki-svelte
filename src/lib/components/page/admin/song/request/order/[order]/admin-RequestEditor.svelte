@@ -5,30 +5,16 @@
     import TitleEditor from "./admin-TitleEditor.svelte";
     import CoursesEditor from "./admin-CoursesEditor.svelte";
     import BasicEditor from "./admin-BasicEditor.svelte";
-    import { afterUpdate, onMount } from "svelte";
 
-    export let compare: {
-        keys: string[];
-        courseKeys: string[];
-    } | null;
+    export let compare: any | null;
 
     export let songData: SongData;
-    export let type: "edit" | "new" = "new";
 
     let container: HTMLDivElement;
-    afterUpdate(() => {
-        container.querySelectorAll("input").forEach((input) => {
-            input.readOnly = true;
-            input.onclick = () => false;
-        });
-        container.querySelectorAll("textarea").forEach((textarea) => {
-            textarea.readOnly = true;
-        });
-    });
 </script>
 
 <div class="container" bind:this={container}>
-    <BasicEditor bind:songNo={songData.songNo} {type} />
+    <BasicEditor bind:songNo={songData.songNo}/>
     <TitleEditor
         bind:title={songData.title}
         bind:titleKo={songData.titleKo}

@@ -7,7 +7,8 @@ const ko: LangFile = {
             doc: '문서',
             newSong: '신곡',
             diffchart: '서열표',
-            dani: '단위도장'
+            dani: '단위도장',
+            gamecenter: '오락실'
         },
         'dedicated diffchart': {
             type: {

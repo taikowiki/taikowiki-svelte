@@ -88,7 +88,7 @@
 <svelte:head>
     <script
         type="text/javascript"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${data.kakaoKey}`}
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${data.kakaoKey}&libraries=services`}
     ></script>
 </svelte:head>
 
@@ -134,6 +134,13 @@
             >
                 <span class="header-text">{i18nLayout.dani}</span>
             </HeaderItem>
+            <HeaderItem
+                icon="/assets/icon/maps-pin-header.svg"
+                href="/gamecenter"
+                mobileHideSlot
+            >
+                <span class="header-text">{i18nLayout.gamecenter}</span>
+            </HeaderItem>            
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />

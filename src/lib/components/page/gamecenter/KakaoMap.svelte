@@ -1,44 +1,163 @@
-<script lang="ts">
-    import PageAside from "$lib/components/layout/main/PageAside.svelte";
-    import getKakaoMap from "$lib/module/page/gamecenter/kakao.client";
-    import { onMount } from "svelte";
+<script lang="ts" context="module">
+    //오락실 마커 생성
+    async function createGamecenterMarkers(
+        gamecenterDatas: GameCenterData[],
+        gamecenterMarkers: Record<
+            string,
+            { marker: kakao.maps.Marker; iwOpened: boolean; iw: kakao.maps.InfoWindow }
+        >,
+        kakaoMap: typeof kakao.maps,
+        map: kakao.maps.Map,
+    ) {
+        const geocoder = new kakaoMap.services.Geocoder();
+        for (const gamecenterData of gamecenterDatas) {
+            //주소 검색 후 좌표 얻기
+            const result = (await new Promise((res) => {
+                geocoder.addressSearch(gamecenterData.address, res);
+            })) as any[];
 
+            if (!result[0]) {
+                break;
+            }
+
+            //marker 생성
+            const marker = new kakaoMap.Marker({
+                map,
+                position: new kakaoMap.LatLng(result[0].y, result[0].x),
+            });
+
+            //infowindow 생성
+            const infoWindowDiv = document.createElement("div");
+            infoWindowDiv.style.display = 'flex';
+            infoWindowDiv.style.justifyContent = 'center';
+            infoWindowDiv.style.width = "200px";
+            infoWindowDiv.style.height = "auto";
+            new MarkerInfo({
+                target: infoWindowDiv,
+                props: {
+                    gamecenterData
+                },
+            });
+            const infoWindow = new kakaoMap.InfoWindow({
+                content: infoWindowDiv
+            });
+
+            //marker 객체에 넣기
+            const markerData = {
+                marker,
+                iwOpened: false,
+                iw: infoWindow
+            };
+            gamecenterMarkers[gamecenterData.name] = markerData;
+
+            kakaoMap.event.addListener(marker, "click", () => {
+                if (markerData.iwOpened) {
+                    infoWindow.close();
+                    markerData.iwOpened = false;
+                } else {
+                    Object.values(gamecenterMarkers).forEach(gamecenterMarker => {
+                        gamecenterMarker.iw.close()
+                    })
+                    infoWindow.open(map, marker);
+                    markerData.iwOpened = true;
+                }
+            });
+        }
+    }
+</script>
+
+<script lang="ts">
+    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import getKakaoMap from "$lib/module/page/gamecenter/kakao.client";
+    import { onDestroy, onMount, setContext } from "svelte";
+    import KakaoMapAside from "./KakaoMapAside.svelte";
+    import MarkerInfo from "./MarkerInfo.svelte";
+
+    //오락실
+    export let gamecenterDatas: GameCenterData[];
+
+    const gamecenterMarkers: Record<
+        string,
+        { marker: kakao.maps.Marker; iwOpened: boolean; iw: kakao.maps.InfoWindow }
+    > = {};
+    let markerLoaded = false;
+
+    //지도 관련 변수
     const kakaoMap = getKakaoMap();
 
     let mapContainer: HTMLDivElement;
     let map: kakao.maps.Map;
 
     const canUseGeolocation = "geolocation" in window.navigator;
+    setContext("canUseGeolocation", canUseGeolocation);
+    let currentPositionMarker: kakao.maps.Marker;
+    let watchCallbackId: number;
 
     onMount(async () => {
-        const [x, y] = canUseGeolocation
-            ? await (new Promise((res) => {
-                  navigator.geolocation.getCurrentPosition((position) => {
-                      res([
-                          position.coords.latitude,
-                          position.coords.longitude,
-                      ]);
-                  });
-              }) as Promise<[number, number]>)
-            : [36.59378832827889, 128.0195306619556];
+        //지도 생성
         map = new kakaoMap.Map(mapContainer, {
             level: 12,
-            center: new kakaoMap.LatLng(x, y),
+            center: new kakaoMap.LatLng(36.59378832827889, 128.0195306619556),
         });
+
+        //현재 위치
+        (async () => {
+            if (canUseGeolocation) {
+                let [x, y]: [number, number] = await new Promise((res) => {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        res([
+                            position.coords.latitude,
+                            position.coords.longitude,
+                        ]);
+                    });
+                });
+
+                map.setCenter(new kakaoMap.LatLng(x, y));
+
+                currentPositionMarker = new kakaoMap.Marker({
+                    map,
+                    position: new kakaoMap.LatLng(x, y),
+                    image: new kakaoMap.MarkerImage(
+                        "/assets/icon/map/current.svg",
+                        new kakaoMap.Size(18, 18),
+                    ),
+                });
+
+                watchCallbackId = navigator.geolocation.watchPosition(
+                    (position) => {
+                        currentPositionMarker.setPosition(
+                            new kakaoMap.LatLng(
+                                position.coords.latitude,
+                                position.coords.longitude,
+                            ),
+                        );
+                    },
+                );
+            }
+        })();
+
+        //오락실 마커
+        (async () => {
+            await createGamecenterMarkers(
+                gamecenterDatas,
+                gamecenterMarkers,
+                kakaoMap,
+                map,
+            );
+
+            markerLoaded = true;
+        })();
     });
 
-    // @ts-expect-error
-    window.getCenter = function () {
-        if (map) {
-            console.log(map.getCenter());
-        }
-    };
+    onDestroy(() => {
+        navigator.geolocation.clearWatch(watchCallbackId);
+    });
 </script>
 
 <div class="map-container" bind:this={mapContainer} />
-<PageAside>
-    
-</PageAside>
+{#if markerLoaded}
+    <KakaoMapAside />
+{/if}
 
 <style>
     .map-container {
@@ -46,9 +165,9 @@
         height: calc(100vh - 105px);
     }
 
-    @media only screen and (max-width: 1000px){
-        .map-container{
-            height: 100%
+    @media only screen and (max-width: 1000px) {
+        .map-container {
+            height: 100%;
         }
     }
 </style>

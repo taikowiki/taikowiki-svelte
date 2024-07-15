@@ -1,12 +1,12 @@
+import { GAMECENTERREGION, AMENITY } from "./const";
+
 export interface GameCenterData{
+    order: number;
     name: string;
     address: string;
-    amenity: {
-        atm: boolean;
-        water: boolean;
-        toilet: boolean;
-    };
-    machines: Machine[]
+    amenity: Record<typeof AMENITY[number], boolean>;
+    machines: Machine[];
+    region: typeof GAMECENTERREGION[number];
 }
 
 export interface Machine{

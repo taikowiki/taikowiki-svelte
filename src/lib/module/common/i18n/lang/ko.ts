@@ -188,6 +188,19 @@ const ko: LangFile = {
             'New nickname is not in the correct format': '닉네임이 형식에 올바르지 않습니다.',
             'Duplicated Nickname': '이미 사용중인 닉네임입니다.'
         }
+    },
+    '/gamecenter': {
+        'amenity': {
+            'water': '정수기',
+            'toilet': '화장실',
+            'park': '주차장',
+            'capture': '캡쳐보드',
+            'rental': '대여',
+            'night': '밤샘',
+            'atm': 'ATM',
+            'fan': '선풍기',
+            'mybachi': '마이바찌'
+        }
     }
 }
 

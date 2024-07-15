@@ -3,8 +3,12 @@
     async function createGamecenterMarkers(
         gamecenterDatas: GameCenterData[],
         gamecenterMarkers: Record<
-            string,
-            { marker: kakao.maps.Marker; iwOpened: boolean; iw: kakao.maps.InfoWindow }
+            number,
+            {
+                marker: kakao.maps.Marker;
+                iwOpened: boolean;
+                iw: kakao.maps.InfoWindow;
+            }
         >,
         kakaoMap: typeof kakao.maps,
         map: kakao.maps.Map,
@@ -28,36 +32,40 @@
 
             //infowindow 생성
             const infoWindowDiv = document.createElement("div");
-            infoWindowDiv.style.display = 'flex';
-            infoWindowDiv.style.justifyContent = 'center';
+            infoWindowDiv.style.display = "flex";
+            infoWindowDiv.style.justifyContent = "center";
             infoWindowDiv.style.width = "200px";
             infoWindowDiv.style.height = "auto";
             new MarkerInfo({
                 target: infoWindowDiv,
                 props: {
-                    gamecenterData
+                    gamecenterData,
                 },
             });
             const infoWindow = new kakaoMap.InfoWindow({
-                content: infoWindowDiv
+                content: infoWindowDiv,
+                zIndex: 200000,
             });
 
             //marker 객체에 넣기
             const markerData = {
                 marker,
                 iwOpened: false,
-                iw: infoWindow
+                iw: infoWindow,
             };
-            gamecenterMarkers[gamecenterData.name] = markerData;
+            gamecenterMarkers[gamecenterData.order] = markerData;
 
             kakaoMap.event.addListener(marker, "click", () => {
                 if (markerData.iwOpened) {
                     infoWindow.close();
                     markerData.iwOpened = false;
                 } else {
-                    Object.values(gamecenterMarkers).forEach(gamecenterMarker => {
-                        gamecenterMarker.iw.close()
-                    })
+                    Object.values(gamecenterMarkers).forEach(
+                        (gamecenterMarker) => {
+                            gamecenterMarker.iwOpened = false;
+                            gamecenterMarker.iw.close();
+                        },
+                    );
                     infoWindow.open(map, marker);
                     markerData.iwOpened = true;
                 }
@@ -69,7 +77,7 @@
 <script lang="ts">
     import type { GameCenterData } from "$lib/module/common/gamecenter/types";
     import getKakaoMap from "$lib/module/page/gamecenter/kakao.client";
-    import { onDestroy, onMount, setContext } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import KakaoMapAside from "./KakaoMapAside.svelte";
     import MarkerInfo from "./MarkerInfo.svelte";
 
@@ -77,8 +85,12 @@
     export let gamecenterDatas: GameCenterData[];
 
     const gamecenterMarkers: Record<
-        string,
-        { marker: kakao.maps.Marker; iwOpened: boolean; iw: kakao.maps.InfoWindow }
+        number,
+        {
+            marker: kakao.maps.Marker;
+            iwOpened: boolean;
+            iw: kakao.maps.InfoWindow;
+        }
     > = {};
     let markerLoaded = false;
 
@@ -88,10 +100,11 @@
     let mapContainer: HTMLDivElement;
     let map: kakao.maps.Map;
 
-    const canUseGeolocation = "geolocation" in window.navigator;
-    setContext("canUseGeolocation", canUseGeolocation);
+    let canUseGeolocation = "geolocation" in window.navigator;
     let currentPositionMarker: kakao.maps.Marker;
     let watchCallbackId: number;
+
+    let setCenterToCurrentPosition: () => any = () => {};
 
     onMount(async () => {
         //지도 생성
@@ -102,38 +115,52 @@
 
         //현재 위치
         (async () => {
-            if (canUseGeolocation) {
-                let [x, y]: [number, number] = await new Promise((res) => {
-                    navigator.geolocation.getCurrentPosition((position) => {
+            if (!canUseGeolocation) {
+                return;
+            }
+            let [x, y]: [number, number] = await new Promise((res) => {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
                         res([
                             position.coords.latitude,
                             position.coords.longitude,
                         ]);
-                    });
-                });
-
-                map.setCenter(new kakaoMap.LatLng(x, y));
-
-                currentPositionMarker = new kakaoMap.Marker({
-                    map,
-                    position: new kakaoMap.LatLng(x, y),
-                    image: new kakaoMap.MarkerImage(
-                        "/assets/icon/map/current.svg",
-                        new kakaoMap.Size(18, 18),
-                    ),
-                });
-
-                watchCallbackId = navigator.geolocation.watchPosition(
-                    (position) => {
-                        currentPositionMarker.setPosition(
-                            new kakaoMap.LatLng(
-                                position.coords.latitude,
-                                position.coords.longitude,
-                            ),
-                        );
+                    },
+                    (error) => {
+                        if (error.code == error.PERMISSION_DENIED) {
+                            canUseGeolocation = false;
+                        }
+                        throw error;
                     },
                 );
-            }
+            });
+
+            map.setCenter(new kakaoMap.LatLng(x, y));
+
+            currentPositionMarker = new kakaoMap.Marker({
+                map,
+                position: new kakaoMap.LatLng(x, y),
+                image: new kakaoMap.MarkerImage(
+                    "/assets/icon/map/current.svg",
+                    new kakaoMap.Size(15, 15),
+                ),
+                zIndex: 100000,
+            });
+
+            setCenterToCurrentPosition = () => {
+                map.setCenter(currentPositionMarker.getPosition());
+            };
+
+            watchCallbackId = navigator.geolocation.watchPosition(
+                (position) => {
+                    currentPositionMarker.setPosition(
+                        new kakaoMap.LatLng(
+                            position.coords.latitude,
+                            position.coords.longitude,
+                        ),
+                    );
+                },
+            );
         })();
 
         //오락실 마커
@@ -154,15 +181,57 @@
     });
 </script>
 
-<div class="map-container" bind:this={mapContainer} />
-{#if markerLoaded}
-    <KakaoMapAside />
-{/if}
+<div class="map-container" bind:this={mapContainer}>
+    <div class="button-container">
+        {#if canUseGeolocation}
+            <button
+                class="toCurrentPosition"
+                on:click={setCenterToCurrentPosition}
+            />
+        {/if}
+    </div>
+
+    {#if markerLoaded}
+        <KakaoMapAside
+            {currentPositionMarker}
+            {gamecenterMarkers}
+            {gamecenterDatas}
+            {map}
+        />
+    {/if}
+</div>
 
 <style>
     .map-container {
         width: 100%;
         height: calc(100vh - 105px);
+        position: relative;
+    }
+
+    .button-container {
+        display: flex;
+        flex-direction: column;
+
+        top: 10px;
+        right: 10px;
+        position: absolute;
+        z-index: 2;
+    }
+    .toCurrentPosition {
+        width: 30px;
+        height: 30px;
+
+        cursor: pointer;
+
+        border-radius: 5px;
+        outline: 0;
+        border: 1px solid black;
+        box-sizing: border-box;
+
+        background-image: url("/assets/icon/map/goto-current.svg");
+        background-position: center center;
+        background-size: 70%;
+        background-repeat: no-repeat;
     }
 
     @media only screen and (max-width: 1000px) {

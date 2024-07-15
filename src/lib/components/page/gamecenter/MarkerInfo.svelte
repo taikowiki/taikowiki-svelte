@@ -16,8 +16,8 @@
     </div>
 
     <div class="map-link-container">
-        <a class="map-link kakao-link" href={kakaoLink}> 카카오맵 </a>
-        <a class="map-link naver-link" href={naverLink}> 네이버맵 </a>
+        <a class="map-link kakao-link" href={kakaoLink} target='_blank'> 카카오맵 </a>
+        <a class="map-link naver-link" href={naverLink} target='_blank'> 네이버맵 </a>
     </div>
 </div>
 
@@ -52,14 +52,14 @@
         width: 100%;
 
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
         margin-top: 5px;
         margin-bottom: 3px;
     }
 
     .map-link {
-        width: 80px;
+        width: 90px;
         height: 25px;
         display: flex;
         justify-content: center;

@@ -48,10 +48,10 @@
             {/if}
         </div>
         <div class="maplink-container">
-            <a class="maplink kakao" href={kakaoLink}>
+            <a class="maplink kakao" href={kakaoLink} target="_blank">
                 <span class="text"> K </span>
             </a>
-            <a class="maplink naver" href={naverLink}>
+            <a class="maplink naver" href={naverLink} target="_blank">
                 <span class="text"> N </span>
             </a>
             {#if $user.logined}

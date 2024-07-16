@@ -10,6 +10,7 @@
     import GamecenterInfo from "./GamecenterInfo.svelte";
     //@ts-expect-error
     import escape from "regex-escape";
+    import { getContext } from "svelte";
 
     export let map: kakao.maps.Map;
     export let gamecenterMarkers: Record<
@@ -78,6 +79,9 @@
     //언어
     const lang = getLang();
     $: i18n = getI18N("/gamecenter", $lang);
+
+    //모바일 사이드
+    const mobileAsideOpened = getContext('mobileAsideOpened') as Writable<boolean>
 </script>
 
 <div class="container">
@@ -139,6 +143,8 @@
                     marker.iw.open(map, marker.marker);
 
                     map.setCenter(marker.marker.getPosition());
+
+                    $mobileAsideOpened = false;
                 }}
             />
         {/each}

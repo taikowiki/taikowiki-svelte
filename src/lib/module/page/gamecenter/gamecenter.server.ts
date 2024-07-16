@@ -1,4 +1,5 @@
 import { runQuery } from "@sveltekit-board/db";
+import type { GameCenterData } from "./types";
 
 export class GamecenterController {
     /**
@@ -54,5 +55,59 @@ export class GamecenterController {
                 return await run("UPDATE `user/gamecenter_favorites` SET `favorites` = ? WHERE `UUID` = ?", [JSON.stringify(favorites.filter(e => e !== gamecenterOrder)), UUID]);
             }
         })
+    }
+
+    /**
+     * 오락실 데이터 가져오기
+     */
+    static async getGamecenters(run?: any): Promise<GameCenterData[]> {
+        const queryCallback = async (run: any) => {
+            const result = await run("SELECT * FROM `gamecenter`");
+            result.forEach((r: any) => {
+                r.amenity = JSON.parse(r.amenity);
+                r.machines = JSON.parse(r.machines);
+            })
+
+            return result as GameCenterData[];
+        }
+
+        if (run) {
+            return await queryCallback(run);
+        }
+        else {
+            return await runQuery(queryCallback);
+        }
+    }
+
+    /**
+     * 오락실 데이터 추가
+     */
+    static async addGamecenter(gamecenterData: GameCenterData, run?: any) {
+        const queryCallback = async (run: any) => {
+            await run("INSERT INTO `gamecenter` (`name`, `address`, `amenity`, `machines`, `region`) VALUES (?, ?, ?, ?, ?)", [gamecenterData.name, gamecenterData.address, JSON.stringify(gamecenterData.amenity), JSON.stringify(gamecenterData.machines), gamecenterData.region])
+        }
+
+        if (run) {
+            return await queryCallback(run);
+        }
+        else {
+            return await runQuery(queryCallback);
+        }
+    }
+
+    /**
+     * 오락실 데이터 삭제
+     */
+    static async deleteGamecenter(order: number, run?: any) {
+        const queryCallback = async (run: any) => {
+            await run("DELETE FROM `gamecenter` WHERE `order` = ?", [order]);
+        }
+
+        if (run) {
+            return await queryCallback(run);
+        }
+        else {
+            return await runQuery(queryCallback);
+        }
     }
 }

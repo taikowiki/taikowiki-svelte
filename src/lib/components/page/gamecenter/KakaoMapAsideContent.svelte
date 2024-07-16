@@ -31,6 +31,7 @@
     const [theme, setTheme] = getTheme();
     const lang = getLang();
     const user = getContext("user");
+    const mobileAsideOpened = getContext('mobileAsideOpened');
 
     const distanceMap = new Map<GameCenterData, number>();
     if (currentPositionMarker) {
@@ -66,6 +67,7 @@
         context.set("setTheme", setTheme);
         context.set("lang", lang);
         context.set("user", user);
+        context.set("mobileAsideOpened", mobileAsideOpened);
 
         const searchComponent = new KakaoMapAsideContentSearch({
             target: searchContainer,

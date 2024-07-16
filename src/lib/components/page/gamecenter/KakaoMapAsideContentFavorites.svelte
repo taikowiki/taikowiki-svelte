@@ -22,6 +22,11 @@
     $: favoriteGamecenters = $favorites
         .map((order) => gamecenterDatas.find((data) => data.order === order))
         .filter((e) => e !== undefined);
+
+    //모바일 사이드
+    const mobileAsideOpened = getContext(
+        "mobileAsideOpened",
+    ) as Writable<boolean>;
 </script>
 
 <div class="container">
@@ -44,12 +49,17 @@
                     marker.iw.open(map, marker.marker);
 
                     map.setCenter(marker.marker.getPosition());
+
+                    $mobileAsideOpened = false;
                 }}
             />
         {/each}
     {:else}
         <span>
-            <a href={`/auth/login?redirect_to=${encodeURIComponent("/gamecenter")}`}>로그인</a>이 필요합니다.
+            <a
+                href={`/auth/login?redirect_to=${encodeURIComponent("/gamecenter")}`}
+                >로그인</a
+            >이 필요합니다.
         </span>
     {/if}
 </div>

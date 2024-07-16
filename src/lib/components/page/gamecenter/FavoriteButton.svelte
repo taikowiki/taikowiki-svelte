@@ -50,10 +50,14 @@
 
         width: 20px;
         height: 20px;
+
+        box-sizing: border-box;
+        /*border: 1px solid #ff7ac3;*/
+        border-radius: 5px;
     }
 
     img {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
     }
 </style>

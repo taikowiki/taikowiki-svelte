@@ -1,11 +1,13 @@
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import type { GameCenterData } from "$lib/module/page/gamecenter/types";
     import { afterUpdate, getContext, onMount } from "svelte";
     import KakaoMapAsideContentSearch from "./KakaoMapAsideContentSearch.svelte";
     import KakaoMapAsideContentFavorites from "./KakaoMapAsideContentFavorites.svelte";
     import { getTheme } from "$lib/module/layout/theme";
-    import i18n, { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import { GamecenterRequestor } from "$lib/module/common/gamecenter/gamecenter";
+    import { getLang } from "$lib/module/common/i18n/i18n";
+    import { GamecenterRequestor } from "$lib/module/page/gamecenter/gamecenter";
+    import { writable } from "svelte/store";
+    import getKakaoMap from "$lib/module/page/gamecenter/kakao.client";
 
     export let map: kakao.maps.Map;
     export let scene: "search" | "favorites";
@@ -20,6 +22,8 @@
     >;
     export let gamecenterDatas: GameCenterData[];
 
+    const kakaoMap = getKakaoMap();
+
     let container: HTMLDivElement;
     let searchContainer: HTMLDivElement;
     let favoritesContainer: HTMLDivElement;
@@ -28,8 +32,27 @@
     const lang = getLang();
     const user = getContext("user");
 
+    const distanceMap = new Map<GameCenterData, number>();
+    if (currentPositionMarker) {
+        const coords = currentPositionMarker.getPosition();
+
+        gamecenterDatas.forEach((data) => {
+            const marker = gamecenterMarkers[data.order];
+
+            if (!marker) {
+                return;
+            }
+
+            const distance = new kakaoMap.Polyline({
+                path: [coords, marker.marker.getPosition()],
+            }).getLength();
+
+            distanceMap.set(data, distance);
+        });
+    }
+
     //즐찾
-    let favorites: number[] = [];
+    let favorites = writable<number[]>([]);
 
     onMount(() => {
         searchContainer = document.createElement("div");
@@ -47,26 +70,30 @@
         const searchComponent = new KakaoMapAsideContentSearch({
             target: searchContainer,
             props: {
-                currentPositionMarker,
                 gamecenterDatas,
                 gamecenterMarkers,
                 map,
                 favorites,
+                distanceMap
             },
             context,
         });
 
         const favoriteComponent = new KakaoMapAsideContentFavorites({
             target: favoritesContainer,
+            props: {
+                favorites,
+                gamecenterDatas,
+                distanceMap,
+                gamecenterMarkers,
+                map
+            },
             context,
         });
 
         GamecenterRequestor.getFavorties().then((response) => {
             if (response.status === "success") {
-                let favorites: number[] = response.data;
-                searchComponent.$set({
-                    favorites
-                });
+                $favorites = response.data;
             }
         });
     });

@@ -1,4 +1,4 @@
-import { GamecenterController } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import { GamecenterController } from '$lib/module/page/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request, locals}){
@@ -10,7 +10,7 @@ export async function POST({request, locals}){
 
     const userData = locals.userData;
     if(!userData){
-        throw error(403);
+        throw error(401);
     }
 
     await GamecenterController.deleteFavorite(userData.UUID, data.gamecenterOrder);

@@ -21,10 +21,10 @@ export class GamecenterRequestor {
         }
         catch (err: any) {
             if (err instanceof AxiosError) {
-                if (err.status === 403) {
+                if (err.response?.status === 401) {
                     return {
                         status: 'error',
-                        statusCode: 403,
+                        statusCode: 401,
                         reason: "NOT_LOGINED"
                     }
                 }
@@ -63,14 +63,14 @@ export class GamecenterRequestor {
         }
         catch (err: any) {
             if (err instanceof AxiosError) {
-                if (err.status === 403) {
+                if (err.response?.status === 401) {
                     return {
                         status: 'error',
-                        statusCode: 403,
+                        statusCode: 401,
                         reason: "NOT_LOGINED"
                     }
                 }
-                if (err.status === 400) {
+                if (err.response?.status === 400) {
                     return {
                         status: 'error',
                         statusCode: 400,
@@ -112,14 +112,14 @@ export class GamecenterRequestor {
         }
         catch (err: any) {
             if (err instanceof AxiosError) {
-                if (err.status === 403) {
+                if (err.response?.status === 401) {
                     return {
                         status: 'error',
-                        statusCode: 403,
+                        statusCode: 401,
                         reason: "NOT_LOGINED"
                     }
                 }
-                if (err.status === 400) {
+                if (err.response?.status === 400) {
                     return {
                         status: 'error',
                         statusCode: 400,

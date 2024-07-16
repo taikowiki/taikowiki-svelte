@@ -3,7 +3,7 @@
     import KakaoMapAsideSceneSelector from "./KakaoMapAsideSceneSelector.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile.js";
     import { browser } from "$app/environment";
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import type { GameCenterData } from "$lib/module/page/gamecenter/types";
     import KakaoMapAsideContent from "./KakaoMapAsideContent.svelte";
     import { getTheme } from "$lib/module/layout/theme";
 

@@ -1,4 +1,4 @@
-import type { GameCenterData } from "$lib/module/common/gamecenter/types"
+import type { GameCenterData } from "$lib/module/page/gamecenter/types"
 
 export async function load() {
     const gamecenterDatas: GameCenterData[] = [

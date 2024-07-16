@@ -75,7 +75,7 @@
 </script>
 
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import type { GameCenterData } from "$lib/module/page/gamecenter/types";
     import getKakaoMap from "$lib/module/page/gamecenter/kakao.client";
     import { onDestroy, onMount } from "svelte";
     import KakaoMapAside from "./KakaoMapAside.svelte";
@@ -118,6 +118,7 @@
             if (!canUseGeolocation) {
                 return;
             }
+
             let [x, y]: [number, number] = await new Promise((res) => {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -142,7 +143,7 @@
                 position: new kakaoMap.LatLng(x, y),
                 image: new kakaoMap.MarkerImage(
                     "/assets/icon/map/current.svg",
-                    new kakaoMap.Size(15, 15),
+                    new kakaoMap.Size(15, 15)
                 ),
                 zIndex: 100000,
             });
@@ -185,10 +186,16 @@
     <div class="button-container">
         {#if canUseGeolocation}
             <button
-                class="toCurrentPosition"
+                class="map-button current-button"
                 on:click={setCenterToCurrentPosition}
             />
         {/if}
+        <button class="map-button plus-button" on:click={() => {
+            map.setLevel(map.getLevel() - 1)
+        }}/>
+        <button class="map-button minus-button" on:click={() => {
+            map.setLevel(map.getLevel() + 1)
+        }}/>
     </div>
 
     {#if markerLoaded}
@@ -216,22 +223,37 @@
         right: 10px;
         position: absolute;
         z-index: 2;
+
+        row-gap: 2px;
     }
-    .toCurrentPosition {
+    .map-button {
         width: 30px;
         height: 30px;
 
         cursor: pointer;
+
+        display:flex;
+        justify-content: center;
+        align-items: center;
 
         border-radius: 5px;
         outline: 0;
         border: 1px solid black;
         box-sizing: border-box;
 
-        background-image: url("/assets/icon/map/goto-current.svg");
         background-position: center center;
         background-size: 70%;
         background-repeat: no-repeat;
+    }
+
+    .current-button{
+        background-image: url("/assets/icon/map/goto-current.svg");
+    }
+    .plus-button{
+        background-image: url("/assets/icon/map/plus.svg");
+    }
+    .minus-button{
+        background-image: url("/assets/icon/map/minus.svg");
     }
 
     @media only screen and (max-width: 1000px) {

@@ -1,5 +1,10 @@
 <script lang="ts">
+    import { getContext } from "svelte";
+    import type { Writable } from "svelte/store";
+
     export let scene: "search" | "favorites";
+
+    const user = getContext("user") as Writable<{ logined: boolean }>;
 </script>
 
 <div>

@@ -2,17 +2,16 @@
     import {
         AMENITY,
         GAMECENTERREGION,
-    } from "$lib/module/common/gamecenter/const";
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    } from "$lib/module/page/gamecenter/const";
+    import type { GameCenterData } from "$lib/module/page/gamecenter/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getTheme } from "$lib/module/layout/theme";
-    import getKakaoMap from "$lib/module/page/gamecenter/kakao.client";
-    import MapSearchInfo from "./MapSearchInfo.svelte";
+    import type { Writable } from "svelte/store";
+    import GamecenterInfo from "./GamecenterInfo.svelte";
     //@ts-expect-error
     import escape from "regex-escape";
 
     export let map: kakao.maps.Map;
-    export let currentPositionMarker: kakao.maps.Marker | undefined;
     export let gamecenterMarkers: Record<
         number,
         {
@@ -22,49 +21,21 @@
         }
     >;
     export let gamecenterDatas: GameCenterData[];
-    export let favorites: number[];
-
-    const kakaoMap = getKakaoMap();
+    export let favorites: Writable<number[]>;
+    export let distanceMap: Map<GameCenterData, number>;
 
     //거리순 정렬
-    const distanceMap = new Map<GameCenterData, number>();
-    if (currentPositionMarker) {
-        const coords = currentPositionMarker.getPosition();
-
-        gamecenterDatas.forEach((data) => {
-            const marker = gamecenterMarkers[data.order];
-
-            if (!marker) {
-                return;
-            }
-
-            const distance = new kakaoMap.Polyline({
-                path: [coords, marker.marker.getPosition()],
-            }).getLength();
-
-            distanceMap.set(data, distance);
-        });
-
+    if (distanceMap.size > 0) {
         gamecenterDatas = gamecenterDatas.toSorted((a, b) => {
-            const markerA = gamecenterMarkers[a.order];
-            const markerB = gamecenterMarkers[b.order];
+            const distanceA = distanceMap.get(a);
+            const distanceB = distanceMap.get(b);
 
-            if (!markerA) {
+            if (distanceA === undefined) {
                 return 1;
             }
-            if (!markerB) {
+            if (distanceB === undefined) {
                 return -1;
             }
-
-            const coordsA = markerA.marker.getPosition();
-            const coordsB = markerB.marker.getPosition();
-
-            const distanceA = new kakaoMap.Polyline({
-                path: [coords, coordsA],
-            }).getLength();
-            const distanceB = new kakaoMap.Polyline({
-                path: [coords, coordsB],
-            }).getLength();
 
             return distanceA - distanceB;
         });
@@ -75,6 +46,7 @@
     let searchKeyword = "";
     let region: "null" | (typeof GAMECENTERREGION)[number] = "null";
     let amenities: (typeof AMENITY)[number][] = [];
+    let input: HTMLInputElement;
     $: {
         filteredGamecenterDatas = gamecenterDatas.filter((data) =>
             new RegExp(
@@ -113,6 +85,7 @@
         <input
             class="keyword-input"
             type="text"
+            bind:this={input}
             bind:value={searchKeyword}
             placeholder="키워드"
             data-theme={$theme}
@@ -149,7 +122,7 @@
     <!--오락실 정보-->
     <div class="info-container">
         {#each filteredGamecenterDatas as gamecenterData}
-            <MapSearchInfo
+            <GamecenterInfo
                 {gamecenterData}
                 {favorites}
                 distance={distanceMap.get(gamecenterData)}

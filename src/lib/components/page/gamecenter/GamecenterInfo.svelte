@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import type { GameCenterData } from "$lib/module/page/gamecenter/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getTheme } from "$lib/module/layout/theme";
     import { getContext } from "svelte";
@@ -9,7 +9,7 @@
     export let gamecenterData: GameCenterData;
     export let clickHandle: () => any;
     export let distance: number | undefined;
-    export let favorites: number[];
+    export let favorites: Writable<number[]>;
 
     const lang = getLang();
     $: i18n = getI18N("/gamecenter", $lang);
@@ -19,7 +19,8 @@
     const naverLink = `https://map.naver.com/p/search/${encodeURIComponent(gamecenterData.address)}`;
     const kakaoLink = `https://map.kakao.com/link/search/${gamecenterData.address}`;
 
-    const user: Writable<{logined: boolean; nickname: string;}> = getContext('user');
+    const user: Writable<{ logined: boolean; nickname: string }> =
+        getContext("user");
 </script>
 
 <div class="container" on:click={clickHandle} role="presentation">
@@ -54,7 +55,10 @@
                 <span class="text"> N </span>
             </a>
             {#if $user.logined}
-                <FavoriteButton favorite={favorites.includes(gamecenterData.order)} gamecenterOrder={gamecenterData.order}/>
+                <FavoriteButton
+                    {favorites}
+                    gamecenterOrder={gamecenterData.order}
+                />
             {/if}
         </div>
     </div>

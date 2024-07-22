@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { GamecenterRequestor } from "$lib/module/page/gamecenter/gamecenter";
+    import { gamecenterRequestor } from "$lib/module/page/gamecenter/gamecenter";
     import type { Writable } from "svelte/store";
 
     export let favorites: Writable<number[]>;
@@ -8,7 +8,7 @@
     $: favorite = $favorites.includes(gamecenterOrder);
 
     async function addFavorite() {
-        const response = await GamecenterRequestor.addFavorite(gamecenterOrder);
+        const response = await gamecenterRequestor.addFavorite({gamecenterOrder});
 
         if (response.status === "success") {
             if(!favorite){
@@ -18,7 +18,7 @@
     }
 
     async function deleteFavorite() {
-        const response = await GamecenterRequestor.deleteFavorite(gamecenterOrder);
+        const response = await gamecenterRequestor.deleteFavorite({gamecenterOrder});
 
         if (response.status === "success") {
             if(favorite){

@@ -5,7 +5,7 @@
     import KakaoMapAsideContentFavorites from "./KakaoMapAsideContentFavorites.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { getLang } from "$lib/module/common/i18n/i18n";
-    import { GamecenterRequestor } from "$lib/module/page/gamecenter/gamecenter";
+    import { gamecenterRequestor } from "$lib/module/page/gamecenter/gamecenter";
     import { writable } from "svelte/store";
     import getKakaoMap from "$lib/module/page/gamecenter/kakao.client";
 
@@ -93,7 +93,7 @@
             context,
         });
 
-        GamecenterRequestor.getFavorties().then((response) => {
+        gamecenterRequestor.getFavorites().then((response) => {
             if (response.status === "success") {
                 $favorites = response.data;
             }

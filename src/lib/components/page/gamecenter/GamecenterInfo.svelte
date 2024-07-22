@@ -21,6 +21,11 @@
 
     const user: Writable<{ logined: boolean; nickname: string }> =
         getContext("user");
+
+    const today = new Date().getDay();
+
+    let showOtherDayBusinessHours = false;
+    let showMachines = false;
 </script>
 
 <div class="container" on:click={clickHandle} role="presentation">
@@ -38,6 +43,51 @@
                 </span>
             </div>
         {/each}
+    </div>
+    <div class="machines-container">
+        <div class="machines-opener" on:click|stopPropagation={() => {showMachines = !showMachines}} role="presentation" class:hidden={!showMachines}>
+            기체 정보
+        </div>
+        <table class="machines" class:hidden={!showMachines}>
+            <tr>
+                <th>
+                    가격
+                </th>
+                <th>
+                    튠
+                </th>
+                <th>
+                    개수
+                </th>
+            </tr>
+            {#each gamecenterData.machines as machine}
+                <tr>
+                    <td>
+                        {machine.price}원
+                    </td>
+                    <td>
+                        {machine.tunes}곡
+                    </td>
+                    <td>
+                        {machine.count}대
+                    </td>
+                </tr>
+            {/each}
+        </table>
+    </div>
+    <div class="hours-container">
+        <div class="today" on:click|stopPropagation={() => {showOtherDayBusinessHours = !showOtherDayBusinessHours}} role="presentation" class:hidden={!showOtherDayBusinessHours}>
+            <span>
+                ({i18n.date[today]}) {gamecenterData.businessHours[today]}
+            </span>
+        </div>
+        <div class="other-day" class:shown={showOtherDayBusinessHours}>
+            {#each [0,1,2,3,4,5,6] as day}
+                <div>
+                    ({i18n.date[day]}) {gamecenterData.businessHours[day]}
+                </div>
+            {/each}
+        </div>
     </div>
     <div class="distance-container">
         <div class="distance">
@@ -118,6 +168,53 @@
     .amenity[data-theme="dark"] {
         background-color: #1c1c1c;
         border-color: rgba(0, 0, 0, 0);
+    }
+
+    .today{
+        width: 100%;
+        display:flex;
+        justify-content: space-between;
+        font-size: 15px;
+    }
+    .today::after{
+        content: '▲';
+    }
+    .today.hidden::after{
+        content: '▼';
+    }
+    .other-day{
+        display:none;
+        flex-direction: column;
+
+        font-size: 13px;
+    }
+    .other-day.shown{
+        display:flex;
+    }
+
+    .machines-opener{
+        width: 100%;
+        display:flex;
+        justify-content: space-between;
+        font-size: 15px;
+    }
+    .machines-opener::after{
+        content: '▲';
+    }
+    .machines-opener.hidden::after{
+        content: '▼';
+    }
+    .machines{
+        width: 100%;
+        font-size: 15px;
+        border-collapse: collapse;
+    }
+    .machines.hidden{
+        display:none;
+    }
+    .machines td,th{
+        border: 1px solid gray;
+        text-align: center;
     }
 
     .distance-container {

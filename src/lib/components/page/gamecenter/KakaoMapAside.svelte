@@ -96,6 +96,9 @@
             {map}
         />
     </div>
+    <div>
+        <a href="/gamecenter/report">제보하기</a>
+    </div>
 </div>
 
 <style>

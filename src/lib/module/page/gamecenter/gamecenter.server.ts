@@ -66,6 +66,7 @@ export class GamecenterController {
             result.forEach((r: any) => {
                 r.amenity = JSON.parse(r.amenity);
                 r.machines = JSON.parse(r.machines);
+                r.businessHours = JSON.parse(r.businessHours)
             })
 
             return result as GameCenterData[];

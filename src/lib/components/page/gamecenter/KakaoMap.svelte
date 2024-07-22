@@ -21,7 +21,8 @@
             })) as any[];
 
             if (!result[0]) {
-                break;
+                console.warn(gamecenterData.name, "주소 검색 오류");
+                continue;
             }
 
             //marker 생성
@@ -80,6 +81,7 @@
     import { onDestroy, onMount } from "svelte";
     import KakaoMapAside from "./KakaoMapAside.svelte";
     import MarkerInfo from "./MarkerInfo.svelte";
+    import Loading from "$lib/components/common/Loading.svelte";
 
     //오락실
     export let gamecenterDatas: GameCenterData[];
@@ -92,7 +94,7 @@
             iw: kakao.maps.InfoWindow;
         }
     > = {};
-    let markerLoaded = false;
+    export let markerLoaded = false;
 
     //지도 관련 변수
     const kakaoMap = getKakaoMap();
@@ -107,6 +109,7 @@
     let setCenterToCurrentPosition: () => any = () => {};
 
     onMount(async () => {
+        mapContainer.style.display = "none";
         //지도 생성
         map = new kakaoMap.Map(mapContainer, {
             level: 12,
@@ -143,7 +146,7 @@
                 position: new kakaoMap.LatLng(x, y),
                 image: new kakaoMap.MarkerImage(
                     "/assets/icon/map/current.svg",
-                    new kakaoMap.Size(15, 15)
+                    new kakaoMap.Size(15, 15),
                 ),
                 zIndex: 100000,
             });
@@ -174,6 +177,11 @@
             );
 
             markerLoaded = true;
+
+            mapContainer.style.display = "block";
+            const center = map.getCenter();
+            map.relayout();
+            map.setCenter(center);
         })();
     });
 
@@ -182,6 +190,11 @@
     });
 </script>
 
+{#if !markerLoaded}
+    <div style="width: 100%;text-align: center;">
+        <Loading />
+    </div>
+{/if}
 <div class="map-container" bind:this={mapContainer}>
     <div class="button-container">
         {#if canUseGeolocation}
@@ -190,12 +203,18 @@
                 on:click={setCenterToCurrentPosition}
             />
         {/if}
-        <button class="map-button plus-button" on:click={() => {
-            map.setLevel(map.getLevel() - 1)
-        }}/>
-        <button class="map-button minus-button" on:click={() => {
-            map.setLevel(map.getLevel() + 1)
-        }}/>
+        <button
+            class="map-button plus-button"
+            on:click={() => {
+                map.setLevel(map.getLevel() - 1);
+            }}
+        />
+        <button
+            class="map-button minus-button"
+            on:click={() => {
+                map.setLevel(map.getLevel() + 1);
+            }}
+        />
     </div>
 
     {#if markerLoaded}
@@ -232,7 +251,7 @@
 
         cursor: pointer;
 
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
 
@@ -246,13 +265,13 @@
         background-repeat: no-repeat;
     }
 
-    .current-button{
+    .current-button {
         background-image: url("/assets/icon/map/goto-current.svg");
     }
-    .plus-button{
+    .plus-button {
         background-image: url("/assets/icon/map/plus.svg");
     }
-    .minus-button{
+    .minus-button {
         background-image: url("/assets/icon/map/minus.svg");
     }
 

@@ -110,15 +110,17 @@ export function useLang() {
     lang.subscribe((value) => {
         if (browser && typeof (window) !== "undefined") {
             window.localStorage.setItem('lang', value);
-            axios({
-                url: '/api/user/lang/set',
-                data: {
-                    lang: value
-                },
-                method: 'post'
-            }).catch((err) => {
-                console.log(err);
-            })
+            try {
+                axios({
+                    url: '/api/user/lang/set',
+                    data: {
+                        lang: value
+                    },
+                    method: 'post'
+                })
+            }catch(err){
+                console.warn(err);
+            }
         }
     })
 

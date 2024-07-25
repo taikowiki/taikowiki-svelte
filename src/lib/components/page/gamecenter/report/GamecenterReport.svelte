@@ -22,8 +22,6 @@
 
         const response = await gamecenterRequestor.report({gamecenterData});
 
-        console.log(response);
-
         if(response.status === "error"){
             alert('오류가 발생했습니다.');
             return;

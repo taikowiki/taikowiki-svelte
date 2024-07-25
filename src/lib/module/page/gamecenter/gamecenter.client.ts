@@ -29,6 +29,30 @@ const gamecenterRequestor = {
     })
 }
 
+const gamecenterAdminRequestor = {
+    edit: defineRequestHandler<{gamecenterData: GameCenterDataWithoutOrder}, void>({
+        method: 'post',
+        url: '/admin/api/gamecenter/edit'
+    }),
+    delete: defineRequestHandler<{order: number}, void>({
+        method: 'post',
+        url: '/admin/api/gamecenter/delete'
+    }),
+    add: defineRequestHandler<{gamecenterData: GameCenterDataWithoutOrder}, void>({
+        method: 'post',
+        url: '/admin/api/gamecenter/add'
+    }),
+    approve: defineRequestHandler<{order:number}, void>({
+        method: 'post',
+        url: '/admin/api/gamecenter/approve'
+    }),
+    disapprove: defineRequestHandler<{order:number}, void>({
+        method: 'post',
+        url: '/admin/api/gamecenter/disapprove'
+    })
+}
+
 export {
-    gamecenterRequestor
+    gamecenterRequestor,
+    gamecenterAdminRequestor
 }

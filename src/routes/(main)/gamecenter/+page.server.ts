@@ -2,6 +2,6 @@ import { GamecenterController } from "$lib/module/page/gamecenter/gamecenter.ser
 
 export async function load() {
     return {
-        gamecenterDatas: await GamecenterController.getGamecenters()
+        gamecenterDatas: await GamecenterController.getAll()
     }
 }

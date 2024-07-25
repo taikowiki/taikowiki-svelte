@@ -59,7 +59,7 @@
         </tr>
         <tr
             class:different={compare?.bpm === true ||
-                compare.bpmShiver === true}
+                compare?.bpmShiver === true}
         >
             <td> BPM </td>
             <td>

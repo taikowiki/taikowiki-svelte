@@ -15,7 +15,7 @@
             <CourseEditor
                 {difficulty}
                 bind:course={courses[difficulty]}
-                compare={compare.courses?.[difficulty]}
+                compare={compare?.courses?.[difficulty]}
             />
         {/each}
     </table>

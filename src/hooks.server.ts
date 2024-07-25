@@ -26,7 +26,9 @@ const provider = {
 const authHandle = auth(Object.values(provider), {
     key: process.env.AUTH_KEY ?? '',
     maxAge: 3600 * 24 * 7,
-    autoRefreshMaxAge: true
+    autoRefreshMaxAge: true,
+    withCredentials: true
+
 })
 
 const getUserData: Handle = async ({ event, resolve }) => {
@@ -58,7 +60,7 @@ const checkPermission = checkPermissions([
     }
 ])
 
-const cors = allowOrigin(["https://donderhiroba.jp"]);
+const cors = allowOrigin(["https://donderhiroba.jp"], { credentials: true });
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);

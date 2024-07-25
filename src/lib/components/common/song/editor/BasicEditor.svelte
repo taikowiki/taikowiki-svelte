@@ -3,6 +3,7 @@
 
     export let songNo: string;
     export let type: 'edit'|'new' = 'new';
+    export let isAdmin: boolean;
 </script>
 
 <TitledContainer title="곡 번호" color="#cf4844">
@@ -10,7 +11,7 @@
         <tr>
             <td> 곡 번호 </td>
             <td class="title">
-                <input type="text" bind:value={songNo} disabled={type === 'edit'}/>
+                <input type="text" bind:value={songNo} disabled={type === 'edit' && !isAdmin}/>
             </td>
         </tr>
     </table>

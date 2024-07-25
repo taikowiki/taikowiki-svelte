@@ -20,7 +20,7 @@ export default class UserController {
 
             const r = await run(`INSERT INTO \`user/data\` (\`provider\`, \`providerId\`, \`nickname\`, \`UUID\`, \`registerTime\`, \`grade\`, \`providerUserData\`) VALUES (?, ?, ?, ?, ?, ?, ?)`, [userData.provider, userData.providerId, userData.nickname, userData.UUID, userData.registerTime, userData.grade, userData.providerUserData]);
 
-            return (await run(`SELECT * FROM \`user/basic_data\` WHERE \`order\` = ?`, [r.insertId]) as UserData[])[0]
+            return (await run(`SELECT * FROM \`user/data\` WHERE \`order\` = ?`, [r.insertId]) as UserData[])[0]
         })
     }
 
@@ -56,8 +56,13 @@ export default class UserController {
 
     static async deleteUser(provider: string, providerId: string) {
         return await runQuery(async (run) => {
+            const data = await this.getData(provider, providerId);
+            if(!data){
+                return;
+            }
+            const UUID = data.UUID;
             await run(`DELETE FROM \`user/data\` WHERE \`provider\` = ? AND \`providerId\` = ?;`, [provider, providerId]);
-            await run(`DELETE FROM \`user/basic_data\` WHERE \`provider\` = ? AND \`providerId\` = ?;`, [provider, providerId]);
+            await run("DELETE FROM `user/gamecenter_favorites` WHERE `UUID` = ?", [UUID]);
         })
     }
 

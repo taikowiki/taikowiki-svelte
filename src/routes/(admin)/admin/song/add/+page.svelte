@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import axios from "axios";
-    async function upload(songData: Partial<SongData>) {
+    async function upload(songNo:string, songData: Partial<SongData>) {
         if (!songData.title || !songData.songNo) {
             alert("곡 번호와 제목을 입력해주세요.");
             return;
@@ -9,7 +9,10 @@
             await axios({
                 method: "POST",
                 url: "/admin/api/song/upload",
-                data: songData,
+                data: {
+                    songNo,
+                    songData
+                },
             });
             alert("저장 성공");
         } catch (err) {
@@ -102,7 +105,7 @@
 
 <button
     on:click={() => {
-        upload(songData).then(() => {
+        upload(songData.songNo, songData).then(() => {
             goto("/admin/song");
         });
     }}

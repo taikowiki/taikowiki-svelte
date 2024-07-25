@@ -7,7 +7,8 @@ const ko: LangFile = {
             doc: '문서',
             newSong: '신곡',
             diffchart: '서열표',
-            dani: '단위도장'
+            dani: '단위도장',
+            gamecenter: '오락실'
         },
         'dedicated diffchart': {
             type: {
@@ -186,6 +187,29 @@ const ko: LangFile = {
         'error': {
             'New nickname is not in the correct format': '닉네임이 형식에 올바르지 않습니다.',
             'Duplicated Nickname': '이미 사용중인 닉네임입니다.'
+        }
+    },
+    '/gamecenter': {
+        'amenity': {
+            'water': '정수기',
+            'toilet': '화장실',
+            'park': '주차장',
+            'capture': '캡쳐보드',
+            'rental': '대여',
+            'night': '밤샘',
+            'atm': 'ATM',
+            'fan': '선풍기',
+            'mybachi': '마이바찌'
+        },
+        'date': {
+            "0": "일",
+            "1": "월",
+            "2": "화",
+            "3": "수",
+            "4": "목",
+            "5": "금",
+            "6": "토",
+            'ㅇㅇ': 'ㅇㅇ'
         }
     }
 }

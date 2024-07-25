@@ -21,6 +21,9 @@ function parseSongDataFromDB(songDataFromDB: any) {
 }
 
 export default class SongDB {
+    /**
+     * 곡 테이블 생성 함수
+     */
     static async createTable() {
         await runQuery(async (run) => {
             await run(`CREATE TABLE \`song\` (
@@ -48,6 +51,9 @@ export default class SongDB {
         })
     }
 
+    /**
+     * 모든 곡의 데이터를 가져옴.
+     */
     static async getAll(): Promise<SongData[]>
     static async getAll<T extends Partial<SongData> = Partial<SongData>>(columns: string[]): Promise<T[]>
     static async getAll(columns?: string[]) {
@@ -63,6 +69,9 @@ export default class SongDB {
         })
     }
 
+    /**
+     * 특정 시각 이후에 변경된 곡의 데이터를 가져옴
+     */
     static async getAfter(after: number): Promise<SongData[]> {
         return await runQuery(async (run) => {
             const result = await run("SELECT `songNo` FROM `song/log` WHERE `updatedTime` >= ?", [after]);
@@ -73,6 +82,9 @@ export default class SongDB {
         })
     }
 
+    /**
+     * 해당 songNo에 대한 곡의 데이터를 가져옴
+     */
     static async getBySongNo(songNo: string): Promise<SongData | null>;
     static async getBySongNo(songNos: string[]): Promise<SongData[]>;
     static async getBySongNo<T extends Partial<SongData> = Partial<SongData>>(songNo: string, columns: string[]): Promise<T | null>;
@@ -102,6 +114,9 @@ export default class SongDB {
         }
     }
 
+    /**
+     * 곡을 검색하는 함수
+     */
     static async search(page: number | null, option?: SongSearchOption): Promise<{
         songs: (SongData & { order: number })[],
         count: number
@@ -144,6 +159,9 @@ export default class SongDB {
         })
     }
 
+    /**
+     * 곡 추가
+     */
     static async addSong(data: SongData) {
         return await runQuery(async (run) => {
             return await run(`INSERT INTO \`song\` (
@@ -184,6 +202,9 @@ export default class SongDB {
         })
     }
 
+    /**
+     * 최근 업데이트 시각을 가져옴
+     */
     static async getUpdateTime(): Promise<number> {
         let result = await runQuery(async (run) => {
             return run(`SELECT \`UPDATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
@@ -194,6 +215,9 @@ export default class SongDB {
         return updateTime;
     }
 
+    /**
+     * 테이블 생성 시각을 가져옴
+     */
     static async getCreateTime(): Promise<number> {
         let result = await runQuery(async (run) => {
             return run(`SELECT \`CREATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
@@ -204,6 +228,9 @@ export default class SongDB {
         return updateTime;
     }
 
+    /**
+     * 최근 추가된 곡들을 가져옴
+     */
     static async getNewSongs(limit: number = 3): Promise<SongData[]> {
         return await runQuery(async (run) => {
             let result = await run(`SELECT * FROM \`song\` ORDER BY \`addedDate\` DESC LIMIT ${limit}`);
@@ -212,14 +239,18 @@ export default class SongDB {
         })
     }
 
-    static async uploadSong(songData: SongData) {
-        const song = await this.getBySongNo(songData.songNo);
+    /**
+     * 곡을 업데이트함
+     */
+    static async uploadSong(songNo: string, songData: SongData) {
+        const song = await this.getBySongNo(songNo);
         return await runQuery(async (run) => {
             if (song === null) {
                 await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])
             }
             else {
-                await run("UPDATE `song` SET `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songData.songNo])
+                console.log(songNo, songData.songNo)
+                await run("UPDATE `song` SET `songNo` = ?, `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songNo])
             }
 
             await run("INSERT INTO `song/log` (`songNo`, `before`, `after`, `updatedTime`) VALUES (?, ?, ?, ?)", [songData.songNo, song ? JSON.stringify(song) : null, JSON.stringify(songData), Date.now()]);
@@ -228,6 +259,9 @@ export default class SongDB {
 }
 
 export class SongRequestController {
+    /**
+     * 모든 요청 가져오기
+     */
     static async getAll(status?: SongRequest['status']): Promise<(SongRequest & { order: number })[]> {
         return await runQuery(async (run) => {
             if (status) {
@@ -245,6 +279,9 @@ export class SongRequestController {
         })
     }
 
+    /**
+     * 해당 songNo에 대한 요청 가져오기
+     */
     static async getRequestsBySongNo(songNo: string, status?: SongRequest['status']): Promise<(SongRequest & { order: number })[]> {
         return await runQuery(async (run) => {
             if (status) {
@@ -262,6 +299,9 @@ export class SongRequestController {
         })
     }
 
+    /**
+     * 해당 order에 대한 요청 가져오기
+     */
     static async getRequestByOrder(order: number, status?: SongRequest['status']): Promise<(SongRequest & { order: number }) | null> {
         return await runQuery(async (run) => {
             let result
@@ -280,6 +320,9 @@ export class SongRequestController {
         })
     }
 
+    /**
+     * 요청 생성하기
+     */
     static async createRequest(request: {
         UUID: string;
         songNo: string;
@@ -300,16 +343,22 @@ export class SongRequestController {
         }
     }
 
-    static async approve(order: number) {
+    /**
+     * 요청 수락하기
+     */
+    static async approve(order: number, editedData?: SongData) {
         const songRequest = await this.getRequestByOrder(order)
         if (!songRequest) return;
         const { data } = songRequest;
-        await SongDB.uploadSong(data);
+        await SongDB.uploadSong(songRequest.songNo, editedData ?? data);
         return await runQuery(async (run) => {
             await run("UPDATE `song/request` SET `status` = 'approved' WHERE `order` = ?", [order])
         })
     }
 
+    /** 
+     * 요청 거절하기
+    */
     static async disapprove(order: number | number[]) {
         return await runQuery(async (run) => {
             if (Array.isArray(order)) {
@@ -321,6 +370,9 @@ export class SongRequestController {
         })
     }
 
+    /**
+     * 요청 삭제하기
+     */
     static async removeRequest(order: number) {
         return await runQuery(async (run) => {
             return await run("DELETE FROM `song/request` WHERE `order` = ?", [order]);

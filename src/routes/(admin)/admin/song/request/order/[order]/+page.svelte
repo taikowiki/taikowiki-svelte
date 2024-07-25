@@ -1,11 +1,12 @@
 <script lang="ts" context="module">
     import axios from "axios";
-    async function approve(request: any & { order: number }) {
+    async function approve(request: any & { order: number }, songData:SongData) {
         try {
             await axios({
                 method: "post",
                 data: {
                     order: request.order,
+                    songData
                 },
                 url: "/admin/api/song/approve",
             });
@@ -37,6 +38,7 @@
     import { goto } from "$app/navigation";
     import AdminRequestEditor from "$lib/components/page/admin/song/request/order/[order]/admin-RequestEditor.svelte";
     import compareSong from "$lib/module/common/song/compare-song";
+    import type { SongData } from "$lib/module/common/song/types.js";
 
     export let data;
 
@@ -73,14 +75,13 @@
 
 <AdminRequestEditor
     bind:songData={request.data}
-    type={request.type}
     {compare}
 />
 
 <div class="button-container">
     <button
         on:click={() => {
-            approve(request);
+            approve(request, request.data);
         }}
     >
         수락

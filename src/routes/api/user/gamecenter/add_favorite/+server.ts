@@ -1,4 +1,4 @@
-import { GamecenterController } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import { GamecenterController } from '$lib/module/page/gamecenter/gamecenter.server';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request, locals}){

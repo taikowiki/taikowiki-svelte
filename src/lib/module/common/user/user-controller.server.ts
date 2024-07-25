@@ -56,7 +56,13 @@ export default class UserController {
 
     static async deleteUser(provider: string, providerId: string) {
         return await runQuery(async (run) => {
+            const data = await this.getData(provider, providerId);
+            if(!data){
+                return;
+            }
+            const UUID = data.UUID;
             await run(`DELETE FROM \`user/data\` WHERE \`provider\` = ? AND \`providerId\` = ?;`, [provider, providerId]);
+            await run("DELETE FROM `user/gamecenter_favorites` WHERE `UUID` = ?", [UUID]);
         })
     }
 

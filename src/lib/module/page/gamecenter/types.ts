@@ -13,11 +13,13 @@ export interface GameCenterData{
         5: string;
         6: string;
         0: string;
-        [date: number]: string;
+        [day: number]: string;
     }
     machines: Machine[];
     region: typeof GAMECENTERREGION[number];
 }
+
+export type GameCenterDataWithoutOrder = Pick<GameCenterData, Exclude<keyof GameCenterData, 'order'>>
 
 export interface Machine{
     price: number;

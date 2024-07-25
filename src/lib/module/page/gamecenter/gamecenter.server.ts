@@ -1,5 +1,5 @@
 import { runQuery } from "@sveltekit-board/db";
-import type { GameCenterData } from "./types";
+import type { GameCenterData, GameCenterDataWithoutOrder } from "./types";
 
 export class GamecenterController {
     /**
@@ -62,7 +62,7 @@ export class GamecenterController {
      */
     static async getGamecenters(run?: any): Promise<GameCenterData[]> {
         const queryCallback = async (run: any) => {
-            const result = await run("SELECT * FROM `gamecenter`");
+            const result = await run("SELECT * FROM `gamecenter/data`");
             result.forEach((r: any) => {
                 r.amenity = JSON.parse(r.amenity);
                 r.machines = JSON.parse(r.machines);
@@ -83,9 +83,9 @@ export class GamecenterController {
     /**
      * 오락실 데이터 추가
      */
-    static async addGamecenter(gamecenterData: GameCenterData, run?: any) {
+    static async addGamecenter(gamecenterData: GameCenterDataWithoutOrder, run?: any) {
         const queryCallback = async (run: any) => {
-            await run("INSERT INTO `gamecenter` (`name`, `address`, `amenity`, `machines`, `region`) VALUES (?, ?, ?, ?, ?)", [gamecenterData.name, gamecenterData.address, JSON.stringify(gamecenterData.amenity), JSON.stringify(gamecenterData.machines), gamecenterData.region])
+            await run("INSERT INTO `gamecenter/data` (`name`, `address`, `amenity`, `machines`, `region`) VALUES (?, ?, ?, ?, ?)", [gamecenterData.name, gamecenterData.address, JSON.stringify(gamecenterData.amenity), JSON.stringify(gamecenterData.machines), gamecenterData.region])
         }
 
         if (run) {
@@ -101,7 +101,7 @@ export class GamecenterController {
      */
     static async deleteGamecenter(order: number, run?: any) {
         const queryCallback = async (run: any) => {
-            await run("DELETE FROM `gamecenter` WHERE `order` = ?", [order]);
+            await run("DELETE FROM `gamecenter/data` WHERE `order` = ?", [order]);
         }
 
         if (run) {
@@ -110,5 +110,14 @@ export class GamecenterController {
         else {
             return await runQuery(queryCallback);
         }
+    }
+
+    /**
+     * 오락실 제보 넣기
+     */
+    static async addReport(data: {gamecenterData: GameCenterDataWithoutOrder;UUID:string, ip:string}){
+        return await runQuery(async(run) => {
+            await run("INSERT INTO `gamecenter/report` (`UUID`, `ip`, `data`) VALUES (?, ?, ?)", [data.UUID, data.ip, JSON.stringify(data.gamecenterData)]);
+        })
     }
 }

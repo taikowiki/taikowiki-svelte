@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { gamecenterRequestor } from "$lib/module/page/gamecenter/gamecenter";
+    import { gamecenterRequestor } from "$lib/module/page/gamecenter/gamecenter.client";
     import type { Writable } from "svelte/store";
 
     export let favorites: Writable<number[]>;

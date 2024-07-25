@@ -28,12 +28,12 @@
     <div
         style={`width: 100%;display:flex;${
             course.images.length === 0
-                ? "height:calc(170px / 4 * 3);"
-                : "height: 102px;"
+                ? "min-height:calc(170px / 4 * 3);"
+                : "min-height: 102px;"
         }`}
     >
         <table data-theme={$theme}>
-            <tr>
+            <tr class={course.images.length ? 'no-image' : 'has-image'}>
                 <td> 최대 노트 수 </td>
                 <td>
                     {course.maxCombo}
@@ -43,7 +43,7 @@
                     {course.isBranched ? "O" : "X"}
                 </td>
             </tr>
-            <tr>
+            <tr class={course.images.length ? 'no-image' : 'has-image'}>
                 <td>최대 풍선 수</td>
                 <td>
                     <div
@@ -93,7 +93,7 @@
                     {/if}
                 </td>
             </tr>
-            <tr>
+            <tr class={course.images.length ? 'no-image' : 'has-image'}>
                 <td>최대 밀도</td>
                 <td>
                     {course.maxDensity} 타/초
@@ -111,7 +111,7 @@
                 class="dani-opener"
                 style={course.images.length === 0
                     ? "height:calc(170px / 4 - 2px);"
-                    : "height: 32px;"}
+                    : "height: 32.5px;"}
                 class:opened={daniOpened}
                 role="presentation"
                 on:click={() => {
@@ -158,10 +158,18 @@
     table {
         flex: 1 0 auto;
         border-collapse: collapse;
+        max-width: 100%;
+    }
+
+    tr.has-image{
+        min-height: calc(170px / 3);
+    }
+    tr.no-image{
+        min-height: 34px;
     }
 
     td {
-        width: 25%;
+        width: 25% !important;
         text-align: center;
         border: 1px solid #cf4844;
         box-sizing: border-box;

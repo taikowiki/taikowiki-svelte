@@ -22,17 +22,23 @@ export class GamecenterController {
      */
     static async addFavorite(UUID: string, gamecenterOrder: number) {
         return await runQuery(async (run) => {
-            const result = await run("SELECT * FROM `user/gamecenter_favorites` WHERE `UUID` = ?", [UUID]);
+            const favoritesResult = await run("SELECT * FROM `user/gamecenter_favorites` WHERE `UUID` = ?", [UUID]);
 
-            if (result.length === 0) {
-                return await run("INSERT INTO `user/gamecenter_favorites` (`UUID`, `favorites`) VALUES (?, ?)", [UUID, JSON.stringify([gamecenterOrder])]);
+            if (favoritesResult.length === 0) {
+                const result = await run("INSERT INTO `user/gamecenter_favorites` (`UUID`, `favorites`) VALUES (?, ?)", [UUID, JSON.stringify([gamecenterOrder])]);
+                if(result.affectedRows > 0){
+                    await run("UPDATE `gamecenter/data` SET `favoriteCount` = `favoriteCount` + 1 WHERE `order` = ?", [gamecenterOrder])
+                }
             }
             else {
-                const favorites: number[] = JSON.parse(result[0].favorites);
+                const favorites: number[] = JSON.parse(favoritesResult[0].favorites);
                 if (favorites.includes(gamecenterOrder)) {
                     return;
                 }
-                return await run("UPDATE `user/gamecenter_favorites` SET `favorites` = ? WHERE `UUID` = ?", [JSON.stringify([...favorites, gamecenterOrder]), UUID]);
+                const result = await run("UPDATE `user/gamecenter_favorites` SET `favorites` = ? WHERE `UUID` = ?", [JSON.stringify([...favorites, gamecenterOrder]), UUID]);
+                if(result.affectedRows > 0){
+                    await run("UPDATE `gamecenter/data` SET `favoriteCount` = `favoriteCount` + 1 WHERE `order` = ?", [gamecenterOrder])
+                }
             }
         })
     }
@@ -42,17 +48,20 @@ export class GamecenterController {
      */
     static async deleteFavorite(UUID: string, gamecenterOrder: number) {
         return await runQuery(async (run) => {
-            const result = await run("SELECT * FROM `user/gamecenter_favorites` WHERE `UUID` = ?", [UUID]);
+            const favoritesResult = await run("SELECT * FROM `user/gamecenter_favorites` WHERE `UUID` = ?", [UUID]);
 
-            if (result.length === 0) {
+            if (favoritesResult.length === 0) {
                 return;
             }
             else {
-                const favorites: number[] = JSON.parse(result[0].favorites);
+                const favorites: number[] = JSON.parse(favoritesResult[0].favorites);
                 if (!favorites.includes(gamecenterOrder)) {
                     return;
                 }
-                return await run("UPDATE `user/gamecenter_favorites` SET `favorites` = ? WHERE `UUID` = ?", [JSON.stringify(favorites.filter(e => e !== gamecenterOrder)), UUID]);
+                const result = await run("UPDATE `user/gamecenter_favorites` SET `favorites` = ? WHERE `UUID` = ?", [JSON.stringify(favorites.filter(e => e !== gamecenterOrder)), UUID]);
+                if(result.affectedRows > 0){
+                    await run("UPDATE `gamecenter/data` SET `favoriteCount` = IF( 0 > `favoriteCount` - 1, 0, `favoriteCount` - 1) WHERE `order` = ?", [gamecenterOrder])
+                }
             }
         })
     }

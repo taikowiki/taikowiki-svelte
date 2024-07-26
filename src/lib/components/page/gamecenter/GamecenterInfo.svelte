@@ -45,20 +45,21 @@
         {/each}
     </div>
     <div class="machines-container">
-        <div class="machines-opener" on:click|stopPropagation={() => {showMachines = !showMachines}} role="presentation" class:hidden={!showMachines}>
+        <div
+            class="machines-opener"
+            on:click|stopPropagation={() => {
+                showMachines = !showMachines;
+            }}
+            role="presentation"
+            class:hidden={!showMachines}
+        >
             기체 정보
         </div>
         <table class="machines" class:hidden={!showMachines}>
             <tr>
-                <th>
-                    가격
-                </th>
-                <th>
-                    튠
-                </th>
-                <th>
-                    개수
-                </th>
+                <th> 가격 </th>
+                <th> 튠 </th>
+                <th> 개수 </th>
             </tr>
             {#each gamecenterData.machines as machine}
                 <tr>
@@ -76,13 +77,20 @@
         </table>
     </div>
     <div class="hours-container">
-        <div class="today" on:click|stopPropagation={() => {showOtherDayBusinessHours = !showOtherDayBusinessHours}} role="presentation" class:hidden={!showOtherDayBusinessHours}>
+        <div
+            class="today"
+            on:click|stopPropagation={() => {
+                showOtherDayBusinessHours = !showOtherDayBusinessHours;
+            }}
+            role="presentation"
+            class:hidden={!showOtherDayBusinessHours}
+        >
             <span>
                 ({i18n.date[today]}) {gamecenterData.businessHours[today]}
             </span>
         </div>
         <div class="other-day" class:shown={showOtherDayBusinessHours}>
-            {#each [0,1,2,3,4,5,6] as day}
+            {#each [0, 1, 2, 3, 4, 5, 6] as day}
                 <div>
                     ({i18n.date[day]}) {gamecenterData.businessHours[day]}
                 </div>
@@ -108,7 +116,12 @@
                 <FavoriteButton
                     {favorites}
                     gamecenterOrder={gamecenterData.order}
+                    favoriteCount={gamecenterData.favoriteCount}
                 />
+            {:else}
+                <div class="favorite-count">
+                    {gamecenterData.favoriteCount}
+                </div>
             {/if}
         </div>
     </div>
@@ -170,49 +183,50 @@
         border-color: rgba(0, 0, 0, 0);
     }
 
-    .today{
+    .today {
         width: 100%;
-        display:flex;
+        display: flex;
         justify-content: space-between;
         font-size: 15px;
     }
-    .today::after{
-        content: '▲';
+    .today::after {
+        content: "▲";
     }
-    .today.hidden::after{
-        content: '▼';
+    .today.hidden::after {
+        content: "▼";
     }
-    .other-day{
-        display:none;
+    .other-day {
+        display: none;
         flex-direction: column;
 
         font-size: 13px;
     }
-    .other-day.shown{
-        display:flex;
+    .other-day.shown {
+        display: flex;
     }
 
-    .machines-opener{
+    .machines-opener {
         width: 100%;
-        display:flex;
+        display: flex;
         justify-content: space-between;
         font-size: 15px;
     }
-    .machines-opener::after{
-        content: '▲';
+    .machines-opener::after {
+        content: "▲";
     }
-    .machines-opener.hidden::after{
-        content: '▼';
+    .machines-opener.hidden::after {
+        content: "▼";
     }
-    .machines{
+    .machines {
         width: 100%;
         font-size: 15px;
         border-collapse: collapse;
     }
-    .machines.hidden{
-        display:none;
+    .machines.hidden {
+        display: none;
     }
-    .machines td,th{
+    .machines td,
+    th {
         border: 1px solid gray;
         text-align: center;
     }
@@ -267,5 +281,18 @@
 
     .text {
         transform: translateY(-1px);
+    }
+
+    .favorite-count {
+        width: 8px;
+        height: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        transform: translateY(-1px);
+
+        font-size: 15px;
     }
 </style>

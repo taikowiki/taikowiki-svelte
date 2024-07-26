@@ -109,7 +109,9 @@
     let setCenterToCurrentPosition: () => any = () => {};
 
     onMount(async () => {
-        mapContainer.style.display = "none";
+        //오락실 마커 로딩 되면 지도 표시
+        //mapContainer.style.display = "none";
+
         //지도 생성
         map = new kakaoMap.Map(mapContainer, {
             level: 12,
@@ -178,10 +180,13 @@
 
             markerLoaded = true;
 
+            //오락실 마커 로딩 되면 지도 표시
+            /*
             mapContainer.style.display = "block";
             const center = map.getCenter();
             map.relayout();
             map.setCenter(center);
+            */
         })();
     });
 
@@ -190,11 +195,13 @@
     });
 </script>
 
+<!-- 오락실 마커 로딩 되면 지도 표시
 {#if !markerLoaded}
     <div style="width: 100%;text-align: center;">
         <Loading />
     </div>
 {/if}
+-->
 <div class="map-container" bind:this={mapContainer}>
     <div class="button-container">
         {#if canUseGeolocation}

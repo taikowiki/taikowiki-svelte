@@ -17,6 +17,7 @@ export interface GameCenterData{
     }
     machines: Machine[];
     region: typeof GAMECENTERREGION[number];
+    favoriteCount: number;
 }
 
 export type GameCenterDataWithoutOrder = Pick<GameCenterData, Exclude<keyof GameCenterData, 'order'>>

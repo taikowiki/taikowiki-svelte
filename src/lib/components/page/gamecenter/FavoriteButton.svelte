@@ -4,6 +4,7 @@
 
     export let favorites: Writable<number[]>;
     export let gamecenterOrder: number;
+    export let favoriteCount: number;
 
     $: favorite = $favorites.includes(gamecenterOrder);
 
@@ -14,6 +15,7 @@
             if(!favorite){
                 $favorites = [...$favorites, gamecenterOrder];
             }
+            favoriteCount = favoriteCount + 1;
         }
     }
 
@@ -24,6 +26,7 @@
             if(favorite){
                 $favorites = $favorites.filter(e => e !== gamecenterOrder);
             }
+            favoriteCount = Math.max(favoriteCount - 1, 0)
         }
     }
 </script>
@@ -40,6 +43,9 @@
     {:else}
         <img src="/assets/icon/map/favorite-off.svg" alt="favorite-off" />
     {/if}
+    <div class="favorite-count">
+        {favoriteCount}
+    </div>
 </div>
 
 <style>
@@ -48,7 +54,7 @@
         justify-content: center;
         align-items: center;
 
-        width: 20px;
+        width: 30px;
         height: 20px;
 
         box-sizing: border-box;
@@ -59,5 +65,18 @@
     img {
         width: 18px;
         height: 18px;
+    }
+
+    .favorite-count {
+        width: 12px;
+        height: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        transform: translateY(-1px);
+
+        font-size: 15px;
     }
 </style>

@@ -16,7 +16,7 @@ export async function load({ url }) {
     const songSearchResult = await songDBController.searchColumns(page, ["order", "songNo", "genre", "title", "titleKo", "aliasKo", "artists", "courses"], { query, difficulty, genre, level });
 
     return {
-        songs: songSearchResult.songs,
+        songs: songSearchResult.songs as SongDataPickedForSearch[],
         count: songSearchResult.count,
         pageNum: page,
         option: {

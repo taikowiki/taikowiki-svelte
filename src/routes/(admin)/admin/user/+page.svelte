@@ -1,20 +1,16 @@
 <script lang="ts" context="module">
-    import type { UserData } from "$lib/module/common/user/types.js";
-    import axios from "axios";
+    import { userAdminRequestor } from "$lib/module/common/user/user.client.js";
 
     async function setGrade(UUID: string, from: number, to: number) {
-        try {
-            await axios({
-                url: "/admin/api/user/set_grade",
-                data: {
-                    UUID,
-                    from,
-                    to,
-                },
-                method: "post",
-            });
+        const response = await userAdminRequestor.setGrade({
+            UUID,
+            from,
+            to,
+        });
+        if (response.status === "success") {
             alert("변경 성공");
-        } catch {
+        }
+        else {
             alert("변경 실패");
         }
     }

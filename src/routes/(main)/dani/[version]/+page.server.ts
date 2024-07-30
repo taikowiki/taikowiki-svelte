@@ -1,22 +1,26 @@
-import DaniDB from '$lib/module/common/dani/daniDB.server.js';
-import SongDB from '$lib/module/common/song/song.server.js';
-import type { SongDataPickedForDani } from '$lib/module/page/dani/types.js';
+import { daniDBController } from '$lib/module/common/dani/dani.server';
+import { songDBController } from '$lib/module/common/song/song.server';
+import type { SongDataPickedForDani } from '$lib/module/common/dani/types';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
-    const daniData = await DaniDB.getByVersion(params.version);
+    const daniData = await daniDBController.getByVersion(params.version);
 
     if (daniData === null) {
         throw error(404);
     }
 
     const songNos = new Set<string>();
+    if (!daniData) {
+        throw error(404);
+    }
+
     daniData.data.forEach(dani => {
         dani.songs.forEach(song => {
             songNos.add(song.songNo)
         })
     })
-    const songDatas = await SongDB.getBySongNo<SongDataPickedForDani>([...songNos], ["songNo", "genre", "title", "courses"])
+    const songDatas = await songDBController.getSongsColumnsBySongNo([...songNos], ["songNo", "genre", "title", "courses"]) as SongDataPickedForDani[]
 
     return {
         daniData,

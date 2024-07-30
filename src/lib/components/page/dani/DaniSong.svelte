@@ -23,7 +23,7 @@
         Difficulty,
     } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { SongDataPickedForDani } from "$lib/module/page/dani/types";
+    import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
 
     export let song: DaniSong;
     export let songDatas: SongDataPickedForDani[];

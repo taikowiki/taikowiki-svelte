@@ -1,7 +1,7 @@
-import { GamecenterController } from "$lib/module/page/gamecenter/gamecenter.server"
+import { gamecenterDBController } from "$lib/module/common/gamecenter/gamecenter.server"
 
 export async function load() {
     return {
-        gamecenterDatas: await GamecenterController.getAll()
+        gamecenterDatas: await gamecenterDBController.getAll()
     }
 }

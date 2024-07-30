@@ -1,6 +1,6 @@
-import { AMENITY, GAMECENTERREGION } from '$lib/module/page/gamecenter/const.js';
-import { GamecenterController } from '$lib/module/page/gamecenter/gamecenter.server.js';
-import type { GameCenterDataWithoutOrder } from '$lib/module/page/gamecenter/types.js';
+import { AMENITY, GAMECENTERREGION } from '$lib/module/common/gamecenter/const.js';
+import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import type { GameCenterDataWithoutOrder } from '$lib/module/common/gamecenter/types.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request }) {
@@ -16,7 +16,7 @@ export async function POST({ request }) {
             reason: 'Error in "address"'
         }));
     }
-    if (!("amenity" in requestData) || typeof (requestData.amenity) !== "object" || !AMENITY.every(amenity => {
+    if (!("amenity" in requestData) || typeof (requestData.amenity) !== "object" || !AMENITY.every((amenity: any) => {
         return amenity in (requestData.amenity as any) && typeof ((requestData.amenity as any)[amenity]) === "boolean"
     })) {
         throw error(400, JSON.stringify({
@@ -45,7 +45,7 @@ export async function POST({ request }) {
 
     const gamecenterData = requestData as GameCenterDataWithoutOrder
 
-    await GamecenterController.addGamecenter(gamecenterData)
+    await gamecenterDBController.addGamecenter(gamecenterData)
 
     return new Response();
 }

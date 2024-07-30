@@ -9,6 +9,7 @@
 </script>
 
 <script lang="ts">
+    //CSelect means 'Custom Select'
     import COption from "./COption.svelte";
 
     export let options: Option[];

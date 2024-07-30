@@ -1,7 +1,7 @@
-import SongDB from '$lib/module/common/song/song.server.js';
+import { songDBController } from '$lib/module/common/song/song.server';
 
-export async function load({params}){
-    return{
-        song: await SongDB.getBySongNo(params.songNo)
+export async function load({ params }) {
+    return {
+        song: await songDBController.getSongBySongNo(params.songNo)
     }
 }

@@ -13,7 +13,7 @@
     import type { Song,  SongScoreDetail } from "$lib/module/common/diffchart/types";
     import DiffchartSongMobile from "./DiffchartSongMobile.svelte";
     import DiffchartSongPc from "./DiffchartSongPc.svelte";
-    import type { SongDataPickedForDiffchart } from "$lib/module/page/diffchart/types";
+    import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
 
     export let song: Song;
     export let songs: SongDataPickedForDiffchart[];

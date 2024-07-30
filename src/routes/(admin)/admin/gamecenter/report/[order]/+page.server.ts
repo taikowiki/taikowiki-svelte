@@ -1,15 +1,15 @@
-import UserController from '$lib/module/common/user/user-controller.server.js';
-import { GamecenterController } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import {userDBController} from '$lib/module/common/user/user.server';
+import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server';
 import { error } from '@sveltejs/kit';
 
 export async function load({params}){
-    const report = await GamecenterController.getReportByOrder(Number(params.order));
+    const report = await gamecenterDBController.getReportByOrder(Number(params.order));
 
     if(!report){
         throw error(404);
     }
 
-    const nickname = await UserController.getNickname(report.UUID);
+    const nickname = await userDBController.getNickname(report.UUID);
 
     return {
         report,

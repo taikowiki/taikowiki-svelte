@@ -1,4 +1,4 @@
-import UserController from '$lib/module/common/user/user-controller.server.js';
+import { userDBController } from '$lib/module/common/user/user.server';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request, locals }) {
@@ -11,7 +11,7 @@ export async function POST({ request, locals }) {
     const { lang } = data;
     if (!lang) throw error(400);
 
-    await UserController.setLang(UUID, lang);
+    await userDBController.setLang(UUID, lang);
 
     return new Response();
 }

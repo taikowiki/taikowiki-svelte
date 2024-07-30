@@ -55,7 +55,7 @@
     import DiffchartSectionName from "./DiffchartSectionName.svelte";
     import DiffchartSong from "./DiffchartSong.svelte";
     import type { Difficulty } from "$lib/module/common/song/types";
-    import type { SongDataPickedForDiffchart } from "$lib/module/page/diffchart/types";
+    import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
 
     export let section: Section;
     export let songs: SongDataPickedForDiffchart[];

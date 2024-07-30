@@ -1,4 +1,4 @@
-import UserController from '$lib/module/common/user/user-controller.server.js';
+import { userDBController } from '$lib/module/common/user/user.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request, locals }) {
@@ -11,7 +11,7 @@ export async function POST({ request, locals }) {
         if (locals.userData.UUID !== data.UUID) return new Response(JSON.stringify({ status: 'fail', reason: 'UUID not matched' }));
 
         try {
-            await UserController.changeNickname(locals.userData.provider, locals.userData.providerId, data.newNickname);
+            await userDBController.changeNickname(locals.userData.provider, locals.userData.providerId, data.newNickname);
             return new Response(JSON.stringify({ status: 'success' }))
         }
         catch (err: any) {

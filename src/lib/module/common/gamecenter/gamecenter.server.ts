@@ -85,7 +85,7 @@ export const gamecenterDBController = {
     /**
      * Retrieves arcade data by order.
      */
-    getByOrder: defineDBHandler<[number], [GameCenterData | null]>((order) => {
+    getByOrder: defineDBHandler<[number], GameCenterData | null>((order) => {
         return async (run) => {
             const result = await run("SELECT * FROM `gamecenter/data` WHERE `order` = ?", [order])
 

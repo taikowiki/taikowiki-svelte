@@ -1,6 +1,6 @@
-import { AMENITY, GAMECENTERREGION } from '$lib/module/page/gamecenter/const.js';
-import { GamecenterController } from '$lib/module/page/gamecenter/gamecenter.server.js';
-import type { GameCenterDataWithoutOrder } from '$lib/module/page/gamecenter/types.js';
+import { AMENITY, GAMECENTERREGION } from '$lib/module/common/gamecenter/const.js';
+import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import type { GameCenterDataWithoutOrder } from '$lib/module/common/gamecenter/types.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({locals, request, getClientAddress}){
@@ -49,7 +49,7 @@ export async function POST({locals, request, getClientAddress}){
 
     const gamecenterData = requestData as GameCenterDataWithoutOrder
 
-    await GamecenterController.addReport({
+    await gamecenterDBController.addReport({
         gamecenterData,
         UUID: locals.userData.UUID,
         ip: getClientAddress()

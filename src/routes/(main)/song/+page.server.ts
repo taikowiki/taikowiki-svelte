@@ -1,6 +1,6 @@
-import SongDB from "$lib/module/common/song/song.server";
-import type { Difficulty, Genre } from "$lib/module/common/song/types.js";
-import type { SongDataPickedForSearch } from "$lib/module/page/song/types.js";
+import {songDBController} from "$lib/module/common/song/song.server";
+import type { Difficulty, Genre } from "$lib/module/common/song/types";
+import type { SongDataPickedForSearch } from "$lib/module/common/song/types";
 
 export async function load({ url }) {
     let page = Number(url.searchParams.get("page")) || 1;
@@ -13,7 +13,7 @@ export async function load({ url }) {
     let level: number | undefined = Number(url.searchParams.get('level'));
     if (isNaN(level) || level === 0) level = undefined;
 
-    const songSearchResult = await SongDB.search<SongDataPickedForSearch>(page, { query, difficulty, genre, level }, ["order", "songNo", "genre", "title", "titleKo", "aliasKo", "artists", "courses"]);
+    const songSearchResult = await songDBController.searchColumns(page, ["order", "songNo", "genre", "title", "titleKo", "aliasKo", "artists", "courses"], { query, difficulty, genre, level });
 
     return {
         songs: songSearchResult.songs,

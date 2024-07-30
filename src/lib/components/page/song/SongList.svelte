@@ -1,7 +1,7 @@
 <script lang="ts">
     import SongItem from "./SongItem.svelte";
     import type { SongLang } from "$lib/module/common/song/types";
-    import type { SongDataPickedForSearch } from "$lib/module/page/song/types";
+    import type { SongDataPickedForSearch } from "$lib/module/common/song/types";
 
     export let songLang: SongLang;
     export let songs: SongDataPickedForSearch[];

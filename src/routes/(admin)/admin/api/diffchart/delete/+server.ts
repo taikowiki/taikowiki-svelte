@@ -1,4 +1,4 @@
-import DiffchartDB from '$lib/module/common/diffchart/diffchart.server.js';
+import { diffchartDBController } from '$lib/module/common/diffchart/diffchart.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request }) {
@@ -8,7 +8,7 @@ export async function POST({ request }) {
     if (!data.type) throw error(400);
 
     try {
-        await DiffchartDB.deleteDiffchart(data.level, data.type);
+        await diffchartDBController.deleteDiffchart(data.level, data.type);
         return new Response();
     }
     catch (err) {

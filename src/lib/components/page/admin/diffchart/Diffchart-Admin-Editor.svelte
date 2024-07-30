@@ -1,32 +1,23 @@
 <script lang="ts" context="module">
     async function save(data: DiffchartData) {
-        try {
-            await axios({
-                method: "POST",
-                data,
-                url: "/admin/api/diffchart/upload",
-            });
+        const response = await diffchartRequestor.save(data)
+        if(response.status === 'success'){
             alert("저장 성공");
-        } catch (err) {
-            console.log(err);
+        }
+        else{
             alert("저장 에러");
         }
     }
 
     async function remove(level:number, type:string){
-        try {
-            await axios({
-                method: "POST",
-                data:{
-                    level,
-                    type
-                },
-                url: "/admin/api/diffchart/delete",
-            });
+        const response = await diffchartRequestor.remove({
+            level, type
+        })
+        if(response.status === 'success'){
             alert("삭제 성공");
             location.reload()
-        } catch (err) {
-            console.log(err);
+        }
+        else{
             alert("삭제 에러");
         }
     }
@@ -34,8 +25,8 @@
 
 <script lang="ts">
     import DIffchartEditor from "$lib/components/common/diffchart/DIffchart-Editor.svelte";
+    import { diffchartRequestor } from "$lib/module/common/diffchart/diffchart.client";
     import { type DiffchartData } from "$lib/module/common/diffchart/types";
-    import axios from "axios";
     export let diffchartData: DiffchartData;
 
     $: diffchartData.name = `${diffchartData.level} level ${diffchartData.type}`;

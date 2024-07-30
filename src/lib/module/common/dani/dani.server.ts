@@ -17,7 +17,7 @@ export const daniDBController = {
     /**
      * Retrieves all dani data for a specific version.
      */
-    getByVersion: defineDBHandler<[string], [DaniDBData | null]>((version) => {
+    getByVersion: defineDBHandler<[string], DaniDBData | null>((version) => {
         return async (run) => {
             const result = await run("SELECT * FROM `dani` WHERE `version` = ?", [version]);
             result.forEach((e: any) => {

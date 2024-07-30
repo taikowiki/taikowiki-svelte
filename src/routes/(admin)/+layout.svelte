@@ -9,6 +9,7 @@
     import { navigating, page } from "$app/stores";
     import { setContext } from "svelte";
     import { useLang } from "$lib/module/common/i18n/i18n.js";
+    import { userRequestor } from "$lib/module/common/user/user.client.js";
 
     export let data;
 
@@ -26,12 +27,11 @@
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);
     $: if (($navigating || $page.state) && browser) {
-        axios({
-            method: "get",
-            url: "/api/user",
-        }).then(({ data }) => {
-            user.set(data);
-        });
+        userRequestor.getUserData(null).then((response) => {
+            if(response.status === 'success'){
+                user.set(response.data);
+            }
+        })
     }
 </script>
 

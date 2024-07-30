@@ -11,7 +11,13 @@ export async function POST({ locals, request }) {
 
     const { grade } = locals.userData;
 
-    if (from >= grade || to >= grade) throw error(403);
+    const user = await userDBController.getData(UUID);
+
+    if(!user){
+        throw error(400);
+    }
+
+    if (user.grade >= grade || to >= grade) throw error(403);
 
     await userDBController.setGrade(UUID, to);
 

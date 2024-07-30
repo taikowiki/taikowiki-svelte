@@ -7,17 +7,15 @@ export async function POST({ request, locals }) {
         throw error(403, JSON.stringify({ status: 'fail', reason: 'Post data error' }));
     }
 
-    if (data && "UUID" in data && "newNickname" in data) {
-        if (locals.userData.UUID !== data.UUID) return new Response(JSON.stringify({ status: 'fail', reason: 'UUID not matched' }));
-
+    if (data && "newNickname" in data) {
         try {
-            await userDBController.changeNickname(locals.userData.provider, locals.userData.providerId, data.newNickname);
-            return new Response(JSON.stringify({ status: 'success' }))
+            await userDBController.changeNickname(locals.userData.UUID, data.newNickname);
+            return new Response()
         }
         catch (err: any) {
-            return new Response(JSON.stringify({ status: 'fail', reason: err.message }));
+            throw error(500)
         }
     }
 
-    return new Response(JSON.stringify({ status: 'fail', reason: 'Post data error' }));
+    throw error(400)
 }

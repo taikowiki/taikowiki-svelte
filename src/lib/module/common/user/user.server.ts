@@ -106,7 +106,7 @@ export const userDBController = {
      */
     getAll: defineDBHandler<[], (UserData & { order: number })[]>(() => {
         return async (run) => {
-            return await run("SELECT * FROM `user/data");
+            return await run("SELECT * FROM `user/data`");
         }
     }),
 

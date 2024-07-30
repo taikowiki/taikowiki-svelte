@@ -3,7 +3,7 @@ import { defineDBHandler } from "@yowza/db-handler";
 
 export const diffchartDBController = {
     /**
-     * 레벨에 따라 클리어 서열표 데이터를 가져옵니다.
+     * Retrieves the clear difficulty chart data by level.
      */
     getClearByLevel: defineDBHandler<[number], DiffChart | null>((level) => {
         return async (run) => {
@@ -16,7 +16,7 @@ export const diffchartDBController = {
         }
     }),
     /**
-     * 모든 서열표 데이터를 가져옵니다.
+     * Retrieves all difficulty chart data.
      */
     getAll: defineDBHandler<[], { name: string, level: number, type: string, data: DiffChart }[]>(() => {
         return async (run) => {
@@ -30,8 +30,8 @@ export const diffchartDBController = {
         }
     }),
     /**
-     * 서열표 데이터를 업로드합니다.
-     * 기존 서열표가 존재하면 업데이트하고, 존재하지 않으면 새로 생성합니다.
+     * Uploads difficulty chart data.
+     * Updates existing difficulty charts or creates new ones if they do not exist.
      */
     uploadDiffchart: defineDBHandler<[DiffchartData], void>((diffchartData) => {
         return async (run) => {
@@ -46,7 +46,7 @@ export const diffchartDBController = {
         }
     }),
     /**
-     * 서열표 데이터를 삭제합니다.
+     * Deletes difficulty chart data.
      */
     deleteDiffchart: defineDBHandler<[number, string], void>((level, type) => {
         return async (run) => {

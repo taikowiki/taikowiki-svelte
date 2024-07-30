@@ -3,28 +3,28 @@ import type { GameCenterDataWithoutOrder } from "./types";
 
 const gamecenterRequestor = {
     /**
-     * 즐겨찾기를 가져옵니다.
+     * Retrieves the list of favorites.
      */
     getFavorites: defineRequestHandler<null, number[]>({
         method: 'get',
         url: '/api/gamecenter/favorite'
     }),
     /**
-     * 즐겨찾기 추가를 요청합니다.
+     * Requests to add a favorite.
      */
     addFavorite: defineRequestHandler<{gamecenterOrder: number}, void>({
         method: 'post',
         url: '/api/gamecenter/add-favorite'
     }),
     /**
-     * 즐겨찾기 삭제를 요청합니다.
+     * Requests to delete a favorite.
      */
     deleteFavorite: defineRequestHandler<{gamecenterOrder: number}, void>({
         method: 'post',
         url: '/api/gamecenter/delete-favorite'
     }),
     /**
-     * 오락실 제보를 요청합니다.
+     * Requests to report a game center.
      */
     report: defineRequestHandler<{gamecenterData: GameCenterDataWithoutOrder}, void>({
         method: 'post',
@@ -34,35 +34,35 @@ const gamecenterRequestor = {
 
 const gamecenterAdminRequestor = {
     /**
-     * 오락실 데이터를 수정합니다.
+     * Edits game center data.
      */
     edit: defineRequestHandler<{gamecenterData: GameCenterDataWithoutOrder}, void>({
         method: 'post',
         url: '/admin/api/gamecenter/edit'
     }),
     /**
-     * 오락실 데이터를 삭제합니다.
+     * Deletes game center data.
      */
     delete: defineRequestHandler<{order: number}, void>({
         method: 'post',
         url: '/admin/api/gamecenter/delete'
     }),
     /**
-     * 오락실 데이터를 추가합니다.
+     * Adds game center data.
      */
     add: defineRequestHandler<{gamecenterData: GameCenterDataWithoutOrder}, void>({
         method: 'post',
         url: '/admin/api/gamecenter/add'
     }),
     /**
-     * 오락실 제보를 승인합니다.
+     * Approves game center reports.
      */
     approve: defineRequestHandler<{order:number}, void>({
         method: 'post',
         url: '/admin/api/gamecenter/approve'
     }),
     /**
-     * 오락실 제보를 거절합니다.
+     * Disapproves game center reports.
      */
     disapprove: defineRequestHandler<{order:number}, void>({
         method: 'post',

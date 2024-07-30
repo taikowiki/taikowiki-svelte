@@ -3,7 +3,7 @@ import { defineDBHandler } from "@yowza/db-handler";
 
 export const daniDBController = {
     /**
-     * 모든 단위 데이터를 가져옵니다.
+     * Retrieves all dani data.
      */
     getAll: defineDBHandler<[], DaniDBData[]>(() => {
         return async (run) => {
@@ -15,7 +15,7 @@ export const daniDBController = {
         }
     }),
     /**
-     * 특정 버전의 모든 단위 데이터를 가져옵니다.
+     * Retrieves all dani data for a specific version.
      */
     getByVersion: defineDBHandler<[string], [DaniDBData | null]>((version) => {
         return async (run) => {
@@ -27,7 +27,7 @@ export const daniDBController = {
         }
     }),
     /**
-     * 버전들을 가져옵니다.
+     * Retrieves versions.
      */
     getVersions: defineDBHandler<[], string[]>(() => {
         return async (run) => {

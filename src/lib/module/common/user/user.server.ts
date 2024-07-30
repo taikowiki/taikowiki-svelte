@@ -5,7 +5,7 @@ import groupBy from "object.groupby";
 
 export const userDBController = {
     /**
-     * 유저 데이터를 생성합니다.
+     * Create user data.
      */
     createData: defineDBHandler<[string, string, object], UserData>((provider, providerId, providerUserData) => {
         return async (run) => {
@@ -28,7 +28,7 @@ export const userDBController = {
     }),
 
     /**
-     * provider와 providerId를 통해 유저데이터를 가져옵니다.
+     * Retrieve user data by provider.
      */
     getDataByProvider: defineDBHandler<[string, string], UserData | null>((provider, providerId) => {
         return async (run) => {
@@ -45,8 +45,9 @@ export const userDBController = {
             return null;
         }
     }),
+
     /**
-     * 특정 UUID의 유저데이터를 가져옵니다.
+     * Retrieve user data by specific UUID.
      */
     getData: defineDBHandler<[string], UserData | null>((UUID) => {
         return async (run) => {
@@ -65,7 +66,7 @@ export const userDBController = {
     }),
 
     /**
-     * 특정 UUID의 닉네임을 가져옵니다.
+     * Retrieve the nickname of a specific UUID.
      */
     getNickname: defineDBHandler<[string], string | null>((UUID) => {
         return async (run) => {
@@ -74,7 +75,7 @@ export const userDBController = {
     }),
 
     /**
-     * 특정 UUID의 닉네임을 변경합니다.
+     * Change the nickname of a specific UUID.
      */
     changeNickname: defineDBHandler<[string, string], void>((UUID, newNickname) => {
         if (!/^([a-zA-Z가-힣0-9\-]*)$/.test(newNickname)) throw new Error('New nickname is not in the correct format');
@@ -85,7 +86,7 @@ export const userDBController = {
     }),
 
     /**
-     * 특정 UUID의 유저를 삭제합니다.
+     * Delete a user by specific UUID.
      */
     deleteUser: defineDBHandler<[string], void>((UUID) => {
         return async (run) => {
@@ -101,15 +102,16 @@ export const userDBController = {
     }),
 
     /**
-     * 모든 유저 데이터를 가져옵니다.
+     * Retrieve all user data.
      */
     getAll: defineDBHandler<[], (UserData & { order: number })[]>(() => {
         return async (run) => {
             return await run("SELECT * FROM `user/data");
         }
     }),
+
     /**
-     * 특정 등급 미만의 유저 데이터를 가져옵니다.
+     * Retrieve user data with grade below a specific level.
      */
     getAllUnderGrade: defineDBHandler<[number], (UserData & { order: number })[]>((grade) => {
         return async (run) => {
@@ -118,7 +120,7 @@ export const userDBController = {
     }),
 
     /**
-     * 특정 UUID의 등급을 설정합니다.
+     * Set the grade for a specific UUID user.
      */
     setGrade: defineDBHandler<[string, number], void>((UUID, grade) => {
         return async (run) => {
@@ -127,7 +129,7 @@ export const userDBController = {
     }),
 
     /**
-     * 특정 UUID의 언어를 설정합니다.
+     * Set the language for a specific UUID user.
      */
     setLang: defineDBHandler<[string, string], void>((UUID, lang) => {
         return async (run) => {
@@ -136,7 +138,7 @@ export const userDBController = {
     }),
 
     /**
-     * 특정 UUID의 언어를 가져옵니다.
+     * Retrieve the language of a specific UUID user.
      */
     getLang: defineDBHandler<[string], string | null>((UUID) => {
         return async (run) => {

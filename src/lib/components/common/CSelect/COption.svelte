@@ -1,4 +1,5 @@
 <script lang="ts">
+    //CSelect means 'Custom Option'
     import { type Option } from "./CSelect.svelte";
 
     export let selected: Option;

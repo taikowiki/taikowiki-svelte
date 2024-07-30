@@ -3,7 +3,7 @@ import { defineDBHandler } from "@yowza/db-handler";
 
 export const gamecenterDBController = {
     /**
-     * 특정 UUID 사용자의 오락실 즐겨찾기를 가져옵니다.
+     * Retrieves the arcade favorites for a specific UUID user.
      */
     getFavorites: defineDBHandler<[string], number[]>((UUID) => {
         return async (run) => {
@@ -18,7 +18,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 특정 UUID 사용자에 오락실 즐겨찾기를 추가합니다.
+     * Adds an arcade favorite for a specific UUID user.
      */
     addFavorite: defineDBHandler<[string, number], void>((UUID, gamecenterOrder) => {
         return async (run) => {
@@ -44,7 +44,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 즐겨찾기 삭제하기
+     * Deletes an arcade favorite.
      */
     deleteFavorite: defineDBHandler<[string, number], void>((UUID, gamecenterOrder) => {
         return async (run) => {
@@ -60,14 +60,14 @@ export const gamecenterDBController = {
                 }
                 const result = await run("UPDATE `user/gamecenter_favorites` SET `favorites` = ? WHERE `UUID` = ?", [JSON.stringify(favorites.filter(e => e !== gamecenterOrder)), UUID]);
                 if (result.affectedRows > 0) {
-                    await run("UPDATE `gamecenter/data` SET `favoriteCount` = IF( 0 > `favoriteCount` - 1, 0, `favoriteCount` - 1) WHERE `order` = ?", [gamecenterOrder])
+                    await run("UPDATE `gamecenter/data` SET `favoriteCount` = IF(0 > `favoriteCount` - 1, 0, `favoriteCount` - 1) WHERE `order` = ?", [gamecenterOrder])
                 }
             }
         }
     }),
 
     /**
-     * 오락실 데이터 전체 가져오기
+     * Retrieves all arcade data.
      */
     getAll: defineDBHandler<[], GameCenterData[]>(() => {
         return async (run) => {
@@ -83,7 +83,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 오락실 데이터 가져오기
+     * Retrieves arcade data by order.
      */
     getByOrder: defineDBHandler<[number], [GameCenterData | null]>((order) => {
         return async (run) => {
@@ -104,7 +104,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 오락실 이름, order만 가져오기
+     * Retrieves only the names and orders of all arcades.
      */
     getAllNames: defineDBHandler<[], Pick<GameCenterData, 'name' | 'order'>[]>(() => {
         return async (run) => {
@@ -113,7 +113,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 오락실 데이터 추가
+     * Adds arcade data.
      */
     addGamecenter: defineDBHandler<[GameCenterDataWithoutOrder], void>((gamecenterData) => {
         return async (run) => {
@@ -122,7 +122,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 오락실 데이터 수정
+     * Edits arcade data.
      */
     editGamecenter: defineDBHandler<[GameCenterData], void>((gamecenterData) => {
         return async (run) => {
@@ -131,7 +131,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 오락실 데이터 삭제
+     * Deletes arcade data.
      */
     deleteGamecenter: defineDBHandler<[number], void>((order) => {
         return async (run: any) => {
@@ -140,7 +140,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 오락실 제보 넣기
+     * Submits an arcade report.
      */
     addReport: defineDBHandler<[{ gamecenterData: GameCenterDataWithoutOrder; UUID: string, ip: string }], void>((data) => {
         return async (run) => {
@@ -149,7 +149,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 모든 제보 가져오기
+     * Retrieves all reports.
      */
     getReports: defineDBHandler<['none' | 'approved' | 'disapproved'], { order: number; UUID: string, ip: string, data: GameCenterDataWithoutOrder }[]>((status = 'none') => {
         return async (run) => {
@@ -164,7 +164,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 제보 가져오기
+     * Retrieves a report by order.
      */
     getReportByOrder: defineDBHandler<[number], { order: number; UUID: string, ip: string, data: GameCenterDataWithoutOrder } | null>((order) => {
         return async (run) => {
@@ -183,7 +183,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 제보 수락
+     * Approves a report.
      */
     approveRequest: defineDBHandler<[number], void>((order) => {
         return async (run) => {
@@ -199,7 +199,7 @@ export const gamecenterDBController = {
     }),
 
     /**
-     * 제보 거부
+     * Disapproves a report.
      */
     disapproveRequest: defineDBHandler<[number], void>((order) => {
         return async (run) => {

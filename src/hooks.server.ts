@@ -1,7 +1,7 @@
 import type { Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import auth, { providers } from '@sveltekit-board/oauth'
-import UserController from "$lib/module/common/user/user-controller.server";
+import { userDBController } from "$lib/module/common/user/user.server";
 
 import { config } from 'dotenv';
 import checkPermissions from "$lib/module/server/hooks/permissionCheck.server";
@@ -31,9 +31,9 @@ const authHandle = auth(Object.values(provider), {
 
 const getUserData: Handle = async ({ event, resolve }) => {
     if (event.locals.user) {
-        let userData = await UserController.getData(event.locals.user.provider, event.locals.user.providerId);
+        let userData = await userDBController.getDataByProvider(event.locals.user.provider, event.locals.user.providerId);
         if (!userData) {
-            userData = await UserController.setData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)
+            userData = await userDBController.createData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)
         }
         event.locals.userData = userData;
     }
@@ -58,7 +58,7 @@ const checkPermission = checkPermissions([
     }
 ])
 
-const cors = allowOrigin([]);
+const cors = allowOrigin(["https://donderhiroba.jp"], {credentials: true});
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);

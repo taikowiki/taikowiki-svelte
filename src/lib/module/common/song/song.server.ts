@@ -8,7 +8,7 @@ function regexEscape(str: string): string {
 }
 
 /**
- * db에서 불러온 songData를 SongData 타입에 맞게 파싱
+ * Parse songData fetched from the database to match the SongData type
  */
 function parseSongDataFromDB(songDataFromDB: any) {
     if (songDataFromDB.courses) songDataFromDB.courses = JSON.parse(songDataFromDB.courses)
@@ -21,7 +21,7 @@ function parseSongDataFromDB(songDataFromDB: any) {
 
 export const songDBController = {
     /**
-     * 곡 테이블 생성 함수
+     * Function to create the song table
      */
     createTable: defineDBHandler<[], void>(() => {
         return async (run) => {
@@ -51,7 +51,7 @@ export const songDBController = {
     }),
 
     /**
-     * 모든 곡의 데이터를 가져옵니다.
+     * Retrieve data of all songs.
      */
     getAll: defineDBHandler<[], SongData[]>(function () {
         let columnsQuery = '*';
@@ -64,7 +64,7 @@ export const songDBController = {
     }),
 
     /**
-     * 모든 곡의 데이터 중 특정 열만 가져옵니다.
+     * Retrieve data of specific columns for all songs.
      */
     getAllColumns: defineDBHandler<[string[]], Partial<SongData>[]>(function (columns) {
         const columnsQuery = columns.map(e => escapeId(e)).join(', ');
@@ -76,7 +76,7 @@ export const songDBController = {
     }),
 
     /**
-     * 특정 시각 이후에 변경된 곡의 데이터를 가져옵니다.
+     * Retrieve song data changed after a specific time.
      */
     getAfter: defineDBHandler<[number], SongData[]>((after) => {
         return async (run) => {
@@ -91,7 +91,7 @@ export const songDBController = {
     }),
 
     /**
-     * 해당 songNo에 대한 곡의 데이터를 가져옵니다.
+     * Retrieve data of a song by its songNo.
      */
     getSongBySongNo: defineDBHandler<[string], SongData | null>((songNo) => {
         return async (run) => {
@@ -102,7 +102,7 @@ export const songDBController = {
         }
     }),
     /**
-     * 해당 songNo에 대한 곡의 데이터 중 특정 열만 가져옵니다.
+     * Retrieve specific columns of a song by its songNo.
      */
     getSongColumnsBySongNo: defineDBHandler<[string, string[]], Partial<SongData> | null>((songNo, columns) => {
         return async (run) => {
@@ -113,7 +113,7 @@ export const songDBController = {
         }
     }),
     /**
-     * 해당 songNo들에 대한 곡의 데이터를 가져옵니다.
+     * Retrieve data of multiple songs by their songNos.
      */
     getSongsBySongNo: defineDBHandler<[string[]], SongData[]>((songNo) => {
         return async (run) => {
@@ -128,7 +128,7 @@ export const songDBController = {
         }
     }),
     /**
-     * 해당 songNo들에 대한 곡의 데이터 중 특정 열만 가져옵니다.
+     * Retrieve specific columns of multiple songs by their songNos.
      */
     getSongsColumnsBySongNo: defineDBHandler<[string[], string[]], Partial<SongData>[]>((songNo, columns) => {
         return async (run) => {
@@ -144,7 +144,7 @@ export const songDBController = {
     }),
 
     /**
-     * 곡 데이터를 검색하여 가져옵니다.
+     * Search and retrieve song data.
      */
     search: defineDBHandler<[number | null, SongSearchOption?], { songs: (SongData & { order: number })[], count: number }>((page, option) => {
         let sqlWhereQuery = "WHERE (1)";
@@ -178,7 +178,7 @@ export const songDBController = {
     }),
 
     /**
-    * 곡 데이터중 특정 열만 검색하여 가져옵니다.
+    * Retrieves specific columns of song data.
     */
     searchColumns: defineDBHandler<[number | null, string[], SongSearchOption?], { songs: Partial<(SongData & { order: number })>[], count: number }>((page, columns, option) => {
         let sqlWhereQuery = "WHERE (1)";
@@ -212,7 +212,7 @@ export const songDBController = {
     }),
 
     /**
-     * 곡을 추가합니다.
+     * Adds a song.
      */
     addSong: defineDBHandler<[SongData], void>((data) => {
         return async (run) => {
@@ -255,7 +255,7 @@ export const songDBController = {
     }),
 
     /**
-     * 최근 업데이트 시각을 가져옵니다.
+     * Retrieves the most recent update time.
      */
     getUpdateTime: defineDBHandler<[], number>(() => {
         return async (run) => {
@@ -266,7 +266,7 @@ export const songDBController = {
     }),
 
     /**
-     * 테이블 생성 시각을 가져옵니다.
+     * Retrieves the table creation time.
      */
     getCreateTime: defineDBHandler<[], number>(() => {
         return async (run) => {
@@ -279,7 +279,7 @@ export const songDBController = {
     }),
 
     /**
-     * 최근 추가된 곡들을 가져옵니다. 업데이트 시각 기준이 아닌 `addedDate` 열 기준입니다.
+     * Retrieves the most recently added songs based on the `addedDate` column, not the update time.
      */
     getNewSongs: defineDBHandler<[number], SongData[]>((limit = 3) => {
         return async (run) => {
@@ -290,7 +290,7 @@ export const songDBController = {
     }),
 
     /**
-     * 곡을 업데이트합니다.
+     * Updates a song.
      */
     uploadSong: defineDBHandler<[string, SongData], void>((songNo, songData) => {
         return async (run) => {
@@ -310,7 +310,7 @@ export const songDBController = {
 
 export const songRequestDBController = {
     /**
-     * 모든 요청 가져오기
+     * Retrieves all requests.
      */
     getAll: defineDBHandler<[SongRequest['status']?], (SongRequest & { order: number })[]>((status) => {
         return async (run) => {
@@ -330,7 +330,7 @@ export const songRequestDBController = {
     }),
 
     /**
-     * 특정 songNo에 대한 요청 가져오기
+     * Retrieves requests for a specific songNo.
      */
     getRequestsBySongNo: defineDBHandler<[string, SongRequest['status']?], (SongRequest & { order: number })[]>((songNo, status) => {
         return async (run) => {
@@ -350,7 +350,7 @@ export const songRequestDBController = {
     }),
 
     /**
-     * 해당 order에 대한 요청 가져오기
+     * Retrieves the request for a specific order.
      */
     getRequestByOrder: defineDBHandler<[number, SongRequest['status']?]>((order, status) => {
         return async (run) => {
@@ -371,7 +371,7 @@ export const songRequestDBController = {
     }),
 
     /**
-     * 요청 생성하기
+     * Create a song request
      */
     createRequest: defineDBHandler<[{ UUID: string; songNo: string; data: SongData; ip: string; }], void>((request) => {
         return async (run) => {
@@ -387,7 +387,7 @@ export const songRequestDBController = {
     }),
 
     /**
-     * 요청 수락하기
+     * Approve a song request
      */
     approve: defineDBHandler<[number, SongData?], void>((order, editedData) => {
         return async (run) => {
@@ -400,7 +400,7 @@ export const songRequestDBController = {
     }),
 
     /** 
-     * 요청 거절하기
+     * Disapprove a song request
     */
     disapprove: defineDBHandler<[number | number[]], void>((order) => {
         return async (run) => {
@@ -414,7 +414,7 @@ export const songRequestDBController = {
     }),
 
     /**
-     * 요청 삭제하기
+     * Delete a song request
      */
     removeRequest: defineDBHandler<[number], void>((order) => {
         return async (run) => {

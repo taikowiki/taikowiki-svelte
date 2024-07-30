@@ -7,6 +7,9 @@ function regexEscape(str: string): string{
     return r(str)
 }
 
+/**
+ * @deprecated
+ */
 export default function filter(songs: SongData[], option: SongSearchOption): SongData[] {
     let filteredSongs = [...songs];
 

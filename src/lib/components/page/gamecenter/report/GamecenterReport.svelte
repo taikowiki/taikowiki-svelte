@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import { goto } from "$app/navigation";
 
-    async function submit(gamecenterData: GameCenterDataWithoutOrder){
+    async function submit(gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount'>>){
         if(!gamecenterData.name){
             alert('이름을 입력해주세요.');
             return;
@@ -36,11 +36,11 @@
 
 <script lang="ts">
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import { AMENITY, GAMECENTERREGION } from "$lib/module/page/gamecenter/const";
-    import { gamecenterRequestor } from "$lib/module/page/gamecenter/gamecenter.client";
-    import type { GameCenterDataWithoutOrder } from "$lib/module/page/gamecenter/types";
+    import { AMENITY, GAMECENTERREGION } from "$lib/module/common/gamecenter/const";
+    import { gamecenterRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
+    import type { GameCenterDataWithoutOrder } from "$lib/module/common/gamecenter/types";
 
-    const gamecenterData: GameCenterDataWithoutOrder = {
+    const gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount'>> = {
         name: "",
         address: "",
         amenity: {

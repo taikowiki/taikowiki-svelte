@@ -3,8 +3,8 @@
     import {
         AMENITY,
         GAMECENTERREGION,
-    } from "$lib/module/page/gamecenter/const";
-    import type { GameCenterData, GameCenterDataWithoutOrder } from "$lib/module/page/gamecenter/types";
+    } from "$lib/module/common/gamecenter/const";
+    import type { GameCenterData, GameCenterDataWithoutOrder } from "$lib/module/common/gamecenter/types";
 
     export let gamecenterData: GameCenterDataWithoutOrder;
     export let submit: (gamecenterData: GameCenterDataWithoutOrder) => any;

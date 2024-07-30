@@ -1,3 +1,5 @@
+import type { SongData } from "$lib/module/common/song/types"
+
 export interface DaniSong{
     songNo: string;
     difficulty: "easy" | "normal" | "hard" | "oni" | "ura";
@@ -40,3 +42,5 @@ export interface DaniDBData {
     version: string;
     data: Dani[];
 }
+
+export type SongDataPickedForDani = Pick<SongData, "songNo"|"genre"|"title"|"courses">

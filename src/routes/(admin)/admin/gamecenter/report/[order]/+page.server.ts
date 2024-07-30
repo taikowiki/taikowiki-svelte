@@ -1,5 +1,5 @@
 import UserController from '$lib/module/common/user/user-controller.server.js';
-import { GamecenterController } from '$lib/module/page/gamecenter/gamecenter.server.js';
+import { GamecenterController } from '$lib/module/common/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function load({params}){

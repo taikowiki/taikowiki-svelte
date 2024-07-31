@@ -4,18 +4,13 @@
             alert("곡 번호와 제목을 입력해주세요.");
             return;
         }
-        try {
-            await axios({
-                method: "POST",
-                url: "/admin/api/song/upload",
-                data: {
-                    songNo,
-                    songData,
-                },
-            });
+        const response = await songAdminRequestor.uploadSong({
+            songNo,
+            songData,
+        });
+        if (response.status === "success") {
             alert("저장 성공");
-        } catch (err) {
-            console.log(err);
+        } else {
             alert("저장 실패");
         }
     }
@@ -28,6 +23,7 @@
     import type { SongData } from "$lib/module/common/song/types";
     import axios from "axios";
     import { page } from "$app/stores";
+    import { songA, songAdminRequestorsongAdminRequestor } from "$lib/module/common/song/song.client.js";
 
     export let data;
 </script>

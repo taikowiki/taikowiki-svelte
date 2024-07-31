@@ -31,7 +31,7 @@
 
 <script lang="ts">
     import type { Difficulty, Genre, SongData } from "$lib/module/common/song/types";
-    import filter from "$lib/module/page/song/filter";
+    import filter from "$lib/module/common/song/filter";
     import type { SongSearchOption } from "$lib/module/common/song/types";
     import SearchBox from "./SearchBox.svelte";
     import { page } from "$app/stores";

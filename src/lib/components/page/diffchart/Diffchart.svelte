@@ -26,7 +26,7 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { browser } from "$app/environment";
     import html2canvas from "html2canvas";
-    import type { SongDataPickedForDiffchart } from "$lib/module/page/diffchart/types";
+    import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
 
     export let diffChart: DiffChart;
     export let songs: SongDataPickedForDiffchart[];

@@ -1,7 +1,7 @@
-import DaniDB from "$lib/module/common/dani/daniDB.server";
+import { daniDBController } from "$lib/module/common/dani/dani.server";
 
-export async function load(){
+export async function load() {
     return {
-        versions: await DaniDB.getVersions()
+        versions: await daniDBController.getVersions()
     }
 }

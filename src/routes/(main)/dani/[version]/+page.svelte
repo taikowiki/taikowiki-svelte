@@ -1,6 +1,5 @@
 <script lang="ts">
     import DaniDisplay from "$lib/components/page/dani/DaniDisplay.svelte";
-    import { getIsMobile } from "$lib/module/layout/isMobile";
 
     export let data;
 

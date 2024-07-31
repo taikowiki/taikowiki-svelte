@@ -8,3 +8,10 @@
 
 - [번역(i18n)](/docs/ko/i18n.md)
 - [API](/docs/ko/api.md)
+- [모듈](/docs/ko/module.md)
+    - [서버 모듈](/docs/ko/server_module.md)
+
+## 후원하기
+
+- [오픈채팅](https://open.kakao.com/me/hotsixman)
+- [Buy me a coffee](https://buymeacoffee.com/hotsixman)

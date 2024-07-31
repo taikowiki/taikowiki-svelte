@@ -28,7 +28,6 @@ const authHandle = auth(Object.values(provider), {
     maxAge: 3600 * 24 * 7,
     autoRefreshMaxAge: true,
     withCredentials: true
-
 })
 
 const getUserData: Handle = async ({ event, resolve }) => {
@@ -60,7 +59,7 @@ const checkPermission = checkPermissions([
     }
 ])
 
-const cors = allowOrigin(["https://donderhiroba.jp"], { credentials: true });
+const cors = allowOrigin(["https://donderhiroba.jp"], {credentials: true});
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);

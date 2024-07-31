@@ -1,4 +1,4 @@
-import type { GameCenterData, GameCenterDataWithoutOrder } from "./types";
+import type { GameCenterData, GameCenterDataWithoutOrder, GameCenterDataWithoutOrderAndFavoriteCount } from "./types";
 import { defineDBHandler } from "@yowza/db-handler";
 
 export const gamecenterDBController = {
@@ -142,7 +142,7 @@ export const gamecenterDBController = {
     /**
      * Submits an arcade report.
      */
-    addReport: defineDBHandler<[{ gamecenterData: GameCenterDataWithoutOrder; UUID: string, ip: string }], void>((data) => {
+    addReport: defineDBHandler<[{ gamecenterData: GameCenterDataWithoutOrderAndFavoriteCount; UUID: string, ip: string }], void>((data) => {
         return async (run) => {
             await run("INSERT INTO `gamecenter/report` (`UUID`, `ip`, `data`) VALUES (?, ?, ?)", [data.UUID, data.ip, JSON.stringify(data.gamecenterData)]);
         }

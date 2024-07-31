@@ -1,14 +1,14 @@
 import { AMENITY, GAMECENTERREGION } from '$lib/module/common/gamecenter/const.js';
 import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server.js';
-import type { GameCenterDataWithoutOrder } from '$lib/module/common/gamecenter/types.js';
+import type { GameCenterDataWithoutOrderAndFavoriteCount } from '$lib/module/common/gamecenter/types.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({locals, request, getClientAddress}){
-    if(!locals.userData){
+    if(!locals.userData || locals.userData.grade < 2){
         throw error(401);
     }
 
-    const requestData: Partial<GameCenterDataWithoutOrder> = (await request.json()).gamecenterData;
+    const requestData: Partial<GameCenterDataWithoutOrderAndFavoriteCount> = (await request.json()).gamecenterData;
 
     if(!("name" in requestData) || typeof(requestData.name) !== "string" || !requestData.name){
         throw error(400, JSON.stringify({
@@ -47,7 +47,7 @@ export async function POST({locals, request, getClientAddress}){
         });
     }
 
-    const gamecenterData = requestData as GameCenterDataWithoutOrder
+    const gamecenterData = requestData as GameCenterDataWithoutOrderAndFavoriteCount
 
     await gamecenterDBController.addReport({
         gamecenterData,

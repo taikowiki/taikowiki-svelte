@@ -47,8 +47,8 @@
     import { setContext } from "svelte";
     import { beforeNavigate } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
-    import axios from "axios";
     import Footer from "$lib/components/layout/main/Footer.svelte";
+    import { userRequestor } from "$lib/module/common/user/user.client.js";
 
     export let data;
     //deepFreeze songs
@@ -78,12 +78,11 @@
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);
     $: if (($navigating || $page.state) && browser) {
-        axios({
-            method: "get",
-            url: "/api/user",
-        }).then(({ data }) => {
-            user.set(data);
-        });
+        userRequestor.getUserData(null).then((response) => {
+            if(response.status === 'success'){
+                user.set(response.data);
+            }
+        })
     }
 </script>
 
@@ -142,7 +141,7 @@
                 mobileHideSlot
             >
                 <span class="header-text">{i18nLayout.gamecenter}</span>
-            </HeaderItem>            
+            </HeaderItem>
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />

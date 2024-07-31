@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { DaniSong as DaniSongType } from "$lib/module/common/dani/types";
-    import type { SongDataPickedForDani } from "$lib/module/page/dani/types";
+    import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
     import DaniSong from "./DaniSong.svelte";
 
     export let songs: DaniSongType[];

@@ -3,8 +3,8 @@
     import {
         GAMECENTERREGION,
         AMENITY,
-    } from "$lib/module/page/gamecenter/const";
-    import { gamecenterAdminRequestor } from '$lib/module/page/gamecenter/gamecenter.client'
+    } from "$lib/module/common/gamecenter/const.js";
+    import { gamecenterAdminRequestor } from '$lib/module/common/gamecenter/gamecenter.client'
     import { goto } from "$app/navigation";
 
     export let data;

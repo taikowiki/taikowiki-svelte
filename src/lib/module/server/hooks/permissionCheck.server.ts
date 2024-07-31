@@ -30,7 +30,7 @@ function createPermissionChecker(path: string, level: number, rule: 'match' | 's
 
         if (!locals.user) {
             if (!redirectPath) {
-                throw error(403, "You have no permission to access admin page");
+                throw error(403, "You have no permission to access this page");
             }
 
             const param = new URLSearchParams({
@@ -41,7 +41,7 @@ function createPermissionChecker(path: string, level: number, rule: 'match' | 's
         }
 
         if (!locals.userData || locals.userData.grade < level) {
-            throw error(403, "You have no permission to access admin page")
+            throw error(403, "You have no permission to access this page")
         }
 
         return await input.resolve(input.event);

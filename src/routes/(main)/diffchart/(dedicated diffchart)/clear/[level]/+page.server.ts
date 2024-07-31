@@ -1,6 +1,6 @@
-import DiffchartDB from "$lib/module/common/diffchart/diffchart.server";
-import SongDB from "$lib/module/common/song/song.server.js";
-import type { SongDataPickedForDiffchart } from "$lib/module/page/diffchart/types.js";
+import { diffchartDBController } from "$lib/module/common/diffchart/diffchart.server";
+import { songDBController } from "$lib/module/common/song/song.server";
+import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
 import { error } from "@sveltejs/kit";
 
 export async function load({ params }) {
@@ -10,14 +10,18 @@ export async function load({ params }) {
         throw error(500);
     }
 
-    const diffChart = await DiffchartDB.getClearByLevel(level);
+    const diffChart = await diffchartDBController.getClearByLevel(level);
+    if (!diffChart) {
+        throw error(404);
+    }
+
     const songNos: string[] = [];
     diffChart.sections.forEach(section => {
         section.songs.forEach(song => {
             songNos.push(song.songNo);
         })
     })
-    const songSearchResult = await SongDB.getBySongNo<SongDataPickedForDiffchart>(songNos, ["genre", "songNo", "title", "titleKo", "aliasKo"])
+    const songSearchResult = await songDBController.getSongsColumnsBySongNo(songNos, ["genre", "songNo", "title", "titleKo", "aliasKo"]) as SongDataPickedForDiffchart[]
 
     return {
         diffChart,

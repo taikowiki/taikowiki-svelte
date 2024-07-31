@@ -1,22 +1,16 @@
 <script lang="ts" context="module">
-    import axios from "axios";
-    async function upload(songNo:string, songData: Partial<SongData>) {
+    async function upload(songNo: string, songData: Partial<SongData>) {
         if (!songData.title || !songData.songNo) {
             alert("곡 번호와 제목을 입력해주세요.");
             return;
         }
-        try {
-            await axios({
-                method: "POST",
-                url: "/admin/api/song/upload",
-                data: {
-                    songNo,
-                    songData
-                },
-            });
+        const response = await songAdminRequestor.uploadSong({
+            songNo,
+            songData,
+        });
+        if (response.status === "success") {
             alert("저장 성공");
-        } catch (err) {
-            console.log(err);
+        } else {
             alert("저장 실패");
         }
     }
@@ -27,6 +21,7 @@
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import type { SongData } from "$lib/module/common/song/types";
     import { goto } from "$app/navigation";
+    import { songAdminRequestor } from "$lib/module/common/song/song.client";
 
     let songData: SongData = {
         songNo: $page.url.searchParams.get("song_no") || "",

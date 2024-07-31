@@ -10,3 +10,11 @@ This project is being developed on `dev/main` branch, and will be merged to `mai
 
 - [translation(i18n)](/docs/i18n.md)
 - [API](/docs/api.md)
+- [module](/docs/module.md)
+    - [server module](/docs/server_module.md)
+
+
+## Donate
+
+- [Kakaotalk](https://open.kakao.com/me/hotsixman)
+- [Buy me a coffee](https://buymeacoffee.com/hotsixman)

@@ -1,3 +1,6 @@
+/**
+ * It is used to change the order of elements within an array. It is used in the Difficulty Chart Editor.
+ */
 export default function intercept<T extends any>(arr: T[], from: number, to: number): T[] {
     if (to >= arr.length || to < 0 || from >= arr.length || from < 0) {
         return arr;

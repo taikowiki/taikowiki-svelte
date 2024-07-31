@@ -1,5 +1,7 @@
 import { GENRE, DIFFICULTY, VERSION, DANIVERSION, DAN } from './const'
 
+export type SongDataPickedForSearch = Pick<SongData, "songNo" | "genre" | "title" | "titleKo" | "aliasKo" | "artists" | "courses"> & { order: number }
+
 export interface SongData {
     songNo: string;
     title: string;

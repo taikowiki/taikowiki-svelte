@@ -1,13 +1,13 @@
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/page/gamecenter/types";
+    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
     import { afterUpdate, getContext, onMount } from "svelte";
     import KakaoMapAsideContentSearch from "./KakaoMapAsideContentSearch.svelte";
     import KakaoMapAsideContentFavorites from "./KakaoMapAsideContentFavorites.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { getLang } from "$lib/module/common/i18n/i18n";
-    import { gamecenterRequestor } from "$lib/module/page/gamecenter/gamecenter.client";
+    import { gamecenterRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
     import { writable } from "svelte/store";
-    import getKakaoMap from "$lib/module/page/gamecenter/kakao.client";
+    import getKakaoMap from "$lib/module/common/gamecenter/kakao.client";
 
     export let map: kakao.maps.Map;
     export let scene: "search" | "favorites";

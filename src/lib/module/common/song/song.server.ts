@@ -1,14 +1,14 @@
-import { runQuery } from "@sveltekit-board/db";
 import { escape, escapeId } from 'mysql2';
 import { type SongData, type SongRequest, type SongSearchOption } from "./types";
 //@ts-expect-error
 import r from 'regex-escape';
+import { defineDBHandler } from "@yowza/db-handler";
 function regexEscape(str: string): string {
     return r(str)
 }
 
 /**
- * db에서 불러온 songData를 SongData 타입에 맞게 파싱
+ * Parse songData fetched from the database to match the SongData type
  */
 function parseSongDataFromDB(songDataFromDB: any) {
     if (songDataFromDB.courses) songDataFromDB.courses = JSON.parse(songDataFromDB.courses)
@@ -17,15 +17,14 @@ function parseSongDataFromDB(songDataFromDB: any) {
     if (songDataFromDB.genre) songDataFromDB.genre = JSON.parse(songDataFromDB.genre);
     if (songDataFromDB.artists) songDataFromDB.artists = JSON.parse(songDataFromDB.artists);
     if (songDataFromDB.courses && songDataFromDB.courses.ura === undefined) songDataFromDB.courses.ura = null;
-    return songDataFromDB
 }
 
-export default class SongDB {
+export const songDBController = {
     /**
-     * 곡 테이블 생성 함수
+     * Function to create the song table
      */
-    static async createTable() {
-        await runQuery(async (run) => {
+    createTable: defineDBHandler<[], void>(() => {
+        return async (run) => {
             await run(`CREATE TABLE \`song\` (
                 \`songNo\` tinytext NOT NULL,
                 \`order\` int(11) NOT NULL,
@@ -48,84 +47,106 @@ export default class SongDB {
             `);
             await run(`ALTER TABLE \`song\` ADD PRIMARY KEY (\`order\`);`);
             await run("ALTER TABLE `song` MODIFY `order` int(11) NOT NULL AUTO_INCREMENT;");
-        })
-    }
+        }
+    }),
 
     /**
-     * 모든 곡의 데이터를 가져옴.
+     * Retrieve data of all songs.
      */
-    static async getAll(): Promise<SongData[]>
-    static async getAll<T extends Partial<SongData> = Partial<SongData>>(columns: string[]): Promise<T[]>
-    static async getAll(columns?: string[]) {
+    getAll: defineDBHandler<[], SongData[]>(function () {
         let columnsQuery = '*';
-        if (columns) {
-            columnsQuery = columns.map(e => escapeId(e)).join(', ');
-        }
 
-        return await runQuery(async (run) => {
+        return async (run) => {
             let result = await run(`SELECT ${columnsQuery} FROM \`song\` ORDER BY \`addedDate\` DESC;`);
             result.forEach(parseSongDataFromDB)
             return JSON.parse(JSON.stringify(result))
-        })
-    }
+        }
+    }),
 
     /**
-     * 특정 시각 이후에 변경된 곡의 데이터를 가져옴
+     * Retrieve data of specific columns for all songs.
      */
-    static async getAfter(after: number): Promise<SongData[]> {
-        return await runQuery(async (run) => {
+    getAllColumns: defineDBHandler<[string[]], Partial<SongData>[]>(function (columns) {
+        const columnsQuery = columns.map(e => escapeId(e)).join(', ');
+        return async (run) => {
+            let result = await run(`SELECT ${columnsQuery} FROM \`song\` ORDER BY \`addedDate\` DESC;`);
+            result.forEach(parseSongDataFromDB)
+            return JSON.parse(JSON.stringify(result))
+        }
+    }),
+
+    /**
+     * Retrieve song data changed after a specific time.
+     */
+    getAfter: defineDBHandler<[number], SongData[]>((after) => {
+        return async (run) => {
             const result = await run("SELECT `songNo` FROM `song/log` WHERE `updatedTime` >= ?", [after]);
 
             const songNos = [...new Set(result.map((e: any) => e.songNo))];
 
-            return await this.getBySongNo(songNos as string[]);
-        })
-    }
+            const r: SongData[] = await songDBController.getSongsBySongNo.getCallback(songNos as string[])(run);
+
+            return r;
+        }
+    }),
 
     /**
-     * 해당 songNo에 대한 곡의 데이터를 가져옴
+     * Retrieve data of a song by its songNo.
      */
-    static async getBySongNo(songNo: string): Promise<SongData | null>;
-    static async getBySongNo(songNos: string[]): Promise<SongData[]>;
-    static async getBySongNo<T extends Partial<SongData> = Partial<SongData>>(songNo: string, columns: string[]): Promise<T | null>;
-    static async getBySongNo<T extends Partial<SongData> = Partial<SongData>>(songNos: string[], columns: string[]): Promise<T[]>;
-    static async getBySongNo(songNo: string | string[], columns?: string[]) {
-        let columnsQuery = '*';
-        if (columns) {
-            columnsQuery = columns.map(e => escapeId(e)).join(', ');
+    getSongBySongNo: defineDBHandler<[string], SongData | null>((songNo) => {
+        return async (run) => {
+            let columnsQuery = '*';
+            let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` = ?`, [songNo]);
+            result.forEach(parseSongDataFromDB);
+            return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
         }
+    }),
+    /**
+     * Retrieve specific columns of a song by its songNo.
+     */
+    getSongColumnsBySongNo: defineDBHandler<[string, string[]], Partial<SongData> | null>((songNo, columns) => {
+        return async (run) => {
+            const columnsQuery = columns.map(e => escapeId(e)).join(', ');
+            let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` = ?`, [songNo]);
+            result.forEach(parseSongDataFromDB);
+            return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
+        }
+    }),
+    /**
+     * Retrieve data of multiple songs by their songNos.
+     */
+    getSongsBySongNo: defineDBHandler<[string[]], SongData[]>((songNo) => {
+        return async (run) => {
+            if (songNo.length === 0) {
+                return [];
+            }
 
-        if (typeof (songNo) === "string") {
-            return await runQuery(async (run) => {
-                let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` = ?`, [songNo]);
-                result.forEach(parseSongDataFromDB);
-                return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
-            })
+            const columnsQuery = '*';
+            let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${songNo.map(() => '?').join(', ')})`, [...songNo]);
+            result.forEach(parseSongDataFromDB);
+            return JSON.parse(JSON.stringify(result));
         }
-        else if (songNo.length === 0) {
-            return [];
+    }),
+    /**
+     * Retrieve specific columns of multiple songs by their songNos.
+     */
+    getSongsColumnsBySongNo: defineDBHandler<[string[], string[]], Partial<SongData>[]>((songNo, columns) => {
+        return async (run) => {
+            if (songNo.length === 0) {
+                return [];
+            }
+
+            const columnsQuery = columns.map(e => escapeId(e)).join(', ');
+            let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${songNo.map(() => '?').join(', ')})`, [...songNo]);
+            result.forEach(parseSongDataFromDB);
+            return JSON.parse(JSON.stringify(result));
         }
-        else {
-            return await runQuery(async (run) => {
-                let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${songNo.map(() => '?').join(', ')})`, [...songNo]);
-                result.forEach(parseSongDataFromDB);
-                return JSON.parse(JSON.stringify(result));
-            })
-        }
-    }
+    }),
 
     /**
-     * 곡을 검색하는 함수
+     * Search and retrieve song data.
      */
-    static async search(page: number | null, option?: SongSearchOption): Promise<{
-        songs: (SongData & { order: number })[],
-        count: number
-    }>
-    static async search<T extends Partial<SongData & { order: number }> = Partial<SongData>>(page: number | null, option: SongSearchOption | undefined, columns?: string[]): Promise<{
-        songs: T[],
-        count: number
-    }>;
-    static async search(page: number | null, option: SongSearchOption | undefined = undefined, columns?: string[]) {
+    search: defineDBHandler<[number | null, SongSearchOption?], { songs: (SongData & { order: number })[], count: number }>((page, option) => {
         let sqlWhereQuery = "WHERE (1)";
         if (option?.difficulty && option?.level) {
             if (option.difficulty === "oniura") {
@@ -143,27 +164,58 @@ export default class SongDB {
             sqlWhereQuery += `AND (\`title\` REGEXP ${escape(regexp)} OR \`titleKo\` REGEXP ${escape(regexp)} OR \`aliasKo\` REGEXP ${escape(regexp)})`
         }
 
-        let columnsQuery = '*';
-        if (columns) {
-            columnsQuery = columns.map(e => escapeId(e)).join(', ')
-        }
+        const columnsQuery = '*';
 
-        return await runQuery(async (run) => {
+        return async (run) => {
             const songs = (page === null || page < 1) ? await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC`) : await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC LIMIT ${(page - 1) * 30}, 30`);
             songs.forEach(parseSongDataFromDB);
-            const count = Object.values((await run(`SELECT COUNT(\`order\`) FROM \`song\` ${sqlWhereQuery}`))[0])?.[0] ?? 0
+            const count = Object.values((await run(`SELECT COUNT(\`order\`) FROM \`song\` ${sqlWhereQuery}`))[0])?.[0] as number ?? 0
             return {
                 songs: JSON.parse(JSON.stringify(songs)),
                 count
-            };
-        })
-    }
+            }
+        };
+    }),
 
     /**
-     * 곡 추가
+    * Retrieves specific columns of song data.
+    */
+    searchColumns: defineDBHandler<[number | null, string[], SongSearchOption?], { songs: Partial<(SongData & { order: number })>[], count: number }>((page, columns, option) => {
+        let sqlWhereQuery = "WHERE (1)";
+        if (option?.difficulty && option?.level) {
+            if (option.difficulty === "oniura") {
+                sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.oni.level') = ${option.level} OR JSON_EXTRACT(\`courses\`, '$.ura.level') = ${option.level})`;
+            }
+            else {
+                sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.${option.difficulty}.level') = ${option.level})`;
+            }
+        }
+        if (option?.genre) {
+            sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
+        }
+        if (option?.query) {
+            const regexp = `${option.query.split(' ').map(regexEscape).join('.*?')}`
+            sqlWhereQuery += `AND (\`title\` REGEXP ${escape(regexp)} OR \`titleKo\` REGEXP ${escape(regexp)} OR \`aliasKo\` REGEXP ${escape(regexp)})`
+        }
+
+        const columnsQuery = columns.map(e => escapeId(e)).join(', ')
+
+        return async (run) => {
+            const songs = (page === null || page < 1) ? await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC`) : await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC LIMIT ${(page - 1) * 30}, 30`);
+            songs.forEach(parseSongDataFromDB);
+            const count = Object.values((await run(`SELECT COUNT(\`order\`) FROM \`song\` ${sqlWhereQuery}`))[0])?.[0] as number ?? 0
+            return {
+                songs: JSON.parse(JSON.stringify(songs)),
+                count
+            }
+        };
+    }),
+
+    /**
+     * Adds a song.
      */
-    static async addSong(data: SongData) {
-        return await runQuery(async (run) => {
+    addSong: defineDBHandler<[SongData], void>((data) => {
+        return async (run) => {
             return await run(`INSERT INTO \`song\` (
                 \`songNo\`, 
                 \`title\`,
@@ -199,52 +251,50 @@ export default class SongDB {
                 data.addedDate || 0,
                 JSON.stringify(data.courses)
             ])
-        })
-    }
+        }
+    }),
 
     /**
-     * 최근 업데이트 시각을 가져옴
+     * Retrieves the most recent update time.
      */
-    static async getUpdateTime(): Promise<number> {
-        let result = await runQuery(async (run) => {
-            return run(`SELECT \`UPDATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
-        })
-
-        const updateTime = new Date(result[0]['UPDATE_TIME']).getTime();
-
-        return updateTime;
-    }
+    getUpdateTime: defineDBHandler<[], number>(() => {
+        return async (run) => {
+            const result = await run(`SELECT \`UPDATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
+            const updateTime = new Date(result[0]['UPDATE_TIME']).getTime();
+            return updateTime;
+        }
+    }),
 
     /**
-     * 테이블 생성 시각을 가져옴
+     * Retrieves the table creation time.
      */
-    static async getCreateTime(): Promise<number> {
-        let result = await runQuery(async (run) => {
-            return run(`SELECT \`CREATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
-        })
+    getCreateTime: defineDBHandler<[], number>(() => {
+        return async (run) => {
+            let result = await run(`SELECT \`CREATE_TIME\` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '${process.env.DB_DATABASE}' AND TABLE_NAME = 'song';`);
 
-        const updateTime = new Date(result[0]['CREATE_TIME']).getTime();
+            const updateTime = new Date(result[0]['CREATE_TIME']).getTime();
 
-        return updateTime;
-    }
+            return updateTime;
+        }
+    }),
 
     /**
-     * 최근 추가된 곡들을 가져옴
+     * Retrieves the most recently added songs based on the `addedDate` column, not the update time.
      */
-    static async getNewSongs(limit: number = 3): Promise<SongData[]> {
-        return await runQuery(async (run) => {
+    getNewSongs: defineDBHandler<[number], SongData[]>((limit = 3) => {
+        return async (run) => {
             let result = await run(`SELECT * FROM \`song\` ORDER BY \`addedDate\` DESC LIMIT ${limit}`);
             result.forEach(parseSongDataFromDB);
             return JSON.parse(JSON.stringify(result))
-        })
-    }
+        }
+    }),
 
     /**
-     * 곡을 업데이트함
+     * Updates a song.
      */
-    static async uploadSong(songNo: string, songData: SongData) {
-        const song = await this.getBySongNo(songNo);
-        return await runQuery(async (run) => {
+    uploadSong: defineDBHandler<[string, SongData], void>((songNo, songData) => {
+        return async (run) => {
+            const song = await songDBController.getSongBySongNo.getCallback(songNo)(run);
             if (song === null) {
                 await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])
             }
@@ -254,16 +304,16 @@ export default class SongDB {
             }
 
             await run("INSERT INTO `song/log` (`songNo`, `before`, `after`, `updatedTime`) VALUES (?, ?, ?, ?)", [songData.songNo, song ? JSON.stringify(song) : null, JSON.stringify(songData), Date.now()]);
-        })
-    }
+        }
+    })
 }
 
-export class SongRequestController {
+export const songRequestDBController = {
     /**
-     * 모든 요청 가져오기
+     * Retrieves all requests.
      */
-    static async getAll(status?: SongRequest['status']): Promise<(SongRequest & { order: number })[]> {
-        return await runQuery(async (run) => {
+    getAll: defineDBHandler<[SongRequest['status']?], (SongRequest & { order: number })[]>((status) => {
+        return async (run) => {
             if (status) {
                 return (await run("SELECT * FROM `song/request` WHERE `status` = ? ORDER BY createdTime DESC", [status])).map((request: any) => {
                     request.data = JSON.parse(request.data);
@@ -276,14 +326,14 @@ export class SongRequestController {
                     return request;
                 })
             }
-        })
-    }
+        }
+    }),
 
     /**
-     * 해당 songNo에 대한 요청 가져오기
+     * Retrieves requests for a specific songNo.
      */
-    static async getRequestsBySongNo(songNo: string, status?: SongRequest['status']): Promise<(SongRequest & { order: number })[]> {
-        return await runQuery(async (run) => {
+    getRequestsBySongNo: defineDBHandler<[string, SongRequest['status']?], (SongRequest & { order: number })[]>((songNo, status) => {
+        return async (run) => {
             if (status) {
                 return (await run("SELECT * FROM `song/request` WHERE `songNo` = ? AND `status` = ? ORDER BY createdTime DESC", [songNo, status])).map((request: any) => {
                     request.data = JSON.parse(request.data);
@@ -296,14 +346,14 @@ export class SongRequestController {
                     return request;
                 })
             }
-        })
-    }
+        }
+    }),
 
     /**
-     * 해당 order에 대한 요청 가져오기
+     * Retrieves the request for a specific order.
      */
-    static async getRequestByOrder(order: number, status?: SongRequest['status']): Promise<(SongRequest & { order: number }) | null> {
-        return await runQuery(async (run) => {
+    getRequestByOrder: defineDBHandler<[number, SongRequest['status']?]>((order, status) => {
+        return async (run) => {
             let result
             if (status) {
                 result = await run("SELECT * FROM `song/request` WHERE `order` = ? AND `status` = ? ORDER BY createdTime DESC", [order, status]);
@@ -317,67 +367,60 @@ export class SongRequestController {
             request.data = JSON.parse(request.data);
 
             return request;
-        })
-    }
+        }
+    }),
 
     /**
-     * 요청 생성하기
+     * Create a song request
      */
-    static async createRequest(request: {
-        UUID: string;
-        songNo: string;
-        data: SongData;
-        ip: string;
-    }) {
-        const song = await SongDB.getBySongNo(request.songNo);
+    createRequest: defineDBHandler<[{ UUID: string; songNo: string; data: SongData; ip: string; }], void>((request) => {
+        return async (run) => {
+            const song = await songDBController.getSongBySongNo.getCallback(request.songNo)(run);
 
-        if (song !== null) {//새곡아님
-            return await runQuery(async (run) => {
-                await run(`INSERT INTO \`song/request\` (\`UUID\`, \`ip\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?, ?)`, [request.UUID, request.ip, request.songNo, Date.now(), 'edit', JSON.stringify(request.data)])
-            })
+            if (song !== null) {//새곡아님
+                return await run(`INSERT INTO \`song/request\` (\`UUID\`, \`ip\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?, ?)`, [request.UUID, request.ip, request.songNo, Date.now(), 'edit', JSON.stringify(request.data)])
+            }
+            else {//새곡임
+                return await run(`INSERT INTO \`song/request\` (\`UUID\`, \`ip\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?, ?)`, [request.UUID, request.ip, request.songNo, Date.now(), 'new', JSON.stringify(request.data)])
+            }
         }
-        else {//새곡임
-            return await runQuery(async (run) => {
-                await run(`INSERT INTO \`song/request\` (\`UUID\`, \`ip\`, \`songNo\`, \`createdTime\`, \`type\`, \`data\`) VALUES (?, ?, ?, ?, ?, ?)`, [request.UUID, request.ip, request.songNo, Date.now(), 'new', JSON.stringify(request.data)])
-            })
-        }
-    }
+    }),
 
     /**
-     * 요청 수락하기
+     * Approve a song request
      */
-    static async approve(order: number, editedData?: SongData) {
-        const songRequest = await this.getRequestByOrder(order)
-        if (!songRequest) return;
-        const { data } = songRequest;
-        await SongDB.uploadSong(songRequest.songNo, editedData ?? data);
-        return await runQuery(async (run) => {
+    approve: defineDBHandler<[number, SongData?], void>((order, editedData) => {
+        return async (run) => {
+            const songRequest = await songRequestDBController.getRequestByOrder.getCallback(order)(run)
+            if (!songRequest) return;
+            const { data } = songRequest;
+            await songDBController.uploadSong.getCallback(songRequest.songNo, editedData ?? data)(run);
             await run("UPDATE `song/request` SET `status` = 'approved' WHERE `order` = ?", [order])
-        })
-    }
+        }
+    }),
 
     /** 
-     * 요청 거절하기
+     * Disapprove a song request
     */
-    static async disapprove(order: number | number[]) {
-        return await runQuery(async (run) => {
+    disapprove: defineDBHandler<[number | number[]], void>((order) => {
+        return async (run) => {
             if (Array.isArray(order)) {
                 await run(`UPDATE \`song/request\` SET \`status\` = 'disapproved' WHERE \`order\` IN (${order.map(escape).join(', ')})`)
             }
             else {
                 await run("UPDATE `song/request` SET `status` = 'disapproved' WHERE `order` = ?", [order])
             }
-        })
-    }
+        }
+    }),
 
     /**
-     * 요청 삭제하기
+     * Delete a song request
      */
-    static async removeRequest(order: number) {
-        return await runQuery(async (run) => {
+    removeRequest: defineDBHandler<[number], void>((order) => {
+        return async (run) => {
             return await run("DELETE FROM `song/request` WHERE `order` = ?", [order]);
-        })
-    }
+        }
+    })
 }
 
 /*

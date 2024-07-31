@@ -1,23 +1,18 @@
 <script lang="ts" context="module">
+    import { songAdminRequestor } from "$lib/module/common/song/song.client.js";
     import axios from "axios";
 
     async function disapproveSelected(checked: number[]) {
         if (checked.length === 0) {
             return;
         }
-        try {
-            await axios({
-                url: "/admin/api/song/disapprove",
-                method: "post",
-                data: {
-                    order: checked,
-                },
-            });
-
+        const response = await songAdminRequestor.disapproveRequest({
+            order: checked,
+        });
+        if (response.status === "success") {
             alert("거부 성공");
-
             location.reload();
-        } catch {
+        } else {
             alert("거부 실패");
         }
     }

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/page/gamecenter/types";
+    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
     import type { Writable } from "svelte/store";
     import GamecenterInfo from "./GamecenterInfo.svelte";
     import { getContext } from "svelte";

@@ -1,8 +1,9 @@
 import type { Handle } from "@sveltejs/kit";
 import { runQuery } from "@sveltekit-board/db";
 
-//이거 사용하려면 ip 수집 동의 받아야함
-
+/**
+ * Records request logs.
+ */
 const logger: Handle = async ({ event, resolve }) => {
     let UUID: string | null = null;
     if (event.locals.userData) {

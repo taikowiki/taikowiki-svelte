@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/page/gamecenter/types";
+    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
 
     export let gamecenterData: GameCenterData;
 

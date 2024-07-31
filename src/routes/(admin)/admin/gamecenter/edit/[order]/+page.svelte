@@ -1,13 +1,13 @@
 <script lang="ts">
     import GamecenterEditor from "$lib/components/page/admin/gamecenter/GamecenterEditor.svelte";
-    import { type GameCenterData } from "$lib/module/page/gamecenter/types.js";
-    import { gamecenterAdminRequestor } from "$lib/module/page/gamecenter/gamecenter.client.js";
+    import { type GameCenterData, type GameCenterDataWithoutOrder } from "$lib/module/common/gamecenter/types.js";
+    import { gamecenterAdminRequestor } from "$lib/module/common/gamecenter/gamecenter.client.js";
     import { goto } from "$app/navigation";
 
     export let data;
     const { gamecenterData } = data;
 
-    async function submit(gamecenterData: GameCenterData){
+    async function submit(gamecenterData: GameCenterDataWithoutOrder){
         if(!gamecenterData.name){
             alert('이름을 입력해주세요.');
             return;

@@ -1,6 +1,6 @@
-import { AMENITY, GAMECENTERREGION } from '$lib/module/page/gamecenter/const.js';
-import { GamecenterController } from '$lib/module/page/gamecenter/gamecenter.server.js';
-import type { GameCenterData, GameCenterDataWithoutOrder } from '$lib/module/page/gamecenter/types.js';
+import { AMENITY, GAMECENTERREGION } from '$lib/module/common/gamecenter/const.js';
+import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import type { GameCenterData, GameCenterDataWithoutOrder } from '$lib/module/common/gamecenter/types.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request }) {
@@ -50,7 +50,7 @@ export async function POST({ request }) {
 
     const gamecenterData = requestData as GameCenterData
 
-    await GamecenterController.editGamecenter(gamecenterData)
+    await gamecenterDBController.editGamecenter(gamecenterData)
 
     return new Response();
 }

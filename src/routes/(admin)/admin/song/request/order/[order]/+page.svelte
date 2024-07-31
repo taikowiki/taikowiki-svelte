@@ -1,34 +1,29 @@
 <script lang="ts" context="module">
-    import axios from "axios";
-    async function approve(request: any & { order: number }, songData:SongData) {
-        try {
-            await axios({
-                method: "post",
-                data: {
-                    order: request.order,
-                    songData
-                },
-                url: "/admin/api/song/approve",
-            });
+    async function approve(
+        request: any & { order: number },
+        songData: SongData,
+    ) {
+        const response = await songAdminRequestor.approve({
+            order: request.order,
+            songData,
+        });
+        if (response.status === "success") {
             alert("저장 성공");
             await goto("/admin/song/request");
-        } catch {
+        } else {
             alert("저장 실패");
         }
     }
 
     async function disapprove(request: any & { order: number }) {
-        try {
-            await axios({
-                method: "post",
-                data: {
-                    order: request.order,
-                },
-                url: "/admin/api/song/disapprove",
-            });
+        const response = await songAdminRequestor.disapproveRequest({
+            order: [request.order]
+        })
+        if(response.status === 'success'){
             alert("거부 성공");
             await goto("/admin/song/request");
-        } catch {
+        }
+        else{
             alert("거부 실패");
         }
     }
@@ -39,6 +34,7 @@
     import AdminRequestEditor from "$lib/components/page/admin/song/request/order/[order]/admin-RequestEditor.svelte";
     import compareSong from "$lib/module/common/song/compare-song";
     import type { SongData } from "$lib/module/common/song/types.js";
+    import { songAdminRequestor } from "$lib/module/common/song/song.client.js";
 
     export let data;
 
@@ -64,19 +60,14 @@
         </td>
     </tr>
     <tr>
-        <td>
-            타입
-        </td>
+        <td> 타입 </td>
         <td>
             {data.request.type}
         </td>
     </tr>
 </table>
 
-<AdminRequestEditor
-    bind:songData={request.data}
-    {compare}
-/>
+<AdminRequestEditor bind:songData={request.data} {compare} />
 
 <div class="button-container">
     <button
@@ -99,12 +90,11 @@
     .button-container {
         display: flex;
     }
-    table{
+    table {
         width: 100%;
         border-collapse: collapse;
     }
-    td{
-
+    td {
         border: 1px solid black;
     }
 </style>

@@ -25,7 +25,7 @@
     import DaniSongContainer from "./DaniSongContainer.svelte";
     import DaniConditionContainer from "./DaniConditionContainer.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile";
-    import type { SongDataPickedForDani } from "$lib/module/page/dani/types";
+    import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
 
     export let dani: Dani;
     export let songDatas: SongDataPickedForDani[];

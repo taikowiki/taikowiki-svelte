@@ -21,7 +21,7 @@
             {data.user.provider}
         </td>
     </tr>
-    <Nickname UUID={data.user.UUID} />
+    <Nickname/>
     <tr>
         <form method="post" action="/api/user/delete" bind:this={withdrawForm}>
             <input

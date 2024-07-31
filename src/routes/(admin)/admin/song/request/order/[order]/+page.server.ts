@@ -1,5 +1,5 @@
-import SongDB, { SongRequestController } from "$lib/module/common/song/song.server";
-import UserController from "$lib/module/common/user/user-controller.server.js";
+import { songDBController, songRequestDBController } from "$lib/module/common/song/song.server";
+import { userDBController } from "$lib/module/common/user/user.server";
 import { error } from "@sveltejs/kit";
 
 export async function load({ params }) {
@@ -8,14 +8,14 @@ export async function load({ params }) {
         throw error(400);
     }
 
-    const request = await SongRequestController.getRequestByOrder(order);
+    const request = await songRequestDBController.getRequestByOrder(order);
     if (!request) {
         throw error(404);
     }
 
-    const song = await SongDB.getBySongNo(request.songNo);
+    const song = await songDBController.getSongBySongNo(request.songNo);
 
-    const requestor = await UserController.getNickname(request.UUID)
+    const requestor = await userDBController.getNickname(request.UUID)
 
     return {
         request,

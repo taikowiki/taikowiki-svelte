@@ -76,8 +76,8 @@
 </script>
 
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/page/gamecenter/types";
-    import getKakaoMap from "$lib/module/page/gamecenter/kakao.client";
+    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import getKakaoMap from "$lib/module/common/gamecenter/kakao.client";
     import { onDestroy, onMount } from "svelte";
     import KakaoMapAside from "./KakaoMapAside.svelte";
     import MarkerInfo from "./MarkerInfo.svelte";

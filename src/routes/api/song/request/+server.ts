@@ -1,10 +1,10 @@
-import { SongRequestController } from '$lib/module/common/song/song.server.js';
+import { songRequestDBController } from '$lib/module/common/song/song.server.js';
 import type { SongData } from '$lib/module/common/song/types.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request, locals, getClientAddress }) {
     if (!locals.user || !locals.userData) throw error(403);
-    if (locals.userData.grade < 2) throw error(403);
+    if (locals.userData.grade < 2) throw error(401);
 
     const data = await request.json();
     const songData = data.songData as SongData;
@@ -16,7 +16,7 @@ export async function POST({ request, locals, getClientAddress }) {
         course.images = course.images.filter(e => e !== '');
     })
 
-    await SongRequestController.createRequest({
+    await songRequestDBController.createRequest({
         UUID: locals.userData.UUID,
         songNo,
         data: songData,

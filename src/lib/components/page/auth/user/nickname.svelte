@@ -1,18 +1,10 @@
 <script lang="ts" context="module">
-    import axios from "axios";
-    import { goto, replaceState } from "$app/navigation";
+    import { replaceState } from "$app/navigation";
 
-    async function changeNickname(UUID: string, newNickname: string) {
-        const result = await axios({
-            method: "post",
-            data: {
-                UUID,
-                newNickname,
-            },
-            url: "/api/user/change_nickname",
-        });
+    async function changeNickname(newNickname: string) {
+        const result = await userRequestor.changeNickname({ newNickname });
         replaceState(get(page).url.href, get(page).state);
-        return result.data;
+        return result;
     }
 </script>
 
@@ -22,8 +14,7 @@
     import { page } from "$app/stores";
     import { getI18N } from "$lib/module/common/i18n/i18n";
     import { getTheme } from "$lib/module/layout/theme";
-
-    export let UUID: string;
+    import { userRequestor } from "$lib/module/common/user/user.client";
 
     const user = getContext("user") as Writable<{
         provider: string;
@@ -45,7 +36,8 @@
     <td> 닉네임 </td>
     <td>
         <div class="explanation">
-            닉네임에는 알파벳, 한글, 숫자, '-'만 사용할 수 있으며 공백은 사용하실 수 없습니다.
+            닉네임에는 알파벳, 한글, 숫자, '-'만 사용할 수 있으며 공백은
+            사용하실 수 없습니다.
         </div>
         <div class="container">
             <div>
@@ -55,21 +47,23 @@
                 />
                 <button
                     on:click={() => {
+                        error = "";
                         if (nicknameFormatError) {
                             error =
                                 $i18n.error[
                                     "New nickname is not in the correct format"
                                 ];
+                        } else {
+                            changeNickname(nickname).then((result) => {
+                                if (result.status === "success") {
+                                    alert("변경 완료");
+                                } else {
+                                    error =
+                                        $i18n.error[result.reason ?? ""] ||
+                                        result.reason;
+                                }
+                            });
                         }
-                        error = "";
-                        changeNickname(UUID, nickname).then((result) => {
-                            if (result.status === "success") {
-                                alert("변경 완료");
-                            } else {
-                                error =
-                                    $i18n.error[result.reason] || result.reason;
-                            }
-                        });
                     }}
                     data-theme={$theme}
                 >
@@ -91,14 +85,14 @@
         box-sizing: border-box;
     }
 
-    .explanation{
+    .explanation {
         font-size: 12px;
-        color:gray;
+        color: gray;
     }
 
-    .container{
+    .container {
         width: 100%;
-        display:flex;
+        display: flex;
         flex-direction: row;
         column-gap: 10px;
     }
@@ -109,10 +103,10 @@
         }
     }
 
-    button{
+    button {
         border: 1px solid #cf4844;
         outline: 0;
-        color:black;
+        color: black;
 
         border-radius: 5px;
 
@@ -120,9 +114,9 @@
 
         cursor: pointer;
     }
-    button[data-theme="dark"]{
+    button[data-theme="dark"] {
         background-color: black;
-        color:white;
+        color: white;
 
         box-sizing: border-box;
         border-color: rgb(145, 145, 145);

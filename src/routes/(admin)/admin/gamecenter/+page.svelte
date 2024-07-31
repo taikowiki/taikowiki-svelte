@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { gamecenterAdminRequestor } from '$lib/module/page/gamecenter/gamecenter.client.js';
+    import { gamecenterAdminRequestor } from '$lib/module/common/gamecenter/gamecenter.client';
 
     export let data;
     let { gamecenterDatas } = data;

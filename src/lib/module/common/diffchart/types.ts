@@ -1,4 +1,5 @@
 import { type Difficulty } from "$lib/module/common/song/types";
+import { type SongData } from "$lib/module/common/song/types"
 
 //diffchart
 export interface Song {
@@ -36,6 +37,8 @@ export interface DiffchartData {
     type: string;
     data: DiffChart;
 }
+
+export type SongDataPickedForDiffchart = Pick<SongData, "songNo" | "genre" | "title" | "titleKo" | "aliasKo">
 
 //user score data
 export interface SongScore {

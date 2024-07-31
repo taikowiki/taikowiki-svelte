@@ -20,7 +20,8 @@ export interface GameCenterData{
     favoriteCount: number;
 }
 
-export type GameCenterDataWithoutOrder = Pick<GameCenterData, Exclude<keyof GameCenterData, 'order'>>
+export type GameCenterDataWithoutOrder = Pick<GameCenterData, Exclude<keyof GameCenterData, 'order'>>;
+export type GameCenterDataWithoutOrderAndFavoriteCount = Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount'>>
 
 export interface Machine{
     price: number;

@@ -1,4 +1,4 @@
-import UserController from '$lib/module/common/user/user-controller.server.js';
+import { userDBController } from '$lib/module/common/user/user.server.js';
 import { redirect } from '@sveltejs/kit';
 
 export async function POST({ request, locals, cookies }) {
@@ -7,7 +7,7 @@ export async function POST({ request, locals, cookies }) {
         if (locals.userData.UUID !== data.get('UUID')) redirect(302, '/auth/user');
 
         try {
-            await UserController.deleteUser(locals.user.provider, locals.user.providerId);
+            await userDBController.deleteUser(locals.userData.UUID);
             cookies.delete("auth-user", { path: '/' });
         }
         catch (err: any) {

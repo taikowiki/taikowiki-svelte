@@ -1,6 +1,9 @@
 import { error, type Handle } from "@sveltejs/kit";
 import { runQuery } from "@sveltekit-board/db";
 
+/**
+ * Ban specific Ip.
+ */
 export default class BanController {
     static checkIp: Handle = async ({ event, resolve }) => {
         const banned = await runQuery(async (run) => {

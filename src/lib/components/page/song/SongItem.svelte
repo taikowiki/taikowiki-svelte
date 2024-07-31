@@ -4,7 +4,7 @@
     import { onDestroy, onMount } from "svelte";
     import type { SongLang } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { SongDataPickedForSearch } from "$lib/module/page/song/types";
+    import type { SongDataPickedForSearch } from "$lib/module/common/song/types";
 
     export let song: SongDataPickedForSearch;
     export let songLang: SongLang;

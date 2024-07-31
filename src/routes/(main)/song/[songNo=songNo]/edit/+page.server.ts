@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import SongDB from '$lib/module/common/song/song.server.js';
+import {songDBController} from '$lib/module/common/song/song.server.js';
 
 export async function load({locals, params}){
     if(!locals.user){
@@ -7,6 +7,6 @@ export async function load({locals, params}){
     }
 
     return{
-        song: await SongDB.getBySongNo(params.songNo)
+        song: await songDBController.getSongBySongNo(params.songNo)
     }
 }

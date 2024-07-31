@@ -1,7 +1,7 @@
 <script lang="ts">
     import GamecenterEditor from "$lib/components/page/admin/gamecenter/GamecenterEditor.svelte";
-    import { type GameCenterData, type GameCenterDataWithoutOrder } from "$lib/module/page/gamecenter/types.js";
-    import { gamecenterAdminRequestor } from "$lib/module/page/gamecenter/gamecenter.client.js";
+    import { type GameCenterData, type GameCenterDataWithoutOrder } from "$lib/module/common/gamecenter/types.js";
+    import { gamecenterAdminRequestor } from "$lib/module/common/gamecenter/gamecenter.client.js";
     import { goto } from "$app/navigation";
 
     const gamecenterData: GameCenterDataWithoutOrder = {
@@ -29,6 +29,7 @@
             5: "",
             6: "",
         },
+        favoriteCount: 0
     };
 
     async function submit(gamecenterData: GameCenterDataWithoutOrder){

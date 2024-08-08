@@ -170,6 +170,9 @@
         background-color: black;
         color: white;
     }
+    :global(a){
+        text-decoration: none;
+    }
     :global(body[data-theme="light"] a) {
         color: #cf4844;
     }

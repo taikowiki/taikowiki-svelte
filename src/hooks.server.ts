@@ -56,6 +56,12 @@ const checkPermission = checkPermissions([
         level: 9,
         rule: 'startsWith',
         redirectPath: '/auth/login'
+    },
+    {
+        path: '/auth/user',
+        level: 1,
+        rule: 'startsWith',
+        redirectPath: '/auth/login'
     }
 ])
 

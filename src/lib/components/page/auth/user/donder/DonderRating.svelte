@@ -7,7 +7,6 @@
     import TierImage from "./TierImage.svelte";
     import TierProgress from "./TierProgress.svelte";
     import GradeProgress from "./GradeProgress.svelte";
-    import Loading from "$lib/components/common/Loading.svelte";
 
     export let donderData: UserDonderData;
     export let ratingResult: ReturnType<typeof getRating>;

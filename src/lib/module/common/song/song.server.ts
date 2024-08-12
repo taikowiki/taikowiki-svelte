@@ -283,7 +283,7 @@ export const songDBController = {
      */
     getNewSongs: defineDBHandler<[number], SongData[]>((limit = 3) => {
         return async (run) => {
-            let result = await run(`SELECT * FROM \`song\` ORDER BY \`addedDate\` DESC LIMIT ${limit}`);
+            let result = await run(`SELECT \`title\`, \`songNo\` FROM \`song\` ORDER BY \`addedDate\` DESC LIMIT ${limit}`);
             result.forEach(parseSongDataFromDB);
             return JSON.parse(JSON.stringify(result))
         }

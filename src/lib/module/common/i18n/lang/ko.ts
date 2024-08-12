@@ -8,7 +8,8 @@ const ko: LangFile = {
             newSong: '신곡',
             diffchart: '서열표',
             dani: '단위도장',
-            gamecenter: '오락실'
+            gamecenter: '오락실',
+            measures: '상수표'
         },
         'dedicated diffchart': {
             type: {
@@ -212,6 +213,6 @@ const ko: LangFile = {
             'ㅇㅇ': 'ㅇㅇ'
         }
     }
-}
+} as const;
 
 export default ko;

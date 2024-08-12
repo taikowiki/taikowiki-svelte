@@ -4,6 +4,7 @@
     import color from "$lib/module/common/color";
     import createSSC from "styled-svelte-component/svelte4";
     import type { UserDonderData } from "$lib/module/common/user/types";
+    import { getTheme } from "$lib/module/layout/theme";
 
     export let songRatingDatas:
         | {
@@ -30,12 +31,14 @@
         ({ index }) =>
             `${index < 50 ? "background-color:#ffdbe2;color:black;" : ""}`,
     );
+
+    const [theme] = getTheme();
 </script>
 
 {#if songRatingDatas}
     <Center>
         <h2>곡 레이팅</h2>
-        <table>
+        <table data-theme={$theme}>
             <tr>
                 <th> 곡 제목 </th>
                 <th> 정확도 </th>
@@ -95,5 +98,9 @@
 
     td:not(:nth-child(1)) {
         padding-inline: 3px;
+    }
+
+    table[data-theme="dark"] td{
+        border-color: rgb(142, 142, 142);
     }
 </style>

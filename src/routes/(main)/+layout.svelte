@@ -127,6 +127,13 @@
                 <span class="header-text">{i18nLayout.diffchart}</span>
             </HeaderItem>
             <HeaderItem
+                icon="/assets/icon/table.svg"
+                href="/measures"
+                mobileHideSlot
+            >
+                <span class="header-text">{i18nLayout.measures}</span>
+            </HeaderItem>
+            <HeaderItem
                 icon="/assets/icon/dani.svg"
                 href="/dani"
                 mobileHideSlot

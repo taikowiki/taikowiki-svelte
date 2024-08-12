@@ -29,6 +29,11 @@
     unicode-range: U+2E80-2EFF, U+3400-4DBF, U+4E00-9FBF, U+F900-FAFF, U+20000-2A6DF, U+2F800-2FA1F;
 }
 
+@font-face{
+    font-family: 'Sokcho';
+    src: url('/assets/font/SokchoDotum.woff2') format('woff2');
+}
+
 /*NanumSquare*/
 body{
     font-family: 'Noto Sans JP', 'Noto Sans KR', sans-serif;

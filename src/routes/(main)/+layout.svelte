@@ -129,6 +129,13 @@
                 <span class="header-text">{i18nLayout.diffchart}</span>
             </HeaderItem>
             <HeaderItem
+                icon="/assets/icon/table.svg"
+                href="/measures"
+                mobileHideSlot
+            >
+                <span class="header-text">{i18nLayout.measures}</span>
+            </HeaderItem>
+            <HeaderItem
                 icon="/assets/icon/dani.svg"
                 href="/dani"
                 mobileHideSlot
@@ -174,6 +181,9 @@
     :global(body[data-theme="dark"]) {
         background-color: black;
         color: white;
+    }
+    :global(a){
+        text-decoration: none;
     }
     :global(body[data-theme="light"] a) {
         color: #cf4844;

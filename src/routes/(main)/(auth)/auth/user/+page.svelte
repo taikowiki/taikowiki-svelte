@@ -1,6 +1,10 @@
 <script lang="ts" context="module">
     function deleteUser(form: HTMLFormElement) {
-        if(confirm("정말 탈퇴하시겠습니까?\n탈퇴하신 이후에는 정보를 복구할 수 없습니다!")){
+        if (
+            confirm(
+                "정말 탈퇴하시겠습니까?\n탈퇴하신 이후에는 정보를 복구할 수 없습니다!",
+            )
+        ) {
             form.submit();
         }
     }
@@ -21,7 +25,11 @@
             {data.user.provider}
         </td>
     </tr>
-    <Nickname/>
+    <tr>
+        <td>UUID</td>
+        <td>{data.user.UUID}</td>
+    </tr>
+    <Nickname />
     <tr>
         <form method="post" action="/api/user/delete" bind:this={withdrawForm}>
             <input

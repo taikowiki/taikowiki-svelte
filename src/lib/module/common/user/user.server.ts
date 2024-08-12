@@ -1,5 +1,7 @@
-import type { UserData } from "./types";
+import { fetchMeasures, getRating } from "@taiko-wiki/taiko-rating";
+import type { UserClearData, UserData, UserDonderData, UserScoreData } from "./types";
 import { defineDBHandler } from "@yowza/db-handler";
+import type { CardData } from "node-hiroba/types";
 //@ts-expect-error
 import groupBy from "object.groupby";
 
@@ -98,6 +100,7 @@ export const userDBController = {
 
             await run(`DELETE FROM \`user/data\` WHERE \`UUID\` = ?;`, [UUID]);
             await run("DELETE FROM `user/gamecenter_favorites` WHERE `UUID` = ?", [UUID]);
+            await run("DELETE FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
         }
     }),
 
@@ -149,6 +152,64 @@ export const userDBController = {
             }
 
             return Object.values(result[0])[0] as string;
+        }
+    })
+}
+
+export const userDonderDBController = {
+    /**
+     * update donder data
+     */
+    updateData: defineDBHandler<[string, { donderData: CardData; clearData: UserClearData; scoreData?: UserScoreData }]>((UUID, data) => {
+        return async (run) => {
+            const countResult = await run("SELECT COUNT(*) FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
+            const count = Object.values(countResult[0])[0];
+
+            if (count === 0) {
+                if ("scoreData" in data) {
+                    await run("INSERT INTO `user/donder_data` (`UUID`, `donder`, `clearData`, `scoreData`) VALUES (?, ?, ?, ?)", [UUID, JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData)]);
+                }
+                else {
+                    await run("INSERT INTO `user/donder_data` (`UUID`, `donder`, `clearData`) VALUES (?, ?, ?)", [UUID, JSON.stringify(data.donderData), JSON.stringify(data.clearData)]);
+                }
+            }
+            else {
+                if ("scoreData" in data) {
+                    const formerScoreDataResult = await run("SELECT `scoreData` FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
+                    const formerScoreData = JSON.parse(formerScoreDataResult[0].scoreData);
+                    if (formerScoreData === null) {
+                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), UUID]);
+                    }
+                    else {
+                        const formerRating = getRating(formerScoreData, await fetchMeasures());
+                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `ratingHistory` = JSON_ARRAY_APPEND(`ratingHistory`, '$', ?)  WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), formerRating.rating, UUID]);
+                    }
+                }
+                else {
+                    await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), UUID]);
+                }
+            }
+        }
+    }),
+
+    /**
+     * get donder data
+     */
+    getData: defineDBHandler<[string], UserDonderData | null>((UUID) => {
+        return async (run) => {
+            const result = await run("SELECT * FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
+
+            if (result.length === 0) {
+                return null;
+            }
+
+            const data = result[0];
+            data.donder = JSON.parse(data.donder);
+            data.clearData = JSON.parse(data.clearData);
+            data.scoreData = data.scoreData === null ? null : JSON.parse(data.scoreData);
+            data.ratingHistory = JSON.parse(data.ratingHistory);
+
+            return data as UserDonderData;
         }
     })
 }

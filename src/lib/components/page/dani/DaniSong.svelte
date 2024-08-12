@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import color, { difficulty } from "$lib/module/common/color";
+    import color from "$lib/module/common/color";
 
     function getGenreColors(genre: Genre[]): string {
         if (genre.length === 1) {
@@ -10,20 +10,14 @@
         }
         return `linear-gradient(${color.genre[genre[0]]} 0%, ${color.genre[genre[0]]} 33%, ${color.genre[genre[1]]} 33%, ${color.genre[genre[1]]} 66%, ${color.genre[genre[2]]} 66%, ${color.genre[genre[2]]} 100%)`;
     }
-
-    function getDifficultyColor(difficulty: Difficulty) {
-        return color.difficulty[difficulty];
-    }
 </script>
 
 <script lang="ts">
     import type { DaniSong } from "$lib/module/common/dani/types";
-    import type {
-        Genre,
-        Difficulty,
-    } from "$lib/module/common/song/types";
+    import type { Genre } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
     import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
+    import { DifficultyColor } from "$lib/module/common/styled";
 
     export let song: DaniSong;
     export let songDatas: SongDataPickedForDani[];
@@ -49,14 +43,9 @@
         <div class="title">
             {title}
         </div>
-        <div
-            class="level"
-            style={`background:${getDifficultyColor(song.difficulty)};`}
-        >
-            <span>
-                ★{level}
-            </span>
-        </div>
+        <DifficultyColor difficulty={song.difficulty}>
+            ★{level}
+        </DifficultyColor>
         <div class="combo">
             <span>
                 {combo}
@@ -111,24 +100,6 @@
         transform: translateY(-1px);
         flex: 1 0 auto;
         max-width: calc(100% - 90px);
-    }
-
-    .level {
-        width: 40px;
-        height: 18px;
-
-        color: white;
-        font-size: 14px;
-
-        box-sizing: border-box;
-
-        padding-inline: 5px;
-
-        border-radius: 3px;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     .combo {

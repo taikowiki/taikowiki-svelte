@@ -109,7 +109,8 @@ function getNavigatorLang(){
 export function useLang() {
     let lang: Writable<Language | string>;
     if (browser) {
-        lang = writable<Language | string>(window.localStorage.getItem('lang') ?? getNavigatorLang());
+        //@ts-expect-error
+        lang = writable<Language | string>((Object.keys(i18nProxyTarget).includes(window.localStorage.getItem('lang')) ? window.localStorage.getItem('lang') : undefined) ?? getNavigatorLang());
         axios({
             url: '/api/user/lang/get',
             method: 'get'

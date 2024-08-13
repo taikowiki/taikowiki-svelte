@@ -1,10 +1,19 @@
 <script lang="ts">
+    import { page } from "$app/stores";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DaniDisplay from "$lib/components/page/dani/DaniDisplay.svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let data;
 
     const {daniData, songDatas} = data;
+
+    const lang = getLang();
+    $: versionI18n = getI18N('other', $lang).dani.version;
+    $: titleI18n = getI18N('other', $lang).title['/dani'];
 </script>
+
+<PageTitle title={versionI18n[$page.url.pathname.split('/')[2]]+ ' ' + titleI18n}/>
 
 <div class="container">
     {#each daniData.data as dani}

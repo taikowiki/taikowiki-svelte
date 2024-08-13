@@ -3,6 +3,8 @@
     import submit from "$lib/module/common/song/submit.client";
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import type { SongData } from "$lib/module/common/song/types";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import PageTitle from '$lib/components/common/PageTitle.svelte'
 
     let songData: SongData = {
         songNo: $page.url.searchParams.get("song_no") || "",
@@ -75,7 +77,12 @@
             ura: null,
         },
     };
+
+    const lang = getLang();
+    $: titleI18n = getI18N('other', $lang).title['/song/add']
 </script>
+
+<PageTitle title={titleI18n}/>
 
 <SongEditor bind:songData />
 

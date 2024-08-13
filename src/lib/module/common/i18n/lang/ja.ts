@@ -51,6 +51,9 @@ const ja: LangFile = {
         }
     },
     other: {
+        title: {
+            base: '太鼓の達人 ウィキ'
+        },
         dani: {
             dan: {
                 "senpo": "先鋒",

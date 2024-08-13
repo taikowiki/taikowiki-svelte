@@ -7,13 +7,20 @@
     import AlertDisplay from "$lib/components/page/song/[songNo]/AlertDisplay.svelte";
     import CourseContainer from "$lib/components/page/song/[songNo]/CourseContainer.svelte";
     import AddSongButton from "$lib/components/page/song/AddSongButton.svelte";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
 
     export let data;
     const song = data.song;
     const isMobile = getIsMobile();
+
+    const lang = getLang();
+    $: i18n = getI18N('/song/[songNo]', $lang);
+    $: titleI18n = getI18N('other', $lang).title['/song/[songNo]'];
 </script>
 
 {#if song}
+    <PageTitle title={song.title}/>
     <AlertDisplay
         isAsiaBanned={song.isAsiaBanned}
         isKrBanned={song.isKrBanned}
@@ -38,7 +45,8 @@
     </div>
     <CourseContainer courses={song.courses} />
 {:else}
-    해당 곡이 존재하지 않습니다.
+    <PageTitle title={titleI18n}/>
+    {i18n.noSong}
     <AddSongButton />
 {/if}
 

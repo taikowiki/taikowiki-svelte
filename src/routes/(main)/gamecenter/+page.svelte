@@ -1,6 +1,7 @@
 <script>
     import { browser } from "$app/environment";
     import { page } from "$app/stores";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
     import KakaoMap from "$lib/components/page/gamecenter/KakaoMap.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.ts";
     import { getTheme } from "$lib/module/layout/theme";
@@ -9,9 +10,12 @@
 
     const lang = getLang();
     $: i18n = getI18N('/gamecenter', $lang);
+    $: titleI18n = getI18N('other', $lang).title['/gamecenter'];
 
     let showAlert = (typeof(window) !== "undefined" ?( window.localStorage.getItem('show gamecenter alert') === 'false' ? false : true) : true);
 </script>
+
+<PageTitle title={titleI18n}/>
 
 {#if browser}
     {#if $lang !== 'ko' && showAlert}

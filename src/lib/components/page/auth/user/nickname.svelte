@@ -12,9 +12,9 @@
     import { getContext } from "svelte";
     import { get, type Writable } from "svelte/store";
     import { page } from "$app/stores";
-    import { getI18N } from "$lib/module/common/i18n/i18n";
     import { getTheme } from "$lib/module/layout/theme";
     import { userRequestor } from "$lib/module/common/user/user.client";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     const user = getContext("user") as Writable<{
         provider: string;
@@ -28,16 +28,16 @@
 
     let error = "";
 
-    const i18n = getI18N();
     const [theme] = getTheme();
+    const lang = getLang();
+    $: i18n = getI18N('/auth/user', $lang);
 </script>
 
 <tr>
-    <td> 닉네임 </td>
+    <td> {i18n.nickname} </td>
     <td>
         <div class="explanation">
-            닉네임에는 알파벳, 한글, 숫자, '-'만 사용할 수 있으며 공백은
-            사용하실 수 없습니다.
+            {i18n.nickRule}
         </div>
         <div class="container">
             <div>
@@ -50,16 +50,16 @@
                         error = "";
                         if (nicknameFormatError) {
                             error =
-                                $i18n.error[
+                                i18n.error[
                                     "New nickname is not in the correct format"
                                 ];
                         } else {
                             changeNickname(nickname).then((result) => {
                                 if (result.status === "success") {
-                                    alert("변경 완료");
+                                    alert(i18n.nickChangeSuccess);
                                 } else {
                                     error =
-                                        $i18n.error[result.reason ?? ""] ||
+                                        i18n.error[result.reason ?? ""] ||
                                         result.reason;
                                 }
                             });
@@ -67,7 +67,7 @@
                     }}
                     data-theme={$theme}
                 >
-                    변경
+                    {i18n.change}
                 </button>
             </div>
             {#if error}

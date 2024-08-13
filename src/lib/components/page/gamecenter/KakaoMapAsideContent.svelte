@@ -69,7 +69,7 @@
         context.set("user", user);
         context.set("mobileAsideOpened", mobileAsideOpened);
 
-        const searchComponent = new KakaoMapAsideContentSearch({
+        new KakaoMapAsideContentSearch({
             target: searchContainer,
             props: {
                 gamecenterDatas,
@@ -81,7 +81,7 @@
             context,
         });
 
-        const favoriteComponent = new KakaoMapAsideContentFavorites({
+        new KakaoMapAsideContentFavorites({
             target: favoritesContainer,
             props: {
                 favorites,

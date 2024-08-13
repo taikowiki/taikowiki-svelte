@@ -1,14 +1,18 @@
 <script>
     import AsideItem from "$lib/components/layout/main/AsideItem.svelte";
     import PageAside from "$lib/components/layout/main/PageAside.svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+
+    const lang = getLang();
+    $: i18n = getI18N('layout', $lang)['/auth/user']
 </script>
 
 <PageAside title="유저">
     <a href="/auth/user">
-        내 정보
+        {i18n.myData}
     </a>
     <a href="/auth/user/donder">
-        동더 데이터
+        {i18n.donderData}
     </a>
 </PageAside>
 

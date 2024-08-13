@@ -6,6 +6,8 @@
     import { Center } from "$lib/module/common/styled";
     import createSSC from "styled-svelte-component/svelte4";
     import SongRatings from "$lib/components/page/auth/user/donder/SongRatings.svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
 
     export let data;
 
@@ -26,10 +28,19 @@
     );
 
     const isMobile = getIsMobile();
+
+    const lang = getLang();
+    $: i18n = getI18N("/auth/user/donder", $lang);
+    $: titleI18n = getI18N('other', $lang).title['/auth/user'];
 </script>
 
+
+<PageTitle title={titleI18n}/>
+
 {#if donderData === null}
-    동더히로바 데이터가 없습니다. 동더히로바 데이터를 업로드해주세요.
+    {i18n.noDonderData}
+    <a href="//github.com/taikowiki/taiko-rating" target="_blank">{i18n.uploadGuide}</a
+    >
 {:else}
     <Center>
         <div class="data-container" data-isMobile={$isMobile}>

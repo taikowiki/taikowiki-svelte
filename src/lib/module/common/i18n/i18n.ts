@@ -1,16 +1,16 @@
 import { getContext, setContext } from "svelte";
-import { type I18N, type Language, type PathLangFile, type RecursiveStringRecord, type SubLangFile } from "./types"
+import { type I18N, type Language, type RecursiveStringRecord } from "./types"
 import { get, writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
 import ko from "./lang/ko";
 import en from './lang/en';
-import jp from './lang/jp';
+import ja from './lang/ja';
 import axios, { type AxiosResponse } from "axios";
 
 const i18nProxyTarget: I18N = {
     ko,
     en,
-    jp
+    ja
 }
 
 function getI18nProxy(target: I18N | any) {
@@ -90,15 +90,34 @@ const i18n = getI18nProxy(i18nProxyTarget);
 
 export default i18n;
 
+function getNavigatorLang(){
+    //@ts-expect-error
+    let navigatorLang = window.navigator.language ?? window.navigator.userLanguage;
+
+    if(navigatorLang.length > 2){
+        navigatorLang = navigatorLang.slice(0, 2);
+    }
+
+    if(navigatorLang in i18nProxyTarget){
+        return navigatorLang;
+    }
+    else{
+        return 'ko';
+    }
+}
+
 export function useLang() {
     let lang: Writable<Language | string>;
     if (browser) {
-        lang = writable<Language | string>(window.localStorage.getItem('lang') ?? 'ko');
+        //@ts-expect-error
+        lang = writable<Language | string>((Object.keys(i18nProxyTarget).includes(window.localStorage.getItem('lang')) ? window.localStorage.getItem('lang') : undefined) ?? getNavigatorLang());
         axios({
             url: '/api/user/lang/get',
             method: 'get'
         }).then((response: AxiosResponse) => {
-            lang.set(response.data);
+            if(response.data in i18nProxyTarget){
+                lang.set(response.data);
+            }
         }).catch((err) => {
             console.warn(err);
         })
@@ -126,12 +145,6 @@ export function useLang() {
 
     setContext('lang', lang);
     return lang;
-}
-
-function setLang(lang: Language | string) {
-    const langg = getContext('lang') as Writable<Language | string>;
-    langg.set(lang);
-    window?.localStorage.setItem('lang', get(langg))
 }
 
 export function getLang(): Writable<Language | string> {

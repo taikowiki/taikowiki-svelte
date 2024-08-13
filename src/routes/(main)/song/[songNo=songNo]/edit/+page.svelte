@@ -4,13 +4,20 @@
 
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import type { SongData } from "$lib/module/common/song/types";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
 
     export let data;
     let maybeSongData: SongData|null = data.song;
     let songData = maybeSongData as SongData;
+
+    const lang = getLang();
+    $: titleI18n = getI18N('other', $lang).title['/song/[songNo]/edit']
 </script>
 
 <SongEditor bind:songData type="edit" />
+
+<PageTitle title={`${titleI18n} - ${data.song?.title ?? ''}`}/>
 
 <button
     on:click={() => {

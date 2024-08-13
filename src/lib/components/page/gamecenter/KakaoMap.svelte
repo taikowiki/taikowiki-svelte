@@ -81,7 +81,6 @@
     import { onDestroy, onMount } from "svelte";
     import KakaoMapAside from "./KakaoMapAside.svelte";
     import MarkerInfo from "./MarkerInfo.svelte";
-    import Loading from "$lib/components/common/Loading.svelte";
 
     //오락실
     export let gamecenterDatas: GameCenterData[];

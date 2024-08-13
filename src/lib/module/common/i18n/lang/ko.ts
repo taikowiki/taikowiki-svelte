@@ -17,6 +17,10 @@ const ko: LangFile = {
                 fc: '풀콤보',
                 dfc: '전량'
             }
+        },
+        '/auth/user': {
+            myData: '내 정보',
+            donderData: '동더 데이터'
         }
     },
     component: {
@@ -50,9 +54,28 @@ const ko: LangFile = {
                 up: '이상',
                 down: '미만'
             }
+        },
+        Diffchart: {
+            diffchart: '서열표',
+            downloadMessage: '이미지가 곧 다운로드됩니다.'
         }
     },
     other: {
+        title: {
+            base: '태고의 달인 위키',
+            '/auth/login': '로그인',
+            '/auth/user': '내 정보',
+            '/auth/user/donder': '동더 데이터',
+            '/dani': '단위도장',
+            '/diffchart/clear': '클리어 서열표',
+            '/gamecenter': '오락실 지도',
+            '/gamecenter/report': '오락실 제보',
+            '/measures': '보면 상수표',
+            '/song': '곡 검색',
+            '/song/[songNo]': '곡 없음',
+            '/song/[songNo]/edit': '곡 수정',
+            '/song/add': '곡 추가'
+        },
         dani: {
             dan: {
                 "senpo": "선봉",
@@ -105,6 +128,33 @@ const ko: LangFile = {
             }
         }
     },
+    //path
+    '/auth/login': {
+        forLogin: '에서 로그인'
+    },
+    '/auth/user': {
+        nickname: '닉네임',
+        change: '변경',
+        nickRule: `닉네임에는 알파벳, 한글, 숫자, '-'만 사용할 수 있으며 공백은 사용하실 수 없습니다.`,
+        nickChangeSuccess: '변경 완료',
+        provider: '로그인 제공자',
+        delete: '회원 탈퇴',
+        error: {
+            'New nickname is not in the correct format': '닉네임이 형식에 올바르지 않습니다.',
+            'Duplicated Nickname': '이미 사용중인 닉네임입니다.'
+        }
+    },
+    '/auth/user/donder':{
+        noDonderData: '동더히로바 데이터가 없습니다. 동더히로바 데이터를 업로드해주세요.',
+        uploadGuide: '업로드 가이드',
+        myDon: '마이동',
+        lastUpdate: '마지막 업데이트',
+        songRating: '곡 레이팅',
+        songTitle: '곡 제목',
+        accuracy: '정확도',
+        crown: '왕관',
+        rating: '레이팅'
+    },
     '/song': {
         placeholder: '검색어',
         difficulty: '난이도',
@@ -132,6 +182,7 @@ const ko: LangFile = {
         }
     },
     '/song/[songNo]': {
+        noSong: '해당 곡이 존재하지 않습니다.',
         genres: {
             pops: '팝스',
             anime: '애니메이션',
@@ -184,14 +235,9 @@ const ko: LangFile = {
         },
         subname: "🔴 개인차가 왕 큼&nbsp;&nbsp;&nbsp;🟢 초견 주의&nbsp;&nbsp;&nbsp;🟣 클리어에 비해 풀콤보가 왕 어려움"
     },
-    '/auth/user': {
-        'error': {
-            'New nickname is not in the correct format': '닉네임이 형식에 올바르지 않습니다.',
-            'Duplicated Nickname': '이미 사용중인 닉네임입니다.'
-        }
-    },
     '/gamecenter': {
-        'amenity': {
+        koreanGamecenterAlert: '한국의 태고의 달인이 있는 오락실의 지도입니다.',
+        amenity: {
             'water': '정수기',
             'toilet': '화장실',
             'park': '주차장',
@@ -202,16 +248,31 @@ const ko: LangFile = {
             'fan': '선풍기',
             'mybachi': '마이바찌'
         },
-        'date': {
+        date: {
             "0": "일",
             "1": "월",
             "2": "화",
             "3": "수",
             "4": "목",
             "5": "금",
-            "6": "토",
-            'ㅇㅇ': 'ㅇㅇ'
-        }
+            "6": "토"
+        },
+        report: '제보하기',
+        favorites: '즐겨찾기',
+        keyword: '키워드',
+        region: '지역',
+        all: '전체',
+        amenityText: '편의시설',
+        machineData: '기체 정보',
+        price: '가격',
+        tunes: '튠',
+        count: '개수',
+        login: '로그인',
+        needed: '이 필요합니다.'
+    },
+    '/measures': {
+        measureTable: '보면 상수표',
+        donderData: '동더 데이터'
     }
 } as const;
 

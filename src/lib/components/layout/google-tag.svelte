@@ -38,7 +38,4 @@
 
         gtag("config", "G-S8TRY8QPYG");
     </script>
-    <title>
-        태고의 달인 위키
-    </title>
 </svelte:head>

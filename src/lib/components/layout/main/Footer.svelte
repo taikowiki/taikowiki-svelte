@@ -10,9 +10,7 @@
         <a href="https://github.com/taikowiki/taikowiki-svelte">Taikowiki-Svelte{version ? `@${version}` : ""}</a>
     </div>
     <div>
-        <a href="https://github.com/taikowiki">Github</a> /
-        <a href="https://toss.me/hotsixman">Toss</a> /
-        <a href="https://buymeacoffee.com/hotsixman">Buy me a coffee</a>
+        <a href="https://github.com/taikowiki">Github</a>
     </div>
 </div>
 

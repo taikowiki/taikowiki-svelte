@@ -79,10 +79,10 @@
     setContext("user", user);
     $: if (($navigating || $page.state) && browser) {
         userRequestor.getUserData(null).then((response) => {
-            if(response.status === 'success'){
+            if (response.status === "success") {
                 user.set(response.data);
             }
-        })
+        });
     }
 </script>
 
@@ -152,6 +152,11 @@
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />
+            <HeaderItem
+                icon="/assets/icon/donate.svg"
+                href="/donate"
+                mobileHideSlot
+            />
         </svelte:fragment>
     </Header>
     <Main>
@@ -170,8 +175,8 @@
     <Footer version={data.version} />
 </div>
 
-<GoogleTag/>
-<VercelInject/>
+<GoogleTag />
+<VercelInject />
 
 <style>
     :global(body[data-theme="light"]) {
@@ -182,7 +187,7 @@
         background-color: black;
         color: white;
     }
-    :global(a){
+    :global(a) {
         text-decoration: none;
     }
 

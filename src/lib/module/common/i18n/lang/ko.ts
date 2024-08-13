@@ -61,6 +61,21 @@ const ko: LangFile = {
         }
     },
     other: {
+        title: {
+            base: '태고의 달인 위키',
+            '/auth/login': '로그인',
+            '/auth/user': '내 정보',
+            '/auth/user/donder': '동더 데이터',
+            '/dani': '단위도장',
+            '/diffchart/clear': '클리어 서열표',
+            '/gamecenter': '오락실 지도',
+            '/gamecenter/report': '오락실 제보',
+            '/measures': '보면 상수표',
+            '/song': '곡 검색',
+            '/song/[songNo]': '곡 없음',
+            '/song/[songNo]/edit': '곡 수정',
+            '/song/add': '곡 추가'
+        },
         dani: {
             dan: {
                 "senpo": "선봉",
@@ -167,6 +182,7 @@ const ko: LangFile = {
         }
     },
     '/song/[songNo]': {
+        noSong: '해당 곡이 존재하지 않습니다.',
         genres: {
             pops: '팝스',
             anime: '애니메이션',

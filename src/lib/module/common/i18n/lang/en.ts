@@ -16,6 +16,11 @@ const en: LangFile = {
             }
         }
     },
+    other:{
+        title: {
+            base: 'Taiko no Tatsujin Wiki'
+        },
+    },
     '/song': {
         placeholder: 'Keywords',
         difficulty: 'Difficulty',

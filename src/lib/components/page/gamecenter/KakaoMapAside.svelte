@@ -8,6 +8,7 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { writable } from "svelte/store";
     import { setContext } from "svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let map: kakao.maps.Map;
     export let currentPositionMarker: kakao.maps.Marker | undefined;
@@ -54,6 +55,9 @@
     }
 
     const [theme] = getTheme();
+
+    const lang = getLang();
+    $: i18n = getI18N('/gamecenter', $lang);
 </script>
 
 <!--pc-->
@@ -97,7 +101,7 @@
         />
     </div>
     <div>
-        <a href="/gamecenter/report">제보하기</a>
+        <a href="/gamecenter/report">{i18n.report}</a>
     </div>
 </div>
 

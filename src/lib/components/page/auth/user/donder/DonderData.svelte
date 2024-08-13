@@ -4,6 +4,7 @@
     import utc from 'dayjs/plugin/utc';
     import timezone from 'dayjs/plugin/timezone'
     import { getTheme } from "$lib/module/layout/theme";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     dayjs.extend(utc);
     dayjs.extend(timezone);
@@ -13,12 +14,13 @@
     export let Container: ConstructorOfATypedSvelteComponent;
 
     const [theme] = getTheme();
-
     const timeZone = dayjs.tz.guess();
+    const lang = getLang();
+    $: i18n = getI18N('/auth/user/donder', $lang);
 </script>
 
 <Container>
-    <img src={donderData.donder.myDon} alt="마이동"/>
+    <img src={donderData.donder.myDon} alt={i18n.myDon}/>
     <table data-theme={$theme}>
         <tr>
             <td class="taikonumber">
@@ -32,7 +34,7 @@
         </tr>
     </table>
     <div class="last-update">
-        마지막 업데이트: {dayjs(donderData.lastUpdate).tz(timeZone).format("YYYY-MM-DD HH:mm:ss")}
+        {i18n.lastUpdate}: {dayjs(donderData.lastUpdate).tz(timeZone).format("YYYY-MM-DD HH:mm:ss")}
     </div>
 </Container>
 

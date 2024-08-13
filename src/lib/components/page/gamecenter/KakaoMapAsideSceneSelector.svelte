@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { getContext } from "svelte";
-    import type { Writable } from "svelte/store";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let scene: "search" | "favorites";
 
-    const user = getContext("user") as Writable<{ logined: boolean }>;
+    const lang = getLang();
+    $: i18n = getI18N('/gamecenter', $lang);
 </script>
 
 <div>
@@ -25,7 +25,7 @@
                 scene = "favorites";
             }}
         >
-            <span>즐겨찾기</span>
+            <span>{i18n.favorites}</span>
         </div>
     </div>
     <div class="slider-container">

@@ -1,6 +1,6 @@
 import type { LangFile } from "../types";
 
-const jp: LangFile = {
+const ja: LangFile = {
     layout: {
         main: {
             song: '曲',
@@ -103,6 +103,12 @@ const jp: LangFile = {
             }
         }
     },
+    '/auth/user': {
+        'error': {
+            'New nickname is not in the correct format': '有効な名前の形式ではありません',
+            'Duplicated Nickname': 'この名前はすでに使用中です'
+        }
+    },
     '/song': {
         placeholder: 'キーワード',
         difficulty: '難易度',
@@ -181,13 +187,7 @@ const jp: LangFile = {
             'X': '個人差'
         },
         subname: "🔴 個人差デカい&nbsp;&nbsp;&nbsp;🟢 初見注意&nbsp;&nbsp;&nbsp;🟣 クリアに比べてフルコンボむずい"
-    },
-    '/auth/user': {
-        'error': {
-            'New nickname is not in the correct format': '有効な名前の形式ではありません',
-            'Duplicated Nickname': 'この名前はすでに使用中です'
-        }
     }
 }
 
-export default jp;
+export default ja;

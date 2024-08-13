@@ -57,9 +57,9 @@
         </div>
         <table class="machines" class:hidden={!showMachines}>
             <tr>
-                <th> 가격 </th>
-                <th> 튠 </th>
-                <th> 개수 </th>
+                <th> {i18n.price} </th>
+                <th> {i18n.tune} </th>
+                <th> {i18n.count} </th>
             </tr>
             {#each gamecenterData.machines as machine}
                 <tr>

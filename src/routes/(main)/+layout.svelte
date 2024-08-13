@@ -180,12 +180,6 @@
     :global(a){
         text-decoration: none;
     }
-    :global(body[data-theme="light"] a) {
-        color: #cf4844;
-    }
-    :global(body[data-theme="dark"] a) {
-        color: #e1a743;
-    }
 
     .page-aside:empty {
         display: none;

@@ -91,21 +91,21 @@
             type="text"
             bind:this={input}
             bind:value={searchKeyword}
-            placeholder="키워드"
+            placeholder={i18n.keyword}
             data-theme={$theme}
         />
         <!--옵션-->
         <div class="option-container">
-            <div class="option-name" data-theme={$theme}>지역</div>
+            <div class="option-name" data-theme={$theme}>{i18n.region}</div>
             <select bind:value={region} style="height: 20px;">
-                <option value="null">전체</option>
+                <option value="null">{i18n.all}</option>
                 {#each GAMECENTERREGION as region}
                     <option value={region}>{region}</option>
                 {/each}
             </select>
         </div>
         <div class="option-container">
-            <div class="option-name" data-theme={$theme}>편의시설</div>
+            <div class="option-name" data-theme={$theme}>{i18n.amenityText}</div>
             <div class="amenity-container">
                 {#each AMENITY as amenity}
                     <label

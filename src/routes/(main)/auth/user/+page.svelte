@@ -12,15 +12,19 @@
 
 <script lang="ts">
     import Nickname from "$lib/components/page/auth/user/nickname.svelte";
+    import { getLang, getI18N } from "$lib/module/common/i18n/i18n.js";
 
     export let data;
 
     let withdrawForm: HTMLFormElement;
+
+    const lang = getLang();
+    $: i18n = getI18N('/auth/user', $lang);
 </script>
 
 <table>
     <tr>
-        <td width="150px"> 로그인 제공자 </td>
+        <td width="150px"> {i18n.provider} </td>
         <td>
             {data.user.provider}
         </td>
@@ -43,7 +47,7 @@
             on:click={() => {
                 deleteUser(withdrawForm);
             }}
-            class="withdraw">회원 탈퇴</button
+            class="withdraw">{i18n.delete}</button
         >
     </tr>
 </table>

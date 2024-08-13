@@ -3,6 +3,7 @@
     import type { Writable } from "svelte/store";
     import GamecenterInfo from "./GamecenterInfo.svelte";
     import { getContext } from "svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let gamecenterDatas: GameCenterData[];
     export let favorites: Writable<number[]>;
@@ -27,6 +28,9 @@
     const mobileAsideOpened = getContext(
         "mobileAsideOpened",
     ) as Writable<boolean>;
+
+    const lang = getLang();
+    $: i18n = getI18N('/gamecenter', $lang);
 </script>
 
 <div class="container">
@@ -58,8 +62,8 @@
         <span>
             <a
                 href={`/auth/login?redirect_to=${encodeURIComponent("/gamecenter")}`}
-                >로그인</a
-            >이 필요합니다.
+                >{i18n.login}</a
+            >{i18n.needed}
         </span>
     {/if}
 </div>

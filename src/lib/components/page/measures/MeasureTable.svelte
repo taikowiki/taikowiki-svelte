@@ -6,6 +6,7 @@
     import createSSC from "styled-svelte-component/svelte4";
     import color from "$lib/module/common/color";
     import { setContext } from "svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let measures: Measure[];
     export let songDatas: (Pick<SongData, "title" | "songNo" | "genre"> & {
@@ -51,14 +52,17 @@
     
     setContext('Genre', Genre);
     setContext('Level', Level);
+
+    const lang = getLang();
+    $: i18n = getI18N('/measures', $lang);
 </script>
 
 <Genre.common/>
 <Level.common/>
 
 <h1>
-    <span> 보면 상수표 </span>
-    <a href="/auth/user/donder"> 동더 데이터 </a>
+    <span> {i18n.measureTable} </span>
+    <a href="/auth/user/donder"> {i18n.donderData} </a>
 </h1>
 
 {#each Object.entries(groupedMeasures).toSorted((a, b) => Number(b[0]) - Number(a[0])) as [group, measures]}

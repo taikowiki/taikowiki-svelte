@@ -3,6 +3,8 @@ import type { SongData } from "$lib/module/common/song/types.js";
 import { userDonderDBController } from "$lib/module/common/user/user.server";
 import { error } from "@sveltejs/kit";
 
+export const ssr = false;
+
 export async function load({locals}){
     if(!locals.userData){
         throw error(403);

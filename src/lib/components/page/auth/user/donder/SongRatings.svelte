@@ -5,6 +5,7 @@
     import createSSC from "styled-svelte-component/svelte4";
     import type { UserDonderData } from "$lib/module/common/user/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let songRatingDatas:
         | {
@@ -33,17 +34,19 @@
     );
 
     const [theme] = getTheme();
+    const lang = getLang();
+    $: i18n = getI18N('/auth/user/donder', $lang);
 </script>
 
 {#if songRatingDatas}
     <Center>
-        <h2>곡 레이팅</h2>
+        <h2>{i18n.songRating}</h2>
         <table data-theme={$theme}>
             <tr>
-                <th> 곡 제목 </th>
-                <th> 정확도 </th>
-                <th> 왕관 </th>
-                <th> 레이팅 </th>
+                <th> {i18n.songTitle} </th>
+                <th> {i18n.accuracy} </th>
+                <th> {i18n.crown} </th>
+                <th> {i18n.rating} </th>
             </tr>
             {#each songRatingDatas as songRatingData, index}
                 {@const song = songDatas.find(

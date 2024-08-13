@@ -34,6 +34,17 @@
     src: url('/assets/font/SokchoDotum.woff2') format('woff2');
 }
 
+:root {
+    color-scheme: light only;
+}
+
+body[data-theme="light"] a {
+    color: #cf4844;
+}
+body[data-theme="dark"] a {
+    color: #e1a743;
+}
+
 /*NanumSquare*/
 body{
     font-family: 'Noto Sans JP', 'Noto Sans KR', sans-serif;

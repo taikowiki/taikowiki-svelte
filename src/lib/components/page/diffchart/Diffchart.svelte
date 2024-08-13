@@ -27,6 +27,7 @@
     import { browser } from "$app/environment";
     import html2canvas from "html2canvas";
     import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let diffChart: DiffChart;
     export let songs: SongDataPickedForDiffchart[];
@@ -46,18 +47,21 @@
                 const canvas = await html2canvas(replica);
                 const url = canvas.toDataURL();
                 const a = document.createElement("a");
-                a.setAttribute("download", "서열표.png");
+                a.setAttribute("download", `${i18n.diffchart}.png`);
                 a.href = url;
                 a.click();
                 a.remove();
                 canvas.remove();
             })();
-            alert('이미지가 곧 다운로드됩니다.')
+            alert(i18n.downloadMessage);
         };
     });
 
     let userScoreDataJSON: string = '';
     $: userScoreData = parseSongScoreJSON(userScoreDataJSON);
+
+    const lang = getLang();
+    $: i18n = getI18N('component', $lang).Diffchart;
 </script>
 
 <input

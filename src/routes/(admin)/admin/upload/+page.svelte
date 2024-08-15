@@ -18,6 +18,7 @@
                 method: "post",
                 url: "https://file.taiko.wiki/upload/img",
                 data: formData,
+                withCredentials: true
             });
 
             fileLog.push({originalFileName, fileName: response.data.fileName});

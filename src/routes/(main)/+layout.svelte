@@ -49,6 +49,7 @@
     import User from "$lib/components/layout/main/User.svelte";
     import Footer from "$lib/components/layout/main/Footer.svelte";
     import { userRequestor } from "$lib/module/common/user/user.client.js";
+    import SideAds from "$lib/components/layout/side-ads.svelte";
 
     export let data;
     //deepFreeze songs
@@ -169,6 +170,7 @@
         </svelte:fragment>
         <Aside slot="aside">
             <div bind:this={$pageAside} class="page-aside" />
+            <SideAds/>
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>

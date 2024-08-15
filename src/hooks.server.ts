@@ -27,7 +27,8 @@ const authHandle = auth(Object.values(provider), {
     key: process.env.AUTH_KEY ?? '',
     maxAge: 3600 * 24 * 7,
     autoRefreshMaxAge: true,
-    withCredentials: true
+    withCredentials: true,
+    useSubdomain: true
 })
 
 const getUserData: Handle = async ({ event, resolve }) => {

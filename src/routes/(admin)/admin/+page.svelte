@@ -13,3 +13,7 @@
 <div>
     <a href="/admin/gamecenter">오락실 정보 관리</a>
 </div>
+
+<div>
+    <a href="/admin/upload">이미지 업로드</a>
+</div>

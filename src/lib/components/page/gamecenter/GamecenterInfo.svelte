@@ -58,7 +58,7 @@
         <table class="machines" class:hidden={!showMachines}>
             <tr>
                 <th> {i18n.price} </th>
-                <th> {i18n.tune} </th>
+                <th> {i18n.tunes} </th>
                 <th> {i18n.count} </th>
             </tr>
             {#each gamecenterData.machines as machine}

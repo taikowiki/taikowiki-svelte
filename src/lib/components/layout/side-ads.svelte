@@ -29,17 +29,19 @@
      */
     let container;
     $: if ($navigating) {
-        container.childNodes[1].remove();
-        new HawkEyes({
-            type: "banner",
-            responsive: "Y",
-            platform: "W",
-            scriptCode: "938200",
-            frameCode: "61",
-            width: "250",
-            height: "250",
-            settings: { cntad: "1", cntsr: "1" },
-        });
+        container.childNodes[1]?.remove();
+        if (typeof HawkEyes !== "undefined") {
+            new HawkEyes({
+                type: "banner",
+                responsive: "Y",
+                platform: "W",
+                scriptCode: "938200",
+                frameCode: "61",
+                width: "250",
+                height: "250",
+                settings: { cntad: "1", cntsr: "1" },
+            });
+        }
     }
 </script>
 

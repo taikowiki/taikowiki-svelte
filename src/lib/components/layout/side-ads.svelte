@@ -27,6 +27,7 @@
     /**
      * @type {HTMLDivElement}
      */
+    /*
     let container;
     $: if ($navigating) {
         container.querySelector(':scope > div')?.remove();
@@ -43,9 +44,10 @@
             });
         }
     }
+    */
 </script>
 
-<div bind:this={container}>
+<div>
     <script>
         if (typeof HawkEyes !== "undefined") {
             new HawkEyes({

@@ -29,13 +29,13 @@
      */
     let container;
     $: if ($navigating) {
-        container.childNodes[1]?.remove();
+        container.querySelector(':scope > div')?.remove();
         if (typeof HawkEyes !== "undefined") {
             new HawkEyes({
                 type: "banner",
                 responsive: "Y",
                 platform: "W",
-                scriptCode: "938200",
+                scriptCode: "938296",
                 frameCode: "61",
                 width: "250",
                 height: "250",
@@ -52,7 +52,7 @@
                 type: "banner",
                 responsive: "Y",
                 platform: "W",
-                scriptCode: "938200",
+                scriptCode: "938296",
                 frameCode: "61",
                 width: "250",
                 height: "250",

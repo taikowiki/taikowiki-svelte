@@ -170,9 +170,7 @@
         </svelte:fragment>
         <Aside slot="aside">
             <div bind:this={$pageAside} class="page-aside" />
-            <!--
             <SideAds/>
-            -->
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>

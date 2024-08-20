@@ -2,6 +2,7 @@
     import { browser } from "$app/environment";
     import { onMount } from "svelte";
     import AsideItem from "./main/AsideItem.svelte";
+    import { navigating } from "$app/stores";
 
     /*
     let container;
@@ -24,6 +25,7 @@
     */
 </script>
 
+{#key $navigating}
 <div>
     <script>
         if (typeof HawkEyes !== "undefined") {
@@ -40,3 +42,4 @@
         }
     </script>
 </div>
+{/key}

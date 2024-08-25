@@ -17,9 +17,12 @@ export async function load({ params }) {
 
     daniData.data.forEach(dani => {
         dani.songs.forEach(song => {
-            songNos.add(song.songNo)
+            if(typeof(song.songNo) === "string"){
+                songNos.add(song.songNo)
+            }
         })
-    })
+    });
+    
     const songDatas = await songDBController.getSongsColumnsBySongNo([...songNos], ["songNo", "genre", "title", "courses"]) as SongDataPickedForDani[]
 
     return {

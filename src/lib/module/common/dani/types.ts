@@ -1,7 +1,7 @@
 import type { SongData } from "$lib/module/common/song/types"
 
 export interface DaniSong{
-    songNo: string;
+    songNo: string | null;
     difficulty: "easy" | "normal" | "hard" | "oni" | "ura";
 }
 
@@ -29,6 +29,7 @@ export interface RegularDani extends DaniBase{
 export interface GaidenDani extends DaniBase{
     dan: "gaiden";
     name: string;
+    qr?: string;
 }
 
 export type RegularDan = "senpo" | "jiho" | "chiuken" | "fukusho" | "taisho" | "beginner" | "10kyu" | "9kyu" | "8kyu" | "7kyu" | "6kyu" | "5kyu" | "4kyu" | "3kyu" | "2kyu" | "1kyu" | "1dan" | "2dan" | "3dan" | "4dan" | "5dan" | "6dan" | "7dan" | "8dan" | "9dan" | "10dan" | "kuroto" | "meijin" | "chojin" | "tatsujin";

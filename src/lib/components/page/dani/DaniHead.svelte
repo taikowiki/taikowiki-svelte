@@ -74,6 +74,13 @@
             {/if}
         {/if}
         -->
+        {#if dani.dan === "gaiden" && dani.qr !== undefined}
+            {#if $theme === "light"}
+                <img src="/assets/icon/dani/qr_256px.svg" alt="" />
+            {:else}
+                <img src="/assets/icon/dani/qr_dark_256px.svg" alt="" />
+            {/if}
+        {/if}
         {#if $isMobile}
             {#if $theme === "light"}
                 <img

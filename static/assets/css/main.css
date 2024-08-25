@@ -35,7 +35,7 @@
 }
 
 :root {
-    color-scheme: light only;
+    color-scheme: only light;
 }
 
 body[data-theme="light"] a {

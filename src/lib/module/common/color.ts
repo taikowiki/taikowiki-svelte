@@ -36,14 +36,20 @@ export const dani = {
             lowdan: '#E2EBEE',
             highdan: '#EEE2E2',
             jin: '#E5F2F5',
-            tatsujin: '#F8EDC8'
+            tatsujin: '#F8EDC8',
+            jiho: '#ffd096',
+            chiuken: '#ba9779',
+            fukusho: '#524c4a'
         } as const,
         dark: {
             kyu: '#5D5A40',
             lowdan: '#40565D',
             highdan: '#5F4242',
             jin: '#80959C',
-            tatsujin: '#8E8C51'
+            tatsujin: '#8E8C51',
+            jiho: '#ffd096',
+            chiuken: '#ba9779',
+            fukusho: '#524c4a'
         } as const
     } as const,
     color: {
@@ -52,14 +58,20 @@ export const dani = {
             lowdan: '#73C5FF',
             highdan: '#E65252',
             jin: '#AED0DB',
-            tatsujin: '#F4BC2B'
+            tatsujin: '#F4BC2B',
+            jiho: '#f6ae54',
+            chiuken: "#bc773f",
+            fukusho: "#2b2827"
         } as const,
         dark: {
             kyu: '#D8B97F',
             lowdan: '#4F92CF',
             highdan: '#BC5353',
             jin: '#B0C6CD',
-            tatsujin: '#F4BC2B'
+            tatsujin: '#F4BC2B',
+            jiho: '#f6ae54',
+            chiuken: "#bc773f",
+            fukusho: "#2b2827"
         } as const
     } as const
 } as const

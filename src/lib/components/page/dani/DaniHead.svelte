@@ -3,14 +3,20 @@
 
     function getColor(dan: Dan, theme: "dark" | "light"): string {
         let d = "kyu";
-        if (/^[1-5]dan$/.test(dan)) {
+        if (/^[1-5]dan$/.test(dan) || dan === "senpo") {
             d = "lowdan";
-        } else if (/^[6-9]dan$/.test(dan) || /^10dan$/.test(dan)) {
+        } else if (/^[6-9]dan$/.test(dan) || /^10dan$/.test(dan) || dan === "taisho") {
             d = "highdan";
         } else if (dan === "kuroto" || dan === "meijin" || dan === "chojin") {
             d = "jin";
         } else if (dan === "tatsujin") {
             d = "tatsujin";
+        } else if (dan === "jiho"){
+            d = "jiho";
+        } else if (dan === "chiuken"){
+            d = "chiuken";
+        } else if (dan === "fukusho"){
+            d = "fukusho";
         }
 
         return (daniColor.color?.[theme] as any)?.[d] ?? "";
@@ -23,12 +29,16 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
+    import DaniPlate from "./DaniPlate.svelte";
 
     export let opened: boolean;
     export let dani: Dani;
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
+
+    const jpDaniI18n = getI18N("other", "ja").dani;
+    const href = `https://www.youtube.com/results?search_query=${encodeURI(`${jpDaniI18n.version[dani.version]} ${jpDaniI18n.dan[dani.dan]}`)}`;
 
     const lang = getLang();
     $: i18n = getI18N("other", $lang).dani;
@@ -37,19 +47,12 @@
 <div
     class="head"
     on:click={() => {
-        opened = !opened;
+        if($isMobile) opened = !opened;
     }}
     role="presentation"
 >
     <div class="section">
-        <div
-            class="item"
-            style={`background-color:${getColor(dani.dan, $theme)};`}
-        >
-            <span>
-                {i18n.dan[dani.name || dani.dan] || dani.name || dani.dan}
-            </span>
-        </div>
+        <DaniPlate dan={dani.dan}/>
         <div
             class="item"
             style={`background-color:${getColor(dani.dan, $theme)};`}
@@ -60,20 +63,15 @@
         </div>
     </div>
     <div class="section">
-        <!--
-            {#if $theme === "light"}
-            <img src="/assets/icon/dani/youtube_256px.svg" alt="" />
+        {#if $theme === "light"}
+            <a class="yt-link" {href} target="_blank">
+                <img src="/assets/icon/dani/youtube_256px.svg" alt="" />
+            </a>
         {:else}
-            <img src="/assets/icon/dani/youtube_dark_256px.svg" alt="" />
+            <a class="yt-link" {href} target="_blank">
+                <img src="/assets/icon/dani/youtube_dark_256px.svg" alt="" />
+            </a>
         {/if}
-        {#if dani.dan !== "gaiden"}
-            {#if $theme === "light"}
-                <img src="/assets/icon/dani/qr_256px.svg" alt="" />
-            {:else}
-                <img src="/assets/icon/dani/qr_dark_256px.svg" alt="" />
-            {/if}
-        {/if}
-        -->
         {#if dani.dan === "gaiden" && dani.qr !== undefined}
             {#if $theme === "light"}
                 <img src="/assets/icon/dani/qr_256px.svg" alt="" />
@@ -109,8 +107,6 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-
-        cursor: pointer;
     }
 
     .item {
@@ -142,9 +138,14 @@
         height: 30px;
     }
 
+    .yt-link {
+        width: 30px;
+        height: 30px;
+    }
+
     .fold {
-        width: 25px;
-        height: 25px;
+        width: 30px;
+        height: 30px;
 
         transition: transform 0.1s;
     }

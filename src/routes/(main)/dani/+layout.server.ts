@@ -1,21 +1,13 @@
 import { daniDBController } from "$lib/module/common/dani/dani.server";
+import { DANIVERSION } from "$lib/module/common/song/const";
 
 export async function load() {
     const versions = await daniDBController.getVersions();
     versions.sort((a, b) => {
-        if (a.startsWith('2')) {
-            if (b.startsWith('2')) {
-                return Number(b) - Number(a);
-            }
+        const aIndex = DANIVERSION.indexOf(a as any);
+        const bIndex = DANIVERSION.indexOf(b as any);
 
-            return -1;
-        }
-        else if(b.startsWith('2')){
-            return 1;
-        }
-        else{
-            return 0;
-        }
+        return bIndex - aIndex;
     });
     return {
         versions

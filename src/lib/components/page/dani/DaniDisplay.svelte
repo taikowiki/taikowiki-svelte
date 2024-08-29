@@ -18,6 +18,8 @@
             d = "chiuken";
         } else if (dan === "fukusho"){
             d = "fukusho";
+        } else if (dan === "gaiden"){
+            d = "gaiden"
         }
 
         return (daniColor.backgroundColor?.[theme] as any)?.[d] ?? "";

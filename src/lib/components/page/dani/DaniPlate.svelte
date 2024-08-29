@@ -40,12 +40,12 @@
 
         font-size: 19px;
         font-weight: bold;
-
         font-family: 'Han';
+        color:white;
 
         text-shadow: 1px 1px black;
 
-        transform: translateY(-1px);
+        transform: translateY(0px);
     }
 
     span{

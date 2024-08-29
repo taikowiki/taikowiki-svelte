@@ -42,7 +42,8 @@ const ko: LangFile = {
                 "hit": "두드린 횟수",
                 "good": "량 개수",
                 "ok": "가 개수",
-                "bad": "불가 개수"
+                "bad": "불가 개수",
+                "score_sum": "점수 총합"
             },
             suffix1: {
                 percent: "%",
@@ -107,7 +108,8 @@ const ko: LangFile = {
                 'kuroto': '현인',
                 'meijin': '명인',
                 'chojin': '초인',
-                'tatsujin': '달인'
+                'tatsujin': '달인',
+                'gaiden': '외전'
             },
             version: {
                 'katsudon': '카츠동',
@@ -120,6 +122,7 @@ const ko: LangFile = {
                 'yellow': '옐로우',
                 'blue': '블루',
                 'green': '그린',
+                'nijiiro_gaiden': '니지이로 외전',
                 '20': '니지이로 2020',
                 '21': '니지이로 2021',
                 '22': '니지이로 2022',

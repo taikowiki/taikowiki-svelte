@@ -6,7 +6,7 @@ export interface DaniSong {
     difficulty: "easy" | "normal" | "hard" | "oni" | "ura";
 }
 
-export type DaniConditionType = "gauge" | "combo" | "score" | "roll" | "hit" | "good" | "ok" | "bad"
+export type DaniConditionType = "gauge" | "combo" | "score" | "roll" | "hit" | "good" | "ok" | "bad" | "score_sum"
 
 export type DaniCondition = {
     type: DaniConditionType;

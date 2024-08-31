@@ -170,8 +170,10 @@
         </svelte:fragment>
         <Aside slot="aside">
             <div bind:this={$pageAside} class="page-aside" />
-            <SideAds/>
             <AsideNewSong newSongs={data.newSongs} />
+            <a href="https://koubouha.modoo.at">
+                <img src="/assets/img/bachi.jpg" style="width: 100%;border-radius: 10px;" alt="competition"/>
+            </a>
         </Aside>
     </Main>
     <Footer version={data.version} />

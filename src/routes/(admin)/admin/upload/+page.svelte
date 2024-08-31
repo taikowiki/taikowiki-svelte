@@ -1,9 +1,11 @@
 <script lang="ts">
     import axios from "axios";
 
-    let fileInput: HTMLInputElement;
+    export let data;
 
-    let fileLog: { originalFileName: string; fileName: string }[] = [];
+    let { fileLog } = data;
+
+    let fileInput: HTMLInputElement;
 
     async function uploadFile() {
         const file = (fileInput.files as FileList)[0];
@@ -18,16 +20,18 @@
                 method: "post",
                 url: "https://file.taiko.wiki/upload/img",
                 data: formData,
-                withCredentials: true
+                withCredentials: true,
             });
 
-            fileLog.push({originalFileName, fileName: response.data.fileName});
-            fileLog = fileLog;
+            fileLog = [
+                { originalFileName, fileName: response.data.fileName },
+                ...fileLog,
+            ];
         } catch {
             alert("업로드 실패");
         }
 
-        fileInput.value = '';
+        fileInput.value = "";
     }
 </script>
 
@@ -55,10 +59,10 @@
 </table>
 
 <style>
-    table{
+    table {
         border-collapse: collapse;
     }
-    td{
+    td {
         border: 1px solid black;
     }
 </style>

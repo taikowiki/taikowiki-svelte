@@ -4,7 +4,8 @@ const RowDefault = createSSC('div', () => '', () => `
     display:flex;
     flex-direction:row;
     align-items: center;
-`)
+`);
+
 export const Row = {
     left: createSSC(RowDefault.styledComponentData.tagName, () => '', () => `
         ${RowDefault.styledComponentData.generateCommonStyle({})}
@@ -18,4 +19,4 @@ export const Row = {
         ${RowDefault.styledComponentData.generateCommonStyle({})}
         justify-content: flex-end;
     `)
-}
+};

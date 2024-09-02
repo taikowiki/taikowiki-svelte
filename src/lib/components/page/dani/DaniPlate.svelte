@@ -17,7 +17,7 @@
                 : dan === '10dan' || dan === '9dan' || dan === '8dan' || dan === '7dan' || dan === '6dan' || dan === 'taisho' ? 'red-dan' : 'blue-dan'
 </script>
 
-<div style={`background-image: url('/assets/icon/dani/plate/${danPlate}.webp');`}>
+<div style={`background-image: url('/assets/icon/dani/plate/${danPlate}.webp');`} class:ko={$lang === 'ko'} class:ja={$lang === "ja"}>
     <span>
         {i18n.dani.dan[dan]}
     </span>
@@ -50,5 +50,21 @@
 
     span{
         transform: translateY(-1px);
+    }
+
+    .ko{
+        font-family: 'KuK';
+    }
+
+    .ko span{
+        transform:translateY(0.5px);
+    }
+
+    .ja{
+        font-family: 'Hak';
+    }
+    
+    .ja span{
+        transform: translate(-0.25px, -0.5px);
     }
 </style>

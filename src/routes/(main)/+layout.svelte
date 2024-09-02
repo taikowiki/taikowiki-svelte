@@ -97,12 +97,12 @@
             <HeaderItem href="/" useHover={false}>
                 {#if $isMobile}
                     <img
-                        class="logo"
-                        src="/assets/img/logo_mobile.png"
+                        class="logo-mobile"
+                        src="/assets/img/logo_mobile.webp"
                         alt="logo"
                     />
                 {:else}
-                    <img class="logo" src="/assets/img/logo.png" alt="logo" />
+                    <img class="logo" src="/assets/img/logo.webp" alt="logo" />
                 {/if}
             </HeaderItem>
             <HeaderItem
@@ -186,7 +186,12 @@
     }
 
     .logo {
+        height: 38px;
+        margin-right: -10px;
+    }
+    .logo-mobile {
         height: 30px;
+        margin-right: -6px;
     }
     span.header-text {
         transform: translateY(-1px);

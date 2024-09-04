@@ -4,14 +4,22 @@
 
     function getBackgroundColor(dan: Dan, theme: "dark" | "light"): string {
         let d = "kyu";
-        if (/^[1-5]dan$/.test(dan)) {
+        if (/^[1-5]dan$/.test(dan) || dan === "senpo") {
             d = "lowdan";
-        } else if (/^[6-9]dan$/.test(dan) || /^10dan$/.test(dan)) {
+        } else if (/^[6-9]dan$/.test(dan) || /^10dan$/.test(dan) || dan === "taisho") {
             d = "highdan";
         } else if (dan === "kuroto" || dan === "meijin" || dan === "chojin") {
             d = "jin";
         } else if (dan === "tatsujin") {
             d = "tatsujin";
+        } else if (dan === "jiho"){
+            d = "jiho";
+        } else if (dan === "chiuken"){
+            d = "chiuken";
+        } else if (dan === "fukusho"){
+            d = "fukusho";
+        } else if (dan === "gaiden"){
+            d = "gaiden"
         }
 
         return (daniColor.backgroundColor?.[theme] as any)?.[d] ?? "";

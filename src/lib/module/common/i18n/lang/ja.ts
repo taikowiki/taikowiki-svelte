@@ -85,7 +85,8 @@ const ja: LangFile = {
                 'kuroto': '玄人',
                 'meijin': '名人',
                 'chojin': '超人',
-                'tatsujin': '達人'
+                'tatsujin': '達人',
+                'gaiden': "外傳"
             },
             version: {
                 'katsudon': 'K-D',
@@ -98,6 +99,7 @@ const ja: LangFile = {
                 'yellow': 'イエロー',
                 'blue': 'ブルー',
                 'green': 'グリーン',
+                'nijiiro_gaiden': 'ニジイロ 外傳',
                 '20': 'ニジイロ 2020',
                 '21': 'ニジイロ 2021',
                 '22': 'ニジイロ 2022',

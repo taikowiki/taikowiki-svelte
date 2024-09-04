@@ -4,7 +4,7 @@ This project is an wiki project for 太鼓の達人(Taiko no Tatsujin). This is 
 
 - [한국어](/docs/ko/readme.md)
 
-## contribution
+## Contribution
 
 This project is being developed on `dev/main` branch, and will be merged to `main` branch. So you should pull request to `dev/main` branch.
 
@@ -13,6 +13,11 @@ This project is being developed on `dev/main` branch, and will be merged to `mai
 - [module](/docs/module.md)
     - [server module](/docs/server_module.md)
 
+## Contributors
+
+- [Mahlerian](https://x.com/IchBinMahlerian)
+    - Dani plate design in Dani-Dojo page
+    - Logo image design
 
 ## Donate
 

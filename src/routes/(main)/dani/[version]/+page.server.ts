@@ -2,6 +2,7 @@ import { daniDBController } from '$lib/module/common/dani/dani.server';
 import { songDBController } from '$lib/module/common/song/song.server';
 import type { SongDataPickedForDani } from '$lib/module/common/dani/types';
 import { error } from '@sveltejs/kit';
+import { DAN } from '$lib/module/common/song/const.js';
 
 export async function load({ params }) {
     const daniData = await daniDBController.getByVersion(params.version);
@@ -15,11 +16,21 @@ export async function load({ params }) {
         throw error(404);
     }
 
+    daniData.data.sort((a, b) => {
+        const aIndex = DAN.indexOf(a as any);
+        const bIndex = DAN.indexOf(b as any);
+
+        return bIndex - aIndex;
+    })
+
     daniData.data.forEach(dani => {
         dani.songs.forEach(song => {
-            songNos.add(song.songNo)
+            if(typeof(song.songNo) === "string"){
+                songNos.add(song.songNo)
+            }
         })
-    })
+    });
+    
     const songDatas = await songDBController.getSongsColumnsBySongNo([...songNos], ["songNo", "genre", "title", "courses"]) as SongDataPickedForDani[]
 
     return {

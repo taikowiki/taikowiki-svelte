@@ -58,7 +58,7 @@
     }
 
     //usemobile
-    const isMobile = useIsMobile();
+    const isMobile = useIsMobile(data.isMobile);
 
     //lang
     const lang = useLang();
@@ -91,6 +91,9 @@
     ></script>
 </svelte:head>
 
+{#if !browser}
+    <Loading/>
+{/if}
 <div style={browser ? "" : "transform:translateX(-100%);"}>
     <Header>
         <svelte:fragment slot="left">

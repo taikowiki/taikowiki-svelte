@@ -23,20 +23,24 @@
 
     $: condition.criteria.red = redCriteria
         .split(",")
-        .map((e) => Number(e.trim()));
+        .map((e) => e.trim())
+        .filter(e => e !== '')
+        .map((e) => Number(e));
     $: condition.criteria.gold = goldCriteria
         .split(",")
-        .map((e) => Number(e.trim()));
+        .map((e) => e.trim())
+        .filter(e => e !== '')
+        .map((e) => Number(e));
 
     const lang = getLang();
-    $: conditionI18n = getI18N('component', $lang).DaniDisplay.type
+    $: conditionI18n = getI18N("component", $lang).DaniDisplay.type;
 </script>
 
 <table>
     <tr>
         <td> 종류 </td>
         <td>
-            <select bind:value={condition.type}> 
+            <select bind:value={condition.type}>
                 {#each conditionTypes as conditionType}
                     <option value={conditionType}>
                         {conditionI18n[conditionType]}
@@ -51,24 +55,32 @@
     <tr>
         <td> 적합격 </td>
         <td>
-            <input type="text" bind:value={redCriteria} placeholder="콤마로 구분할 것"/>
+            <input
+                type="text"
+                bind:value={redCriteria}
+                placeholder="콤마로 구분할 것"
+            />
         </td>
     </tr>
     <tr>
         <td> 금합격 </td>
         <td>
-            <input type="text" bind:value={goldCriteria} placeholder="콤마로 구분할 것" />
+            <input
+                type="text"
+                bind:value={goldCriteria}
+                placeholder="콤마로 구분할 것"
+            />
         </td>
     </tr>
 </table>
 
 <style>
-    table{
+    table {
         border: 1px solid black;
         border-collapse: collapse;
     }
-    
-    td{
+
+    td {
         border: 1px solid black;
     }
 </style>

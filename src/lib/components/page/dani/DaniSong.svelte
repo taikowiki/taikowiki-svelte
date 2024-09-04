@@ -25,13 +25,13 @@
     const [theme] = getTheme();
 
     const songData = songDatas.find(
-        (songData) => songData.songNo === song.songNo,
+        (songData) => songData.songNo === song.songNo
     );
-    const genre = songData?.genre || [];
-    const title = songData?.title || "";
-    const level = songData?.courses?.[song.difficulty]?.level || 0;
+    const genre = songData?.genre ?? [];
+    const title = songData?.title ?? "-";
+    const level = songData?.courses?.[song.difficulty]?.level ?? ' -';
     const combo =
-        songData?.courses?.[song.difficulty]?.maxCombo?.toString() || "";
+        songData?.courses?.[song.difficulty]?.maxCombo?.toString() ?? "-";
 </script>
 
 <a

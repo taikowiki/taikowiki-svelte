@@ -34,8 +34,26 @@
     src: url('/assets/font/SokchoDotum.woff2') format('woff2');
 }
 
+@font-face{
+    font-family: 'Kuk';
+    src: url('/assets/font/Kuk/aLt.woff2') format('woff2');
+    font-weight: normal;
+}
+
+@font-face{
+    font-family: 'Kuk';
+    src: url('/assets/font/Kuk/bBd.woff2') format('woff2');
+    font-weight: bold;
+}
+
+@font-face{
+    font-family: 'Hak';
+    src: url('/assets/font/Hakushu/Hakushu.otf') format('woff2');
+    font-weight: normal;
+}
+
 :root {
-    color-scheme: light only;
+    color-scheme: only light;
 }
 
 body[data-theme="light"] a {

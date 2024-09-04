@@ -188,6 +188,7 @@
     .logo {
         height: 38px;
         margin-right: -10px;
+        transform: translateY(0.5px);
     }
     .logo-mobile {
         height: 30px;

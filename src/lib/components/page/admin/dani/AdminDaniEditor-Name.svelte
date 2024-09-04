@@ -17,5 +17,6 @@
 
     td:nth-child(1){
         width: 100px;
+        text-align: center;
     }
 </style>

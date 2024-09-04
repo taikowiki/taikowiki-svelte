@@ -1,8 +1,10 @@
 <script lang="ts">
     import type { DaniCondition } from "$lib/module/common/dani/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import type { MouseEventHandler } from "svelte/elements";
 
     export let condition: DaniCondition;
+    export let deleteCondition: MouseEventHandler<any>;
 
     const conditionTypes = [
         "gauge",
@@ -43,7 +45,7 @@
             </select>
         </td>
         <td rowspan="3">
-            <button>삭제</button>
+            <button on:click={deleteCondition}>삭제</button>
         </td>
     </tr>
     <tr>

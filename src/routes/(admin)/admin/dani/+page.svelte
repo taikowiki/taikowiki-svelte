@@ -34,9 +34,11 @@
         <button on:click={() => {addVersion(newVersion)}}> 추가 </button>
     </div>
     {#each versions as version}
-        <a href={`/admin/dani/${version}`}>
-            {versionI18n[version] == '' ? version : versionI18n[version]}
-        </a>
+        <div>
+            <a href={`/admin/dani/${version}`}>
+                {versionI18n[version] == '' ? version : versionI18n[version]}
+            </a>
+        </div>
     {/each}
 </div>
 

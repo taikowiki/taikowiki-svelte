@@ -58,7 +58,10 @@
     const isMobile = getIsMobile();
 
     const jpDaniI18n = getI18N("other", "ja").dani;
-    const href = dani.dan === "gaiden" ? `https://www.youtube.com/results?search_query=${encodeURI(`太鼓の達人 ${dani.name.ja}`)}` : `https://www.youtube.com/results?search_query=${encodeURI(`太鼓の達人 ${jpDaniI18n.version[dani.version]} ${jpDaniI18n.dan[dani.dan]}`)}`;
+    const href =
+        dani.dan === "gaiden"
+            ? `https://www.youtube.com/results?search_query=${encodeURI(`太鼓の達人 ${dani.name.ja}`)}`
+            : `https://www.youtube.com/results?search_query=${encodeURI(`太鼓の達人 ${jpDaniI18n.version[dani.version]} ${jpDaniI18n.dan[dani.dan]}`)}`;
 
     const lang = getLang();
     $: i18n = getI18N("other", $lang).dani;
@@ -85,19 +88,26 @@
         </div>
     </div>
     <div class="section">
-        <a class="yt-link" {href} target="_blank" on:click|stopPropagation={()=>{}}>
-            <img src={`/assets/icon/dani/youtube${$theme === "dark" ? "_dark" : ''}_256px.svg`} alt="" />
+        <a
+            class="yt-link"
+            {href}
+            target="_blank"
+            on:click|stopPropagation={() => {}}
+        >
+            <img
+                src={`/assets/icon/dani/youtube${$theme === "dark" ? "_dark" : "_dark"}_256px.svg`}
+                alt=""
+            />
         </a>
         {#if dani.dan === "gaiden" && dani.qr !== undefined}
             <img
-                src={$theme === "light"
-                    ? "/assets/icon/dani/qr.svg"
-                    : "/assets/icon/dani/qr_dark.svg"}
+                src={"/assets/icon/dani/qr_dark.svg"}
                 alt="qr button"
                 on:click|stopPropagation={() => {
                     dialog.showModal();
                 }}
                 role="presentation"
+                style="cursor:pointer;"
             />
             <dialog
                 bind:this={dialog}
@@ -106,26 +116,23 @@
             >
                 <div class="dialog-content-wrapper">
                     <img class="qr" src={dani.qr} alt="qr" />
-                    <button on:click|stopPropagation={() => {dialog.close()}}> 닫기 </button>
+                    <button
+                        on:click|stopPropagation={() => {
+                            dialog.close();
+                        }}
+                    >
+                        닫기
+                    </button>
                 </div>
             </dialog>
         {/if}
         {#if $isMobile}
-            {#if $theme === "light"}
-                <img
-                    class="fold"
-                    src="/assets/icon/dani/unfold.svg"
-                    alt=""
-                    class:opened
-                />
-            {:else}
-                <img
-                    class="fold"
-                    src="/assets/icon/dani/unfold_dark.svg"
-                    alt=""
-                    class:opened
-                />
-            {/if}
+            <img
+                class="fold"
+                src="/assets/icon/dani/unfold_dark.svg"
+                alt=""
+                class:opened
+            />
         {/if}
     </div>
 </div>
@@ -228,12 +235,12 @@
         height: auto;
     }
 
-    .dialog-content-wrapper{
-        display:flex;
+    .dialog-content-wrapper {
+        display: flex;
         flex-direction: column;
         align-items: center;
     }
-    .dialog-content-wrapper button{
+    .dialog-content-wrapper button {
         width: 50px;
         height: 30px;
 

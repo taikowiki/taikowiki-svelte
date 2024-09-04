@@ -1,5 +1,6 @@
+import { DAN } from "../song/const";
 import type { DaniVersion } from "../song/types";
-import type { Dani, DaniDBData } from "./types";
+import type { Dani, DaniDBData, DaniUpdateData } from "./types";
 import { defineDBHandler } from "@yowza/db-handler";
 
 export const daniDBController = {
@@ -57,5 +58,20 @@ export const daniDBController = {
         return async(run) => {
             await run("INSERT INTO `dani` (`version`, `data`) VALUES (?, ?)", [version, JSON.stringify(danis ?? [])])
         }
-    })
+    }),
+    /**
+     * Update Version
+     */
+    updateVersion: defineDBHandler<[DaniUpdateData]>((updateData) => {
+        updateData.data.sort((a, b) => {
+            const aIndex = DAN.indexOf(a as any);
+            const bIndex = DAN.indexOf(b as any);
+    
+            return bIndex - aIndex;
+        });
+        
+        return async(run) => {
+            await run("UPDATE `dani` SET `data` = ? WHERE `version` = ?", [JSON.stringify(updateData.data), updateData.version])
+        }
+    }),
 }

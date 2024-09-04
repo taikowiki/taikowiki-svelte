@@ -1,4 +1,4 @@
-import type { SongData } from "$lib/module/common/song/types"
+import type { DaniVersion, SongData } from "$lib/module/common/song/types"
 import { DANIVERSION, DAN } from "../song/const";
 
 export interface DaniSong {
@@ -41,8 +41,11 @@ export type Dani = RegularDani | GaidenDani;
 
 export interface DaniDBData {
     order: number;
-    version: string;
+    version: DaniVersion;
     data: Dani[];
 }
 
 export type SongDataPickedForDani = Pick<SongData, "songNo" | "genre" | "title" | "courses">
+
+// requestor
+export type DaniUpdateData = Omit<DaniDBData, 'order'>

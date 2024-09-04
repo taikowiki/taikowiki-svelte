@@ -5,6 +5,7 @@
     import AdminDaniEditorSong from "./AdminDaniEditor-Song.svelte";
     import AdminDaniEditorCondition from "./AdminDaniEditor-Conditions.svelte";
     import type { MouseEventHandler } from "svelte/elements";
+    import AdminDaniEditorQr from "./AdminDaniEditor-Qr.svelte";
 
     export let daniData: Dani;
     export let deleteDani: MouseEventHandler<any>;
@@ -23,8 +24,9 @@
 
 <table>
     <AdminDaniEditorDan bind:dan={daniData.dan} {setDaniName} />
-    {#if daniData.name}
+    {#if daniData.dan === "gaiden"}
         <AdminDaniEditorName bind:name={daniData.name} />
+        <AdminDaniEditorQr bind:qr={daniData.qr}/>
     {/if}
     <AdminDaniEditorSong bind:songs={daniData.songs} />
     <AdminDaniEditorCondition bind:conditions={daniData.conditions}/>

@@ -7,16 +7,20 @@
     const [theme] = getTheme();
 </script>
 
-<div class="container">
+<h1 class="container">
     <div class="title">
         {title}
     </div>
     <a class="icon-container" href={`/song/${songNo}/edit`} data-theme={$theme}>
         <img class="icon" src="/assets/icon/pen.svg" alt="edit" />
     </a>
-</div>
+</h1>
 
 <style>
+    h1{
+        margin: 0;
+    }
+
     .container {
         display: flex;
         flex-direction: row;

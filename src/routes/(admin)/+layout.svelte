@@ -5,7 +5,6 @@
     import HeaderItem from "$lib/components/layout/main/HeaderItem.svelte";
     import User from "$lib/components/layout/main/User.svelte";
     import { writable } from "svelte/store";
-    import axios from 'axios';
     import { navigating, page } from "$app/stores";
     import { setContext } from "svelte";
     import { useLang } from "$lib/module/common/i18n/i18n.js";

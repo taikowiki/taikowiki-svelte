@@ -10,7 +10,8 @@
     export let daniData: Dani;
     export let deleteDani: MouseEventHandler<any>;
 
-    function setDaniName() {
+    function gaidenInit(dan: Dani['dan']) {
+        daniData.dan = dan;
         if (daniData.dan === "gaiden") {
             daniData.name = {
                 ja: "",
@@ -23,7 +24,7 @@
 </script>
 
 <table>
-    <AdminDaniEditorDan bind:dan={daniData.dan} {setDaniName} />
+    <AdminDaniEditorDan bind:dan={daniData.dan} {gaidenInit} />
     {#if daniData.dan === "gaiden"}
         <AdminDaniEditorName bind:name={daniData.name} />
         <AdminDaniEditorQr bind:qr={daniData.qr}/>

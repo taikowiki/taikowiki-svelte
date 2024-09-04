@@ -63,6 +63,10 @@ body[data-theme="dark"] a {
     color: #e1a743;
 }
 
+img.preview{
+    display:none;
+}
+
 /*NanumSquare*/
 body{
     font-family: 'Noto Sans JP', 'Noto Sans KR', sans-serif;

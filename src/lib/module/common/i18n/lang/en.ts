@@ -275,3 +275,5 @@ const en: LangFile = {
         donderData: 'Donder Data'
     }
 } as const;
+
+export default en;

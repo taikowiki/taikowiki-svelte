@@ -17,7 +17,3 @@
 <div>
     <a href="/admin/dani">단위도장 관리</a>
 </div>
-
-<div>
-    <a href="/admin/upload">이미지 업로드</a>
-</div>

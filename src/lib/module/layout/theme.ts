@@ -20,10 +20,10 @@ export default function useTheme(init?: 'light' | 'dark'): [Writable<'light' | '
         theme.subscribe((value) => {
             document.body.setAttribute("data-theme", value);
             window.localStorage.theme = value;
-            if("cookieStore" in window){
-                //@ts-expect-error
-                window.cookieStore.set('theme', value);
-            }
+            (async() => {
+                const cookieStore = (await import('$lib/module/common/cookieStore.client')).default;
+                cookieStore.set('theme', value);
+            })().catch()
         })
     }
     else {

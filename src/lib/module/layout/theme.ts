@@ -6,33 +6,39 @@ import type { Action } from "svelte/action";
 /**
  * Save a store to the context indicating theme(light or dark).
  */
-export default function useTheme(): [Writable<'light' | 'dark'>, () => void] {
+export default function useTheme(init?: 'light' | 'dark'): [Writable<'light' | 'dark'>, () => void] {
     let theme = writable<"light" | "dark">();
     setContext("theme", theme)
 
     if (browser) {
-        theme.set(window.localStorage.theme ??
+        const themeValue = window.localStorage.theme ??
             (window.matchMedia &&
                 window.matchMedia("(prefers-color-scheme: dark)").matches
                 ? "dark"
-                : "light"))
+                : "light");
+        theme.set(themeValue);
         theme.subscribe((value) => {
+            document.body.setAttribute("data-theme", value);
             window.localStorage.theme = value;
+            if("cookieStore" in window){
+                //@ts-expect-error
+                window.cookieStore.set('theme', value);
+            }
         })
     }
-    else{
-        theme.set("light");
+    else {
+        theme.set(init ?? "light");
     }
 
     const toggleTheme = () => {
         if (get(theme) === "light") {
-            theme.set("dark")
+            theme.set("dark");
         }
         else {
-            theme.set('light')
+            theme.set('light');
         }
     }
-    setContext('toggleTheme', toggleTheme)
+    setContext('toggleTheme', toggleTheme);
 
     return [theme, toggleTheme];
 }

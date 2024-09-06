@@ -1,52 +1,52 @@
 @import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
 @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Dongle&family=Gamja+Flower&family=Gothic+A1&family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+KR:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
 
-@font-face{
+@font-face {
     font-family: 'Han';
     src: url('/assets/font/Han/SourceHanSerif-Bold.woff2') format('woff2');
     font-weight: normal;
     unicode-range: U+3040-309F, U+30A0-30FF, U+1100-11FF, U+3131-318F, U+AC00-D7A3;
 }
 
-@font-face{
+@font-face {
     font-family: 'Han';
     src: url('/assets/font/Han/SourceHanSerif-Heavy.woff2') format('woff2');
     font-weight: bold;
     unicode-range: U+3040-309F, U+30A0-30FF, U+1100-11FF, U+3131-318F, U+AC00-D7A3;
 }
 
-@font-face{
+@font-face {
     font-family: 'QingKong';
     src: url('/assets/font/QingKong/AozoraMincho-bold-2.woff2') format('woff2');
     font-weight: normal;
     unicode-range: U+2E80-2EFF, U+3400-4DBF, U+4E00-9FBF, U+F900-FAFF, U+20000-2A6DF, U+2F800-2FA1F;
 }
 
-@font-face{
+@font-face {
     font-family: 'QingKong';
     src: url('/assets/font/QingKong/AozoraMinchoHeavy-2.woff2') format('woff2');
     font-weight: bold;
     unicode-range: U+2E80-2EFF, U+3400-4DBF, U+4E00-9FBF, U+F900-FAFF, U+20000-2A6DF, U+2F800-2FA1F;
 }
 
-@font-face{
+@font-face {
     font-family: 'Sokcho';
     src: url('/assets/font/SokchoDotum.woff2') format('woff2');
 }
 
-@font-face{
+@font-face {
     font-family: 'Kuk';
     src: url('/assets/font/Kuk/aLt.woff2') format('woff2');
     font-weight: normal;
 }
 
-@font-face{
+@font-face {
     font-family: 'Kuk';
     src: url('/assets/font/Kuk/bBd.woff2') format('woff2');
     font-weight: bold;
 }
 
-@font-face{
+@font-face {
     font-family: 'Hak';
     src: url('/assets/font/Hakushu/Hakushu.otf') format('woff2');
     font-weight: normal;
@@ -62,16 +62,27 @@ body[data-theme="light"] a {
 body[data-theme="dark"] a {
     color: #e1a743;
 }
+body[data-theme="light"] {
+    background-color: #e8e8e8;
+    color: black;
+}
+body[data-theme="dark"] {
+    background-color: black;
+    color: white;
+}
+a {
+    text-decoration: none;
+}
 
-img.preview{
-    display:none;
+img.preview {
+    display: none;
 }
 
 /*NanumSquare*/
-body{
+body {
     font-family: 'Noto Sans JP', 'Noto Sans KR', sans-serif;
 }
 
-*{
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }

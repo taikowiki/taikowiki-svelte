@@ -39,6 +39,7 @@
 		"@yowza/db-handler": "^0.1.0",
 		"@yowza/rrequestor": "^0.2.1",
 		"axios": "^1.6.8",
+		"cookie-store": "^3.0.0",
 		"css-filter-converter": "^1.0.109",
 		"dayjs": "^1.11.11",
 		"html2canvas": "^1.4.1",

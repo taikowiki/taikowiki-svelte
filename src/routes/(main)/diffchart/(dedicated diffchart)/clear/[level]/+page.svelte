@@ -47,6 +47,7 @@
     $: customedDiffchart = getCustomedDiffchart(data.diffChart, i18n);
 
     const songs = data.songs;
+    const donderData = data.donderData;
 </script>
 
 <PageTitle title={`★${$page.url.pathname.split('/')[3]} ${titleI18n}`}/>
@@ -54,6 +55,7 @@
 <Diffchart
     diffChart={customedDiffchart}
     {songs}
+    {donderData}
     backgroundColor="#c9c9c9"
     bind:downloadImage
 />

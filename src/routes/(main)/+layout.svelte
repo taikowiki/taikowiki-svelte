@@ -52,10 +52,7 @@
     //deepFreeze songs
 
     //theme
-    let [theme, _] = useTheme();
-    $: if (browser) {
-        document.body.setAttribute("data-theme", $theme);
-    }
+    let [theme, _] = useTheme(data.theme);
 
     //usemobile
     const isMobile = useIsMobile(data.isMobile);
@@ -77,10 +74,10 @@
     setContext("user", user);
     $: if (($navigating || $page.state) && browser) {
         userRequestor.getUserData(null).then((response) => {
-            if(response.status === 'success'){
+            if (response.status === "success") {
                 user.set(response.data);
             }
-        })
+        });
     }
 </script>
 
@@ -89,12 +86,32 @@
         type="text/javascript"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${data.kakaoKey}&libraries=services`}
     ></script>
+    {#if !browser}
+        {#if $theme === "light"}
+            <style>
+                a {
+                    color: #cf4844;
+                }
+                body {
+                    background-color: #e8e8e8;
+                    color: black;
+                }
+            </style>
+        {:else}
+            <style>
+                a {
+                    color: #e1a743;
+                }
+                body {
+                    background-color: black;
+                    color: white;
+                }
+            </style>
+        {/if}
+    {/if}
 </svelte:head>
 
-{#if !browser}
-    <Loading/>
-{/if}
-<div style={browser ? "" : "transform:translateX(-100%);"}>
+<div>
     <Header>
         <svelte:fragment slot="left">
             <HeaderItem href="/" useHover={false}>
@@ -172,18 +189,6 @@
 </div>
 
 <style>
-    :global(body[data-theme="light"]) {
-        background-color: #e8e8e8;
-        color: black;
-    }
-    :global(body[data-theme="dark"]) {
-        background-color: black;
-        color: white;
-    }
-    :global(a){
-        text-decoration: none;
-    }
-
     .page-aside:empty {
         display: none;
     }

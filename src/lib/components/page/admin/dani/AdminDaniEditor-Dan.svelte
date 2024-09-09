@@ -2,10 +2,12 @@
     import type { Dani } from "$lib/module/common/dani/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DAN } from "$lib/module/common/song/const";
-    import type { ChangeEventHandler } from "svelte/elements";
 
     export let dan: Dani['dan'];
-    export let setDaniName: ChangeEventHandler<any>;
+    export let gaidenInit: (dan: Dani['dan']) => void;
+
+    let danValue = dan;
+    $: gaidenInit(danValue);
 
     const lang = getLang();
     $: daniI18n = getI18N("other", $lang).dani;
@@ -14,7 +16,7 @@
 <tr>
     <td> 단 </td>
     <td>
-        <select bind:value={dan} on:change={setDaniName}>
+        <select bind:value={danValue}>
             {#each DAN as dan}
                 <option value={dan}>
                     {daniI18n.dan[dan]}

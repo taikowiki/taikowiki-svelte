@@ -6,14 +6,13 @@ import type {
     SongScore,
     SongScoreDetail,
 } from "$lib/module/common/diffchart/types";
-import { type UserDonderData } from '$lib/module/common/user/types.js';
-import type { Clear, Difficulty } from "node-hiroba/types";
+import type { Clear, ClearData, Difficulty } from "node-hiroba/types";
 
 
 export async function load({ locals }) {
     let donderDataResult = null;
     if (locals.userData !== null) {
-        donderDataResult = await userDonderDBController.getData(locals.userData.UUID);
+        donderDataResult = await userDonderDBController.getClearData(locals.userData.UUID);
         if(donderDataResult){
             donderDataResult = parseSongScoreDonderData(donderDataResult);
         }
@@ -24,19 +23,17 @@ export async function load({ locals }) {
     }
 }
 
-function parseSongScoreDonderData(data: UserDonderData): SongScore[] | null {
-    const result: SongScore[] = [];
+function parseSongScoreDonderData(clearData: ClearData[]): SongScore[] | null {
     try {
-        for (let scoreData of data.clearData) {
-            const details: Partial<Record<DifficultyType, SongScoreDetail>> = parseDetail(scoreData.difficulty);
+        return clearData.map(c => {
+            const details: Partial<Record<DifficultyType, SongScoreDetail>> = parseDetail(c.difficulty);
             const score: SongScore = {
-                title: scoreData.title,
-                songNo: scoreData.songNo,
-                details: details,
+                title: c.title,
+                songNo: c.songNo,
+                details
             };
-            result.push(score);
-        }
-        return result;
+            return score;
+        })
     } catch (err) {
         console.warn(err);
         return null;

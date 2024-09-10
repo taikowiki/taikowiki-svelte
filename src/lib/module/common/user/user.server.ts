@@ -1,8 +1,7 @@
 import { fetchMeasures, getRating } from "@taiko-wiki/taiko-rating";
 import type { UserClearData, UserData, UserDonderData, UserScoreData } from "./types";
 import { defineDBHandler } from "@yowza/db-handler";
-import type { CardData } from "node-hiroba/types";
-//@ts-expect-error
+import type { CardData, ClearData } from "node-hiroba/types";
 import groupBy from "object.groupby";
 
 export const userDBController = {
@@ -210,6 +209,21 @@ export const userDonderDBController = {
             data.ratingHistory = JSON.parse(data.ratingHistory);
 
             return data as UserDonderData;
+        }
+    }),
+
+    /**
+     * get clear data
+     */
+    getClearData: defineDBHandler<[string], ClearData[]>((UUID) => {
+        return async (run) => {
+            const result = await run("SELECT `clearData` FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
+
+            if(result.length === 0){
+                return null;
+            }
+
+            return JSON.parse(result[0].clearData)
         }
     })
 }

@@ -1,66 +1,44 @@
 <script lang="ts">
-    import type { UserDonderData } from "$lib/module/common/user/types";
-    import { getRating, fetchMeasures } from "@taiko-wiki/taiko-rating";
-    import type { Measure } from "@taiko-wiki/taiko-rating/src/types";
+    import { getRating } from "@taiko-wiki/taiko-rating";
     import { TIER_COLOR } from "$lib/module/common/user/const";
     import { getTier } from "$lib/module/common/user/getTier";
     import TierImage from "./TierImage.svelte";
     import TierProgress from "./TierProgress.svelte";
     import GradeProgress from "./GradeProgress.svelte";
 
-    export let donderData: UserDonderData;
-    export let ratingResult: ReturnType<typeof getRating>;
-
-    let measures: Measure[];
-    let tier: ReturnType<typeof getTier>;
-    const f = async () => {
-        if (donderData.scoreData === null) {
-            throw new Error("NO_SCOREDATA");
-        } else {
-            measures = await fetchMeasures();
-            ratingResult = getRating(donderData.scoreData, measures);
-            tier = getTier(ratingResult.rating);
-        }
-    };
+    export let ratings: ReturnType<typeof getRating>;
+    let tier: ReturnType<typeof getTier> = getTier(ratings.rating);
 
     export let Container: ConstructorOfATypedSvelteComponent;
 </script>
 
-{#await f()}
-    <img src="/assets/icon/loading.svg" alt="loading" />
-{:then}
-    <Container>
-        <TierImage tierName={tier.tierName} grade={tier.detailTierGrade} />
-        <div class="exp-rating-container">
-            <div class="exp">
-                <span> exp </span>
-                {ratingResult?.exp}
-            </div>
-            <div
-                class="rating"
-                style={tier.tierName === "omega"
-                    ? ""
-                    : `background:${TIER_COLOR[tier.tierName]}`}
-                class:pearl={tier.tierName === "pearl"}
-                class:omega={tier.tierName === "omega"}
-            >
-                <span>
-                    {ratingResult.rating}
-                </span>
-            </div>
+<Container>
+    <TierImage tierName={tier.tierName} grade={tier.detailTierGrade} />
+    <div class="exp-rating-container">
+        <div class="exp">
+            <span> exp </span>
+            {ratings?.exp}
         </div>
-        <GradeProgress
-            rating={ratingResult.rating}
-            tierName={tier.tierName}
-            grade={tier.detailTierGrade}
-        />
-        <TierProgress rating={ratingResult.rating} tierName={tier.tierName} />
-    </Container>
-{:catch err}
-    {#if err.message === "NO_SCOREDATA"}
-        점수데이터가 없습니다.
-    {/if}
-{/await}
+        <div
+            class="rating"
+            style={tier.tierName === "omega"
+                ? ""
+                : `background:${TIER_COLOR[tier.tierName]}`}
+            class:pearl={tier.tierName === "pearl"}
+            class:omega={tier.tierName === "omega"}
+        >
+            <span>
+                {ratings.rating}
+            </span>
+        </div>
+    </div>
+    <GradeProgress
+        rating={ratings.rating}
+        tierName={tier.tierName}
+        grade={tier.detailTierGrade}
+    />
+    <TierProgress rating={ratings.rating} tierName={tier.tierName} />
+</Container>
 
 <style>
     .exp-rating-container {

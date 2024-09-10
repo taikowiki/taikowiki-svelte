@@ -115,6 +115,9 @@
                 role="presentation"
             >
                 <div class="dialog-content-wrapper">
+                    <div>
+                        {dani.name[$lang] ?? dani.name.ja}
+                    </div>
                     <img class="qr" src={dani.qr} alt="qr" />
                     <button
                         on:click|stopPropagation={() => {

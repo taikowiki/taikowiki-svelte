@@ -5,11 +5,13 @@
     import AdminDaniEditorSong from "./AdminDaniEditor-Song.svelte";
     import AdminDaniEditorCondition from "./AdminDaniEditor-Conditions.svelte";
     import type { MouseEventHandler } from "svelte/elements";
+    import AdminDaniEditorQr from "./AdminDaniEditor-Qr.svelte";
 
     export let daniData: Dani;
     export let deleteDani: MouseEventHandler<any>;
 
-    function setDaniName() {
+    function gaidenInit(dan: Dani['dan']) {
+        daniData.dan = dan;
         if (daniData.dan === "gaiden") {
             daniData.name = {
                 ja: "",
@@ -22,9 +24,10 @@
 </script>
 
 <table>
-    <AdminDaniEditorDan bind:dan={daniData.dan} {setDaniName} />
-    {#if daniData.name}
+    <AdminDaniEditorDan bind:dan={daniData.dan} {gaidenInit} />
+    {#if daniData.dan === "gaiden"}
         <AdminDaniEditorName bind:name={daniData.name} />
+        <AdminDaniEditorQr bind:qr={daniData.qr}/>
     {/if}
     <AdminDaniEditorSong bind:songs={daniData.songs} />
     <AdminDaniEditorCondition bind:conditions={daniData.conditions}/>

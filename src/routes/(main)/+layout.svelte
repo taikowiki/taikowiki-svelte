@@ -183,18 +183,6 @@
 <VercelInject />
 
 <style>
-    :global(body[data-theme="light"]) {
-        background-color: #e8e8e8;
-        color: black;
-    }
-    :global(body[data-theme="dark"]) {
-        background-color: black;
-        color: white;
-    }
-    :global(a) {
-        text-decoration: none;
-    }
-
     .page-aside:empty {
         display: none;
     }

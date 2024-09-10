@@ -1,6 +1,5 @@
 import type { CardData, Clear, ClearData, ScoreData } from "node-hiroba/types";
 
-
 export interface UserData {
     order: number;
     provider: string;
@@ -18,6 +17,7 @@ export interface UserDonderData {
     donder: CardData;
     clearData: ClearData[];
     scoreData: UserScoreData | null;
+    currentRating: number | null;
     ratingHistory: number[];
     lastUpdate: Date;
 }

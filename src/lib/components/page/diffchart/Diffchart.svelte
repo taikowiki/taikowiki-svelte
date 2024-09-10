@@ -31,6 +31,7 @@
 
     export let diffChart: DiffChart;
     export let songs: SongDataPickedForDiffchart[];
+    export let donderData: SongScore[] | null;
     export let color: string | undefined = diffChart.color;
     export let backgroundColor: string | undefined = diffChart.backgroundColor;
     export let downloadImage: (() => Promise<void>) | null = null;
@@ -57,11 +58,11 @@
         };
     });
 
-    let userScoreDataJSON: string = '';
-    $: userScoreData = parseSongScoreJSON(userScoreDataJSON);
+    let userScoreDataJSON: string = ""; // 확장 프로그램
+    $: userScoreData = donderData ?? parseSongScoreJSON(userScoreDataJSON);
 
     const lang = getLang();
-    $: i18n = getI18N('component', $lang).Diffchart;
+    $: i18n = getI18N("component", $lang).Diffchart;
 </script>
 
 <input

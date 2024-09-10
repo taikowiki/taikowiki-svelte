@@ -22,18 +22,9 @@
 <PageAside>
     <DiffchartSelectorPc />
     {#if $downloadImage}
-        <button
-            style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;"
-            on:click={$downloadImage}
-        >
-            <div class="download-text" data-theme={$theme}>{i18n.download}</div>
-            <img
-                class="download"
-                data-theme={$theme}
-                src="/assets/icon/download.svg"
-                alt="다운로드"
-                role="presentation"
-            />
+        <button style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;" on:click={$downloadImage}>
+            <span class="download-text" data-theme={$theme}>{i18n.download}</span>
+            <img class="download" data-theme={$theme} src="/assets/icon/download.svg" alt="다운로드" role="presentation"/>
         </button>
     {/if}
 </PageAside>
@@ -42,14 +33,10 @@
     <div class="mobile">
         <DiffchartSelectorMobile />
         {#if $downloadImage}
-            <img
-                class="download"
-                data-theme={$theme}
-                src="/assets/icon/download.svg"
-                alt="다운로드"
-                on:click={$downloadImage}
-                role="presentation"
-            />
+            <button on:click={$downloadImage} style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;">
+                <span class="download-text" data-theme={$theme}>{i18n.download}</span>
+                <img class="download" data-theme={$theme} src="/assets/icon/download.svg" alt="다운로드" role="presentation"/>
+            </button>
         {/if}
     </div>
 {/if}
@@ -65,8 +52,8 @@
         flex-direction: row;
         align-items: center;
         column-gap: 5px;
-
         margin-bottom: 10px;
+      justify-content: space-between;
     }
 
     .download {

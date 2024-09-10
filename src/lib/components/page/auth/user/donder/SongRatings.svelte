@@ -6,17 +6,9 @@
     import type { UserDonderData } from "$lib/module/common/user/types";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import type { getRating } from "@taiko-wiki/taiko-rating";
 
-    export let songRatingDatas:
-        | {
-              songNo: string;
-              difficulty: "oni" | "ura";
-              songRating: {
-                  value: number;
-                  accuracy: number;
-              };
-          }[]
-        | undefined;
+    export let ratings: ReturnType<typeof getRating>;
     export let songDatas: Pick<SongData, "songNo" | "title">[];
     export let donderData: UserDonderData;
 
@@ -35,62 +27,74 @@
 
     const [theme] = getTheme();
     const lang = getLang();
-    $: i18n = getI18N('/auth/user/donder', $lang);
+    $: i18n = getI18N("/auth/user/donder", $lang);
+
+    function getDiffNum(diff: 'oni'|'ura'){
+        if(diff === 'oni'){
+            return 4;
+        }
+        else{
+            return 5;
+        }
+    }
 </script>
 
-{#if songRatingDatas}
-    <Center>
-        <h2>{i18n.songRating}</h2>
-        <table data-theme={$theme}>
-            <tr>
-                <th> {i18n.songTitle} </th>
-                <th> {i18n.accuracy} </th>
-                <th> {i18n.crown} </th>
-                <th> {i18n.rating} </th>
-            </tr>
-            {#each songRatingDatas as songRatingData, index}
-                {@const song = songDatas.find(
-                    ({ songNo }) => songNo === songRatingData.songNo.toString(),
-                )}
-                {@const songScoreData = donderData.scoreData?.[songRatingData.songNo]}
+<Center>
+    <table data-theme={$theme}>
+        <tr>
+            <th> {i18n.songTitle} </th>
+            <th> {i18n.measureValue} </th>
+            <th> {i18n.accuracy} </th>
+            <th> {i18n.crown} </th>
+            <th> {i18n.rating} </th>
+            <th> {i18n.hiroba} </th>
+        </tr>
+        {#each ratings.songRatingDatas as songRatingData, index}
+            {@const song = songDatas.find(
+                ({ songNo }) => songNo === songRatingData.songNo.toString(),
+            )}
+            {@const songScoreData =
+                donderData.scoreData?.[songRatingData.songNo]}
 
-                <Tr50 {index}>
-                    <td>
-                        <DiffColoredTitle
-                            difficulty={songRatingData.difficulty}
-                            href={`/song/${songRatingData.songNo}`}
-                        >
-                            {song?.title}
-                        </DiffColoredTitle>
-                    </td>
-                    <td>
-                        {Math.round(songRatingData.songRating.accuracy * 100) /
-                            100}%
-                    </td>
-                    <td>
-                        {songScoreData?.difficulty[songRatingData.difficulty]?.crown}
-                    </td>
-                    <td>
-                        {Math.round(songRatingData.songRating.value)}
-                    </td>
-                </Tr50>
-            {/each}
-        </table>
-    </Center>
-{/if}
+            <Tr50 {index}>
+                <td>
+                    <DiffColoredTitle
+                        difficulty={songRatingData.difficulty}
+                        href={`/song/${songRatingData.songNo}`}
+                    >
+                        {song?.title}
+                    </DiffColoredTitle>
+                </td>
+                <td>
+                    {songRatingData.songRating.measureValue}
+                </td>
+                <td>
+                    {Math.round(songRatingData.songRating.accuracy * 100) /
+                        100}%
+                </td>
+                <td>
+                    {songScoreData?.difficulty[songRatingData.difficulty]
+                        ?.crown}
+                </td>
+                <td>
+                    {Math.round(songRatingData.songRating.value)}
+                </td>
+                <td>
+                    <a href={`https://donderhiroba.jp/score_detail.php?song_no=${songRatingData.songNo}&level=${getDiffNum(songRatingData.difficulty)}`} target="_blank"> 링크 </a>
+                </td>
+            </Tr50>
+        {/each}
+    </table>
+</Center>
 
 <style>
-    h2{
-        margin-bottom: 0;
-    }
-
     table {
-        max-width: 100%;
+        width: 100%;
         border-collapse: collapse;
     }
 
-    th{
-        font-size:medium;
+    th {
+        font-size: medium;
     }
     td {
         border: 1px solid black;
@@ -103,7 +107,7 @@
         padding-inline: 3px;
     }
 
-    table[data-theme="dark"] td{
+    table[data-theme="dark"] td {
         border-color: rgb(142, 142, 142);
     }
 </style>

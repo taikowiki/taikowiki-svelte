@@ -1,8 +1,7 @@
 import { fetchMeasures, getRating } from "@taiko-wiki/taiko-rating";
 import type { UserClearData, UserData, UserDonderData, UserScoreData } from "./types";
 import { defineDBHandler } from "@yowza/db-handler";
-import type { CardData } from "node-hiroba/types";
-//@ts-expect-error
+import type { CardData, ClearData } from "node-hiroba/types";
 import groupBy from "object.groupby";
 
 export const userDBController = {
@@ -210,6 +209,45 @@ export const userDonderDBController = {
             data.ratingHistory = JSON.parse(data.ratingHistory);
 
             return data as UserDonderData;
+        }
+    }),
+
+    /**
+     * get clear data
+     */
+    getClearData: defineDBHandler<[string], ClearData[]>((UUID) => {
+        return async (run) => {
+            const result = await run("SELECT `clearData` FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
+
+            if(result.length === 0){
+                return null;
+            }
+
+            return JSON.parse(result[0].clearData)
+        }
+    }),
+
+    /**
+     * update current rating
+     */
+    updateCurrentRating: defineDBHandler<[string, number], void>((UUID, currentRating) => {
+        return async(run) => {
+            await run("UPDATE `user/donder_data` SET `currentRating` = ? WHERE `UUID` = ?", [currentRating, UUID])
+        }
+    }),
+
+    /**
+     * get rank by rating
+     */
+    getRankByRating: defineDBHandler<[string], {count: number, ranking: number}>((UUID) => {
+        return async(run) => {
+            const count: number = Object.values((await run("SELECT COUNT(*) FROM `user/donder_data` WHERE `currentRating` IS NOT NULL"))[0])[0] as number;
+            const ranking: number = (Object.values((await run("SELECT COUNT(*) FROM `user/donder_data` WHERE (`currentRating` > (SELECT `currentRating` FROM `user/donder_data` WHERE `UUID` = ?)) AND (`currentRating` IS NOT NULL)", [UUID]))[0])[0] as number) + 1;
+
+            return {
+                count,
+                ranking
+            }
         }
     })
 }

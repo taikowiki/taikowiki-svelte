@@ -1,19 +1,21 @@
 <script lang="ts">
     import DonderData from "$lib/components/page/auth/user/donder/DonderData.svelte";
     import DonderRating from "$lib/components/page/auth/user/donder/DonderRating.svelte";
-    import { getRating } from "@taiko-wiki/taiko-rating";
     import { getIsMobile } from "$lib/module/layout/isMobile.js";
     import { Center } from "$lib/module/common/styled";
     import createSSC from "styled-svelte-component/svelte4";
     import SongRatings from "$lib/components/page/auth/user/donder/SongRatings.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
+    import Loading from "$lib/components/common/Loading.svelte";
+    import DonderSection from "$lib/components/page/auth/user/donder/DonderSection.svelte";
+    import MeasureTable from "$lib/components/page/measures/MeasureTable.svelte";
+    import { getTheme } from "$lib/module/layout/theme.js";
+    import { TIER_COLOR } from "$lib/module/common/user/const";
 
     export let data;
 
-    let ratingResult: ReturnType<typeof getRating>;
-
-    const { donderData, songDatas } = data;
+    const { donderData, songDatas, loadingPromise } = data;
 
     const Container = createSSC(
         "div",
@@ -27,34 +29,57 @@
     `,
     );
 
-    const isMobile = getIsMobile();
+    const opened = {
+        songRatings: false,
+        measureTable: false,
+        explanation: false
+    };
 
+    const RatingText = createSSC<{color: string}>('span', ({color}) => `color:${color};font-weight:bold;`)
+
+    const isMobile = getIsMobile();
+    const [theme] = getTheme();
     const lang = getLang();
     $: i18n = getI18N("/auth/user/donder", $lang);
-    $: titleI18n = getI18N('other', $lang).title['/auth/user'];
+    $: titleI18n = getI18N("other", $lang).title["/auth/user"];
 </script>
 
+<PageTitle title={titleI18n} />
 
-<PageTitle title={titleI18n}/>
-
-{#if donderData === null}
-    {i18n.noDonderData}
-    <a href="//github.com/taikowiki/taiko-rating" target="_blank">{i18n.uploadGuide}</a
-    >
-{:else}
-    <Center>
-        <div class="data-container" data-isMobile={$isMobile}>
-            {#if ratingResult}
+{#if donderData && donderData.scoreData && loadingPromise}
+    {#await loadingPromise}
+        <Loading />
+    {:then loadedData}
+        {@const { ratings, measures, rankingData, tier } = loadedData}
+        <Center>
+            <div class="data-container" data-isMobile={$isMobile}>
                 <DonderData {donderData} {Container} />
-            {/if}
-            <DonderRating {donderData} {Container} bind:ratingResult />
-        </div>
-        <SongRatings
-            songRatingDatas={ratingResult?.songRatingDatas}
-            {songDatas}
-            {donderData}
-        />
-    </Center>
+                <DonderRating {Container} {ratings} {tier} {rankingData}/>
+            </div>
+            <DonderSection
+                bind:opened={opened.songRatings}
+                sectionName="곡 레이팅"
+            >
+                <SongRatings {ratings} {songDatas} {donderData} />
+            </DonderSection>
+            <DonderSection
+                bind:opened={opened.measureTable}
+                sectionName="상수표"
+            >
+                <MeasureTable {measures} {songDatas} />
+            </DonderSection>
+            <DonderSection
+                bind:opened={opened.explanation}
+                sectionName="레이팅 설명"
+            >
+                {@html i18n.explanation}
+            </DonderSection>
+        </Center>
+    {/await}
+{:else}
+    <div class="guide" data-theme={$theme}>
+        {@html i18n.uploadGuide}
+    </div>
 {/if}
 
 <style>
@@ -69,5 +94,31 @@
         flex-direction: column;
         align-items: center;
         row-gap: 10px;
+    }
+
+    .data-ranking{
+        margin-top: 20px;
+    }
+
+    :global(.guide code) {
+        background-color: rgb(219, 219, 219);
+        display: inline-block;
+        padding-inline: 4px;
+        padding-block: 3px;
+
+        border-radius: 4px;
+    }
+
+    :global(.guide[data-theme="dark"] code) {
+        background-color: rgb(87, 87, 87);
+    }
+
+    :global(.guide pre code) {
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+        padding-inline: 0px;
+        padding-block: 5px;
+        border-radius: 0px;
     }
 </style>

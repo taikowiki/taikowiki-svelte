@@ -3,7 +3,7 @@ import { songDBController } from "$lib/module/common/song/song.server";
 import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
 import { error } from "@sveltejs/kit";
 
-export async function load({ params }) {
+export async function load({ params, locals }) {
     const level = Number(params.level);
 
     if (isNaN(level)) {

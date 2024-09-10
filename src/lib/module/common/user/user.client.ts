@@ -8,6 +8,13 @@ export const userRequestor = {
     getUserData: defineRequestHandler<null, any>({
         url: "/api/user",
         method: 'get'
+    }),
+}
+
+export const userDonderRequestor = {
+    updateRating: defineRequestHandler<{rating: number}, {count: number, ranking: number}>({
+        url: '/api/user/update-rating',
+        method: 'post'
     })
 }
 

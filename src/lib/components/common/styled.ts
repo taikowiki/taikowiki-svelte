@@ -7,7 +7,9 @@ const RowDefault = createSSC('div', () => '', () => `
 `);
 
 export const Row = {
-    left: createSSC(RowDefault.styledComponentData.tagName, () => '', () => `
+    left: createSSC(RowDefault.styledComponentData.tagName, ({columnGap}) => `
+        ${columnGap ? `column-gap:${columnGap}px;` : ''}
+    `, () => `
         ${RowDefault.styledComponentData.generateCommonStyle({})}
         justify-content: flex-start;
     `),

@@ -11,7 +11,7 @@ export async function load({locals}){
     }
 
     const donderData = await userDonderDBController.getData(locals.userData.UUID);
-    const songDatas = (await songDBController.getAllColumns(['title', 'songNo'])) as Pick<SongData, 'songNo' | 'title'>[];
+    const songDatas = (await songDBController.getAllColumns(['title', 'songNo', 'genre', 'courses'])) as Pick<SongData, 'songNo' | 'title' | 'genre' | 'courses'>[];
 
     return {
         donderData,

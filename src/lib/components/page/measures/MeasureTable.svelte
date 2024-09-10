@@ -15,8 +15,7 @@
 
     const groupedMeasures = groupBy(
         measures,
-        //@ts-expect-error
-        (measure) => measure["상수대역"] ?? measure["상수내림"],
+        (measure) => measure.range
     );
 
     const Genre = createSSC<{ genre: Genre[] }, {}>(
@@ -54,29 +53,11 @@
     setContext('Level', Level);
 
     const lang = getLang();
-    $: i18n = getI18N('/measures', $lang);
 </script>
 
 <Genre.common/>
 <Level.common/>
 
-<h1>
-    <span> {i18n.measureTable} </span>
-    <a href="/auth/user/donder"> {i18n.donderData} </a>
-</h1>
-
 {#each Object.entries(groupedMeasures).toSorted((a, b) => Number(b[0]) - Number(a[0])) as [group, measures]}
     <MeasureGroup group={Number(group)} {measures} {songDatas} />
 {/each}
-
-<style>
-    h1 {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    a {
-        font-size: 16px;
-    }
-</style>

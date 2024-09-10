@@ -1,4 +1,8 @@
+import { mdToHtml } from "../../mdHtmlConverter";
 import type { LangFile } from "../types";
+
+import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
+import ratingExplanation from '../md/ko/ratingExplanation.md?raw'
 
 const ko: LangFile = {
     layout: {
@@ -162,14 +166,17 @@ const ko: LangFile = {
     },
     '/auth/user/donder':{
         noDonderData: '동더히로바 데이터가 없습니다. 동더히로바 데이터를 업로드해주세요.',
-        uploadGuide: '업로드 가이드',
         myDon: '마이동',
         lastUpdate: '마지막 업데이트',
         songRating: '곡 레이팅',
         songTitle: '곡 제목',
         accuracy: '정확도',
         crown: '왕관',
-        rating: '레이팅'
+        rating: '레이팅',
+        hiroba: '히로바',
+        measureValue: '상수',
+        uploadGuide: mdToHtml(ratingUploadGuide),
+        explanation: mdToHtml(ratingExplanation)
     },
     '/song': {
         placeholder: '검색어',

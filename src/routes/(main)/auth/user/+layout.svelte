@@ -11,9 +11,6 @@
     $: i18n = getI18N("layout", $lang)["/auth/user"];
 
     const isMobile = getIsMobile();
-
-    $: console.log($page);
-    $: console.log($navigating);
 </script>
 
 <PageAside title="유저">

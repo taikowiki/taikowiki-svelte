@@ -192,6 +192,9 @@
     <Footer version={data.version} />
 </div>
 
+<GoogleTag />
+<VercelInject />
+
 <style>
     .page-aside:empty {
         display: none;

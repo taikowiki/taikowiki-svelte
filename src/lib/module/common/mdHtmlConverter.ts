@@ -1,6 +1,6 @@
-import { Converter } from 'showdown';
+import showdown from 'showdown';
 
-const converter = new Converter({
+const converter = new showdown.Converter({
     requireSpaceBeforeHeadingText: true,
     ghCodeBlocks: true,
     tasklists: true,

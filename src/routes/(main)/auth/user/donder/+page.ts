@@ -1,3 +1,6 @@
+import { getTier } from '$lib/module/common/user/getTier.js';
+import { userDonderRequestor } from '$lib/module/common/user/user.client.js';
+import { error } from '@sveltejs/kit';
 import { fetchMeasures, getRating } from '@taiko-wiki/taiko-rating';
 
 export async function load({ data }) {
@@ -7,9 +10,21 @@ export async function load({ data }) {
             const measures = await fetchMeasures();
             const ratings = getRating(scoreData, measures);
 
+            const rankingResponse = await userDonderRequestor.updateRating({rating: ratings.rating});
+
+            if(rankingResponse.status === 'error'){
+                throw error(500);
+            }
+
+            const rankingData = rankingResponse.data;
+
+            const tier = getTier(ratings.rating);
+
             return {
                 measures,
-                ratings
+                ratings,
+                rankingData,
+                tier
             }
         })();
 

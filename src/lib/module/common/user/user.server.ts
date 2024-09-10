@@ -225,5 +225,29 @@ export const userDonderDBController = {
 
             return JSON.parse(result[0].clearData)
         }
+    }),
+
+    /**
+     * update current rating
+     */
+    updateCurrentRating: defineDBHandler<[string, number], void>((UUID, currentRating) => {
+        return async(run) => {
+            await run("UPDATE `user/donder_data` SET `currentRating` = ? WHERE `UUID` = ?", [currentRating, UUID])
+        }
+    }),
+
+    /**
+     * get rank by rating
+     */
+    getRankByRating: defineDBHandler<[string], {count: number, ranking: number}>((UUID) => {
+        return async(run) => {
+            const count: number = Object.values((await run("SELECT COUNT(*) FROM `user/donder_data` WHERE `currentRating` IS NOT NULL"))[0])[0] as number;
+            const ranking: number = (Object.values((await run("SELECT COUNT(*) FROM `user/donder_data` WHERE (`currentRating` > (SELECT `currentRating` FROM `user/donder_data` WHERE `UUID` = ?)) AND (`currentRating` IS NOT NULL)", [UUID]))[0])[0] as number) + 1;
+
+            return {
+                count,
+                ranking
+            }
+        }
     })
 }

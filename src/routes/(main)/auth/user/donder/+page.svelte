@@ -11,6 +11,7 @@
     import DonderSection from "$lib/components/page/auth/user/donder/DonderSection.svelte";
     import MeasureTable from "$lib/components/page/measures/MeasureTable.svelte";
     import { getTheme } from "$lib/module/layout/theme.js";
+    import { TIER_COLOR } from "$lib/module/common/user/const";
 
     export let data;
 
@@ -34,6 +35,8 @@
         explanation: false
     };
 
+    const RatingText = createSSC<{color: string}>('span', ({color}) => `color:${color};font-weight:bold;`)
+
     const isMobile = getIsMobile();
     const [theme] = getTheme();
     const lang = getLang();
@@ -47,11 +50,11 @@
     {#await loadingPromise}
         <Loading />
     {:then loadedData}
-        {@const { ratings, measures } = loadedData}
+        {@const { ratings, measures, rankingData, tier } = loadedData}
         <Center>
             <div class="data-container" data-isMobile={$isMobile}>
                 <DonderData {donderData} {Container} />
-                <DonderRating {Container} {ratings} />
+                <DonderRating {Container} {ratings} {tier} {rankingData}/>
             </div>
             <DonderSection
                 bind:opened={opened.songRatings}
@@ -91,6 +94,10 @@
         flex-direction: column;
         align-items: center;
         row-gap: 10px;
+    }
+
+    .data-ranking{
+        margin-top: 20px;
     }
 
     :global(.guide code) {

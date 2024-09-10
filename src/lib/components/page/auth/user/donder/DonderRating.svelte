@@ -7,9 +7,9 @@
     import GradeProgress from "./GradeProgress.svelte";
 
     export let ratings: ReturnType<typeof getRating>;
-    let tier: ReturnType<typeof getTier> = getTier(ratings.rating);
-
+    export let tier: ReturnType<typeof getTier>;
     export let Container: ConstructorOfATypedSvelteComponent;
+    export let rankingData: {count: number; ranking: number}
 </script>
 
 <Container>
@@ -38,6 +38,9 @@
         grade={tier.detailTierGrade}
     />
     <TierProgress rating={ratings.rating} tierName={tier.tierName} />
+    <div class="ranking">
+        상위 {Math.round((rankingData.ranking / rankingData.count) * 10000) / 100}%
+    </div>
 </Container>
 
 <style>
@@ -82,5 +85,9 @@
             rgba(99, 171, 248, 1) 100%
         );
         color: #95003c;
+    }
+
+    .ranking{
+        font-size: 14px;
     }
 </style>

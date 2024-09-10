@@ -42,7 +42,7 @@
 <Center>
     <table data-theme={$theme}>
         <tr>
-            <th> {i18n.songTitle} </th>
+            <th class="song-title"> {i18n.songTitle} </th>
             <th> {i18n.measureValue} </th>
             <th> {i18n.accuracy} </th>
             <th> {i18n.crown} </th>
@@ -57,7 +57,7 @@
                 donderData.scoreData?.[songRatingData.songNo]}
 
             <Tr50 {index}>
-                <td>
+                <td class="song-title">
                     <DiffColoredTitle
                         difficulty={songRatingData.difficulty}
                         href={`/song/${songRatingData.songNo}`}
@@ -95,12 +95,18 @@
 
     th {
         font-size: medium;
+        word-break: keep-all;
     }
     td {
         border: 1px solid black;
         text-align: center;
         box-sizing: border-box;
         padding-bottom: 4px;
+        word-break: keep-all;
+    }
+
+    .song-title{
+        word-break: break-all;
     }
 
     td:not(:nth-child(1)) {

@@ -11,7 +11,6 @@
     import DonderSection from "$lib/components/page/auth/user/donder/DonderSection.svelte";
     import MeasureTable from "$lib/components/page/measures/MeasureTable.svelte";
     import { getTheme } from "$lib/module/layout/theme.js";
-    import { TIER_COLOR } from "$lib/module/common/user/const";
 
     export let data;
 
@@ -34,8 +33,6 @@
         measureTable: false,
         explanation: false
     };
-
-    const RatingText = createSSC<{color: string}>('span', ({color}) => `color:${color};font-weight:bold;`)
 
     const isMobile = getIsMobile();
     const [theme] = getTheme();

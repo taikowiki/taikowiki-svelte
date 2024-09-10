@@ -55,13 +55,10 @@
     //deepFreeze songs
 
     //theme
-    let [theme, _] = useTheme();
-    $: if (browser) {
-        document.body.setAttribute("data-theme", $theme);
-    }
+    let [theme, _] = useTheme(data.theme);
 
     //usemobile
-    const isMobile = useIsMobile();
+    const isMobile = useIsMobile(data.isMobile);
 
     //lang
     const lang = useLang();
@@ -92,9 +89,32 @@
         type="text/javascript"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${data.kakaoKey}&libraries=services`}
     ></script>
+    {#if !browser}
+        {#if $theme === "light"}
+            <style>
+                a {
+                    color: #cf4844;
+                }
+                body {
+                    background-color: #e8e8e8;
+                    color: black;
+                }
+            </style>
+        {:else}
+            <style>
+                a {
+                    color: #e1a743;
+                }
+                body {
+                    background-color: black;
+                    color: white;
+                }
+            </style>
+        {/if}
+    {/if}
 </svelte:head>
 
-<div style={browser ? "" : "transform:translateX(-100%);"}>
+<div>
     <Header>
         <svelte:fragment slot="left">
             <HeaderItem href="/" useHover={false}>
@@ -128,13 +148,6 @@
                 mobileHideSlot
             >
                 <span class="header-text">{i18nLayout.diffchart}</span>
-            </HeaderItem>
-            <HeaderItem
-                icon="/assets/icon/table.svg"
-                href="/measures"
-                mobileHideSlot
-            >
-                <span class="header-text">{i18nLayout.measures}</span>
             </HeaderItem>
             <HeaderItem
                 icon="/assets/icon/dani.svg"

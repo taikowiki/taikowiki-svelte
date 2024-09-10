@@ -1,11 +1,12 @@
 import { getContext, setContext } from "svelte";
-import { writable, type Writable } from "svelte/store";
+import { get, writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
+import { page } from "$app/stores";
 
 /**
  * Save a store to the context indicating mobile. If the width is 1000px or less, it is considered mobile.
  */
-export function useIsMobile(): Writable<boolean> {
+export function useIsMobile(init?: boolean): Writable<boolean> {
     let isMobile = writable<boolean>();
     setContext('isMobile', isMobile);
 
@@ -16,7 +17,7 @@ export function useIsMobile(): Writable<boolean> {
         })
     }
     else{
-        isMobile.set(false);
+        isMobile.set(init ?? false);
     }
 
     return isMobile

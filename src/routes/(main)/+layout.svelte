@@ -185,7 +185,7 @@
             <div bind:this={$pageAside} class="page-aside" />
             <AsideNewSong newSongs={data.newSongs} />
             <a href="https://koubouha.modoo.at">
-                <img src="/assets/img/bachi.jpg" style="width: 100%;border-radius: 10px;" alt="competition"/>
+                <img src="/assets/img/bachi.webp" style="width: 100%;border-radius: 10px;" alt="competition"/>
             </a>
         </Aside>
     </Main>

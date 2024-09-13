@@ -85,7 +85,7 @@
             )}
             {@const songScoreData =
                 donderData.scoreData?.[songRatingData.songNo]}
-            <tr class:top50={index < 50} use:visibilityAction={opened}>
+            <tr class="song" class:top50={index < 50} use:visibilityAction={opened}>
                 <td class="song-title">
                     <DiffColoredTitle
                         difficulty={songRatingData.difficulty}
@@ -151,6 +151,9 @@
         border-color: rgb(142, 142, 142);
     }
 
+    .song{
+        color:black;
+    }
     .top50 {
         background-color: #ffdbe2;
     }

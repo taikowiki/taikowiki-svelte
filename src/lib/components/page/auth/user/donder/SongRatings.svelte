@@ -151,10 +151,8 @@
         border-color: rgb(142, 142, 142);
     }
 
-    .song{
-        color:black;
-    }
     .top50 {
         background-color: #ffdbe2;
+        color:black;
     }
 </style>

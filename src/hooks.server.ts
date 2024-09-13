@@ -28,7 +28,8 @@ const authHandle = auth(Object.values(provider), {
     maxAge: 3600 * 24 * 7,
     autoRefreshMaxAge: true,
     withCredentials: true,
-    useSubdomain: true
+    useSubdomain: true,
+    absoluteMaxAge: 3600 * 24 * 30
 })
 
 const getUserData: Handle = async ({ event, resolve }) => {

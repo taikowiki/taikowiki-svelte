@@ -57,7 +57,7 @@
                 bind:opened={opened.songRatings}
                 sectionName="곡 레이팅"
             >
-                <SongRatings {ratings} {songDatas} {donderData} />
+                <SongRatings {ratings} {songDatas} {donderData} opened={opened.songRatings}/>
             </DonderSection>
             <DonderSection
                 bind:opened={opened.measureTable}

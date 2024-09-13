@@ -33,9 +33,15 @@
 
     .content{
         width: 100%;
-        display:none;
+        visibility: hidden;
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: translate(-100%, -100%);
     }
     .content.opened{
-        display:block;
+        position: static;
+        transform: translate(0, 0);
+        visibility: visible;
     }
 </style>

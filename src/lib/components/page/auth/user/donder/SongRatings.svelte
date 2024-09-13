@@ -7,10 +7,12 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { getRating } from "@taiko-wiki/taiko-rating";
+    import type { Action } from "svelte/action";
 
     export let ratings: ReturnType<typeof getRating>;
     export let songDatas: Pick<SongData, "songNo" | "title">[];
     export let donderData: UserDonderData;
+    export let opened: boolean;
 
     const DiffColoredTitle = createSSC<{ difficulty: "oni" | "ura" }>(
         "a",
@@ -19,21 +21,49 @@
         `,
     );
 
-    const Tr50 = createSSC<{ index: number }>(
-        "tr",
-        ({ index }) =>
-            `${index < 50 ? "background-color:#ffdbe2;color:black;" : ""}`,
-    );
+    const visibilityAction: Action<HTMLElement, boolean> = (node, opened) => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const entry = entries[0];
+                if (entry.isIntersecting) {
+                    node.style.visibility = "visible";
+                } else {
+                    node.style.visibility = "hidden";
+                }
+            },
+            {
+                threshold: 0,
+            },
+        );
+
+        if (opened) {
+            observer.observe(node);
+        }
+
+        return {
+            destroy() {
+                observer.disconnect();
+            },
+            update(opened) {
+                if (opened) {
+                    observer.observe(node);
+                } 
+                else {
+                    observer.unobserve(node);
+                    node.style.visibility = "hidden";
+                }
+            },
+        };
+    };
 
     const [theme] = getTheme();
     const lang = getLang();
     $: i18n = getI18N("/auth/user/donder", $lang);
 
-    function getDiffNum(diff: 'oni'|'ura'){
-        if(diff === 'oni'){
+    function getDiffNum(diff: "oni" | "ura") {
+        if (diff === "oni") {
             return 4;
-        }
-        else{
+        } else {
             return 5;
         }
     }
@@ -55,8 +85,7 @@
             )}
             {@const songScoreData =
                 donderData.scoreData?.[songRatingData.songNo]}
-
-            <Tr50 {index}>
+            <tr class:top50={index < 50} use:visibilityAction={opened}>
                 <td class="song-title">
                     <DiffColoredTitle
                         difficulty={songRatingData.difficulty}
@@ -80,9 +109,14 @@
                     {Math.round(songRatingData.songRating.value)}
                 </td>
                 <td>
-                    <a href={`https://donderhiroba.jp/score_detail.php?song_no=${songRatingData.songNo}&level=${getDiffNum(songRatingData.difficulty)}`} target="_blank"> 링크 </a>
+                    <a
+                        href={`https://donderhiroba.jp/score_detail.php?song_no=${songRatingData.songNo}&level=${getDiffNum(songRatingData.difficulty)}`}
+                        target="_blank"
+                    >
+                        링크
+                    </a>
                 </td>
-            </Tr50>
+            </tr>
         {/each}
     </table>
 </Center>
@@ -105,7 +139,7 @@
         word-break: keep-all;
     }
 
-    .song-title{
+    .song-title {
         word-break: break-all;
     }
 
@@ -115,5 +149,9 @@
 
     table[data-theme="dark"] td {
         border-color: rgb(142, 142, 142);
+    }
+
+    .top50 {
+        background-color: #ffdbe2;
     }
 </style>

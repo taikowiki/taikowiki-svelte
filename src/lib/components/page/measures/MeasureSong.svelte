@@ -4,6 +4,7 @@
         SongData,
     } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import type { Action } from "svelte/action";
     import { getContext } from "svelte";
 
     export let songData: (Pick<SongData, "title" | "songNo" | "genre"> & {
@@ -14,9 +15,33 @@
 
     const Genre = getContext('Genre') as ConstructorOfATypedSvelteComponent;
     const Level = getContext('Level') as ConstructorOfATypedSvelteComponent;
+
+    const visibilityAction: Action<HTMLElement> = (node) => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const entry = entries[0];
+                if (entry.isIntersecting) {
+                    node.style.visibility = "inherit";
+                } else {
+                    node.style.visibility = "hidden";
+                }
+            },
+            {
+                threshold: 0,
+            },
+        );
+
+        observer.observe(node);
+
+        return {
+            destroy() {
+                observer.disconnect();
+            }
+        };
+    };
 </script>
 
-<a class="song-container" href={`/song/${songData.songNo}`} data-theme={$theme}>
+<a class="song-container" href={`/song/${songData.songNo}`} data-theme={$theme} use:visibilityAction>
     <Genre genre={songData.genre} />
     <Level diff={songData.diff ?? "oni"}>
         <span>

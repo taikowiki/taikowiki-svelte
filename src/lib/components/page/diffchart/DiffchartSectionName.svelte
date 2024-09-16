@@ -1,6 +1,4 @@
 <script lang="ts">
-    import type { SongScore } from "$lib/module/common/diffchart/types";
-
     export let name: string;
     export let color: string = "white";
     export let backgroundColor: string = "#7f7f7f";

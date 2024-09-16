@@ -2,46 +2,12 @@
     function getClearedSongScores(
         scoreData: SongScore[] | null,
         songs: Song[],
-    ): SongScore[] | null {
-        if (scoreData === null) return null;
-        return scoreData.filter(
-            (score) =>
-                songs.find(
-                    (song) =>
-                        song.songNo === score.songNo &&
-                        score.details[uraToOniUra(song.difficulty)] !==
-                            undefined &&
-                        score.details[uraToOniUra(song.difficulty)]?.crown !==
-                            "none",
-                ) !== undefined,
-        );
-    }
-
-    function countClearedSongs(scoreData: SongScore[] | null, songs: Song[]) {
-        if (scoreData === null) return null;
-        let count = 0;
-        songs.forEach((song) => {
-            if (
-                scoreData.find(
-                    (score) =>
-                        score.songNo === song.songNo &&
-                        score.details[uraToOniUra(song.difficulty)] !==
-                            undefined &&
-                        score.details[uraToOniUra(song.difficulty)]?.crown !==
-                            "none",
-                ) !== undefined
-            ) {
-                count++;
-            }
-        });
-        return count;
+    ): SongScore[] {
+        return scoreData?.filter((score) => songs.find((song) => song.songNo === score.songNo && score.details[uraToOniUra(song.difficulty)]?.crown !== "none")) ?? [];
     }
 
     function uraToOniUra(diff: Difficulty): DifficultyType {
-        if (diff === "ura") {
-            return "oni_ura";
-        }
-        return diff;
+        return diff === "ura" ? "oni_ura" : diff;
     }
 </script>
 
@@ -64,7 +30,8 @@
     export let userScoreData: SongScore[] | null;
 
     $: clearedSongScores = getClearedSongScores(userScoreData, section.songs);
-    $: clearedSongsCount = countClearedSongs(userScoreData, section.songs);
+    $: clearedSongsCount = userScoreData ? clearedSongScores.length : null;
+    
 </script>
 
 <div class="section">
@@ -81,9 +48,7 @@
                 {songs}
                 {theme}
                 {useMobile}
-                userScore={clearedSongScores?.find(
-                    (score) => score.songNo === song.songNo,
-                )?.details[uraToOniUra(song.difficulty)] ?? null}
+                userScore={clearedSongScores.find((score) => score.songNo === song.songNo)?.details[uraToOniUra(song.difficulty)] ?? null}
             />
         {/each}
     </div>

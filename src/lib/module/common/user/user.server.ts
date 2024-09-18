@@ -179,11 +179,11 @@ export const userDonderDBController = {
                     const measures = await fetchMeasures();
                     const currentRating = getRating(data.scoreData as UserScoreData, measures);
                     if (formerScoreData === null) {
-                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ? ,`lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), currentRating, UUID]);
+                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ? ,`lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), currentRating.rating, UUID]);
                     }
                     else {
                         const formerRating = getRating(formerScoreData, measures);
-                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `ratingHistory` = JSON_ARRAY_APPEND(`ratingHistory`, '$', ?)  WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), currentRating, formerRating.rating, UUID]);
+                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `ratingHistory` = JSON_ARRAY_APPEND(`ratingHistory`, '$', ?)  WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), currentRating.rating, formerRating.rating, UUID]);
                     }
                 }
                 else {

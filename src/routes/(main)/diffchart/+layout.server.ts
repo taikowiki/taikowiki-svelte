@@ -11,11 +11,9 @@ import type { Clear, ClearData, Difficulty } from "node-hiroba/types";
 
 export async function load({ locals }) {
     let donderDataResult = null;
-    if (locals.userData !== null) {
+    if (locals.userData) {
         donderDataResult = await userDonderDBController.getClearData(locals.userData.UUID);
-        if(donderDataResult){
-            donderDataResult = parseSongScoreDonderData(donderDataResult);
-        }
+        donderDataResult &&= parseSongScoreDonderData(donderDataResult);
     }
 
     return {
@@ -42,21 +40,18 @@ function parseSongScoreDonderData(clearData: ClearData[]): SongScore[] | null {
 
 function parseDetail(data: Partial<Record<Difficulty, Clear>>): Partial<Record<DifficultyType, SongScoreDetail>> {
     const result: Partial<Record<DifficultyType, SongScoreDetail>> = {};
-
-    if (data.ura !== null && data.ura !== undefined) {
+    if (data.ura) {
         result.oni_ura = {
             crown: crowntoCrownType(data.ura.crown),
             badge: badgetoBadgeType(data.ura.badge),
         }
     }
-
-    if (data.oni !== null && data.oni !== undefined) {
+    if (data.oni) {
         result.oni = {
             crown: crowntoCrownType(data.oni.crown),
             badge: badgetoBadgeType(data.oni.badge),
         }
     }
-
     return result;
 }
 

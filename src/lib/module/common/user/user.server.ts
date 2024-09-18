@@ -176,12 +176,14 @@ export const userDonderDBController = {
                 if ("scoreData" in data) {
                     const formerScoreDataResult = await run("SELECT `scoreData` FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
                     const formerScoreData = JSON.parse(formerScoreDataResult[0].scoreData);
+                    const measures = await fetchMeasures();
+                    const currentRating = getRating(data.scoreData as UserScoreData, measures);
                     if (formerScoreData === null) {
-                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), UUID]);
+                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ? ,`lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), currentRating, UUID]);
                     }
                     else {
-                        const formerRating = getRating(formerScoreData, await fetchMeasures());
-                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `ratingHistory` = JSON_ARRAY_APPEND(`ratingHistory`, '$', ?)  WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), formerRating.rating, UUID]);
+                        const formerRating = getRating(formerScoreData, measures);
+                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `ratingHistory` = JSON_ARRAY_APPEND(`ratingHistory`, '$', ?)  WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), currentRating, formerRating.rating, UUID]);
                     }
                 }
                 else {

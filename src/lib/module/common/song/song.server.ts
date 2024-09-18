@@ -11,12 +11,12 @@ function regexEscape(str: string): string {
  * Parse songData fetched from the database to match the SongData type
  */
 function parseSongDataFromDB(songDataFromDB: any) {
-    if (songDataFromDB.courses) songDataFromDB.courses = JSON.parse(songDataFromDB.courses)
-    if (songDataFromDB.bpm) songDataFromDB.bpm = JSON.parse(songDataFromDB.bpm);
-    if (songDataFromDB.version) songDataFromDB.version = JSON.parse(songDataFromDB.version);
-    if (songDataFromDB.genre) songDataFromDB.genre = JSON.parse(songDataFromDB.genre);
-    if (songDataFromDB.artists) songDataFromDB.artists = JSON.parse(songDataFromDB.artists);
-    if (songDataFromDB.courses && songDataFromDB.courses.ura === undefined) songDataFromDB.courses.ura = null;
+    songDataFromDB.courses &&= JSON.parse(songDataFromDB.courses)
+    songDataFromDB.courses && (songDataFromDB.courses.ura ??= null)
+    songDataFromDB.bpm &&= JSON.parse(songDataFromDB.bpm)
+    songDataFromDB.version &&= JSON.parse(songDataFromDB.version)
+    songDataFromDB.genre &&= JSON.parse(songDataFromDB.genre)
+    songDataFromDB.artists &&= JSON.parse(songDataFromDB.artists)
 }
 
 export const songDBController = {
@@ -53,7 +53,7 @@ export const songDBController = {
     /**
      * Retrieve data of all songs.
      */
-    getAll: defineDBHandler<[], SongData[]>(function () {
+    getAll: defineDBHandler<[], SongData[]>(() => {
         let columnsQuery = '*';
 
         return async (run) => {
@@ -66,7 +66,7 @@ export const songDBController = {
     /**
      * Retrieve data of specific columns for all songs.
      */
-    getAllColumns: defineDBHandler<[string[]], Partial<SongData>[]>(function (columns) {
+    getAllColumns: defineDBHandler<[string[]], Partial<SongData>[]>((columns) => {
         const columnsQuery = columns.map(e => escapeId(e)).join(', ');
         return async (run) => {
             let result = await run(`SELECT ${columnsQuery} FROM \`song\` ORDER BY \`addedDate\` DESC;`);
@@ -106,7 +106,7 @@ export const songDBController = {
      */
     getSongColumnsBySongNo: defineDBHandler<[string, string[]], Partial<SongData> | null>((songNo, columns) => {
         return async (run) => {
-            const columnsQuery = columns.map(e => escapeId(e)).join(', ');
+            const columnsQuery = columns.map(escapeId).join(', ');
             let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` = ?`, [songNo]);
             result.forEach(parseSongDataFromDB);
             return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
@@ -122,7 +122,7 @@ export const songDBController = {
             }
 
             const columnsQuery = '*';
-            let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${songNo.map(() => '?').join(', ')})`, [...songNo]);
+            let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${[...songNo].fill('?').join(', ')})`, [...songNo]);
             result.forEach(parseSongDataFromDB);
             return JSON.parse(JSON.stringify(result));
         }
@@ -136,8 +136,8 @@ export const songDBController = {
                 return [];
             }
 
-            const columnsQuery = columns.map(e => escapeId(e)).join(', ');
-            let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${songNo.map(() => '?').join(', ')})`, [...songNo]);
+            const columnsQuery = columns.map(escapeId).join(', ');
+            let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${[...songNo].fill('?').join(', ')})`, [...songNo]);
             result.forEach(parseSongDataFromDB);
             return JSON.parse(JSON.stringify(result));
         }
@@ -198,7 +198,7 @@ export const songDBController = {
             sqlWhereQuery += `AND (\`title\` REGEXP ${escape(regexp)} OR \`titleKo\` REGEXP ${escape(regexp)} OR \`aliasKo\` REGEXP ${escape(regexp)})`
         }
 
-        const columnsQuery = columns.map(e => escapeId(e)).join(', ')
+        const columnsQuery = columns.map(escapeId).join(', ')
 
         return async (run) => {
             const songs = (page === null || page < 1) ? await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC`) : await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC LIMIT ${(page - 1) * 30}, 30`);

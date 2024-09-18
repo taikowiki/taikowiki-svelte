@@ -63,6 +63,8 @@
 
     const lang = getLang();
     $: i18n = getI18N("component", $lang).Diffchart;
+
+    const sortedDifferChartSections = diffChart.sections.toSorted((a, b) => a.order - b.order)
 </script>
 
 <input
@@ -75,14 +77,14 @@
 />
 <div class="container">
     <DiffchartName name={diffChart.name} {color} {backgroundColor} />
-    {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
+    {#each sortedDifferChartSections as section}
         <DiffchartSection {section} {songs} theme={$theme} {userScoreData} />
     {/each}
 </div>
 
 <div class="replica" bind:this={replica}>
     <DiffchartName name={diffChart.name} {color} {backgroundColor} />
-    {#each diffChart.sections.toSorted((a, b) => a.order - b.order) as section}
+    {#each sortedDifferChartSections as section}
         <DiffchartSection
             {section}
             {songs}

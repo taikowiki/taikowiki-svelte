@@ -15,14 +15,8 @@ export async function load({ params, locals }) {
         throw error(404);
     }
 
-    const songNos: string[] = [];
-    diffChart.sections.forEach(section => {
-        section.songs.forEach(song => {
-            songNos.push(song.songNo);
-        })
-    })
+    const songNos = diffChart.sections.flatMap((section) => section.songs.map((song) => song.songNo))
     const songSearchResult = await songDBController.getSongsColumnsBySongNo(songNos, ["genre", "songNo", "title", "titleKo", "aliasKo"]) as SongDataPickedForDiffchart[]
-
     return {
         diffChart,
         songs: songSearchResult

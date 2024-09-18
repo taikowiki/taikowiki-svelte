@@ -6,26 +6,17 @@
         function resize(browser: boolean) {
             const titleDiv = node.querySelector<HTMLDivElement>(".title");
             const krTitleDiv = node.querySelector<HTMLDivElement>(".title-kr");
-            if (!titleDiv) {
-                return;
-            }
-            if (!browser) {
-                return;
-            }
+            if (!titleDiv || !browser) return;
 
             if (titleDiv.clientHeight > 24 && titleDiv.clientHeight < 48) {
-                if (krTitleDiv) {
-                    krTitleDiv.style.fontSize = "10px";
-                }
+                krTitleDiv && (krTitleDiv.style.fontSize = "10px")
                 let fontSize = 16;
                 while (titleDiv.clientHeight > 24 && fontSize >= 12) {
                     titleDiv.style.fontSize = `${fontSize}px`;
                     fontSize--;
                 }
             } else if (titleDiv.clientHeight > 48) {
-                if (krTitleDiv) {
-                    krTitleDiv.style.fontSize = "10px";
-                }
+                krTitleDiv && (krTitleDiv.style.fontSize = "10px");
                 let fontSize = 16;
                 while (titleDiv.clientHeight > 30 && fontSize >= 10) {
                     titleDiv.style.fontSize = `${fontSize}px`;

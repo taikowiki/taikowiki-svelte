@@ -1,20 +1,17 @@
 <script lang="ts">
-    import Loading from "$lib/components/common/Loading.svelte";
-    import type { SvelteComponent } from "svelte";
-
     export let src: string;
 
-    let loading: SvelteComponent;
+    let loading: HTMLImageElement;
     let container: HTMLDivElement;
 </script>
 
 <div class="container" bind:this={container}>
-    <Loading bind:this={loading}/>
+    <img src="/assets/icon/loading.svg" alt="loading" bind:this={loading}/>
     <img
         {src}
         alt="fumen"
         on:load={() => {
-            loading?.$destroy?.();
+            loading.remove();
         }}
         on:error={() => {
             container.remove();
@@ -25,6 +22,7 @@
 <style>
     .container {
         width: 100%;
+        text-align: center;
     }
 
     img {

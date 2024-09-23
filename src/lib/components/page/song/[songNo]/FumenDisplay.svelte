@@ -2,13 +2,15 @@
     import { browser } from "$app/environment";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
+    import FumenImg from "./FumenImg.svelte";
 
     export let images: string[];
 
     let opened = true;
-    if(browser){
-        const fumenImageOpened = window.localStorage.getItem("fumenImageOpened");
-        if(fumenImageOpened !== null){
+    if (browser) {
+        const fumenImageOpened =
+            window.localStorage.getItem("fumenImageOpened");
+        if (fumenImageOpened !== null) {
             opened = fumenImageOpened === "true";
         }
     }
@@ -37,15 +39,11 @@
             보면 이미지
         </div>
         {#if opened}
-            {#each images as image}
-                <img
-                    src={image}
-                    alt="fumen"
-                    on:error={(event) => {
-                        event.currentTarget.remove();
-                    }}
-                />
-            {/each}
+            <div class="img-container">
+                {#each images as src}
+                    <FumenImg {src}/>
+                {/each}
+            </div>
         {/if}
     </div>
 {/if}
@@ -64,9 +62,14 @@
         transform: translateY(-34px);
     }*/
 
-    img {
+    .img-container{
         width: 100%;
         max-width: 800px;
+
+        display:flex;
+        flex-direction: column;
+
+        row-gap: 3px;
     }
 
     .opener {

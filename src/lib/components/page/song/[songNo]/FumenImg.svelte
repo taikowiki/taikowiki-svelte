@@ -1,20 +1,18 @@
 <script lang="ts">
     export let src: string;
-
-    let loading: HTMLImageElement;
-    let container: HTMLDivElement;
 </script>
 
-<div class="container" bind:this={container}>
-    <img src="/assets/icon/loading.svg" alt="loading" bind:this={loading}/>
+<div class="container">
+    <img class="loading" src="/assets/icon/loading.svg" alt="loading"/>
     <img
         {src}
+        class="fumen"
         alt="fumen"
-        on:load={() => {
-            loading.remove();
+        on:load={(event) => {
+            event.currentTarget.parentElement?.children[0]?.remove();
         }}
-        on:error={() => {
-            container.remove();
+        on:error={(event) => {
+            event.currentTarget.parentElement?.remove();
         }}
     />
 </div>
@@ -25,7 +23,11 @@
         text-align: center;
     }
 
-    img {
+    img.loading{
+        width: 250px;
+    }
+
+    img.fumen {
         width: 100%;
     }
 </style>

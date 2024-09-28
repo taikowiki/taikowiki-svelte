@@ -37,7 +37,7 @@
 <a
     class="container"
     style={`background:${getGenreColors(genre)};`}
-    href={`/song/${song.songNo}`}
+    href={`/song/${song.songNo}?diff=${song.difficulty}`}
 >
     <div class="container2" data-theme={$theme}>
         <div class="title">

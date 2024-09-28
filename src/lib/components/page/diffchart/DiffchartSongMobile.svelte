@@ -17,7 +17,7 @@
 
 <a
     class="container"
-    href={`/song/${song.songNo}`}
+    href={`/song/${song.songNo}?diff=${song.difficulty}`}
     data-theme={theme}
     data-crown={userScore?.crown || ""}
 >

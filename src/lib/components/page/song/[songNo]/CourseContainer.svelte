@@ -5,12 +5,13 @@
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import FumenDisplay from "./FumenDisplay.svelte";
+    import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
 
     export let courses: SongData["courses"];
+    export let selectedDifficulty: Difficulty = "oni";
 
     let difficulties: Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
-
-    let selectedDifficulty: Difficulty = "oni";
 
     const isMobile = getIsMobile();
 
@@ -25,8 +26,10 @@
                     class="difficulty"
                     class:selected={selectedDifficulty === difficulty}
                     role="presentation"
-                    on:click={() => {
+                    on:click={async () => {
                         selectedDifficulty = difficulty;
+                        $page.url.searchParams.set('diff', difficulty);
+                        await goto($page.url, { replaceState: true });
                     }}
                     style={`background-color:${color.difficulty[difficulty]};`}
                 >

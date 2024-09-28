@@ -9,6 +9,9 @@
     import AddSongButton from "$lib/components/page/song/AddSongButton.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
+    import { page } from "$app/stores";
+    import { DIFFICULTY } from "$lib/module/common/song/const.js";
+    import type { Difficulty } from "$lib/module/common/song/types.js";
 
     export let data;
     const song = data.song;
@@ -17,6 +20,13 @@
     const lang = getLang();
     $: i18n = getI18N('/song/[songNo]', $lang);
     $: titleI18n = getI18N('other', $lang).title['/song/[songNo]'];
+
+    let diff: Difficulty = "oni";
+    $: {
+        let diffParam = $page.url.searchParams.get('diff') as Difficulty;
+        if (!DIFFICULTY.includes(diffParam)) diff = "oni";
+        else diff = diffParam;
+    }
 </script>
 
 {#if song}
@@ -43,7 +53,7 @@
             addedDate={song.addedDate}
         />
     </div>
-    <CourseContainer courses={song.courses} />
+    <CourseContainer courses={song.courses} selectedDifficulty={diff} />
 {:else}
     <PageTitle title={titleI18n}/>
     {i18n.noSong}

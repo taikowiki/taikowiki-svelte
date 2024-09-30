@@ -24,8 +24,7 @@
     let diff: Difficulty = "oni";
     $: {
         let diffParam = $page.url.searchParams.get('diff') as Difficulty;
-        if (!DIFFICULTY.includes(diffParam)) diff = "oni";
-        else diff = diffParam;
+        diff = song?.courses?.[diffParam] ? diffParam : "oni";
     }
 </script>
 

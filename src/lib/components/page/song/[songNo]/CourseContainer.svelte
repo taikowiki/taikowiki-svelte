@@ -6,7 +6,7 @@
     import { getTheme } from "$lib/module/layout/theme";
     import FumenDisplay from "./FumenDisplay.svelte";
     import { page } from "$app/stores";
-    import { goto } from "$app/navigation";
+    import { replaceState } from "$app/navigation";
 
     export let courses: SongData["courses"];
     export let selectedDifficulty: Difficulty = "oni";
@@ -26,10 +26,10 @@
                     class="difficulty"
                     class:selected={selectedDifficulty === difficulty}
                     role="presentation"
-                    on:click={async () => {
+                    on:click={() => {
                         selectedDifficulty = difficulty;
                         $page.url.searchParams.set('diff', difficulty);
-                        await goto($page.url, { replaceState: true });
+                        replaceState($page.url, $page.state);
                     }}
                     style={`background-color:${color.difficulty[difficulty]};`}
                 >

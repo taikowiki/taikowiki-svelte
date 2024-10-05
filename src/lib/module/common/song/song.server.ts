@@ -3,6 +3,7 @@ import { type SongData, type SongRequest, type SongSearchOption } from "./types"
 //@ts-expect-error
 import r from 'regex-escape';
 import { defineDBHandler } from "@yowza/db-handler";
+import { defineRequestHandler } from '@yowza/rrequestor';
 function regexEscape(str: string): string {
     return r(str)
 }
@@ -290,10 +291,36 @@ export const songDBController = {
     }),
 
     /**
+     * Upload Image
+     */
+    uploadLink: async (url: string) => {
+        const req = defineRequestHandler<string, { fileName: string }>({
+            url: 'https://file.taiko.wiki/upload/link',
+            method: 'post'
+        })
+        return await req(JSON.stringify({
+            url,
+            key: process.env.FILE_API_KEY
+        }));
+    },
+
+    /**
      * Updates a song.
      */
     uploadSong: defineDBHandler<[string, SongData], void>((songNo, songData) => {
         return async (run) => {
+            for (const course of Object.values(songData.courses)) {
+                if (!course) continue;
+                for (let i = 0; i < course.images.length; i++) {
+                    const url = course.images[i];
+                    if (!url.startsWith('https://file.taiko.wiki')) {
+                        const response = await songDBController.uploadLink(url);
+                        if (response.status === "success") {
+                            course.images[i] = `https://file.taiko.wiki/img/${response.data.fileName}`;
+                        }
+                    }
+                }
+            }
             const song = await songDBController.getSongBySongNo.getCallback(songNo)(run);
             if (song === null) {
                 await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])

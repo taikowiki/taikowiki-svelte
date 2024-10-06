@@ -1,6 +1,8 @@
 <script lang="ts">
-    import BannerGrid from "$lib/components/page/BannerGrid.svelte";
+    import MainSearch from "$lib/components/page/MainSearch.svelte";
+    import { Center } from "$lib/module/common/styled";
 </script>
 
-<BannerGrid>
-</BannerGrid>
+<Center>
+    <MainSearch />
+</Center>

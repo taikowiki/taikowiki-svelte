@@ -72,6 +72,7 @@
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);
+    /*
     $: if (($navigating || $page.state) && browser) {
         userRequestor.getUserData(null).then((response) => {
             if (response.status === "success") {
@@ -79,6 +80,7 @@
             }
         });
     }
+    */
 </script>
 
 <svelte:head>

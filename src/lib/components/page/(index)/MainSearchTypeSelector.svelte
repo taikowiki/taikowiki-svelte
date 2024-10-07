@@ -120,6 +120,9 @@
         flex-direction: column;
 
         background-color: white;
+
+        position: relative;
+        z-index: 1;
     }
     .container[data-theme="light"] .select {
         outline: 1px solid #cf4844;

@@ -61,7 +61,11 @@
 
         display: flex;
         flex-direction: column;
-        row-gap: 2px;
+
+        position: relative;
+        z-index: 2;
+
+        background-color: white;
     }
     .searchresult-container[data-theme="dark"] {
         outline-color: gray;

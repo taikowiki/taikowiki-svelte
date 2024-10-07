@@ -1,3 +1,7 @@
+<script lang="ts">
+    export let data;
+</script>
+
 <div>
     <a href="/admin/diffchart">서열표 관리</a>
 </div>
@@ -5,6 +9,16 @@
 <div>
     <a href="/admin/song">곡 관리</a>
 </div>
+
+<div>
+    <a href="/admin/notice">공지 관리</a>
+</div>
+
+{#if data.grade === 10}
+    <div>
+        <a href="/admin/banner">배너 관리</a>
+    </div>
+{/if}
 
 <div>
     <a href="/admin/user">유저 관리</a>

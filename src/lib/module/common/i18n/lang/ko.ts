@@ -296,6 +296,12 @@ const ko: LangFile = {
     '/measures': {
         measureTable: '보면 상수표',
         donderData: '동더 데이터'
+    },
+    '/notice':{
+        type: {
+            wiki: '위키',
+            official: '공식'
+        }
     }
 } as const;
 

@@ -3,8 +3,9 @@ import type { Notice } from "./types";
 
 export const noticeDBController = {
     /**@param page*/
-    getNoticeList: defineDBHandler<[{ page?: number; type?: 'wiki' | 'official' }], Omit<Notice, 'content'>[]>(({ page, type }) => {
+    getNoticeList: defineDBHandler<[{ page?: number; type?: 'wiki' | 'official' }?], Omit<Notice, 'content'>[]>((param) => {
         return async (run) => {
+            const { page, type } = param ?? {};
             if(type === 'wiki' || type === "official"){
                 return await run("SELECT `order`, `title`, `type`, `writtenDate`, `officialDate` FROM `notice` WHERE `type` = ? ORDER BY `order` DESC" + (page ? ` LIMIT ${(page - 1) * 20}, 20` : ''), [type]);
             }

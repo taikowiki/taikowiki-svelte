@@ -190,9 +190,6 @@
                 <AsideBanner banners={data.asideBanners} />
             {/if}
             <AsideNewSong newSongs={data.newSongs} />
-            <a href="https://koubouha.modoo.at" target="_blank">
-                <img src="/assets/img/bachi.jpg" style="width: 100%;border-radius: 10px;" alt="bachi"/>
-            </a>
         </Aside>
     </Main>
     <Footer version={data.version} />

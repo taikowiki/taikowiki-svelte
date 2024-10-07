@@ -29,6 +29,7 @@
 </script>
 
 <script lang="ts">
+    import SideAds from "$lib/components/layout/side-ads.svelte";
     import GoogleTag from "$lib/components/layout/google-tag.svelte";
     import VercelInject from "$lib/components/layout/vercel-inject.svelte";
     import { browser } from "$app/environment";
@@ -49,7 +50,6 @@
     import User from "$lib/components/layout/main/User.svelte";
     import Footer from "$lib/components/layout/main/Footer.svelte";
     import { userRequestor } from "$lib/module/common/user/user.client.js";
-    import SideAds from "$lib/components/layout/side-ads.svelte";
 
     export let data;
     //deepFreeze songs

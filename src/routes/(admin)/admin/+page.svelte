@@ -45,7 +45,3 @@
         <a href="/admin/banner">배너 관리</a>
     </div>
 {/if}
-
-<div data-type="upload">
-    <a href="/admin/upload">이미지 업로드</a>
-</div>

@@ -1,36 +1,50 @@
 <script lang="ts">
     export let data;
+
+    const linkDatas = [
+        {
+            name: "서열표 관리",
+            href: "/admin/diffchart",
+        },
+
+        {
+            name: "곡 관리",
+            href: "/admin/song",
+        },
+
+        {
+            name: "공지 관리",
+            href: "/admin/notice",
+        },
+
+        {
+            name: "유저 관리",
+            href: "/admin/user",
+        },
+
+        {
+            name: "오락실 관리",
+            href: "/admin/gamecenter",
+        },
+
+        {
+            name: "단위도장 관리",
+            href: "/admin/dani",
+        },
+    ];
 </script>
 
-<div>
-    <a href="/admin/diffchart">서열표 관리</a>
-</div>
-
-<div>
-    <a href="/admin/song">곡 관리</a>
-</div>
-
-<div>
-    <a href="/admin/notice">공지 관리</a>
-</div>
+{#each linkDatas as linkData}
+    <div>
+        <a href={linkData.href}>{linkData.name}</a>
+    </div>
+{/each}
 
 {#if data.grade === 10}
     <div>
         <a href="/admin/banner">배너 관리</a>
     </div>
 {/if}
-
-<div>
-    <a href="/admin/user">유저 관리</a>
-</div>
-
-<div>
-    <a href="/admin/gamecenter">오락실 정보 관리</a>
-</div>
-
-<div>
-    <a href="/admin/dani">단위도장 관리</a>
-</div>
 
 <div data-type="upload">
     <a href="/admin/upload">이미지 업로드</a>

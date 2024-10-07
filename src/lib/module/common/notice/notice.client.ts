@@ -14,7 +14,7 @@ export function convertNoticeMd(md: string){
     return converter.makeHtml(md);
 }
 
-export const adminNoticeRequestor = {
+export const noticeAdminRequestor = {
     writeNotice: defineRequestHandler<{notice: Omit<Notice, "order" | "writtenDate">}, void>({
         url: '/admin/api/notice/write',
         method: 'post'
@@ -29,3 +29,5 @@ export const adminNoticeRequestor = {
         method: 'post'
     })
 }
+
+export const adminNoticeRequestor = noticeAdminRequestor;

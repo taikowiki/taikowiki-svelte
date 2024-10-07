@@ -62,7 +62,7 @@
     }
 
     .sub-container {
-        width: 345px;
+        width: min(345px, 100%);
         min-height: 114px;
         box-shadow: 0px 0px 3px #d4d4d4;
         border-radius: 5px;

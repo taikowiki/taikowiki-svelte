@@ -51,7 +51,7 @@ export const noticeDBController = {
             await run("DELETE FROM `notice` WHERE `order` = ?", [order])
         }
     }),
-    getRecentNotices: defineDBHandler<[], { wiki: Notice[], official: Omit<Notice, 'content'>[] }>(() => {
+    getRecentNotices: defineDBHandler<[], { wiki: Omit<Notice, 'content'>[], official: Omit<Notice, 'content'>[] }>(() => {
         return async (run) => {
             return {
                 wiki: await run("SELECT `order`, `title`, `type`, `writtenDate`, `officialDate` FROM `notice` WHERE `type` = 'wiki' ORDER BY `order` DESC LIMIT 0, 5"),

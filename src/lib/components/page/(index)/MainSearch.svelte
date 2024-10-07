@@ -1,6 +1,6 @@
 <script lang="ts">
     import createSSC from "styled-svelte-component/svelte4";
-    import { Row } from "../common/styled";
+    import { Row } from "../../common/styled";
     import MainSearchTypeSelector from "./MainSearchTypeSelector.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { onDestroy, onMount } from "svelte";

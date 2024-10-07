@@ -44,4 +44,3 @@
     <div>
         <a href="/admin/banner">배너 관리</a>
     </div>
-{/if}

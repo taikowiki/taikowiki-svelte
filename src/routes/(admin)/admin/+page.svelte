@@ -7,6 +7,10 @@
 </div>
 
 <div>
+    <a href="/admin/notice">공지 관리</a>
+</div>
+
+<div>
     <a href="/admin/user">유저 관리</a>
 </div>
 

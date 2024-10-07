@@ -28,6 +28,7 @@
         flex-wrap: wrap;
         row-gap: 10px;
         column-gap: 10px;
+        justify-content: center;
 
         margin-top: 15px;
     }

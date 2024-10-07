@@ -7,41 +7,75 @@
     import { page } from "$app/stores";
 
     let opened = false;
-    function close(){
+    function close() {
         opened = false;
     }
 
+    $: if (itemContainer) {
+        if (opened) {
+            itemContainer.style.display = "flex";
+            itemContainer.focus();
+        } else {
+            itemContainer.style.display = "none";
+        }
+    }
+
+    let itemContainer: HTMLDivElement;
+    let container: HTMLDivElement;
+    let opener: HTMLDivElement;
+
     const [theme] = getTheme();
 
-    $:if($page.url || $page.state){
+    $: if ($page.url || $page.state) {
         close();
     }
 </script>
 
-<div class="container">
+<div
+    class="container"
+    on:focusout={(event) => {
+        if (
+            event.relatedTarget instanceof Node &&
+            itemContainer?.contains(event.relatedTarget)
+        )
+            return;
+        if (event.relatedTarget === opener) {
+            return;
+        }
+        opened = false;
+    }}
+    bind:this={container}
+>
     <div
         class="opener"
+        bind:this={opener}
         on:click={() => {
             opened = !opened;
         }}
-        role="presentation"
+        role="button"
+        tabindex="0"
+        on:keydown={() => {}}
     >
         <img src="/assets/icon/user.svg" alt="" />
     </div>
-    {#if opened}
-        <div class="item-container" data-theme={$theme}>
-            <UserInfo {close}/>
-            <UserItem separated height="30px">
-                <span slot="left">테마</span><ThemeToggler slot="right" />
-            </UserItem>
-            <LanguageItem />
-        </div>
-    {/if}
+    <div
+        class="item-container"
+        data-theme={$theme}
+        role="button"
+        tabindex="0"
+        bind:this={itemContainer}
+    >
+        <UserInfo {close} />
+        <UserItem separated height="30px">
+            <span slot="left">테마</span><ThemeToggler slot="right" />
+        </UserItem>
+        <LanguageItem />
+    </div>
 </div>
 
 <style>
-    .container{
-        position:relative;
+    .container {
+        position: relative;
     }
     .opener {
         width: 20px;
@@ -69,7 +103,7 @@
 
         z-index: 100;
 
-        display: flex;
+        display: none;
         flex-direction: column;
         align-items: center;
         row-gap: 5px;

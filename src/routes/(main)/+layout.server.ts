@@ -1,3 +1,4 @@
+import { bannerDBController } from '$lib/module/common/banner/banner.server.js';
 import { songDBController } from '$lib/module/common/song/song.server';
 import { UAParser } from 'ua-parser-js';
 
@@ -27,6 +28,7 @@ export async function load({ fetch, request, cookies }) {
         version: (await import('../../../package.json')).version,
         kakaoKey: process.env.KAKAO_JAVASCRIPT_KEY,
         isMobile,
-        theme
+        theme,
+        asideBanners: await bannerDBController.getAsideBanner()
     }
 }

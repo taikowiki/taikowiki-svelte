@@ -47,6 +47,16 @@ const getUserData: Handle = async ({ event, resolve }) => {
     return await resolve(event);
 }
 
+const setAssetsCacheControl: Handle = async({event, resolve}) => {
+    if(event.url.pathname.startsWith('/assets')){
+        event.setHeaders({
+            'Cache-Control': `max-age=${3600 * 24 * 7}`
+        });
+    }
+
+    return await resolve(event);
+}
+
 const checkPermission = checkPermissions([
     {
         path: '/admin/api',
@@ -73,4 +83,4 @@ Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission);
+export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission, setAssetsCacheControl);

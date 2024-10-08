@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let title:string;
+    export let title:string = '';
 
     import {getLang, getI18N} from '$lib/module/common/i18n/i18n';
 

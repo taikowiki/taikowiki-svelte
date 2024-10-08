@@ -1,4 +1,5 @@
 <script lang="ts">
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
     import MainBanner from "$lib/components/page/(index)/MainBanner.svelte";
     import MainNotice from "$lib/components/page/(index)/MainNotice.svelte";
     import MainSearch from "$lib/components/page/(index)/MainSearch.svelte";
@@ -8,6 +9,7 @@
     export let data;
 </script>
 
+<PageTitle />
 <Center>
     <MainSearch />
     <MainShortcut />

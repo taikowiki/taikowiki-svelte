@@ -73,11 +73,11 @@
     let inputContianer: HTMLDivElement;
 
     //검색
-    function search(){
-        switch(searchType){
-            case 'song':{
+    function search() {
+        switch (searchType) {
+            case "song": {
                 const searchParams = new URLSearchParams();
-                searchParams.set('query', keyword);
+                searchParams.set("query", keyword);
                 goto(`/song?${searchParams.toString()}`);
             }
         }
@@ -93,7 +93,11 @@
         data-theme={$theme}
         bind:this={inputContianer}
         on:focusout={(event) => {
-            if(event.relatedTarget instanceof Node && inputContianer?.contains(event.relatedTarget)) return;
+            if (
+                event.relatedTarget instanceof Node &&
+                inputContianer?.contains(event.relatedTarget)
+            )
+                return;
             searchResultOpened = false;
         }}
     >
@@ -111,12 +115,12 @@
         />
         <MainSearchResult {searchResults} bind:opened={searchResultOpened} />
     </div>
-    <button class="search-btn" data-theme={$theme} on:click={search}/>
+    <button class="search-btn" data-theme={$theme} on:click={search} />
 </Container>
 
 <style>
     .input-container {
-        flex: 1 1 auto;
+        width: calc(100% - 88px);
         height: 100%;
 
         border-left: 1px solid #cf4844;

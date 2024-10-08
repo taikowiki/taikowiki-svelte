@@ -4,6 +4,7 @@
     import timezone from "dayjs/plugin/timezone";
     import { convertNoticeMd } from "$lib/module/common/notice/notice.client";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
     export let data;
 
     const {notice} = data;
@@ -20,6 +21,7 @@
     $: i18n = getI18N('/notice', $lang);
 </script>
 
+<PageTitle title={`[${i18n.type[notice.type]}]${notice.title}`}/>
 <a class="tiny" href="/notice">
     공지
 </a>

@@ -1,20 +1,24 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
+
     export let src: string;
 </script>
 
 <div class="container">
-    <img class="loading" src="/assets/icon/loading.svg" alt="loading"/>
-    <img
-        {src}
-        class="fumen"
-        alt="fumen"
-        on:load={(event) => {
-            event.currentTarget.parentElement?.children[0]?.remove();
-        }}
-        on:error={(event) => {
-            event.currentTarget.parentElement?.remove();
-        }}
-    />
+    <img class="loading" src="/assets/icon/loading.svg" alt="loading" />
+    {#if browser}
+        <img
+            {src}
+            class="fumen"
+            alt="fumen"
+            on:load={(event) => {
+                event.currentTarget.parentElement?.children[0]?.remove();
+            }}
+            on:error={(event) => {
+                event.currentTarget.parentElement?.remove();
+            }}
+        />
+    {/if}
 </div>
 
 <style>
@@ -23,7 +27,7 @@
         text-align: center;
     }
 
-    img.loading{
+    img.loading {
         width: 250px;
     }
 

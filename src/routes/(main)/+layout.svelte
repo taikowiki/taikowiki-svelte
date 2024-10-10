@@ -100,19 +100,18 @@
     setContext("currentScrollY", currentScrollY);
     beforeNavigate(() => {
         pageScrolls.set(pagePosition, window.scrollY);
+        pageScrolls = pageScrolls;
         $currentScrollY = null;
     });
     afterNavigate((navigation) => {
         try {
             if (navigation.delta === undefined) {
+                const pageScrollsArr = [...pageScrolls].toSorted((a, b) => a[0] - b[0]);
+                const pagePositionIndex = pageScrollsArr.findIndex(([idx, _]) => idx === pagePosition);
                 pageScrolls = new Map(
-                    [...pageScrolls]
-                        .toSorted((a, b) => a[0] - b[0])
-                        .map(([_, value]) => value)
-                        .slice(0, pagePosition + 1)
-                        .map((v, i) => [i, v]),
+                    pageScrollsArr.slice(0, pagePositionIndex + 1)
                 );
-                pagePosition++;
+                pagePosition = pagePosition + 1;
             } else {
                 pagePosition += navigation.delta;
                 $currentScrollY = pageScrolls.get(pagePosition) ?? 0;

@@ -59,7 +59,7 @@
     });
 
     let userScoreDataJSON: string = ""; // 확장 프로그램
-    $: userScoreData = donderData ?? parseSongScoreJSON(userScoreDataJSON);
+    $: userScoreData = parseSongScoreJSON(userScoreDataJSON) ?? donderData;
 
     const lang = getLang();
     $: i18n = getI18N("component", $lang).Diffchart;

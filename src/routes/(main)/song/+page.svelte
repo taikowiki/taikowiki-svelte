@@ -20,10 +20,10 @@
     $: length = data.count;
 
     const lang = getLang();
-    $: titleI18n = getI18N('other', $lang).title['/song'];
+    $: titleI18n = getI18N("other", $lang).title["/song"];
 </script>
 
-<PageTitle title={titleI18n}/>
+<PageTitle title={titleI18n} />
 
 <SearchBox {option} />
 {#if $navigating}

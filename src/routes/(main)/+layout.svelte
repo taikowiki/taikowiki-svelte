@@ -45,12 +45,19 @@
     import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n";
     import { writable, get, type Writable } from "svelte/store";
     import { type PathLangFile } from "$lib/module/common/i18n/types.js";
-    import { setContext } from "svelte";
-    import { beforeNavigate } from "$app/navigation";
+    import { afterUpdate, onMount, setContext } from "svelte";
+    import {
+        afterNavigate,
+        beforeNavigate,
+        goto,
+        pushState,
+        replaceState,
+    } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
     import Footer from "$lib/components/layout/main/Footer.svelte";
     import { userRequestor } from "$lib/module/common/user/user.client.js";
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
+    import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
 
     export let data;
     //deepFreeze songs
@@ -85,6 +92,36 @@
         });
     }
     */
+
+    //page scroll
+    let pagePosition: number = 0;
+    let pageScrolls: Map<number, number> = new Map();
+    let currentScrollY = writable<number | null>(null);
+    setContext("currentScrollY", currentScrollY);
+    beforeNavigate(() => {
+        pageScrolls.set(pagePosition, window.scrollY);
+        $currentScrollY = null;
+    });
+    afterNavigate((navigation) => {
+        try {
+            if (navigation.delta === undefined) {
+                pageScrolls = new Map(
+                    [...pageScrolls]
+                        .toSorted((a, b) => a[0] - b[0])
+                        .map(([_, value]) => value)
+                        .slice(0, pagePosition + 1)
+                        .map((v, i) => [i, v]),
+                );
+                pagePosition++;
+            } else {
+                pagePosition += navigation.delta;
+                $currentScrollY = pageScrolls.get(pagePosition) ?? 0;
+            }
+        } catch {
+            pagePosition = -1;
+            pageScrolls = new Map();
+        }
+    });
 </script>
 
 <svelte:head>
@@ -182,6 +219,9 @@
                 <Loading />
             {:else}
                 <slot />
+                {#if $page.url.pathname !== "/song"}
+                    <ScrollSetter />
+                {/if}
             {/if}
         </svelte:fragment>
         <Aside slot="aside">

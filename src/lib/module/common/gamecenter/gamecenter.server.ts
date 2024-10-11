@@ -1,4 +1,5 @@
-import type { GameCenterData, GameCenterDataWithoutOrder, GameCenterDataWithoutOrderAndFavoriteCount } from "./types";
+import axios from "axios";
+import type { CoorSearchResult, GameCenterData, GameCenterDataWithoutOrder, GameCenterDataWithoutOrderAndFavoriteCount, GameCenterRequestData } from "./types";
 import { defineDBHandler } from "@yowza/db-handler";
 
 export const gamecenterDBController = {
@@ -75,7 +76,13 @@ export const gamecenterDBController = {
             result.forEach((r: any) => {
                 r.amenity = JSON.parse(r.amenity);
                 r.machines = JSON.parse(r.machines);
-                r.businessHours = JSON.parse(r.businessHours)
+                r.businessHours = JSON.parse(r.businessHours);
+                r.coor = {
+                    x: r.x,
+                    y: r.y
+                }
+                delete r.x;
+                delete r.y;
             })
 
             return result as GameCenterData[];
@@ -96,7 +103,13 @@ export const gamecenterDBController = {
             result.forEach((r: any) => {
                 r.amenity = JSON.parse(r.amenity);
                 r.machines = JSON.parse(r.machines);
-                r.businessHours = JSON.parse(r.businessHours)
+                r.businessHours = JSON.parse(r.businessHours);
+                r.coor = {
+                    x: r.x,
+                    y: r.y
+                }
+                delete r.x;
+                delete r.y;
             })
 
             return result[0]
@@ -115,9 +128,9 @@ export const gamecenterDBController = {
     /**
      * Adds arcade data.
      */
-    addGamecenter: defineDBHandler<[GameCenterDataWithoutOrder], void>((gamecenterData) => {
+    addGamecenter: defineDBHandler<[GameCenterDataWithoutOrderAndFavoriteCount], void>((gamecenterData) => {
         return async (run) => {
-            await run("INSERT INTO `gamecenter/data` (`name`, `address`, `amenity`, `machines`, `region`, `businessHours`) VALUES (?, ?, ?, ?, ?, ?)", [gamecenterData.name, gamecenterData.address, JSON.stringify(gamecenterData.amenity), JSON.stringify(gamecenterData.machines), gamecenterData.region, JSON.stringify(gamecenterData.businessHours)])
+            await run("INSERT INTO `gamecenter/data` (`name`, `address`, `amenity`, `machines`, `region`, `businessHours`, `x`, `y`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [gamecenterData.name, gamecenterData.address, JSON.stringify(gamecenterData.amenity), JSON.stringify(gamecenterData.machines), gamecenterData.region, JSON.stringify(gamecenterData.businessHours), gamecenterData.coor.x, gamecenterData.coor.y])
         }
     }),
 
@@ -126,7 +139,7 @@ export const gamecenterDBController = {
      */
     editGamecenter: defineDBHandler<[GameCenterData], void>((gamecenterData) => {
         return async (run) => {
-            return await run("UPDATE `gamecenter/data` SET `name`=?, `address`=?, `amenity`=?, `machines`=?, `region`=?, `businessHours`=? WHERE `order` = ?", [gamecenterData.name, gamecenterData.address, JSON.stringify(gamecenterData.amenity), JSON.stringify(gamecenterData.machines), gamecenterData.region, JSON.stringify(gamecenterData.businessHours), gamecenterData.order])
+            return await run("UPDATE `gamecenter/data` SET `name`=?, `address`=?, `amenity`=?, `machines`=?, `region`=?, `businessHours`=?, `x` = ?, `y` = ? WHERE `order` = ?", [gamecenterData.name, gamecenterData.address, JSON.stringify(gamecenterData.amenity), JSON.stringify(gamecenterData.machines), gamecenterData.region, JSON.stringify(gamecenterData.businessHours), gamecenterData.coor.x, gamecenterData.coor.y, gamecenterData.order])
         }
     }),
 
@@ -142,7 +155,7 @@ export const gamecenterDBController = {
     /**
      * Submits an arcade report.
      */
-    addReport: defineDBHandler<[{ gamecenterData: GameCenterDataWithoutOrderAndFavoriteCount; UUID: string, ip: string }], void>((data) => {
+    addReport: defineDBHandler<[{ gamecenterData: GameCenterRequestData; UUID: string, ip: string }], void>((data) => {
         return async (run) => {
             await run("INSERT INTO `gamecenter/report` (`UUID`, `ip`, `data`) VALUES (?, ?, ?)", [data.UUID, data.ip, JSON.stringify(data.gamecenterData)]);
         }
@@ -151,7 +164,7 @@ export const gamecenterDBController = {
     /**
      * Retrieves all reports.
      */
-    getReports: defineDBHandler<['none' | 'approved' | 'disapproved'], { order: number; UUID: string, ip: string, data: GameCenterDataWithoutOrder }[]>((status = 'none') => {
+    getReports: defineDBHandler<['none' | 'approved' | 'disapproved'], { order: number; UUID: string, ip: string, data: GameCenterRequestData }[]>((status = 'none') => {
         return async (run) => {
             const result = await run("SELECT * FROM `gamecenter/report` WHERE `status` = ?", [status]);
 
@@ -166,7 +179,7 @@ export const gamecenterDBController = {
     /**
      * Retrieves a report by order.
      */
-    getReportByOrder: defineDBHandler<[number], { order: number; UUID: string, ip: string, data: GameCenterDataWithoutOrder } | null>((order) => {
+    getReportByOrder: defineDBHandler<[number], { order: number; UUID: string, ip: string, data: GameCenterRequestData } | null>((order) => {
         return async (run) => {
             const result = await run("SELECT * FROM `gamecenter/report` WHERE `order` = ? AND `status` = 'none'", [order]);
 
@@ -185,14 +198,24 @@ export const gamecenterDBController = {
     /**
      * Approves a report.
      */
-    approveRequest: defineDBHandler<[number], void>((order) => {
+    approveRequest: defineDBHandler<[number, string], void>((order, origin) => {
         return async (run) => {
             const report = await gamecenterDBController.getReportByOrder.getCallback(order)(run);
             if (!report) {
                 return;
             }
 
-            await gamecenterDBController.addGamecenter.getCallback(report.data)(run);
+            const coorData = await gamecenterServerRequestor.searchCoorWithAddress(report.data.address, origin);
+
+            const data = {
+                ...report.data,
+                coor: {
+                    x: coorData?.[0]?.x !== undefined ? Number(coorData?.[0]?.x) : null,
+                    y: coorData?.[0]?.y !== undefined ? Number(coorData?.[0]?.y) : null
+                }
+            }
+
+            await gamecenterDBController.addGamecenter.getCallback(data)(run);
 
             return await run("UPDATE `gamecenter/report` SET `status`='approved' WHERE `order` = ?", [order]);
         }
@@ -206,4 +229,27 @@ export const gamecenterDBController = {
             return await run("UPDATE `gamecenter/report` SET `status`='disapproved' WHERE `order` = ?", [order]);
         }
     })
+}
+
+export const gamecenterServerRequestor = {
+    async searchCoorWithAddress(address: string, origin: string): Promise<CoorSearchResult[]> {
+        const fetchUrl = new URL("https://dapi.kakao.com");
+        fetchUrl.pathname = '/v2/local/search/address.json';
+        fetchUrl.searchParams.set('query', address);
+        fetchUrl.searchParams.set('page', '1');
+        fetchUrl.searchParams.set('size', '1');
+
+        const headers: Record<string, string> = {};
+        headers['authorization'] = `KakaoAK ${process.env.KAKAO_JAVASCRIPT_KEY}`;
+        headers['ka'] = `sdk/4.4.19 os/javascript lang/ko-KR device/Win32 origin/${encodeURIComponent(origin)}`;
+        headers['Referer'] = origin;
+
+        const response = await axios({
+            method: 'GET',
+            url: fetchUrl.href,
+            headers
+        });
+
+        return response.data.documents;
+    }
 }

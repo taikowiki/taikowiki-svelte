@@ -1,10 +1,10 @@
 import { AMENITY, GAMECENTERREGION } from '$lib/module/common/gamecenter/const.js';
-import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server.js';
-import type { GameCenterDataWithoutOrder } from '$lib/module/common/gamecenter/types.js';
+import { gamecenterDBController, gamecenterServerRequestor } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import type { GameCenterRequestData } from '$lib/module/common/gamecenter/types.js';
 import { error } from '@sveltejs/kit';
 
-export async function POST({ request }) {
-    const requestData: Partial<GameCenterDataWithoutOrder> = (await request.json()).gamecenterData;
+export async function POST({ request, url }) {
+    const requestData: Partial<GameCenterRequestData> = (await request.json()).gamecenterData;
 
     if (!("name" in requestData) || typeof (requestData.name) !== "string" || !requestData.name) {
         throw error(400, JSON.stringify({
@@ -43,9 +43,19 @@ export async function POST({ request }) {
         });
     }
 
-    const gamecenterData = requestData as GameCenterDataWithoutOrder
+    const gamecenterData = requestData as GameCenterRequestData;
 
-    await gamecenterDBController.addGamecenter(gamecenterData)
+    const coorData = await gamecenterServerRequestor.searchCoorWithAddress(gamecenterData.address, url.origin);
+
+    const data = {
+        ...gamecenterData,
+        coor: {
+            x: coorData?.[0]?.x !== undefined ? Number(coorData?.[0]?.x) : null,
+            y: coorData?.[0]?.y !== undefined ? Number(coorData?.[0]?.y) : null
+        }
+    }
+
+    await gamecenterDBController.addGamecenter(data);
 
     return new Response();
 }

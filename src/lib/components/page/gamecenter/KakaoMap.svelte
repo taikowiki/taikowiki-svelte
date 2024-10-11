@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     //오락실 마커 생성
-    async function createGamecenterMarkers(
+    function createGamecenterMarkers(
         gamecenterDatas: GameCenterData[],
         gamecenterMarkers: Record<
             number,
@@ -13,22 +13,22 @@
         kakaoMap: typeof kakao.maps,
         map: kakao.maps.Map,
     ) {
-        const geocoder = new kakaoMap.services.Geocoder();
         for (const gamecenterData of gamecenterDatas) {
-            //주소 검색 후 좌표 얻기
-            const result = (await new Promise((res) => {
-                geocoder.addressSearch(gamecenterData.address, res);
-            })) as any[];
-
-            if (!result[0]) {
-                console.warn(gamecenterData.name, "주소 검색 오류");
+            if (
+                gamecenterData.coor.x === null ||
+                gamecenterData.coor.y === null
+            ) {
+                console.warn(gamecenterData.name, "좌표 오류");
                 continue;
             }
 
             //marker 생성
             const marker = new kakaoMap.Marker({
                 map,
-                position: new kakaoMap.LatLng(result[0].y, result[0].x),
+                position: new kakaoMap.LatLng(
+                    gamecenterData.coor.y,
+                    gamecenterData.coor.x,
+                ),
             });
 
             //infowindow 생성
@@ -118,7 +118,7 @@
         });
 
         //현재 위치
-        (async () => {
+        await (async () => {
             if (!canUseGeolocation) {
                 return;
             }
@@ -168,25 +168,14 @@
             );
         })();
 
-        //오락실 마커
-        (async () => {
-            await createGamecenterMarkers(
-                gamecenterDatas,
-                gamecenterMarkers,
-                kakaoMap,
-                map,
-            );
+        createGamecenterMarkers(
+            gamecenterDatas,
+            gamecenterMarkers,
+            kakaoMap,
+            map,
+        );
 
-            markerLoaded = true;
-
-            //오락실 마커 로딩 되면 지도 표시
-            /*
-            mapContainer.style.display = "block";
-            const center = map.getCenter();
-            map.relayout();
-            map.setCenter(center);
-            */
-        })();
+        markerLoaded = true;
     });
 
     onDestroy(() => {

@@ -1,9 +1,9 @@
 import { AMENITY, GAMECENTERREGION } from '$lib/module/common/gamecenter/const.js';
-import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import { gamecenterDBController, gamecenterServerRequestor } from '$lib/module/common/gamecenter/gamecenter.server.js';
 import type { GameCenterData, GameCenterDataWithoutOrder } from '$lib/module/common/gamecenter/types.js';
 import { error } from '@sveltejs/kit';
 
-export async function POST({ request }) {
+export async function POST({ request, url }) {
     const requestData: Partial<GameCenterDataWithoutOrder> = (await request.json()).gamecenterData;
 
     if (!("order" in requestData) || typeof (requestData.order) !== "number") {
@@ -48,7 +48,15 @@ export async function POST({ request }) {
         });
     }
 
-    const gamecenterData = requestData as GameCenterData
+    const coorData = await gamecenterServerRequestor.searchCoorWithAddress(requestData.address, url.origin);
+
+    const gamecenterData = {
+        ...requestData,
+        coor: {
+            x: coorData?.[0]?.x !== undefined ? Number(coorData?.[0]?.x) : null,
+            y: coorData?.[0]?.y !== undefined ? Number(coorData?.[0]?.y) : null
+        }
+    } as GameCenterData;
 
     await gamecenterDBController.editGamecenter(gamecenterData)
 

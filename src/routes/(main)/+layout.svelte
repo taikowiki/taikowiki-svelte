@@ -205,6 +205,11 @@
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />
+            <HeaderItem
+                icon="/assets/icon/donate.svg"
+                href="/donate"
+                mobileHideSlot
+            />
         </svelte:fragment>
     </Header>
     <Main>

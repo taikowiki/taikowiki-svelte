@@ -79,6 +79,7 @@
                 const searchParams = new URLSearchParams();
                 searchParams.set("query", keyword);
                 goto(`/song?${searchParams.toString()}`);
+                break;
             }
         }
     }
@@ -111,6 +112,11 @@
             }}
             on:click={() => {
                 searchResultOpened = true;
+            }}
+            on:keypress={(event) => {
+                if (event.key === "Enter") {
+                    search();
+                }
             }}
         />
         <MainSearchResult {searchResults} bind:opened={searchResultOpened} />

@@ -7,12 +7,13 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { getRating } from "@taiko-wiki/taiko-rating";
-    import type { Action } from "svelte/action";
 
     export let ratings: ReturnType<typeof getRating>;
     export let songDatas: Pick<SongData, "songNo" | "title">[];
     export let donderData: UserDonderData;
     export let opened: boolean;
+
+    let subOpened = false;
 
     const DiffColoredTitle = createSSC<{ difficulty: "oni" | "ura" }>(
         "a",
@@ -20,41 +21,6 @@
             color:${color.difficulty[difficulty]} !important;font-weight: bold;
         `,
     );
-
-    const visibilityAction: Action<HTMLElement, boolean> = (node, opened) => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const entry = entries[0];
-                if (entry.isIntersecting) {
-                    node.style.visibility = "visible";
-                } else {
-                    node.style.visibility = "hidden";
-                }
-            },
-            {
-                threshold: 0,
-            },
-        );
-
-        if (opened) {
-            observer.observe(node);
-        }
-
-        return {
-            destroy() {
-                observer.disconnect();
-            },
-            update(opened) {
-                if (opened) {
-                    observer.observe(node);
-                } 
-                else {
-                    observer.unobserve(node);
-                    node.style.visibility = "hidden";
-                }
-            },
-        };
-    };
 
     const [theme] = getTheme();
     const lang = getLang();
@@ -70,6 +36,7 @@
 </script>
 
 <Center>
+    <h3>상위 50곡</h3>
     <table data-theme={$theme}>
         <tr>
             <th class="song-title"> {i18n.songTitle} </th>
@@ -79,13 +46,13 @@
             <th> {i18n.rating} </th>
             <th> {i18n.hiroba} </th>
         </tr>
-        {#each ratings.songRatingDatas as songRatingData, index}
+        {#each ratings.songRatingDatas.slice(0, Math.min(50, ratings.songRatingDatas.length)) as songRatingData, index}
             {@const song = songDatas.find(
                 ({ songNo }) => songNo === songRatingData.songNo.toString(),
             )}
             {@const songScoreData =
                 donderData.scoreData?.[songRatingData.songNo]}
-            <tr class="song" class:top50={index < 50} use:visibilityAction={opened}>
+            <tr class="song top50">
                 <td class="song-title">
                     <DiffColoredTitle
                         difficulty={songRatingData.difficulty}
@@ -119,9 +86,74 @@
             </tr>
         {/each}
     </table>
+    <h3
+        class="other"
+        class:subOpened
+        role="presentation"
+        on:click={() => {
+            subOpened = !subOpened;
+        }}
+    >
+        이외의 곡
+    </h3>
+    {#if subOpened}
+        <table data-theme={$theme}>
+            <tr>
+                <th class="song-title"> {i18n.songTitle} </th>
+                <th> {i18n.measureValue} </th>
+                <th> {i18n.accuracy} </th>
+                <th> {i18n.crown} </th>
+                <th> {i18n.rating} </th>
+                <th> {i18n.hiroba} </th>
+            </tr>
+            {#each ratings.songRatingDatas.slice(Math.min(50, ratings.songRatingDatas.length), ratings.songRatingDatas.length) as songRatingData, index}
+                {@const song = songDatas.find(
+                    ({ songNo }) => songNo === songRatingData.songNo.toString(),
+                )}
+                {@const songScoreData =
+                    donderData.scoreData?.[songRatingData.songNo]}
+                <tr class="song">
+                    <td class="song-title">
+                        <DiffColoredTitle
+                            difficulty={songRatingData.difficulty}
+                            href={`/song/${songRatingData.songNo}`}
+                        >
+                            {song?.title}
+                        </DiffColoredTitle>
+                    </td>
+                    <td>
+                        {songRatingData.songRating.measureValue}
+                    </td>
+                    <td>
+                        {Math.round(songRatingData.songRating.accuracy * 100) /
+                            100}%
+                    </td>
+                    <td>
+                        {songScoreData?.difficulty[songRatingData.difficulty]
+                            ?.crown}
+                    </td>
+                    <td>
+                        {Math.round(songRatingData.songRating.value)}
+                    </td>
+                    <td>
+                        <a
+                            href={`https://donderhiroba.jp/score_detail.php?song_no=${songRatingData.songNo}&level=${getDiffNum(songRatingData.difficulty)}`}
+                            target="_blank"
+                        >
+                            링크
+                        </a>
+                    </td>
+                </tr>
+            {/each}
+        </table>
+    {/if}
 </Center>
 
 <style>
+    h3 {
+        width: 100%;
+        margin-block: 0;
+    }
     table {
         width: 100%;
         border-collapse: collapse;
@@ -153,6 +185,19 @@
 
     .top50 {
         background-color: #ffdbe2;
-        color:black;
+        color: black;
+    }
+
+    .other{
+        cursor: pointer;
+        
+        display:flex;
+        justify-content: flex-start;
+    }
+    .other::before{
+        content: '▼'
+    }
+    .other.subOpened::before{
+        content: '▲'
     }
 </style>

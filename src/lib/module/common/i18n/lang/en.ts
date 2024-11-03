@@ -1,4 +1,8 @@
+import { mdToHtml } from "../../mdHtmlConverter";
 import type { LangFile } from "../types";
+
+import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
+import ratingExplanation from '../md/ko/ratingExplanation.md?raw'
 
 const en: LangFile = {
     layout: {
@@ -8,7 +12,7 @@ const en: LangFile = {
             newSong: 'New Charts',
             diffchart: 'Difficulty Chart',
             dani: 'Dan-i Dojo',
-            gamecenter: 'Gane Centers',
+            gamecenter: 'Game Centers',
             measures: 'Rating Mesurements'
         },
         'dedicated diffchart': {
@@ -42,7 +46,8 @@ const en: LangFile = {
                 "hit": "Hits",
                 "good": "Goods",
                 "ok": "OKs",
-                "bad": "Bads"
+                "bad": "Bads",
+                "score_sum": "Score Summary"
             },
             suffix1: {
                 percent: "%",
@@ -67,12 +72,12 @@ const en: LangFile = {
             '/auth/user': 'My Data',
             '/auth/user/donder': 'Donder Data',
             '/dani': 'Dan-i Dojo',
-            '/diffchart/clear': 'Clear difficulty Chart',
+            '/diffchart/clear': 'Clear Difficulty Chart',
             '/gamecenter': 'Game Center Map',
-            '/gamecenter/report': 'Request Game Center Infromation',
-            '/measures': 'Chart Rating Mesurment',
-            '/song': 'Search Song',
-            '/song/[songNo]': 'No Song',
+            '/gamecenter/report': 'Report Game Center Information',
+            '/measures': 'Chart Rating Measurement',
+            '/song': 'Search Chart',
+            '/song/[songNo]': 'No result',
             '/song/[songNo]/edit': 'Request Edit',
             '/song/add': 'Add Song'
         },
@@ -84,30 +89,31 @@ const en: LangFile = {
                 "fukusho": "Fukusho",
                 "taisho": "Taisho",
                 "beginner": "Beginner",
-                "10kyu": "10kyu",
-                "9kyu": "9kyu",
-                "8kyu": "8kyu",
-                "7kyu": "7kyu",
-                "6kyu": "6kyu",
-                '5kyu': '5kyu',
-                '4kyu': '4kyu',
-                '3kyu': '3kyu',
-                '2kyu': '2kyu',
-                '1kyu': '1kyu',
-                '1dan': 'Shyodan',
-                '2dan': '2dan',
-                '3dan': '3dan',
-                '4dan': '4dan',
-                '5dan': '5dan',
-                '6dan': '6dan',
-                '7dan': '7dan',
-                '8dan': '8dan',
-                '9dan': '9dan',
-                '10dan': '10dan',
+                "10kyu": "10th Kyu",
+                "9kyu": "9th Kyu",
+                "8kyu": "8th Kyu",
+                "7kyu": "7th Kyu",
+                "6kyu": "6th Kyu",
+                '5kyu': '5th Kyu',
+                '4kyu': '4th Kyu',
+                '3kyu': '3rd Kyu',
+                '2kyu': '2nd Kyu',
+                '1kyu': '1st Kyu',
+                '1dan': 'Shodan',
+                '2dan': '2nd Dan',
+                '3dan': '3rd Dan',
+                '4dan': '4th Dan',
+                '5dan': '5th Dan',
+                '6dan': '6th Dan',
+                '7dan': '7th Dan',
+                '8dan': '8th Dan',
+                '9dan': '9th Dan',
+                '10dan': '10th Dan',
                 'kuroto': 'Kuroto',
                 'meijin': 'Meijin',
                 'chojin': 'Chojin',
-                'tatsujin': 'Tatsujin'
+                'tatsujin': 'Tatsujin',
+                'gaiden': 'Gaiden'
             },
             version: {
                 'katsudon': 'Katsudon',
@@ -120,17 +126,31 @@ const en: LangFile = {
                 'yellow': 'Yellow',
                 'blue': 'Blue',
                 'green': 'Green',
+                'nijiiro_gaiden': 'Nijiiro Gaiden',
                 '20': 'Nijiiro 2020',
                 '21': 'Nijiiro 2021',
                 '22': 'Nijiiro 2022',
                 '23': 'Nijiiro 2023',
-                '24': 'Nijiiro 2024'
+                '24': 'Nijiiro 2024',
+                '25': 'Nijiiro 2025',
+                '26': 'Nijiiro 2026',
+                '27': 'Nijiiro 2027',
+                '28': 'Nijiiro 2028',
+                '29': 'Nijiiro 2029',
+                '30': 'Nijiiro 2030'
             }
+        },
+        difficulty: {
+            easy: 'Easy',
+            normal: 'Normal',
+            hard: 'Hard',
+            oni: 'Extreme (Front)',
+            ura: 'Extreme (Inner)'
         }
     },
     //path
     '/auth/login': {
-        forLogin: 'to Login'
+        forLogin: 'for Login'
     },
     '/auth/user': {
         nickname: 'Username',
@@ -141,19 +161,22 @@ const en: LangFile = {
         delete: 'Delete Account',
         error: {
             'New nickname is not in the correct format': 'Username is not in the correct form.',
-            'Duplicated Nickname': 'This Username is already in use.'
+            'Duplicated Nickname': 'The Username is already in use.'
         }
     },
     '/auth/user/donder':{
-        noDonderData: 'No information found. Please upload your Donderhiroba data.',
-        uploadGuide: 'Upload guide(English not yet supported).',
+        noDonderData: 'No data found. Please upload your Donderhiroba data.',
         myDon: 'My Don',
         lastUpdate: 'Last Update',
-        songRating: 'Song Rating',
-        songTitle: 'Song Title',
+        songRating: 'Song Ratings',
+        songTitle: 'Song title',
         accuracy: 'Accuracy',
         crown: 'Crown',
-        rating: 'Ratings'
+        rating: 'Ratings',
+        hiroba: 'Hiroba',
+        measureValue: 'Mesurements',
+        uploadGuide: mdToHtml(ratingUploadGuide),
+        explanation: mdToHtml(ratingExplanation)
     },
     '/song': {
         placeholder: 'Keywords',
@@ -186,7 +209,7 @@ const en: LangFile = {
         genres: {
             pops: 'POPS',
             anime: 'Anime',
-            kids: 'Kids',
+            kids: 'KIDS',
             vocaloid: 'Vocaloid',
             game: 'Game Music',
             namco: 'Namco Original',
@@ -198,7 +221,7 @@ const en: LangFile = {
         genres: {
             pops: 'POPS',
             anime: 'Anime',
-            kids: 'Kids',
+            kids: 'KIDS',
             vocaloid: 'Vocaloid',
             game: 'Game Music',
             namco: 'Namco Original',
@@ -241,7 +264,7 @@ const en: LangFile = {
             'water': 'Water tab',
             'toilet': 'W/C',
             'park': 'Parking',
-            'capture': 'Screen Recording',
+            'capture': 'Screen Record',
             'rental': 'Rental',
             'night': 'Overnight',
             'atm': 'ATM',
@@ -271,8 +294,14 @@ const en: LangFile = {
         needed: 'is(are) required.'
     },
     '/measures': {
-        measureTable: 'Chart Rating Mesurments',
+        measureTable: 'Chart Rating Mesurements',
         donderData: 'Donder Data'
+    },
+    '/notice':{
+        type: {
+            wiki: 'Wiki',
+            official: 'Official'
+        }
     }
 } as const;
 

@@ -16,6 +16,7 @@
     const Genre = getContext('Genre') as ConstructorOfATypedSvelteComponent;
     const Level = getContext('Level') as ConstructorOfATypedSvelteComponent;
 
+    /*
     const visibilityAction: Action<HTMLElement> = (node) => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -39,9 +40,10 @@
             }
         };
     };
+    */
 </script>
 
-<a class="song-container" href={`/song/${songData.songNo}`} data-theme={$theme} use:visibilityAction>
+<a class="song-container" href={`/song/${songData.songNo}`} data-theme={$theme}>
     <Genre genre={songData.genre} />
     <Level diff={songData.diff ?? "oni"}>
         <span>

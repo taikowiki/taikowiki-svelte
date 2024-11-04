@@ -25,7 +25,7 @@ export const daniDBController = {
             result.forEach((e: any) => {
                 e.data = JSON.parse(e.data);
             })
-            return JSON.parse(JSON.stringify(result))?.[0] ?? null
+            return result[0] ?? null;
         }
     }),
     /**

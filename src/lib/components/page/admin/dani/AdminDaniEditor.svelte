@@ -14,8 +14,8 @@
         daniData.dan = dan;
         if (daniData.dan === "gaiden") {
             daniData.name = {
-                ja: "",
-                ko: "",
+                ja: daniData?.name?.ja ?? "",
+                ko: daniData?.name?.ko ?? "",
             };
         } else {
             daniData.name = null;

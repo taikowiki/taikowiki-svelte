@@ -8,7 +8,7 @@ export async function POST({ request, locals, cookies }) {
 
         try {
             await userDBController.deleteUser(locals.userData.UUID);
-            cookies.delete('auth-user', { path: '/', domain: '.taiko.wiki' });
+            cookies.delete("auth-user", { path: '/' });
         }
         catch (err: any) {
             redirect(302, '/auth/user');

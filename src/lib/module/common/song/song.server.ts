@@ -1,3 +1,4 @@
+import { defineRequestHandler } from '@yowza/rrequestor';
 import { escape, escapeId } from 'mysql2';
 import { type SongData, type SongRequest, type SongSearchOption } from "./types";
 //@ts-expect-error

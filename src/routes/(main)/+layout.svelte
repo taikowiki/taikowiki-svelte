@@ -29,6 +29,9 @@
 </script>
 
 <script lang="ts">
+    import SideAds from "$lib/components/layout/side-ads.svelte";
+    import GoogleTag from "$lib/components/layout/google-tag.svelte";
+    import VercelInject from "$lib/components/layout/vercel-inject.svelte";
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
@@ -202,6 +205,11 @@
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />
+            <HeaderItem
+                icon="/assets/icon/donate.svg"
+                href="/donate"
+                mobileHideSlot
+            />
         </svelte:fragment>
     </Header>
     <Main>
@@ -225,6 +233,9 @@
     </Main>
     <Footer version={data.version} />
 </div>
+
+<GoogleTag />
+<VercelInject />
 
 <style>
     .page-aside:empty {

@@ -27,7 +27,8 @@
                         data:{
                             name: '',
                             sections: []
-                        }
+                        },
+                        comment: null
                     }
                 ]
             }}>

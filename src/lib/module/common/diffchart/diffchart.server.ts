@@ -5,28 +5,46 @@ export const diffchartDBController = {
     /**
      * Retrieves the clear difficulty chart data by level.
      */
-    getClearByLevel: defineDBHandler<[number], DiffChart | null>((level) => {
+    getClearByLevel: defineDBHandler<[number], DiffchartData | null>((level) => {
         return async (run) => {
-            const result = await run("SELECT `data` FROM `diffchart` WHERE `type` = 'clear' AND `level` = ?", [level]);
+            const result = await run("SELECT * FROM `diffchart` WHERE `type` = 'clear' AND `level` = ?", [level]);
 
             if (result[0]?.data === undefined) {
                 return null;
             }
-            return JSON.parse(result[0].data)
+
+            result.forEach(parseDiffchart);
+            
+            return result[0];
+        }
+    }),
+    /**
+     * Retrieves the fullcombo difficulty chart data by level.
+     */
+    getFullcomboByLevel: defineDBHandler<[number], DiffchartData | null>((level) => {
+        return async (run) => {
+            const result = await run("SELECT * FROM `diffchart` WHERE `type` = 'fc' AND `level` = ?", [level]);
+
+            if (result[0]?.data === undefined) {
+                return null;
+            }
+
+            result.forEach(parseDiffchart);
+            
+            return result[0];
         }
     }),
     /**
      * Retrieves all difficulty chart data.
      */
-    getAll: defineDBHandler<[], { name: string, level: number, type: string, data: DiffChart }[]>(() => {
+    getAll: defineDBHandler<[], DiffchartData[]>(() => {
         return async (run) => {
             const result = await run("SELECT * FROM `diffchart`;");
 
-            result.forEach((e: any) => {
-                e.data = JSON.parse(e.data);
-            })
+            result.forEach(parseDiffchart);
+            result.sort(sortDiffchart);
 
-            return result
+            return result;
         }
     }),
     /**
@@ -38,10 +56,10 @@ export const diffchartDBController = {
             let r = await run("SELECT `order` FROM `diffchart` WHERE `type` = ? AND `level` = ?", [diffchartData.type, diffchartData.level])
 
             if (r.length === 0) {
-                return await run("INSERT INTO `diffchart` (`name`, `level`, `type`, `data`) VALUES (?, ?, ?, ?)", [diffchartData.name, diffchartData.level, diffchartData.type, JSON.stringify(diffchartData.data)]);
+                return await run("INSERT INTO `diffchart` (`name`, `level`, `type`, `data`, `comment`) VALUES (?, ?, ?, ?, ?)", [diffchartData.name, diffchartData.level, diffchartData.type, JSON.stringify(diffchartData.data), diffchartData.comment ?? null]);
             }
             else {
-                return await run("UPDATE `diffchart` SET `name` = ?, `data` = ? WHERE `level` = ? AND `type` = ?", [diffchartData.name, JSON.stringify(diffchartData.data), diffchartData.level, diffchartData.type]);
+                return await run("UPDATE `diffchart` SET `name` = ?, `data` = ?, `comment` = ? WHERE `level` = ? AND `type` = ?", [diffchartData.name, JSON.stringify(diffchartData.data), diffchartData.comment ?? null, diffchartData.level, diffchartData.type]);
             }
         }
     }),
@@ -53,4 +71,34 @@ export const diffchartDBController = {
             await run("DELETE FROM `diffchart` WHERE `level` = ? AND `type` = ?", [level, type])
         }
     })
+}
+
+
+function parseDiffchart(e: any){
+    e.data &&= JSON.parse(e.data);
+}
+
+function sortDiffchart(a: DiffchartData, b: DiffchartData){
+    if(a.type === b.type){
+        return a.level - b.level
+    }
+    else{
+        return typeToNum(a.type) - typeToNum(b.type);
+    }
+}
+function typeToNum(type: 'clear' | 'fc' | 'dfc'){
+    switch(type){
+        case('clear'):{
+            return 0;
+        }
+        case('fc'):{
+            return 1;
+        }
+        case('dfc'):{
+            return 2;
+        }
+        default:{
+            return 3;
+        }
+    }
 }

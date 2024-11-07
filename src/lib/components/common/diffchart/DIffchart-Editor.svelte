@@ -14,24 +14,53 @@
 
     import { type DiffChart } from "$lib/module/common/diffchart/types";
     import DiffchartEditorSection from "./Diffchart-Editor-Section.svelte";
+    import { page } from "$app/stores";
 
     export let diffchart: DiffChart;
+    export let mode: "admin" | "normal" = "normal";
+
+    const url = new URL($page.url);
+    $: url.hash = btoa(encodeURIComponent(JSON.stringify(diffchart)));
+
+    function copyLink() {
+        try {
+            navigator.clipboard.writeText(url.href);
+            alert("복사 완료");
+        } catch {
+            alert("복사 실패");
+        }
+    }
 </script>
 
 <div class="container">
     <div class="layer">
-        <input
-            type="text"
-            value={JSON.stringify(diffchart)}
-            disabled
-            class="json"
-        />
-        <button
-            on:click={() => {
-                copyJSON(JSON.stringify(diffchart));
-            }}
-            >복사하기
-        </button>
+        {#if mode === "admin"}
+            <input
+                type="text"
+                value={JSON.stringify(diffchart)}
+                disabled
+                class="json"
+            />
+            <button
+                on:click={() => {
+                    copyJSON(JSON.stringify(diffchart));
+                }}
+                >복사하기
+            </button>
+        {:else}
+            <input
+                type="text"
+                value={url.href}
+                disabled
+                class="json"
+            />
+            <button
+                on:click={() => {
+                    copyLink();
+                }}
+                >복사하기
+            </button>
+        {/if}
     </div>
     <div class="layer">
         <table>
@@ -80,10 +109,12 @@
                                     diffchart.sections = intercepted;
                                 }}
                                 remove={(index) => {
-                                    diffchart.sections = diffchart.sections.filter((_, i) => i !== index).map((section, i) => {
-                                        section.order = i;
-                                        return section;
-                                    });
+                                    diffchart.sections = diffchart.sections
+                                        .filter((_, i) => i !== index)
+                                        .map((section, i) => {
+                                            section.order = i;
+                                            return section;
+                                        });
                                 }}
                             />
                         {/each}
@@ -144,6 +175,7 @@
     }
     td {
         border: 1px solid black;
+        text-align: center;
     }
 
     input.title {

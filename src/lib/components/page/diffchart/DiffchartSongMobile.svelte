@@ -2,17 +2,20 @@
     import type { Genre } from "$lib/module/common/song/types";
     import type {
         Song,
-        SongScore,
         SongScoreDetail,
     } from "$lib/module/common/diffchart/types";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
     import color from "$lib/module/common/color";
+    import { getLang } from "$lib/module/common/i18n/i18n";
 
     export let song: Song;
+    export let title: string;
     export let genre: Genre[];
     export let krTitle: string;
     export let theme: string;
     export let userScore: SongScoreDetail | null = null;
+
+    const lang = getLang();
 </script>
 
 <a
@@ -27,10 +30,10 @@
             class="title"
             style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
         >
-            {song.title}
+            {title}
         </div>
         {#if krTitle}
-            <div class="title-kr">
+            <div class="title-kr" class:hidden={$lang !== "ko"}>
                 {krTitle}
             </div>
         {/if}
@@ -134,5 +137,8 @@
         height: 22px;
 
         z-index: 0;
+    }
+    .hidden{
+        display:none;
     }
 </style>

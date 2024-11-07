@@ -4,7 +4,7 @@
     export let backgroundColor: string = "grey";
 </script>
 
-<div class="name" style={`color:${color};background-color:${backgroundColor};`}>
+<div class="name" style={`color:${color};background:${backgroundColor};`}>
     {name}
 </div>
 

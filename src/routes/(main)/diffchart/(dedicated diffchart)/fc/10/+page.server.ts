@@ -2,13 +2,13 @@ import { diffchartDBController } from "$lib/module/common/diffchart/diffchart.se
 import { error } from "@sveltejs/kit";
 
 export async function load({ params, locals }) {
-    const level = Number(params.level);
+    const level = Number(10);
 
     if (isNaN(level)) {
         throw error(500);
     }
 
-    const diffChartData = await diffchartDBController.getClearByLevel(level);
+    const diffChartData = await diffchartDBController.getFullcomboByLevel(level);
     const diffChart = diffChartData?.data;
     if (!diffChart) {
         throw error(404);

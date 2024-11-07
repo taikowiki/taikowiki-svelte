@@ -3,10 +3,12 @@ import type {
     BadgeType,
     CrownType,
     DifficultyType,
+    SongDataPickedForDiffchart,
     SongScore,
     SongScoreDetail,
 } from "$lib/module/common/diffchart/types";
 import type { Clear, ClearData, Difficulty } from "node-hiroba/types";
+import { songDBController } from '$lib/module/common/song/song.server.js';
 
 
 export async function load({ locals }) {
@@ -16,8 +18,11 @@ export async function load({ locals }) {
         donderDataResult &&= parseSongScoreDonderData(donderDataResult);
     }
 
+    const songs = await songDBController.getAllColumns(["genre", "songNo", "title", "titleKo", "aliasKo"]) as SongDataPickedForDiffchart[];
+
     return {
-        donderData: donderDataResult
+        donderData: donderDataResult,
+        songs
     }
 }
 

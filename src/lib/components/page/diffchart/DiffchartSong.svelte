@@ -10,7 +10,10 @@
 
 <script lang="ts">
     import { getIsMobile } from "$lib/module/layout/isMobile";
-    import type { Song,  SongScoreDetail } from "$lib/module/common/diffchart/types";
+    import type {
+        Song,
+        SongScoreDetail,
+    } from "$lib/module/common/diffchart/types";
     import DiffchartSongMobile from "./DiffchartSongMobile.svelte";
     import DiffchartSongPc from "./DiffchartSongPc.svelte";
     import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
@@ -21,23 +24,24 @@
     export let useMobile: boolean = true;
     export let userScore: SongScoreDetail | null = null;
 
-    const songData = songs.find((e) => e.songNo === song.songNo);
-    const genre = songData?.genre || [];
-    const krTitle = getKrTitle(
+    $: songData = songs.find((e) => e.songNo === song.songNo);
+    $: genre = songData?.genre || [];
+    $: krTitle = getKrTitle(
         songData?.aliasKo,
         songData?.titleKo,
         songData?.title,
     );
+    $: title = song.title || songData?.title || "";
 
     const isMobile = getIsMobile();
 </script>
 
 {#if useMobile}
     {#if $isMobile}
-        <DiffchartSongMobile {song} {genre} {krTitle} {theme} {userScore}/>
+        <DiffchartSongMobile {song} {title} {genre} {krTitle} {theme} {userScore} />
     {:else}
-        <DiffchartSongPc {song} {genre} {krTitle} {theme} {userScore}/>
+        <DiffchartSongPc {song} {title} {genre} {krTitle} {theme} {userScore} />
     {/if}
 {:else}
-    <DiffchartSongPc {song} {genre} {krTitle} {theme} {userScore} />
+    <DiffchartSongPc {song} {title} {genre} {krTitle} {theme} {userScore} />
 {/if}

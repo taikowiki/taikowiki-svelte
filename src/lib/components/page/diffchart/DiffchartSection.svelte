@@ -6,6 +6,13 @@
         return scoreData?.filter((score) => songs.find((song) => song.songNo === score.songNo && score.details[uraToOniUra(song.difficulty)]?.crown !== "none")) ?? [];
     }
 
+    function getPlayedSongScores(
+        scoreData: SongScore[] | null,
+        songs: Song[],
+    ): SongScore[] {
+        return scoreData?.filter((score) => songs.find((song) => song.songNo === score.songNo && score.details[uraToOniUra(song.difficulty)]?.badge !== null)) ?? [];
+    }
+
     function uraToOniUra(diff: Difficulty): DifficultyType {
         return diff === "ura" ? "oni_ura" : diff;
     }
@@ -30,8 +37,8 @@
     export let userScoreData: SongScore[] | null;
 
     $: clearedSongScores = getClearedSongScores(userScoreData, section.songs);
+    $: playedSongScores = getPlayedSongScores(userScoreData, section.songs);
     $: clearedSongsCount = userScoreData ? clearedSongScores.length : null;
-    
 </script>
 
 <div class="section">
@@ -48,7 +55,7 @@
                 {songs}
                 {theme}
                 {useMobile}
-                userScore={clearedSongScores.find((score) => score.songNo === song.songNo)?.details[uraToOniUra(song.difficulty)] ?? null}
+                userScore={playedSongScores.find((score) => score.songNo === song.songNo)?.details[uraToOniUra(song.difficulty)] ?? null}
             />
         {/each}
     </div>

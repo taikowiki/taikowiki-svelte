@@ -1,37 +1,44 @@
 <script lang="ts" context="module">
     function resizeTitle(
         node: HTMLDivElement,
-        value: [browser: boolean, theme: string],
+        value: [browser: boolean, theme: string, title:string],
     ) {
-        function resize(browser: boolean) {
-            const titleDiv = node.querySelector<HTMLDivElement>(".title");
-            const krTitleDiv = node.querySelector<HTMLDivElement>(".title-kr");
-            if (!titleDiv || !browser) return;
-
-            if (titleDiv.clientHeight > 24 && titleDiv.clientHeight < 48) {
-                krTitleDiv && (krTitleDiv.style.fontSize = "10px")
-                let fontSize = 16;
-                while (titleDiv.clientHeight > 24 && fontSize >= 12) {
-                    titleDiv.style.fontSize = `${fontSize}px`;
-                    fontSize--;
-                }
-            } else if (titleDiv.clientHeight > 48) {
-                krTitleDiv && (krTitleDiv.style.fontSize = "10px");
-                let fontSize = 16;
-                while (titleDiv.clientHeight > 30 && fontSize >= 10) {
-                    titleDiv.style.fontSize = `${fontSize}px`;
-                    fontSize--;
-                }
-            }
-        }
-
-        resize(value[0]);
+        resizeTitleSize(node, value[0]);
 
         return {
-            update(value: [browser: boolean, theme: string]) {
-                resize(value[0]);
+            update(value: [browser: boolean, theme: string, title:string]) {
+                resizeTitleSize(node, value[0]);
             },
         };
+    }
+
+    function resizeTitleSize(node: HTMLDivElement, browser: boolean) {
+        const titleDiv = node.querySelector<HTMLDivElement>(".title");
+        const krTitleDiv = node.querySelector<HTMLDivElement>(".title-kr");
+        if (!titleDiv || !browser) return;
+
+        if (titleDiv.clientHeight > 24 && titleDiv.clientHeight < 48) {
+            krTitleDiv && (krTitleDiv.style.fontSize = "10px");
+            let fontSize = 16;
+            while (titleDiv.clientHeight > 24 && fontSize >= 12) {
+                titleDiv.style.fontSize = `${fontSize}px`;
+                fontSize--;
+            }
+        } else if (titleDiv.clientHeight > 48) {
+            krTitleDiv && (krTitleDiv.style.fontSize = "10px");
+            let fontSize = 16;
+            while (titleDiv.clientHeight > 30 && fontSize >= 10) {
+                titleDiv.style.fontSize = `${fontSize}px`;
+                fontSize--;
+            }
+        }
+    }
+
+    function initTitleSize(node: HTMLDivElement) {
+        const titleDiv = node.querySelector<HTMLDivElement>(".title");
+        if (!titleDiv) return;
+
+        titleDiv.style.fontSize = "16px";
     }
 </script>
 
@@ -47,12 +54,18 @@
     import { browser } from "$app/environment";
 
     export let song: Song;
+    export let title: string;
     export let genre: Genre[];
     export let krTitle: string;
     export let theme: string;
     export let userScore: SongScoreDetail | null = null;
 
     const lang = getLang();
+
+    let titleContainer: HTMLDivElement;
+    $: if(titleContainer && title){
+        initTitleSize(titleContainer);
+    }
 
     /*
     afterUpdate(() => {
@@ -86,12 +99,12 @@
     data-crown={userScore?.crown || ""}
 >
     <DiffchartSongGenre {genre} width="6px" height="36px" />
-    <div class="title-container" use:resizeTitle={[browser, theme]}>
+    <div class="title-container" use:resizeTitle={[browser, theme, title]} bind:this={titleContainer}>
         <div
             class="title"
             style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
         >
-            {song.title}
+            {title}
         </div>
         {#if krTitle}
             <div class="title-kr" class:hidden={$lang !== "ko"}>
@@ -212,7 +225,7 @@
         z-index: 0;
     }
 
-    .hidden{
-        display:none;
+    .hidden {
+        display: none;
     }
 </style>

@@ -13,7 +13,7 @@
     const [theme] = getTheme();
     const handleDiffChart = () => {
         if (type === "custom") {
-            goto('/diffchart');
+            goto('/diffchart/custom');
         } else {
             const url = `/diffchart/${type}/${level}`;
             preloadData(url).then(() => goto(url));

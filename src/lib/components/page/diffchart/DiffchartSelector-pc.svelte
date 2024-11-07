@@ -4,30 +4,56 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { goto, preloadData } from "$app/navigation";
 
-    let type = $page.url.pathname.split("/")[2];
-    let level = $page.params.level;
+    let type = $page.url.pathname.split("/")[2] || "custom";
+    let level = $page.params.level || "10";
 
     const lang = getLang();
     $: i18n = getI18N("/diffchart", $lang);
 
     const [theme] = getTheme();
-    const handleDiffChard = () => {
-        const url = `/diffchart/${type}/${level}`
-        preloadData(url).then(() => goto(url))
-    }
+    const handleDiffChart = () => {
+        if (type === "custom") {
+            goto('/diffchart');
+        } else {
+            const url = `/diffchart/${type}/${level}`;
+            preloadData(url).then(() => goto(url));
+        }
+    };
 </script>
 
 <div class="container">
-    <select bind:value={type} data-theme={$theme} on:change={handleDiffChard}>
+    <select bind:value={type} data-theme={$theme} on:change={handleDiffChart}>
+        <option value="custom">
+            {i18n.custom}
+        </option>
         <option value="clear">
             {i18n.type.clear}
         </option>
+        <option value="fc">
+            {i18n.type.fc}
+        </option>
     </select>
-    <select bind:value={level} data-theme={$theme} on:change={handleDiffChard}>
-        {#each [6, 7, 8, 9, 10] as lev}
-            <option value={lev.toString()}>★{lev}</option>
-        {/each}
-    </select>
+    {#if type === "clear"}
+        <select
+            bind:value={level}
+            data-theme={$theme}
+            on:change={handleDiffChart}
+        >
+            {#each [6, 7, 8, 9, 10] as lev}
+                <option value={lev.toString()}>★{lev}</option>
+            {/each}
+        </select>
+    {:else if type === "fc"}
+        <select
+            bind:value={level}
+            data-theme={$theme}
+            on:change={handleDiffChart}
+        >
+            {#each [10] as lev}
+                <option value={lev.toString()}>★{lev}</option>
+            {/each}
+        </select>
+    {/if}
 </div>
 
 <style>
@@ -59,6 +85,7 @@
         color: white;
     }
 
+    /*
     a {
         width: 40px;
 
@@ -85,4 +112,5 @@
 
         border-color: white;
     }
+    */
 </style>

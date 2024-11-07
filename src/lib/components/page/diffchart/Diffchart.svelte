@@ -7,9 +7,6 @@
             }
             return null;
         } catch (err) {
-            if (browser) {
-                console.log(err);
-            }
             return null;
         }
     }
@@ -32,11 +29,13 @@
     export let diffChart: DiffChart;
     export let songs: SongDataPickedForDiffchart[];
     export let donderData: SongScore[] | null;
-    export let color: string | undefined = diffChart.color;
-    export let backgroundColor: string | undefined = diffChart.backgroundColor;
+    export let color: string | undefined = undefined;
+    export let backgroundColor: string | undefined = undefined;
     export let downloadImage: (() => Promise<void>) | null = null;
 
     const [theme] = getTheme();
+    $: colorValue = color ?? diffChart.color;
+    $: backgroundColorValue = backgroundColor ?? diffChart.backgroundColor;
 
     let replica: HTMLDivElement;
     afterUpdate(async () => {
@@ -64,7 +63,7 @@
     const lang = getLang();
     $: i18n = getI18N("component", $lang).Diffchart;
 
-    const sortedDifferChartSections = diffChart.sections.toSorted((a, b) => a.order - b.order)
+    $: sortedDifferChartSections = diffChart.sections.toSorted((a, b) => a.order - b.order)
 </script>
 
 <input
@@ -76,14 +75,14 @@
     style="display:none;"
 />
 <div class="container">
-    <DiffchartName name={diffChart.name} {color} {backgroundColor} />
+    <DiffchartName name={diffChart.name} color={colorValue} backgroundColor={backgroundColorValue} />
     {#each sortedDifferChartSections as section}
         <DiffchartSection {section} {songs} theme={$theme} {userScoreData} />
     {/each}
 </div>
 
 <div class="replica" bind:this={replica}>
-    <DiffchartName name={diffChart.name} {color} {backgroundColor} />
+    <DiffchartName name={diffChart.name} color={colorValue} backgroundColor={backgroundColorValue} />
     {#each sortedDifferChartSections as section}
         <DiffchartSection
             {section}

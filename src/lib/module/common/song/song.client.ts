@@ -20,9 +20,5 @@ export const songAdminRequestor = {
     approve: defineRequestHandler<{order: number, songData: SongData}, void>({
         url: "/admin/api/song/approve",
         method: 'post'
-    }),
-    uploadLink: defineRequestHandler<{url: string }, string | null>({
-        url: "https://file.taiko.wiki/upload/link",
-        method: "post"
     })
 }

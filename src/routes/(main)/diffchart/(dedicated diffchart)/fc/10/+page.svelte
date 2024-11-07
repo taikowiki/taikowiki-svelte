@@ -1,14 +1,23 @@
 <script lang="ts" context="module">
     const sectionColor: Record<string, string> = {
-        SSS: "#B93FEA",
-        SS: "#E8348F",
-        S: "#EF3059",
-        A: "#EB7535",
-        B: "#E6B439",
-        C: "#60CE37",
-        D: "#37B0CB",
-        E: "#4161D8",
-        X: "#adadad",
+        'SS': "#B93FEA",
+        'S+': "#f00eac",
+        'pS+': "#f00eac",
+        'S': "#ff0000",
+        'pS': "#ff0000",
+        'A+': '#EF3059',
+        'pA+': '#EF3059',
+        'A': "#ef3030",
+        'pA': "#ef3030",
+        'B+': '#ff5a00',
+        'B': "#EB7535",
+        'pB': "#EB7535",
+        'C+': '#E6B439',
+        'C': '#60CE37',
+        'pC': '#60CE37',
+        'D': '#37B0CB',
+        'E': '#4161D8',
+        'F': '#adadad'
     };
 
     function getCustomedDiffchart(diffChart: DiffChart, i18n: any) {
@@ -43,8 +52,8 @@
     ).set(downloadImage);
 
     const lang = getLang();
-    $: i18n = getI18N("/diffchart/clear/[level]", $lang);
-    $: titleI18n = getI18N('other', $lang).title['/diffchart/clear'];
+    $: i18n = getI18N("/diffchart/clear/[fc]", $lang);
+    $: titleI18n = getI18N('other', $lang).title['/diffchart/fc'];
     $: customedDiffchart = getCustomedDiffchart(diffChartData.data, i18n);
 
     const donderData = data.donderData;
@@ -56,7 +65,7 @@
     diffChart={customedDiffchart}
     {songs}
     {donderData}
-    backgroundColor="#c9c9c9"
+    backgroundColor="#ffd055"
     bind:downloadImage
 />
 {#if diffChartData.comment}

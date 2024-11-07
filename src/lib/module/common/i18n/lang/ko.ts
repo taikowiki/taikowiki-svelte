@@ -20,7 +20,8 @@ const ko: LangFile = {
                 clear: '클리어',
                 fc: '풀콤보',
                 dfc: '전량'
-            }
+            },
+            select: '선택'
         },
         '/auth/user': {
             myData: '내 정보',
@@ -66,6 +67,7 @@ const ko: LangFile = {
         }
     },
     other: {
+        //페이지 제목
         title: {
             base: '태고의 달인 위키',
             '/auth/login': '로그인',
@@ -73,6 +75,7 @@ const ko: LangFile = {
             '/auth/user/donder': '동더 데이터',
             '/dani': '단위도장',
             '/diffchart/clear': '클리어 서열표',
+            '/diffchart/fc': '풀콤보 서열표',
             '/gamecenter': '오락실 지도',
             '/gamecenter/report': '오락실 제보',
             '/measures': '보면 상수표',
@@ -164,7 +167,7 @@ const ko: LangFile = {
             'Duplicated Nickname': '이미 사용중인 닉네임입니다.'
         }
     },
-    '/auth/user/donder':{
+    '/auth/user/donder': {
         noDonderData: '동더히로바 데이터가 없습니다. 동더히로바 데이터를 업로드해주세요.',
         myDon: '마이동',
         lastUpdate: '마지막 업데이트',
@@ -229,6 +232,7 @@ const ko: LangFile = {
             classic: '클래식'
         }
     },
+    //서열표
     '/diffchart': {
         type: {
             clear: '클리어',
@@ -236,7 +240,8 @@ const ko: LangFile = {
             dfc: '전량'
         },
         download: "다운로드",
-        go: "이동"
+        go: "이동",
+        custom: '커스텀'
     },
     '/diffchart/clear/[level]': {
         '10 level clear': '★10 클리어 서열표',
@@ -257,6 +262,33 @@ const ko: LangFile = {
             'X': '개인차'
         },
         subname: "🔴 개인차가 왕 큼&nbsp;&nbsp;&nbsp;🟢 초견 주의&nbsp;&nbsp;&nbsp;🟣 클리어에 비해 풀콤보가 왕 어려움"
+    },
+    '/diffchart/clear/[fc]': {
+        '10 level fc': '★10 풀콤보 서열표',
+        '9 level fc': '★9 풀콤보 서열표',
+        '8 level fc': '★8 풀콤보 서열표',
+        '7 level fc': '★7 풀콤보 서열표',
+        '6 level fc': '★6 풀콤보 서열표',
+        sections: {
+            'SS': "SS",
+            'S+': "S+",
+            'pS+': "개인차 S+",
+            'S': "S",
+            'pS': "개인차 S",
+            'A+': 'A+',
+            'pA+': '개인차 A+',
+            'A': "A",
+            'pA': "개인차 A",
+            'B+': 'B+',
+            'B': "B",
+            'pB': "개인차 B",
+            'C+': 'C+',
+            'C': 'C',
+            'pC': '개인차 C',
+            'D': 'D',
+            'E': 'E',
+            'F': 'F'
+        }
     },
     '/gamecenter': {
         koreanGamecenterAlert: '한국의 태고의 달인이 있는 오락실의 지도입니다.',
@@ -297,7 +329,7 @@ const ko: LangFile = {
         measureTable: '보면 상수표',
         donderData: '동더 데이터'
     },
-    '/notice':{
+    '/notice': {
         type: {
             wiki: '위키',
             official: '공식'

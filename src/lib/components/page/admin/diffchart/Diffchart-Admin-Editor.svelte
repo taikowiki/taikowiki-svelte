@@ -1,23 +1,22 @@
 <script lang="ts" context="module">
     async function save(data: DiffchartData) {
-        const response = await diffchartRequestor.save(data)
-        if(response.status === 'success'){
+        const response = await diffchartRequestor.save(data);
+        if (response.status === "success") {
             alert("저장 성공");
-        }
-        else{
+        } else {
             alert("저장 에러");
         }
     }
 
-    async function remove(level:number, type:string){
+    async function remove(level: number, type: string) {
         const response = await diffchartRequestor.remove({
-            level, type
-        })
-        if(response.status === 'success'){
+            level,
+            type,
+        });
+        if (response.status === "success") {
             alert("삭제 성공");
-            location.reload()
-        }
-        else{
+            location.reload();
+        } else {
             alert("삭제 에러");
         }
     }
@@ -32,6 +31,7 @@
     $: diffchartData.name = `${diffchartData.level} level ${diffchartData.type}`;
 
     let opened = false;
+    let commentOpened = false;
 </script>
 
 <tr>
@@ -39,8 +39,8 @@
         <div class="layer">
             <select bind:value={diffchartData.type}>
                 <option value={"clear"}>clear</option>
-                <option value={"fullcombo"}>fullcombo</option>
-                <option value={"donderfullcombo"}>donderfullcombo</option>
+                <option value={"fc"}>fullcombo</option>
+                <option value={"dfc"}>donderfullcombo</option>
             </select>
         </div>
     </td>
@@ -66,6 +66,18 @@
                 펼치기
             {/if}
         </button>
+        
+        <button
+            on:click={() => {
+                commentOpened = !commentOpened;
+            }}
+        >
+            {#if commentOpened}
+                코멘트 접기
+            {:else}
+                코멘트 펼치기
+            {/if}
+        </button>
 
         <button
             on:click={async () => {
@@ -82,10 +94,18 @@
         </button>
     </td>
 </tr>
+{#if commentOpened}
+    <tr>
+        <td> 코멘트 </td>
+        <td colspan="2">
+            <textarea bind:value={diffchartData.comment} />
+        </td>
+    </tr>
+{/if}
 {#if opened}
     <tr>
         <td colspan="3" style="border: 3px solid red;">
-            <DIffchartEditor bind:diffchart={diffchartData.data} />
+            <DIffchartEditor bind:diffchart={diffchartData.data} mode="admin"/>
         </td>
     </tr>
 {/if}
@@ -102,5 +122,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    textarea {
+        width: 100%;
     }
 </style>

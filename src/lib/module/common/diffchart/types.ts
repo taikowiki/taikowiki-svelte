@@ -34,8 +34,9 @@ export interface DiffChart {
 export interface DiffchartData {
     name: string;
     level: number;
-    type: string;
+    type: 'clear' | 'fc' | 'dfc';
     data: DiffChart;
+    comment: string | null;
 }
 
 export type SongDataPickedForDiffchart = Pick<SongData, "songNo" | "genre" | "title" | "titleKo" | "aliasKo">

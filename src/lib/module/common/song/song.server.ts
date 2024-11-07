@@ -3,6 +3,7 @@ import { type SongData, type SongRequest, type SongSearchOption } from "./types"
 //@ts-expect-error
 import r from 'regex-escape';
 import { defineDBHandler } from "@yowza/db-handler";
+import { defineRequestHandler } from '@yowza/rrequestor';
 import { escapeString } from '../escape';
 function regexEscape(str: string): string {
     return r(str)

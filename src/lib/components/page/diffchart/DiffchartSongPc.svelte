@@ -1,12 +1,12 @@
 <script lang="ts" context="module">
     function resizeTitle(
         node: HTMLDivElement,
-        value: [browser: boolean, theme: string, title:string],
+        value: [browser: boolean, theme: string],
     ) {
         resizeTitleSize(node, value[0]);
 
         return {
-            update(value: [browser: boolean, theme: string, title:string]) {
+            update(value: [browser: boolean, theme: string]) {
                 resizeTitleSize(node, value[0]);
             },
         };
@@ -17,10 +17,10 @@
         const krTitleDiv = node.querySelector<HTMLDivElement>(".title-kr");
         if (!titleDiv || !browser) return;
 
-        if (titleDiv.clientHeight > 24 && titleDiv.clientHeight < 48) {
+        if (titleDiv.clientHeight > 24 && titleDiv.clientHeight <= 48) {
             krTitleDiv && (krTitleDiv.style.fontSize = "10px");
             let fontSize = 16;
-            while (titleDiv.clientHeight > 24 && fontSize >= 12) {
+            while (titleDiv.clientHeight > 22 && fontSize >= 12) {
                 titleDiv.style.fontSize = `${fontSize}px`;
                 fontSize--;
             }
@@ -34,12 +34,16 @@
         }
     }
 
+    /*
     function initTitleSize(node: HTMLDivElement) {
         const titleDiv = node.querySelector<HTMLDivElement>(".title");
+        const krTitleDiv = node.querySelector<HTMLDivElement>(".title-kr");
         if (!titleDiv) return;
 
         titleDiv.style.fontSize = "16px";
+        krTitleDiv && (krTitleDiv.style.fontSize = "12px");
     }
+    */
 </script>
 
 <script lang="ts">
@@ -62,10 +66,13 @@
 
     const lang = getLang();
 
+    /*
     let titleContainer: HTMLDivElement;
-    $: if(titleContainer && title){
+    $: if (titleContainer && title) {
         initTitleSize(titleContainer);
+        resizeTitleSize(titleContainer, true);
     }
+    */
 
     /*
     afterUpdate(() => {
@@ -92,34 +99,39 @@
     */
 </script>
 
-<a
-    class="container"
-    href={`/song/${song.songNo}?diff=${song.difficulty}`}
-    data-theme={theme}
-    data-crown={userScore?.crown || ""}
->
-    <DiffchartSongGenre {genre} width="6px" height="36px" />
-    <div class="title-container" use:resizeTitle={[browser, theme, title]} bind:this={titleContainer}>
+{#key title}
+    <a
+        class="container"
+        href={`/song/${song.songNo}?diff=${song.difficulty}`}
+        data-theme={theme}
+        data-crown={userScore?.crown || ""}
+    >
+        <DiffchartSongGenre {genre} width="6px" height="36px" />
         <div
-            class="title"
-            style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
+            class="title-container"
+            use:resizeTitle={[browser, theme]}
         >
-            {title}
-        </div>
-        {#if krTitle}
-            <div class="title-kr" class:hidden={$lang !== "ko"}>
-                {krTitle}
+            <div
+                class="title"
+                style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
+            >
+                {title}
             </div>
-        {/if}
-        {#if userScore?.badge}
-            <img
-                src={`/assets/img/badge/badge-${userScore.badge}.png`}
-                alt=""
-                class="badge"
-            />
-        {/if}
-    </div>
-</a>
+            {#if krTitle}
+                <div class="title-kr" class:hidden={$lang !== "ko"}>
+                    {krTitle}
+                </div>
+            {/if}
+            {#if userScore?.badge}
+                <img
+                    src={`/assets/img/badge/badge-${userScore.badge}.png`}
+                    alt=""
+                    class="badge"
+                />
+            {/if}
+        </div>
+    </a>
+{/key}
 
 <style>
     .container {

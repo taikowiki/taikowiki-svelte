@@ -43,7 +43,7 @@
     </td>
     <td>
         <div class="layer">
-            <input type="text" bind:value={song.title} />
+            <input type="text" bind:value={song.title} placeholder="비워두어도 됩니다."/>
         </div>
     </td>
     <td>

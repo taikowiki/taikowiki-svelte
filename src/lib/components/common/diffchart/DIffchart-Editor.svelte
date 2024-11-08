@@ -15,12 +15,18 @@
     import { type DiffChart } from "$lib/module/common/diffchart/types";
     import DiffchartEditorSection from "./Diffchart-Editor-Section.svelte";
     import { page } from "$app/stores";
+    import LZUTF8 from "lzutf8";
 
     export let diffchart: DiffChart;
     export let mode: "admin" | "normal" = "normal";
 
     const url = new URL($page.url);
-    $: url.hash = btoa(encodeURIComponent(JSON.stringify(diffchart)));
+    $:{
+        const stringified = JSON.stringify(diffchart);
+        const compressed = LZUTF8.compress(stringified, {outputEncoding: 'ByteArray'});
+        const stringifiedCompressed = JSON.stringify(Array.from(compressed));
+        url.hash = btoa(encodeURIComponent(stringifiedCompressed));
+    }
 
     function copyLink() {
         try {

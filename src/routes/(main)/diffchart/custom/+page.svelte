@@ -4,6 +4,7 @@
     import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
     import type { DiffChart } from "$lib/module/common/diffchart/types";
     import { getIsMobile } from "$lib/module/layout/isMobile.js";
+    import LZUTF8 from "lzutf8";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
 
@@ -11,8 +12,6 @@
     const { donderData, songs } = data;
 
     let diffChart: DiffChart = getDiffchartFromHash();
-
-    getDiffchartFromHash();
 
     let downloadImage: (() => Promise<void>) | null = null;
     $: (
@@ -44,16 +43,24 @@
         }
 
         try {
-            const json = atob(hash);
-            const diffchart = JSON.parse(decodeURIComponent(json));
+            const stringifiedCompressed = decodeURIComponent(atob(hash));
+            const compressed = Uint8Array.from(JSON.parse(stringifiedCompressed));
+            const stringified = LZUTF8.decompress(compressed);
+            const diffchart = JSON.parse(stringified);
             return diffchart;
         } catch {
-            return {
+            try{
+                const diffchart = JSON.parse(decodeURIComponent(atob(hash)));
+                return diffchart;
+            }
+            catch{
+                return {
                 name: "custom",
                 color: "white",
                 backgroundColor: "gray",
                 sections: [],
             };
+            }
         }
     }
 </script>

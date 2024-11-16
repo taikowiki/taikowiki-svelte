@@ -1,10 +1,11 @@
 import { mdToHtml } from "../../mdHtmlConverter";
-import type { LangFile } from "../types";
+import type { LangFile, RecursiveStringRecord } from "../types";
 
 import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
 import ratingExplanation from '../md/ko/ratingExplanation.md?raw'
 
-const ko: LangFile = {
+const newKo: RecursiveStringRecord = {
+    //레이아웃
     layout: {
         main: {
             song: '곡',
@@ -28,6 +29,7 @@ const ko: LangFile = {
             donderData: '동더 데이터'
         }
     },
+    //컴포넌트
     component: {
         SongEditor: {
             difficulties: {
@@ -66,6 +68,124 @@ const ko: LangFile = {
             downloadMessage: '이미지가 곧 다운로드됩니다.'
         }
     },
+    //페이지 제목
+    title: {
+        base: '태고의 달인 위키',
+        '/auth/login': '로그인',
+        '/auth/user': '내 정보',
+        '/auth/user/donder': '동더 데이터',
+        '/dani': '단위도장',
+        '/diffchart/clear': '클리어 서열표',
+        '/diffchart/fc': '풀콤보 서열표',
+        '/diffchart/dfc': '전량 서열표',
+        '/gamecenter': '오락실 지도',
+        '/gamecenter/report': '오락실 제보',
+        '/measures': '보면 상수표',
+        '/song': '곡 검색',
+        '/song/[songNo]': '곡 없음',
+        '/song/[songNo]/edit': '곡 수정',
+        '/song/add': '곡 추가',
+    },
+    //단위
+    dani: {
+        dan: {
+            "senpo": "선봉",
+            "jiho": "차봉",
+            "chiuken": "중견",
+            "fukusho": "부장",
+            "taisho": "대장",
+            "beginner": "초급",
+            "10kyu": "10급",
+            "9kyu": "9급",
+            "8kyu": "8급",
+            "7kyu": "7급",
+            "6kyu": "6급",
+            '5kyu': '5급',
+            '4kyu': '4급',
+            '3kyu': '3급',
+            '2kyu': '2급',
+            '1kyu': '1급',
+            '1dan': '초단',
+            '2dan': '2단',
+            '3dan': '3단',
+            '4dan': '4단',
+            '5dan': '5단',
+            '6dan': '6단',
+            '7dan': '7단',
+            '8dan': '8단',
+            '9dan': '9단',
+            '10dan': '10단',
+            'kuroto': '현인',
+            'meijin': '명인',
+            'chojin': '초인',
+            'tatsujin': '달인',
+            'gaiden': '외전'
+        },
+        version: {
+            'katsudon': '카츠동',
+            'sorairo': '소라이로',
+            'momoiro': '모모이로',
+            'kimidori': '키미도리',
+            'murasaki': '무라사키',
+            'white': '화이트',
+            'red': '레드',
+            'yellow': '옐로우',
+            'blue': '블루',
+            'green': '그린',
+            'nijiiro_gaiden': '니지이로 외전',
+            '20': '니지이로 2020',
+            '21': '니지이로 2021',
+            '22': '니지이로 2022',
+            '23': '니지이로 2023',
+            '24': '니지이로 2024',
+            '25': '니지이로 2025',
+            '26': '니지이로 2026',
+            '27': '니지이로 2027',
+            '28': '니지이로 2028',
+            '29': '니지이로 2029',
+            '30': '니지이로 2030'
+        }
+    },
+    //곡
+    song: {
+        difficulty: {
+            easy: '쉬움',
+            normal: '보통',
+            hard: '어려움',
+            oni: '오니(앞)',
+            ura: '오니(뒤)'
+        }
+    },
+    //페이지
+    page: {
+        diffchart: {
+            dfc: {
+                '10 level dfc': '★10 전량 서열표',
+                sections: {
+                    'SS': "SS",
+                    'pS+': "개인차 S+",
+                    'iS': "지력 S",
+                    'pS': "개인차 S",
+                    'iA+': '지력 A+',
+                    'pA+': '개인차 A+',
+                    'iA': "지력 A",
+                    'pA': "개인차 A",
+                    'iB': '지력 B',
+                    'pB': "개인차 B",
+                    'iC': '지력 C',
+                    'pC': '개인차 C',
+                    'iD': '지력 D',
+                    'pD': '개인차 D',
+                    'iE': '지력 E',
+                    'pE': '개인차 E',
+                    'iF': '지력 F'
+                }
+            }
+        }
+    }
+}
+
+const ko: LangFile = {
     other: {
         //페이지 제목
         title: {
@@ -334,7 +454,8 @@ const ko: LangFile = {
             wiki: '위키',
             official: '공식'
         }
-    }
+    },
+    ...newKo
 } as const;
 
 export default ko;

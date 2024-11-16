@@ -1,10 +1,10 @@
 import { mdToHtml } from "../../mdHtmlConverter";
-import type { LangFile } from "../types";
+import type { LangFile, RecursiveStringRecord } from "../types";
 
 import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
-import ratingExplanation from '../md/ko/ratingExplanation.md?raw'
+import ratingExplanation from '../md/ko/ratingExplanation.md?raw';
 
-const ja: LangFile = {
+const newJa: RecursiveStringRecord = {
     layout: {
         main: {
             song: '曲',
@@ -66,6 +66,121 @@ const ja: LangFile = {
             downloadMessage: 'イメージを間もなくダウンロードします.'
         }
     },
+    //페이지 제목
+    title: {
+        base: '太鼓の達人 ウィキ',
+        '/auth/login': 'ログイン',
+        '/auth/user': 'マイページ',
+        '/auth/user/donder': 'ドンだーデータ',
+        '/dani': '段位道場',
+        '/diffchart/clear': 'クリアー難易度表',
+        '/diffchart/fc': 'フルコンボ難易度表',
+        '/diffchart/dfc': '全良難易度表',
+        '/gamecenter': 'ゲームセンター地図',
+        '/gamecenter/report': 'ゲームセンター報告',
+        '/measures': '譜面レーティング表',
+        '/song': '曲サーチ',
+        '/song/[songNo]': '曲なし',
+        '/song/[songNo]/edit': '曲修正',
+        '/song/add': '曲追加'
+    },
+    dani: {
+        dan: {
+            "senpo": "先鋒",
+            "jiho": "次鋒",
+            "chiuken": "中堅",
+            "fukusho": "副将",
+            "taisho": "大将",
+            "beginner": "初級",
+            "10kyu": "十級",
+            "9kyu": "九級",
+            "8kyu": "八級",
+            "7kyu": "七級",
+            "6kyu": "六級",
+            '5kyu': '五級',
+            '4kyu': '四級',
+            '3kyu': '三級',
+            '2kyu': '二級',
+            '1kyu': '一級',
+            '1dan': '初段',
+            '2dan': '二段',
+            '3dan': '三段',
+            '4dan': '四段',
+            '5dan': '五段',
+            '6dan': '六段',
+            '7dan': '七段',
+            '8dan': '八段',
+            '9dan': '九段',
+            '10dan': '十段',
+            'kuroto': '玄人',
+            'meijin': '名人',
+            'chojin': '超人',
+            'tatsujin': '達人',
+            'gaiden': '外傳'
+        },
+        version: {
+            'katsudon': 'K-D',
+            'sorairo': 'ソライロ',
+            'momoiro': 'モモイロ',
+            'kimidori': 'キミドリ',
+            'murasaki': 'ムラサキ',
+            'white': 'ホワイト',
+            'red': 'レッド',
+            'yellow': 'イエロー',
+            'blue': 'ブルー',
+            'green': 'グリーン',
+            'nijiiro_gaiden': 'ニジイロ 外傳',
+            '20': 'ニジイロ 2020',
+            '21': 'ニジイロ 2021',
+            '22': 'ニジイロ 2022',
+            '23': 'ニジイロ 2023',
+            '24': 'ニジイロ 2024',
+            '25': 'ニジイロ 2025',
+            '26': 'ニジイロ 2026',
+            '27': 'ニジイロ 2027',
+            '28': 'ニジイロ 2028',
+            '29': 'ニジイロ 2029',
+            '30': 'ニジイロ 2030'
+        }
+    },
+    song:{
+        difficulty: {
+            easy: 'かんたん',
+            normal: 'ふつう',
+            hard: 'むずかしい',
+            oni: 'おに(表)',
+            ura: 'おに(裏)'
+        }
+    },
+    page:{
+        diffchart: {
+            dfc: {
+                '10 level dfc': '★10 全良難易度表',
+                sections: {
+                    'SS': "SS",
+                    'pS+': "個人差 S+",
+                    'iS': "地力 S",
+                    'pS': "個人差 S",
+                    'iA+': '地力 A+',
+                    'pA+': '個人差 A+',
+                    'iA': "地力 A",
+                    'pA': "個人差 A",
+                    'iB': '地力 B',
+                    'pB': "個人差 B",
+                    'iC': '地力 C',
+                    'pC': '個人差 C',
+                    'iD': '地力 D',
+                    'pD': '個人差 D',
+                    'iE': '地力 E',
+                    'pE': '個人差 E',
+                    'iF': '地力 F'
+                }
+            }
+        }
+    }
+}
+
+const ja: LangFile = {
     other: {
         //페이지 제목
         title: {
@@ -334,7 +449,8 @@ const ja: LangFile = {
             wiki: 'ウィキ',
             official: '公式'
         }
-    }
+    },
+    ...newJa
 } as const;
 
 export default ja;

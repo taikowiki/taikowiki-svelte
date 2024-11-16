@@ -32,6 +32,9 @@
         <option value="fc">
             {i18n.type.fc}
         </option>
+        <option value="dfc">
+            {i18n.type.dfc}
+        </option>
     </select>
     {#if type === "clear"}
         <select
@@ -43,7 +46,7 @@
                 <option value={lev.toString()}>★{lev}</option>
             {/each}
         </select>
-    {:else if type === "fc"}
+    {:else if type === "fc" || type === "dfc"}
         <select
             bind:value={level}
             data-theme={$theme}

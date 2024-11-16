@@ -1,10 +1,10 @@
 import { mdToHtml } from "../../mdHtmlConverter";
-import type { LangFile } from "../types";
+import type { LangFile, RecursiveStringRecord } from "../types";
 
 import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
-import ratingExplanation from '../md/ko/ratingExplanation.md?raw'
+import ratingExplanation from '../md/ko/ratingExplanation.md?raw';
 
-const en: LangFile = {
+const newEn: RecursiveStringRecord = {
     layout: {
         main: {
             song: 'Song',
@@ -65,6 +65,95 @@ const en: LangFile = {
             downloadMessage: 'The image will be soon downloaded.'
         }
     },
+    title: {
+        base: 'Taiko no Tatsujin Wiki',
+        '/auth/login': 'Login',
+        '/auth/user': 'My Data',
+        '/auth/user/donder': 'Donder Data',
+        '/dani': 'Dan-i Dojo',
+        '/diffchart/clear': 'Clear Difficulty Chart',
+        '/gamecenter': 'Game Center Map',
+        '/gamecenter/report': 'Report Game Center Information',
+        '/measures': 'Chart Rating Measurement',
+        '/song': 'Search Chart',
+        '/song/[songNo]': 'No result',
+        '/song/[songNo]/edit': 'Request Edit',
+        '/song/add': 'Add Song'
+    },
+    dani: {
+        dan: {
+            "senpo": "Senpo",
+            "jiho": "Jiho",
+            "chiuken": "Chiuken",
+            "fukusho": "Fukusho",
+            "taisho": "Taisho",
+            "beginner": "Beginner",
+            "10kyu": "10th Kyu",
+            "9kyu": "9th Kyu",
+            "8kyu": "8th Kyu",
+            "7kyu": "7th Kyu",
+            "6kyu": "6th Kyu",
+            '5kyu': '5th Kyu',
+            '4kyu': '4th Kyu',
+            '3kyu': '3rd Kyu',
+            '2kyu': '2nd Kyu',
+            '1kyu': '1st Kyu',
+            '1dan': 'Shodan',
+            '2dan': '2nd Dan',
+            '3dan': '3rd Dan',
+            '4dan': '4th Dan',
+            '5dan': '5th Dan',
+            '6dan': '6th Dan',
+            '7dan': '7th Dan',
+            '8dan': '8th Dan',
+            '9dan': '9th Dan',
+            '10dan': '10th Dan',
+            'kuroto': 'Kuroto',
+            'meijin': 'Meijin',
+            'chojin': 'Chojin',
+            'tatsujin': 'Tatsujin',
+            'gaiden': 'Gaiden'
+        },
+        version: {
+            'katsudon': 'Katsudon',
+            'sorairo': 'Sorairo',
+            'momoiro': 'Momoiro',
+            'kimidori': 'Kimidori',
+            'murasaki': 'Murasaki',
+            'white': 'White',
+            'red': 'Red',
+            'yellow': 'Yellow',
+            'blue': 'Blue',
+            'green': 'Green',
+            'nijiiro_gaiden': 'Nijiiro Gaiden',
+            '20': 'Nijiiro 2020',
+            '21': 'Nijiiro 2021',
+            '22': 'Nijiiro 2022',
+            '23': 'Nijiiro 2023',
+            '24': 'Nijiiro 2024',
+            '25': 'Nijiiro 2025',
+            '26': 'Nijiiro 2026',
+            '27': 'Nijiiro 2027',
+            '28': 'Nijiiro 2028',
+            '29': 'Nijiiro 2029',
+            '30': 'Nijiiro 2030'
+        }
+    },
+    song:{
+        difficulty: {
+            easy: 'Easy',
+            normal: 'Normal',
+            hard: 'Hard',
+            oni: 'Extreme (Front)',
+            ura: 'Extreme (Inner)'
+        }
+    },
+    page:{
+        
+    }
+}
+
+const en: LangFile = {
     other: {
         title: {
             base: 'Taiko no Tatsujin Wiki',
@@ -164,7 +253,7 @@ const en: LangFile = {
             'Duplicated Nickname': 'The Username is already in use.'
         }
     },
-    '/auth/user/donder':{
+    '/auth/user/donder': {
         noDonderData: 'No data found. Please upload your Donderhiroba data.',
         myDon: 'My Don',
         lastUpdate: 'Last Update',
@@ -297,12 +386,13 @@ const en: LangFile = {
         measureTable: 'Chart Rating Mesurements',
         donderData: 'Donder Data'
     },
-    '/notice':{
+    '/notice': {
         type: {
             wiki: 'Wiki',
             official: 'Official'
         }
-    }
+    },
+    ...newEn
 } as const;
 
 export default en;

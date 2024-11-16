@@ -1,6 +1,6 @@
 import { getContext, setContext } from "svelte";
 import { type I18N, type Language, type RecursiveStringRecord } from "./types"
-import { get, writable, type Writable } from "svelte/store";
+import { writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
 import ko from "./lang/ko";
 import en from './lang/en';
@@ -90,18 +90,18 @@ const i18n = getI18nProxy(i18nProxyTarget);
 
 export default i18n;
 
-function getNavigatorLang(){
+function getNavigatorLang() {
     //@ts-expect-error
     let navigatorLang = window.navigator.language ?? window.navigator.userLanguage;
 
-    if(navigatorLang.length > 2){
+    if (navigatorLang.length > 2) {
         navigatorLang = navigatorLang.slice(0, 2);
     }
 
-    if(navigatorLang in i18nProxyTarget){
+    if (navigatorLang in i18nProxyTarget) {
         return navigatorLang;
     }
-    else{
+    else {
         return 'ko';
     }
 }
@@ -115,7 +115,7 @@ export function useLang() {
             url: '/api/user/lang/get',
             method: 'get'
         }).then((response: AxiosResponse) => {
-            if(response.data in i18nProxyTarget){
+            if (response.data in i18nProxyTarget) {
                 lang.set(response.data);
             }
         }).catch((err) => {
@@ -137,7 +137,7 @@ export function useLang() {
                     },
                     method: 'post'
                 })
-            }catch(err){
+            } catch (err) {
                 console.warn(err);
             }
         }
@@ -156,10 +156,18 @@ export function setI18N(language: string, pathname: string): any {
 }
 
 export function getI18N(): Writable<any>;
+export function getI18N(lang: string): any;
 export function getI18N(key: string, lang: string): any;
 export function getI18N(key?: string, lang?: string) {
-    if (key === undefined || lang === undefined) {
+    if (key === undefined) {
         return getContext('i18n')
     }
-    return i18n[lang][key];
+    else if (key !== undefined) {
+        if (lang === undefined) {
+            return i18n[key];
+        }
+        else {
+            return i18n[lang][key];
+        }
+    }
 }

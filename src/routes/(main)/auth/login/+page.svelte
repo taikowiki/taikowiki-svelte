@@ -28,6 +28,9 @@
         color="#3C1E1E"
         href={`/auth/login/kakao?${redirectUri}`}
     />
+    <div>
+        위 로그인 제공자를 통해 로그인 시 <a href="/auth/login/policy">개인정보 취급방침</a>에 동의한 것으로 간주합니다.
+    </div>
 </div>
 
 <style>
@@ -39,5 +42,10 @@
         align-items: center;
 
         row-gap: 20px;
+    }
+
+    div{
+        margin-top: 20px;
+        font-size: 13px;
     }
 </style>

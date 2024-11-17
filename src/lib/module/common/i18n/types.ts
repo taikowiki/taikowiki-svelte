@@ -30,6 +30,6 @@ export interface RecursiveStringRecord {
     [key: string]: string | RecursiveStringRecord
 }
 
-export type LangFile = LayoutLangFile & PathLangFile & ComponentLangFile & OtherLangFile
+export type LangFile = LayoutLangFile & PathLangFile & ComponentLangFile & OtherLangFile;
 
 export type I18N = Record<'ko', LangFile> & Partial<Record<Language, LangFile>>;

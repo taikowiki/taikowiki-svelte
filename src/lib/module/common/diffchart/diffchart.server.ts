@@ -35,6 +35,22 @@ export const diffchartDBController = {
         }
     }),
     /**
+     * Retrieves the donderfullcombo difficulty chart data by level.
+     */
+    getDonderfullcomboByLevel: defineDBHandler<[number], DiffchartData | null>((level) => {
+        return async (run) => {
+            const result = await run("SELECT * FROM `diffchart` WHERE `type` = 'dfc' AND `level` = ?", [level]);
+
+            if (result[0]?.data === undefined) {
+                return null;
+            }
+
+            result.forEach(parseDiffchart);
+            
+            return result[0];
+        }
+    }),
+    /**
      * Retrieves all difficulty chart data.
      */
     getAll: defineDBHandler<[], DiffchartData[]>(() => {

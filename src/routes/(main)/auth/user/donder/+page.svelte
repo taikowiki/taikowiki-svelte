@@ -93,9 +93,11 @@
         row-gap: 10px;
     }
 
+    /*
     .data-ranking{
         margin-top: 20px;
     }
+    */
 
     :global(.guide code) {
         background-color: rgb(219, 219, 219);

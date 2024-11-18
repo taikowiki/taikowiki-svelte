@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-    import intercept from "$lib/module/common/intercept";
+    import {intercept} from '$lib/module/common/util';
 
     import { type DiffChart } from "$lib/module/common/diffchart/types";
     import DiffchartEditorSection from "./Diffchart-Editor-Section.svelte";

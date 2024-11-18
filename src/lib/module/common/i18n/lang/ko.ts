@@ -1,4 +1,4 @@
-import { mdToHtml } from "../../mdHtmlConverter";
+import { mdToHtml } from "../../util";
 import type { LangFile, RecursiveStringRecord } from "../types";
 
 import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';

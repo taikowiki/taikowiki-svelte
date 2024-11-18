@@ -29,7 +29,11 @@
             5: "",
             6: "",
         },
-        favoriteCount: 0
+        favoriteCount: 0,
+        coor: {
+            x: null,
+            y: null
+        }
     };
 
     async function submit(gamecenterData: GameCenterDataWithoutOrder){

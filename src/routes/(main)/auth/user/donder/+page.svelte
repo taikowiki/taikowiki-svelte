@@ -39,6 +39,7 @@
     const lang = getLang();
     $: i18n = getI18N("/auth/user/donder", $lang);
     $: titleI18n = getI18N("other", $lang).title["/auth/user"];
+    $: newI18n = getI18N($lang).page.donder;
 </script>
 
 <PageTitle title={titleI18n} />
@@ -55,19 +56,19 @@
             </div>
             <DonderSection
                 bind:opened={opened.songRatings}
-                sectionName="곡 레이팅"
+                sectionName={newI18n.section.song}
             >
                 <SongRatings {ratings} {songDatas} {donderData} opened={opened.songRatings}/>
             </DonderSection>
             <DonderSection
                 bind:opened={opened.measureTable}
-                sectionName="상수표"
+                sectionName={newI18n.section.measure}
             >
                 <MeasureTable {measures} {songDatas} />
             </DonderSection>
             <DonderSection
                 bind:opened={opened.explanation}
-                sectionName="레이팅 설명"
+                sectionName={newI18n.section.explanation}
             >
                 {@html i18n.explanation}
             </DonderSection>

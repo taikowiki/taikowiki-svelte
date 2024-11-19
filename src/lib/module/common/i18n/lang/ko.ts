@@ -14,7 +14,16 @@ const newKo: RecursiveStringRecord = {
             diffchart: '서열표',
             dani: '단위도장',
             gamecenter: '오락실',
-            measures: '상수표'
+            measures: '상수표',
+            user: {
+                user: '사용자',
+                donderData: '동더 데이터',
+                notLogined:'비로그인',
+                login: '로그인',
+                logout: '로그아웃',
+                theme: '테마',
+                lang: '언어'
+            }
         },
         'dedicated diffchart': {
             type: {
@@ -25,6 +34,7 @@ const newKo: RecursiveStringRecord = {
             select: '선택'
         },
         '/auth/user': {
+            user: '유저',
             myData: '내 정보',
             donderData: '동더 데이터'
         }
@@ -158,6 +168,52 @@ const newKo: RecursiveStringRecord = {
     },
     //페이지
     page: {
+        index: {
+            shortcut: {
+                song: '곡',
+                doc: '문서',
+                diffchart: '서열표',
+                dani: '단위도장',
+                gamecenter: '오락실',
+                myData: '내 정보'
+            },
+            notice: '공지'
+        },
+        songNo: {
+            alert: {
+                deleted: '이 곡은 삭제되었습니다.',
+                krBanned: '이 곡은 한국에서 플레이할 수 없습니다.',
+                asiaBanned: '이 곡은 아시아판에서 플레이할 수 없습니다.'
+            },
+            multipleTitle: {
+                translatedTitle: '번역명',
+                ko: '한국어',
+                aliasKo: '한국어(비공식)',
+                en: '영어',
+                aliasEn: '영어(비공식)'
+            },
+            songData: {
+                version: '수록 버전',
+                artists: '아티스트',
+                addedDate: '추가된 날짜'
+            },
+            course: {
+                combos: '최대 노트 수',
+                branched: '분기 여부',
+                balloons: '최대 풍선 수',
+                roll: '최대 연타 시간',
+                density: '최대 밀도',
+                playTime: '최대 연주 시간',
+                hitsec: '타/초',
+                sec: '초',
+                total: '총',
+                count: '개',
+                daniList: '단위 수록 목록',
+                nthSong: '번째 곡',
+                noDani: '단위 수록',
+                fumenImage: '보면 이미지'
+            }
+        },
         diffchart: {
             dfc: {
                 '10 level dfc': '★10 전량 서열표',
@@ -181,6 +237,28 @@ const newKo: RecursiveStringRecord = {
                     'iF': '지력 F'
                 }
             }
+        },
+        dani: {
+            go: '이동'
+        },
+        gamecenter:{
+            selector: {
+                search: '검색'
+            },
+            machineInfo: '기체 정보'
+        },
+        donder: {
+            rating:{
+                top: '상위'
+            },
+            section:{
+                song: '곡 레이팅',
+                measure: '상수표',
+                explanation: '레이팅 설명'
+            },
+            song: '곡',
+            otherSong: '이외의 곡',
+            link: '링크'
         }
     }
 }

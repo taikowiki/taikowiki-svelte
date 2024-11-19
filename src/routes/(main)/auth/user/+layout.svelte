@@ -13,7 +13,7 @@
     const isMobile = getIsMobile();
 </script>
 
-<PageAside title="유저">
+<PageAside title={i18n.user}>
     <a href="/auth/user">
         {i18n.myData}
     </a>

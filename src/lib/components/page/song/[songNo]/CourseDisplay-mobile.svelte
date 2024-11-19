@@ -17,23 +17,24 @@
 
     const lang = getLang();
     $: daniI18n = getI18N("other", $lang).dani;
+    $: i18n = getI18N($lang).page.songNo.course;
 </script>
 
 <table data-theme={$theme}>
     <tr>
-        <td> 최대 노트 수 </td>
+        <td> {i18n.combos} </td>
         <td>
             {course.maxCombo}
         </td>
     </tr>
     <tr>
-        <td> 분기 여부 </td>
+        <td> {i18n.branched} </td>
         <td>
             {course.isBranched ? "O" : "X"}
         </td>
     </tr>
     <tr>
-        <td>최대 풍선 수</td>
+        <td>{i18n.balloons}</td>
         <td>
             <div
                 class="opener"
@@ -43,12 +44,12 @@
                 }}
                 role="presentation"
             >
-                총 <span style="font-weight:bold;"
+            {i18n.total} <span style="font-weight:bold;"
                     >{course.balloon.reduce(
                         (partial, current) => partial + current,
                         0,
                     )}</span
-                >개
+                >{i18n.count}
             </div>
             {#if balloonOpened}
                 <div class="detail">
@@ -58,7 +59,7 @@
         </td>
     </tr>
     <tr>
-        <td> 최대 연타 시간 </td>
+        <td> {i18n.roll} </td>
         <td>
             <div
                 class="opener"
@@ -68,14 +69,14 @@
                 }}
                 role="presentation"
             >
-                총 <span style="font-weight:bold;"
+            {i18n.total} <span style="font-weight:bold;"
                     >{Math.round(
                         course.rollTime.reduce(
                             (partial, current) => partial + current,
                             0,
                         ) * 1000,
                     ) / 1000}</span
-                >초
+                >{i18n.sec}
             </div>
             {#if rollOpened}
                 <div class="detail">
@@ -85,15 +86,15 @@
         </td>
     </tr>
     <tr>
-        <td>최대 밀도</td>
+        <td>{i18n.density}</td>
         <td>
-            {course.maxDensity} 타/초
+            {course.maxDensity} {i18n.hitsec}
         </td>
     </tr>
     <tr>
-        <td> 최대 연주 시간 </td>
+        <td> {i18n.playTime} </td>
         <td>
-            {course.playTime} 초
+            {course.playTime} {i18n.sec}
         </td>
     </tr>
     {#if course.daniUsed}
@@ -108,7 +109,7 @@
                             daniOpened = !daniOpened;
                         }}
                     >
-                        단위 수록 목록
+                    {i18n.daniList}
                     </div>
                     {#if daniOpened}
                         <div class="dani">
@@ -116,7 +117,7 @@
                                 <span>
                                     {daniI18n.version[dani.version]}
                                     {daniI18n.dan[dani.dan]}
-                                    {dani.order}번째 곡
+                                    {dani.order}{i18n.nthSong}
                                 </span>
                             {/each}
                         </div>
@@ -126,7 +127,7 @@
         </tr>
     {:else}
         <tr>
-            <td>단위 수록</td>
+            <td>{i18n.noDani}</td>
             <td>X</td>
         </tr>
     {/if}

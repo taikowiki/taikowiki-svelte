@@ -2,7 +2,7 @@ import { mdToHtml } from "../../util";
 import type { LangFile, RecursiveStringRecord } from "../types";
 
 import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
-import ratingExplanation from '../md/ko/ratingExplanation.md?raw';
+import ratingExplanation from '../md/ja/ratingExplanation.md?raw';
 
 const newJa: RecursiveStringRecord = {
     layout: {
@@ -13,7 +13,16 @@ const newJa: RecursiveStringRecord = {
             diffchart: '難易度表',
             dani: '段位道場',
             gamecenter: 'ゲームセンター',
-            measures: 'レーティング表'
+            measures: 'レーティング表',
+            user: {
+                user: 'ユーザー',
+                donderData: 'ドンだーデータ',
+                notLogined: '非ログイン',
+                login: 'ログイン',
+                logout: 'ログアウト',
+                theme: 'テーマ',
+                lang: '言語'
+            }
         },
         'dedicated diffchart': {
             type: {
@@ -24,6 +33,7 @@ const newJa: RecursiveStringRecord = {
             select: '選択'
         },
         '/auth/user': {
+            user: 'ユーザー',
             myData: 'マイページ',
             donderData: 'ドンだーデータ'
         }
@@ -143,7 +153,7 @@ const newJa: RecursiveStringRecord = {
             '30': 'ニジイロ 2030'
         }
     },
-    song:{
+    song: {
         difficulty: {
             easy: 'かんたん',
             normal: 'ふつう',
@@ -152,7 +162,53 @@ const newJa: RecursiveStringRecord = {
             ura: 'おに(裏)'
         }
     },
-    page:{
+    page: {
+        index: {
+            shortcut: {
+                song: '曲',
+                doc: '文書',
+                diffchart: '難易度表',
+                dani: '段位道場',
+                gamecenter: 'ゲーセン',
+                myData: 'マイページ'
+            },
+            notice: 'お知らせ'
+        },
+        songNo: {
+            alert: {
+                deleted: 'この曲は削除されました。',
+                krBanned: 'この曲は韓国ではプレイできません',
+                asiaBanned: 'この曲はアジア版ではプレイできません。'
+            },
+            multipleTitle: {
+                translatedTitle: '翻訳名',
+                ko: '韓国語',
+                aliasKo: '韓国語(非公式)',
+                en: '英語',
+                aliasEn: '英語(非公式)'
+            },
+            songData: {
+                version: '収録 バージョン',
+                artists: 'アーティスト',
+                addedDate: '追加された日付'
+            },
+            course: {
+                combos: '最大コンボ数',
+                branched: '分岐可否',
+                balloons: '最大風船数',
+                roll: '最大連打時間',
+                density: '最大密度',
+                playTime: '最大演奏時間',
+                hitsec: '打/秒',
+                sec: '秒',
+                total: '総',
+                count: '個',
+                daniList: '段位収録リスト',
+                nthSong: '曲目',
+                noDani: '段位収録',
+                fumenImage: '譜面イメージ'
+            }
+        },
         diffchart: {
             dfc: {
                 '10 level dfc': '★10 全良難易度表',
@@ -176,6 +232,28 @@ const newJa: RecursiveStringRecord = {
                     'iF': '地力 F'
                 }
             }
+        },
+        dani: {
+            go: '移動'
+        },
+        gamecenter: {
+            selector: {
+                search: '検索'
+            },
+            machineInfo: '機体情報'
+        },
+        donder: {
+            rating:{
+                top: '上位'
+            },
+            section:{
+                song: '曲レーティング',
+                measure: '定数表',
+                explanation: 'レーティング説明'
+            },
+            song: '曲',
+            otherSong: 'それ以外の曲',
+            link: 'リンク'
         }
     }
 }
@@ -234,7 +312,7 @@ const ja: LangFile = {
                 'gaiden': '外傳'
             },
             version: {
-                'katsudon': 'K-D',
+                'katsudon': 'KATSU-DON',
                 'sorairo': 'ソライロ',
                 'momoiro': 'モモイロ',
                 'kimidori': 'キミドリ',

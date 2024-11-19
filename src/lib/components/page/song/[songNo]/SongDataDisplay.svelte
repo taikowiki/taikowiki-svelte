@@ -34,6 +34,8 @@
 </script>
 
 <script lang="ts">
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+
     import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
@@ -52,6 +54,9 @@
     artists = [...new Set(artists)];
 
     let table: HTMLTableElement;
+
+    const lang = getLang();
+    $: i18n = getI18N($lang).page.songNo.songData;
 </script>
 
 <table
@@ -75,7 +80,7 @@
     </tr>
     {#if version.length}
         <tr>
-            <td> 수록 버전 </td>
+            <td> {i18n.version} </td>
             <td>
                 {#each version as v}
                     <SongDataDisplayTag item={v} />
@@ -85,7 +90,7 @@
     {/if}
     {#if artists.length}
         <tr>
-            <td> 아티스트 </td>
+            <td> {i18n.artists} </td>
             <td>
                 {#each artists as artist}
                     <SongDataDisplayTag item={artist} />
@@ -95,7 +100,7 @@
     {/if}
     {#if addedDate}
         <tr>
-            <td> 추가된 날짜 </td>
+            <td> {i18n.addedDate} </td>
             <td>
                 {dayjs(addedDate).format("YYYY-MM-DD")}
             </td>

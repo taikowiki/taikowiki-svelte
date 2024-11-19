@@ -5,11 +5,15 @@
     import TierImage from "./TierImage.svelte";
     import TierProgress from "./TierProgress.svelte";
     import GradeProgress from "./GradeProgress.svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let ratings: ReturnType<typeof getRating>;
     export let tier: ReturnType<typeof getTier>;
     export let Container: ConstructorOfATypedSvelteComponent;
     export let rankingData: {count: number; ranking: number}
+
+    const lang = getLang();
+    $: i18n = getI18N($lang).page.donder.rating
 </script>
 
 <Container>
@@ -39,7 +43,7 @@
     />
     <TierProgress rating={ratings.rating} tierName={tier.tierName} />
     <div class="ranking">
-        상위 {Math.round((rankingData.ranking / rankingData.count) * 10000) / 100}%
+        {i18n.top} {Math.round((rankingData.ranking / rankingData.count) * 10000) / 100}%
     </div>
 </Container>
 

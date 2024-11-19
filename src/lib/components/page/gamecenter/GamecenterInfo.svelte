@@ -13,6 +13,7 @@
 
     const lang = getLang();
     $: i18n = getI18N("/gamecenter", $lang);
+    $: newI18n = getI18N($lang).page.gamecenter;
 
     const [theme] = getTheme();
 
@@ -53,7 +54,7 @@
             role="presentation"
             class:hidden={!showMachines}
         >
-            기체 정보
+            {newI18n.machineInfo}
         </div>
         <table class="machines" class:hidden={!showMachines}>
             <tr>

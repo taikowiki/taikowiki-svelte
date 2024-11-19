@@ -13,6 +13,9 @@
     let version = $page.url.pathname.replace("/dani/", "") || "24";
 
     const isMobile = getIsMobile();
+
+    const lang = getLang()
+    $: go = getI18N($lang).page.dani.go
 </script>
 
 <PageAside>
@@ -23,7 +26,7 @@
                 goto(`/dani/${version}`);
             }}
         >
-            이동
+            {go}
         </button>
     </Row.center>
 </PageAside>

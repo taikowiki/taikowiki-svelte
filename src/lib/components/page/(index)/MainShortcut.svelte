@@ -1,5 +1,5 @@
 <script lang="ts">
-    import groupBy from "object.groupby";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import MainShortcutItem from "./MainShortcutItem.svelte";
 
     const items = [
@@ -43,6 +43,17 @@
         }
         return newArray;
     }
+
+    const lang = getLang();
+    $: i18n = getI18N($lang).page.index.shortcut;
+    $: {
+        items[0].name = i18n.song;
+        items[1].name = i18n.doc;
+        items[2].name = i18n.diffchart;
+        items[3].name = i18n.dani;
+        items[4].name = i18n.gamecenter;
+        items[5].name = i18n.myData;
+    }
 </script>
 
 <div class="container">
@@ -63,7 +74,7 @@
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-around;
-        align-items: center;
+        align-items: flex-start;
 
         row-gap: 5px;
 
@@ -77,6 +88,6 @@
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-around;
-        align-items: center;
+        align-items: flex-start;
     }
 </style>

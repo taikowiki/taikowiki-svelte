@@ -5,6 +5,7 @@
     import LanguageItem from "./LanguageItem.svelte";
     import UserInfo from "./User-Info.svelte";
     import { page } from "$app/stores";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     let opened = false;
     function close() {
@@ -25,6 +26,9 @@
     let opener: HTMLDivElement;
 
     const [theme] = getTheme();
+
+    const lang = getLang();
+    $: i18n = getI18N($lang).layout.main.user;
 
     $: if ($page.url || $page.state) {
         close();
@@ -67,7 +71,7 @@
     >
         <UserInfo {close} />
         <UserItem separated height="30px">
-            <span slot="left">테마</span><ThemeToggler slot="right" />
+            <span slot="left">{i18n.theme}</span><ThemeToggler slot="right" />
         </UserItem>
         <LanguageItem />
     </div>

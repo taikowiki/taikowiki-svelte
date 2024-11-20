@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
@@ -9,6 +10,9 @@
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
+
+    const lang = getLang();
+    $: i18n = getI18N($lang).page.songNo.multipleTitle;
 
     let opened = false;
 </script>
@@ -24,13 +28,13 @@
             role="presentation"
             data-theme={$theme}
         >
-            번역명
+            {i18n.translatedTitle}
         </div>
         <div class="table-container" class:opened>
             <table data-theme={$theme}>
                 {#if titleKo}
                     <tr>
-                        <td> 한국어 </td>
+                        <td> {i18n.ko} </td>
                         <td>
                             {titleKo}
                         </td>
@@ -38,7 +42,7 @@
                 {/if}
                 {#if aliasKo}
                     <tr>
-                        <td> 한국어(비공식) </td>
+                        <td> {i18n.aliasKo} </td>
                         <td>
                             {aliasKo}
                         </td>
@@ -46,7 +50,7 @@
                 {/if}
                 {#if titleEn}
                     <tr>
-                        <td> 영어 </td>
+                        <td> {i18n.en} </td>
                         <td>
                             {titleEn}
                         </td>
@@ -54,7 +58,7 @@
                 {/if}
                 {#if aliasEn}
                     <tr>
-                        <td> 영어(비공식) </td>
+                        <td> {i18n.aliasEn} </td>
                         <td>
                             {aliasEn}
                         </td>

@@ -17,6 +17,7 @@
 
     const lang = getLang();
     $: daniI18n = getI18N("other", $lang).dani;
+    $: i18n = getI18N($lang).page.songNo.course;
 </script>
 
 <div
@@ -33,18 +34,18 @@
         }`}
     >
         <table data-theme={$theme}>
-            <tr class={course.images.length ? 'no-image' : 'has-image'}>
-                <td> 최대 노트 수 </td>
+            <tr class={course.images.length ? "no-image" : "has-image"}>
+                <td> {i18n.combos} </td>
                 <td>
                     {course.maxCombo}
                 </td>
-                <td> 분기 여부 </td>
+                <td> {i18n.branched} </td>
                 <td>
                     {course.isBranched ? "O" : "X"}
                 </td>
             </tr>
-            <tr class={course.images.length ? 'no-image' : 'has-image'}>
-                <td>최대 풍선 수</td>
+            <tr class={course.images.length ? "no-image" : "has-image"}>
+                <td>{i18n.balloons}</td>
                 <td>
                     <div
                         class="opener"
@@ -54,12 +55,13 @@
                         }}
                         role="presentation"
                     >
-                        총 <span style="font-weight:bold;"
+                        {i18n.total}
+                        <span style="font-weight:bold;"
                             >{course.balloon.reduce(
                                 (partial, current) => partial + current,
                                 0,
                             )}</span
-                        >개
+                        >{i18n.count}
                     </div>
                     {#if balloonOpened}
                         <div class="detail">
@@ -67,7 +69,7 @@
                         </div>
                     {/if}
                 </td>
-                <td> 최대 연타 시간 </td>
+                <td> {i18n.roll} </td>
                 <td>
                     <div
                         class="opener"
@@ -77,14 +79,15 @@
                         }}
                         role="presentation"
                     >
-                        총 <span style="font-weight:bold;"
+                        {i18n.total}
+                        <span style="font-weight:bold;"
                             >{Math.round(
                                 course.rollTime.reduce(
                                     (partial, current) => partial + current,
                                     0,
                                 ) * 1000,
                             ) / 1000}</span
-                        >초
+                        >{i18n.sec}
                     </div>
                     {#if rollOpened}
                         <div class="detail">
@@ -93,14 +96,16 @@
                     {/if}
                 </td>
             </tr>
-            <tr class={course.images.length ? 'no-image' : 'has-image'}>
-                <td>최대 밀도</td>
+            <tr class={course.images.length ? "no-image" : "has-image"}>
+                <td>{i18n.density}</td>
                 <td>
-                    {course.maxDensity} 타/초
+                    {course.maxDensity}
+                    {i18n.hitsec}
                 </td>
-                <td> 최대 연주 시간 </td>
+                <td> {i18n.playTime} </td>
                 <td>
-                    {course.playTime} 초
+                    {course.playTime}
+                    {i18n.sec}
                 </td>
             </tr>
         </table>
@@ -118,7 +123,7 @@
                     daniOpened = !daniOpened;
                 }}
             >
-                단위 수록 목록
+                {i18n.daniList}
             </div>
             {#if daniOpened}
                 <div class="dani">
@@ -126,7 +131,7 @@
                         <span>
                             {daniI18n.version[dani.version]}
                             {daniI18n.dan[dani.dan]}
-                            {dani.order}번째 곡
+                            {dani.order}{i18n.nthSong}
                         </span>
                     {/each}
                 </div>
@@ -140,7 +145,7 @@
             class="nodani-container"
             data-theme={$theme}
         >
-            단위 수록 X
+            {i18n.noDani} X
         </div>
     {/if}
     {#if course?.images}
@@ -161,10 +166,10 @@
         max-width: 100%;
     }
 
-    tr.has-image{
+    tr.has-image {
         min-height: calc(170px / 3);
     }
-    tr.no-image{
+    tr.no-image {
         min-height: 34px;
     }
 
@@ -206,8 +211,8 @@
         border: 1px solid #cf4844;
         box-sizing: border-box;
     }
-    .dani-container[data-theme="dark"]{
-        border-color:#1c1c1c;
+    .dani-container[data-theme="dark"] {
+        border-color: #1c1c1c;
     }
     .dani-opener {
         width: 100%;
@@ -232,7 +237,7 @@
     .dani-container[data-theme="dark"] > .dani-opener {
         background-color: #1c1c1c;
     }
-    .dani-opener.opened{
+    .dani-opener.opened {
         border-bottom: 1px solid #cf4844;
     }
     .dani-container[data-theme="dark"] > .dani-opener.opened {
@@ -246,7 +251,7 @@
         background-color: #cf4844;
         color: white;
     }
-    .nodani-container[data-theme="dark"]{
+    .nodani-container[data-theme="dark"] {
         background-color: #1c1c1c;
     }
 

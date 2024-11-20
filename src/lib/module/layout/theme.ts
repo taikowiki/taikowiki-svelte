@@ -21,7 +21,7 @@ export default function useTheme(init?: 'light' | 'dark'): [Writable<'light' | '
             document.body.setAttribute("data-theme", value);
             window.localStorage.theme = value;
             (async() => {
-                const cookieStore = (await import('$lib/module/common/cookieStore.client')).default;
+                const cookieStore = (await import('$lib/module/common/util.client')).cookieStore;
                 cookieStore.set('theme', value);
             })().catch()
         })

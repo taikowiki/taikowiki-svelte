@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import { goto } from "$app/navigation";
 
-    async function submit(gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount'>>){
+    async function submit(gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount' | 'coor'>>){
         if(!gamecenterData.name){
             alert('이름을 입력해주세요.');
             return;
@@ -40,7 +40,7 @@
     import { gamecenterRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
     import type { GameCenterDataWithoutOrder } from "$lib/module/common/gamecenter/types";
 
-    const gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount'>> = {
+    const gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount' | 'coor'>> = {
         name: "",
         address: "",
         amenity: {

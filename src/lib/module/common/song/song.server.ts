@@ -3,7 +3,7 @@ import { type SongData, type SongRequest, type SongSearchOption } from "./types"
 //@ts-expect-error
 import r from 'regex-escape';
 import { defineDBHandler } from "@yowza/db-handler";
-import { escapeString } from '../escape';
+import { sqlEscapeString } from '../util';
 function regexEscape(str: string): string {
     return r(str)
 }
@@ -161,7 +161,7 @@ export const songDBController = {
             sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
         }
         if (option?.query) {
-            const query = `%${option.query.split(' ').map(escapeString).join('%')}%`
+            const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
             sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)})`
         }
 
@@ -195,7 +195,7 @@ export const songDBController = {
             sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
         }
         if (option?.query) {
-            const query = `%${option.query.split(' ').map(escapeString).join('%')}%`
+            const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
             sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)})`
         }
 

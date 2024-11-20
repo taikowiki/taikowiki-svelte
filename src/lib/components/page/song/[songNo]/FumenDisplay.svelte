@@ -1,5 +1,6 @@
 <script lang="ts">
     import { browser } from "$app/environment";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import FumenImg from "./FumenImg.svelte";
@@ -17,6 +18,9 @@
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
+
+    const lang = getLang();
+    $: i18n = getI18N($lang).page.songNo.course
 </script>
 
 {#if images.length}
@@ -36,7 +40,7 @@
             data-opened={opened}
             data-theme={$theme}
         >
-            보면 이미지
+            {i18n.fumenImage}
         </div>
         {#if opened}
             <div class="img-container">

@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Section } from "$lib/module/common/diffchart/types";
     import DiffchartEditorSong from "./Diffchart-Editor-Song.svelte";
-    import _intercept from "$lib/module/common/intercept";
+    import {intercept as _intercept} from '$lib/module/common/util';
 
     export let section: Section;
     export let index;

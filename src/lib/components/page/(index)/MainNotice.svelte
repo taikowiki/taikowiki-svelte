@@ -11,6 +11,7 @@
     const [theme] = getTheme();
     const lang = getLang();
     $: noticeI18n = getI18N("/notice", $lang);
+    $: indexNoticeI18n = getI18N($lang).page.index.notice;
 </script>
 
 <div class="container">
@@ -21,7 +22,7 @@
             href="/notice?type=wiki"
         >
             <span>
-                {noticeI18n.type.wiki} 공지
+                {noticeI18n.type.wiki} {indexNoticeI18n}
             </span>
         </a>
         {#each notices.wiki as notice}
@@ -37,7 +38,7 @@
             href="/notice?type=official"
         >
             <span>
-                {noticeI18n.type.official} 공지
+                {noticeI18n.type.official} {indexNoticeI18n}
             </span>
         </a>
         {#each notices.official as notice}

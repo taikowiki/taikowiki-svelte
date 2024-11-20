@@ -29,6 +29,7 @@
 
 <style>
     .item {
+        width: 65px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -70,5 +71,9 @@
         width: 25px;
         height: 25px;
         filter: invert(100%);
+    }
+
+    span{
+        text-align: center;
     }
 </style>

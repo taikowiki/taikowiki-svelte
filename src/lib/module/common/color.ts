@@ -1,5 +1,5 @@
-import deepFreeze from "./deepFreeze";
 import type { Difficulty, Genre } from "./song/types";
+import {deepFreeze} from "./util";
 
 export const genre: Record<Genre, string> = {
     pops: "#4fb5bd",

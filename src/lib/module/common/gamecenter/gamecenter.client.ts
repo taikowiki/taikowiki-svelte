@@ -26,7 +26,7 @@ const gamecenterRequestor = {
     /**
      * Requests to report a game center.
      */
-    report: defineRequestHandler<{gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount'>>}, void>({
+    report: defineRequestHandler<{gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount' | 'coor'>>}, void>({
         method: 'post',
         url: '/api/gamecenter/report'
     })

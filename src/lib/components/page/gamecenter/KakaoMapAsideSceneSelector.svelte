@@ -5,6 +5,7 @@
 
     const lang = getLang();
     $: i18n = getI18N('/gamecenter', $lang);
+    $: newI18n = getI18N($lang).page.gamecenter.selector
 </script>
 
 <div>
@@ -16,7 +17,7 @@
                 scene = "search";
             }}
         >
-            <span>검색</span>
+            <span>{newI18n.search}</span>
         </div>
         <div
             class="button"

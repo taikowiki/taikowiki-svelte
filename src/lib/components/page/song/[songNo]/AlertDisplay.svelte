@@ -1,19 +1,24 @@
 <script lang="ts">
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+
     export let isAsiaBanned: 1 | 0;
     export let isKrBanned: 1 | 0;
     export let isDeleted: 1 | 0;
+
+    const lang = getLang();
+    $: i18n = getI18N($lang).page.songNo.alert;
 </script>
 
 <div class="container">
     {#if isDeleted}
         <img src="/assets/icon/warning.svg" alt="warning" />
-        <span> 이 곡은 삭제되었습니다. </span>
+        <span> {i18n.deleted} </span>
     {:else if isKrBanned}
         <img src="/assets/icon/warning.svg" alt="warning" />
-        <span> 이 곡은 한국에서 플레이할 수 없습니다. </span>
+        <span> {i18n.krBanned} </span>
     {:else if isAsiaBanned}
         <img src="/assets/icon/warning.svg" alt="warning" />
-        <span> 이 곡은 아시아판에서 플레이할 수 없습니다. </span>
+        <span> {i18n.asiaBanned} </span>
     {/if}
 </div>
 

@@ -25,6 +25,7 @@
     const [theme] = getTheme();
     const lang = getLang();
     $: i18n = getI18N("/auth/user/donder", $lang);
+    $: newI18n = getI18N($lang).page.donder;
 
     function getDiffNum(diff: "oni" | "ura") {
         if (diff === "oni") {
@@ -36,7 +37,7 @@
 </script>
 
 <Center>
-    <h3>상위 50곡</h3>
+    <h3>{newI18n.rating.top} 50{newI18n.song}</h3>
     <table data-theme={$theme}>
         <tr>
             <th class="song-title"> {i18n.songTitle} </th>
@@ -80,7 +81,7 @@
                         href={`https://donderhiroba.jp/score_detail.php?song_no=${songRatingData.songNo}&level=${getDiffNum(songRatingData.difficulty)}`}
                         target="_blank"
                     >
-                        링크
+                    {newI18n.link}
                     </a>
                 </td>
             </tr>
@@ -94,7 +95,7 @@
             subOpened = !subOpened;
         }}
     >
-        이외의 곡
+        {newI18n.otherSong}
     </h3>
     {#if subOpened}
         <table data-theme={$theme}>

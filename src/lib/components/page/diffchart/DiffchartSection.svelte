@@ -50,10 +50,7 @@
         color={section.color}
         backgroundColor={section.backgroundColor}
         closed={closed}
-        on:click={() => {
-            closed = !closed;
-            console.log("clicked" + section.name);
-        }}
+        on:click={() => closed = !closed}
     />
     {#if !closed}
     <div class="song-container" class:useMobile>

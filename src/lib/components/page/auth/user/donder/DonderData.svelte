@@ -10,8 +10,8 @@
     dayjs.extend(timezone);
 
     export let donderData: UserDonderData;
+
     export let Container: ConstructorOfATypedSvelteComponent;
-    export let loaded: boolean;
 
     const [theme] = getTheme();
     const timeZone = dayjs.tz.guess();
@@ -20,7 +20,7 @@
 </script>
 
 <Container>
-    <img src={donderData.donder.myDon} alt={i18n.myDon} on:load={() => {loaded = true}} on:error={() => {loaded = true}}/>
+    <img src={donderData.donder.myDon} alt={i18n.myDon}/>
     <table data-theme={$theme}>
         <tr>
             <td class="taikonumber">

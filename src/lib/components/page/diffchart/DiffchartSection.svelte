@@ -36,6 +36,8 @@
     export let useMobile: boolean = true;
     export let userScoreData: SongScore[] | null;
 
+    let closed = false;
+
     $: clearedSongScores = getClearedSongScores(userScoreData, section.songs);
     $: playedSongScores = getPlayedSongScores(userScoreData, section.songs);
     $: clearedSongsCount = userScoreData ? clearedSongScores.length : null;
@@ -47,7 +49,10 @@
         {clearedSongsCount}
         color={section.color}
         backgroundColor={section.backgroundColor}
+        closed={closed}
+        on:click={() => closed = !closed}
     />
+    {#if !closed}
     <div class="song-container" class:useMobile>
         {#each section.songs.toSorted((a, b) => a.order - b.order) as song}
             <DiffchartSong
@@ -59,6 +64,7 @@
             />
         {/each}
     </div>
+    {/if}
 </div>
 
 <style>

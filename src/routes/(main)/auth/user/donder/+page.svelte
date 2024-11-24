@@ -31,8 +31,10 @@
     const opened = {
         songRatings: false,
         measureTable: false,
-        explanation: false
+        explanation: false,
     };
+
+    let loaded: boolean = false;
 
     const isMobile = getIsMobile();
     const [theme] = getTheme();
@@ -51,27 +53,36 @@
         {@const { ratings, measures, rankingData, tier } = loadedData}
         <Center>
             <div class="data-container" data-isMobile={$isMobile}>
-                <DonderData {donderData} {Container} />
-                <DonderRating {Container} {ratings} {tier} {rankingData}/>
+                <DonderData {donderData} {Container} bind:loaded/>
+                <DonderRating {Container} {ratings} {tier} {rankingData} />
             </div>
-            <DonderSection
-                bind:opened={opened.songRatings}
-                sectionName={newI18n.section.song}
-            >
-                <SongRatings {ratings} {songDatas} {donderData} opened={opened.songRatings}/>
-            </DonderSection>
-            <DonderSection
-                bind:opened={opened.measureTable}
-                sectionName={newI18n.section.measure}
-            >
-                <MeasureTable {measures} {songDatas} />
-            </DonderSection>
-            <DonderSection
-                bind:opened={opened.explanation}
-                sectionName={newI18n.section.explanation}
-            >
-                {@html i18n.explanation}
-            </DonderSection>
+            {#if loaded}
+                <DonderSection
+                    bind:opened={opened.songRatings}
+                    sectionName={newI18n.section.song}
+                >
+                    <SongRatings
+                        {ratings}
+                        {songDatas}
+                        {donderData}
+                        opened={opened.songRatings}
+                    />
+                </DonderSection>
+                <DonderSection
+                    bind:opened={opened.measureTable}
+                    sectionName={newI18n.section.measure}
+                >
+                    <MeasureTable {measures} {songDatas} />
+                </DonderSection>
+                <DonderSection
+                    bind:opened={opened.explanation}
+                    sectionName={newI18n.section.explanation}
+                >
+                    {@html i18n.explanation}
+                </DonderSection>
+            {:else}
+                <Loading/>
+            {/if}
         </Center>
     {/await}
 {:else}

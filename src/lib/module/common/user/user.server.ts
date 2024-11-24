@@ -1,9 +1,12 @@
 import { fetchMeasures, getRating } from "@taiko-wiki/taiko-rating";
+import { escapeId } from 'mysql2';
 import type { UserClearData, UserData, UserDonderData, UserScoreData } from "./types";
 import { defineDBHandler } from "@yowza/db-handler";
-import type { CardData, ClearData } from "node-hiroba/types";
+import type { Badge, CardData, Clear, ClearData, Crown, Difficulty } from "node-hiroba/types";
 import { randomUUID } from 'node:crypto';
 import groupBy from "object.groupby";
+import { getSongRating } from "@taiko-wiki/taiko-rating/src/getSongRating";
+import type { Measure } from "@taiko-wiki/taiko-rating/src/types";
 
 export const userDBController = {
     /**
@@ -155,6 +158,7 @@ export const userDBController = {
     })
 }
 
+// 동더 데이터 DB
 export const userDonderDBController = {
     /**
      * update donder data
@@ -164,30 +168,46 @@ export const userDonderDBController = {
             const countResult = await run("SELECT COUNT(*) FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
             const count = Object.values(countResult[0])[0];
 
-            if (count === 0) {
+            if (count === 0) { //처음 추가한 경우
                 if ("scoreData" in data) {
-                    await run("INSERT INTO `user/donder_data` (`UUID`, `donder`, `clearData`, `scoreData`) VALUES (?, ?, ?, ?)", [UUID, JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData)]);
+                    const measures = await fetchMeasures();
+                    const currentRating = getRating(data.scoreData as UserScoreData, measures);
+                    await run(
+                        "INSERT INTO `user/donder_data` (`UUID`, `donder`, `clearData`, `scoreData`, `currentRating`, `currentExp`, `ratingData`) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        [UUID, JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), currentRating.rating, currentRating.exp, JSON.stringify(currentRating.songRatingDatas)]
+                    );
                 }
                 else {
                     await run("INSERT INTO `user/donder_data` (`UUID`, `donder`, `clearData`) VALUES (?, ?, ?)", [UUID, JSON.stringify(data.donderData), JSON.stringify(data.clearData)]);
                 }
             }
-            else {
+            else { //업데이트 한 경우
                 if ("scoreData" in data) {
-                    const formerScoreDataResult = await run("SELECT `scoreData` FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
-                    const formerScoreData = JSON.parse(formerScoreDataResult[0].scoreData);
+                    const formerData = await userDonderDBController.getDataColumns(UUID, ['clearData', 'scoreData', 'currentRating', 'currentExp']) as Pick<UserDonderData, 'clearData' | 'scoreData' | 'currentExp' | 'currentRating'>;
+                    const mergedClearData = mergeClearData(formerData?.clearData, data.clearData);
+
                     const measures = await fetchMeasures();
-                    const currentRating = getRating(data.scoreData as UserScoreData, measures);
-                    if (formerScoreData === null) {
-                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ? ,`lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), currentRating.rating, UUID]);
+                    const mergedScoreData = mergeScoreData(formerData.scoreData as UserScoreData, data.scoreData as UserScoreData, measures);
+                    const currentRating = getRating(mergedScoreData as UserScoreData, measures);
+
+                    if (formerData === null) {
+                        await run(
+                            "UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ?, `currentExp` = ?, `ratingData` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `lastRatingCalculate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?",
+                            [JSON.stringify(data.donderData), JSON.stringify(mergedClearData), JSON.stringify(mergedScoreData), currentRating.rating, currentRating.exp, JSON.stringify(currentRating.songRatingDatas), UUID]
+                        );
                     }
                     else {
-                        const formerRating = getRating(formerScoreData, measures);
-                        await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `ratingHistory` = JSON_ARRAY_APPEND(`ratingHistory`, '$', ?)  WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), JSON.stringify(data.scoreData), currentRating.rating, formerRating.rating, UUID]);
+                        await run(
+                            "UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ?, `currentExp` = ?, `ratingHistory` = JSON_ARRAY_APPEND(`ratingHistory`, '$', ?), `expHistory` = JSON_ARRAY_APPEND(`expHistory`, '$', ?), `ratingData` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `lastRatingCalculate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?",
+                            [JSON.stringify(data.donderData), JSON.stringify(mergedClearData), JSON.stringify(mergedScoreData), currentRating.rating, currentRating.exp, formerData.currentRating, formerData.currentExp, JSON.stringify(currentRating.songRatingDatas), UUID]
+                        );
                     }
                 }
                 else {
-                    await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(data.clearData), UUID]);
+                    const formerData = await userDonderDBController.getDataColumns(UUID, ['clearData']) as Pick<UserDonderData, 'clearData'>;
+                    const mergedClearData = mergeClearData(formerData?.clearData, data.clearData);
+                    
+                    await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(mergedClearData), UUID]);
                 }
             }
         }
@@ -204,13 +224,29 @@ export const userDonderDBController = {
                 return null;
             }
 
+            result.forEach(parseDonderData);
             const data = result[0];
-            data.donder = JSON.parse(data.donder);
-            data.clearData = JSON.parse(data.clearData);
-            data.scoreData = data.scoreData === null ? null : JSON.parse(data.scoreData);
-            data.ratingHistory = JSON.parse(data.ratingHistory);
 
             return data as UserDonderData;
+        }
+    }),
+
+    /**
+     * get donder data columns
+     */
+    getDataColumns: defineDBHandler<[string, (keyof UserDonderData)[]], Partial<UserDonderData> | null>((UUID, columns) => {
+        const columnsQuery = columns.map(e => escapeId(e)).join(', ');
+        return async (run) => {
+            const result = await run(`SELECT ${columnsQuery} FROM \`user/donder_data\` WHERE \`UUID\` = ?`, [UUID]);
+
+            if (result.length === 0) {
+                return null;
+            }
+
+            result.forEach(parseDonderData);
+            const data = result[0];
+
+            return data as Partial<UserDonderData>;
         }
     }),
 
@@ -232,9 +268,9 @@ export const userDonderDBController = {
     /**
      * update current rating
      */
-    updateCurrentRating: defineDBHandler<[string, number], void>((UUID, currentRating) => {
+    updateCurrentRating: defineDBHandler<[string, number, number, UserDonderData['ratingData']], void>((UUID, currentRating, currentExp, ratingData) => {
         return async (run) => {
-            await run("UPDATE `user/donder_data` SET `currentRating` = ? WHERE `UUID` = ?", [currentRating, UUID])
+            await run("UPDATE `user/donder_data` SET `currentRating` = ?, `currentExp` = ?, `ratingData` = ?, `lastRatingCalculate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [currentRating, currentExp, JSON.stringify(ratingData), UUID])
         }
     }),
 
@@ -252,4 +288,89 @@ export const userDonderDBController = {
             }
         }
     })
+}
+
+// db 동더 데이터 파싱
+function parseDonderData(data: any) {
+    data.donder &&= JSON.parse(data.donder);
+    data.clearData &&= JSON.parse(data.clearData);
+    data.scoreData &&= data.scoreData === null ? null : JSON.parse(data.scoreData);
+    data.ratingHistory &&= JSON.parse(data.ratingHistory);
+    data.expHistory &&= JSON.parse(data.expHistory);
+    data.ratingData &&= JSON.parse(data.ratingData);
+}
+
+// 스코어데이터 병합
+function mergeScoreData(oldData: UserScoreData | undefined, newData: UserScoreData, measures: Measure[]): UserScoreData {
+    if(!oldData) return structuredClone(newData);
+    const data = structuredClone(oldData);
+    measures.forEach(measure => {
+        const oldScoreData = oldData[measure.songno]?.difficulty?.[measure.diff];
+        const newScoreData = newData[measure.songno]?.difficulty?.[measure.diff];
+
+        if (!oldScoreData) {
+            if (newScoreData) {
+                if(!data[measure.songno]){
+                    data[measure.songno] = newData[measure.songno]
+                }
+                else{
+                    data[measure.songno].difficulty[measure.diff] = newData[measure.songno].difficulty[measure.diff];
+                }
+                return;
+            }
+            else {
+                return;
+            }
+        }
+        if (!newScoreData) {
+            return;
+        }
+
+        const oldSongRating = getSongRating(oldScoreData, measure.notes, measure.measureValue);
+        const newSongRating = getSongRating(newScoreData, measure.notes, measure.measureValue);
+
+        if (oldSongRating.value < newSongRating.value) {
+            data[measure.songno].difficulty[measure.diff] = newData[measure.songno].difficulty[measure.diff];
+        }
+    });
+
+    return data;
+}
+
+function mergeClearData(oldData: ClearData[] | undefined, newData: ClearData[]){
+    if(!oldData) return structuredClone(newData);
+
+    const data = structuredClone(oldData);
+    const crowns: Crown[] = [null, 'played', 'silver', 'gold', 'donderfull'];
+    const badges: Badge[] = [null, 'white', 'bronze', 'silver', 'gold', 'pink', 'purple', 'rainbow'];
+    newData.forEach(clearData => {
+        const oldClearData = data.find((e) => e.songNo === clearData.songNo);
+        if(!oldClearData){
+            data.push(clearData);
+            return;
+        }
+
+        Object.keys(clearData.difficulty).forEach((value) => {
+            const diff = value as Difficulty;
+            const oldDiffData = oldClearData.difficulty[diff];
+            if(!oldDiffData){
+                oldClearData.difficulty[diff] = clearData.difficulty[diff];
+                return;
+            }
+
+            const oldCrownNum = crowns.indexOf(oldDiffData.crown);
+            const newCrownNum = crowns.indexOf((clearData.difficulty[diff] as Clear).crown);
+            if(newCrownNum > oldCrownNum){
+                oldDiffData.crown = crowns[newCrownNum];
+            }
+
+            const oldBadgeNum = badges.indexOf(oldDiffData.badge);
+            const newBadgeNum = badges.indexOf((clearData.difficulty[diff] as Clear).badge);
+            if(newBadgeNum > oldBadgeNum){
+                oldDiffData.badge = badges[newBadgeNum];
+            }
+        })
+    })
+
+    return data;
 }

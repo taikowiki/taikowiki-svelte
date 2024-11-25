@@ -39,6 +39,7 @@
     import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
+    import { DateTime } from "luxon";
     import SongDataDisplayTag from "./SongDataDisplayTag.svelte";
     import dayjs from "dayjs";
 
@@ -102,7 +103,7 @@
         <tr>
             <td> {i18n.addedDate} </td>
             <td>
-                {dayjs(addedDate).format("YYYY-MM-DD")}
+                {DateTime.fromMillis(addedDate).toFormat("yyyy-MM-dd")}
             </td>
         </tr>
     {/if}

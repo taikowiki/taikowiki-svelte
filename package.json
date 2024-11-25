@@ -43,7 +43,6 @@
 		"axios": "^1.6.8",
 		"cookie-store": "^3.0.0",
 		"css-filter-converter": "^1.0.109",
-		"dayjs": "^1.11.11",
 		"html2canvas": "^1.4.1",
 		"kakao.maps.d.ts": "^0.1.40",
 		"luxon": "^3.5.0",

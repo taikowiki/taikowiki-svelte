@@ -41,7 +41,6 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { DateTime } from "luxon";
     import SongDataDisplayTag from "./SongDataDisplayTag.svelte";
-    import dayjs from "dayjs";
 
     export let bpm: SongData["bpm"];
     export let bpmShiver: SongData["bpmShiver"];

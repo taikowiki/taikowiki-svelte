@@ -1,7 +1,7 @@
 import { mdToHtml } from "../../util";
 import type { LangFile, RecursiveStringRecord } from "../types";
 
-import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
+import ratingUploadGuide from '../md/ja/ratingUploadGuide.md?raw';
 import ratingExplanation from '../md/ja/ratingExplanation.md?raw';
 
 const newJa: RecursiveStringRecord = {

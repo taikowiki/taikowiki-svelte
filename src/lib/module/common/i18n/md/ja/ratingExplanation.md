@@ -11,4 +11,4 @@
 各ティアは5つのランクに分かれており、1ランクが最も高いランクです。
 
 ## レーティング計算
-レーティングの計算方法については[여기](https://github.com/taikowiki/taiko-rating/blob/main/README.md) をご参照ください。
+レーティングの計算方法については[こちら](https://github.com/taikowiki/taiko-rating/blob/main/README.md) をご参照ください。

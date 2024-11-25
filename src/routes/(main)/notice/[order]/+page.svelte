@@ -1,20 +1,15 @@
 <script lang="ts">
-    import dayjs from "dayjs";
-    import utc from "dayjs/plugin/utc";
-    import timezone from "dayjs/plugin/timezone";
     import { convertNoticeMd } from "$lib/module/common/notice/notice.client";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
+    import { DateTime } from "luxon";
     export let data;
 
     const {notice} = data;
 
     //time
-    dayjs.extend(utc);
-    dayjs.extend(timezone);
-    const timeZone = dayjs.tz.guess();
     function getTime(date: Date) {
-        return dayjs(date).tz(timeZone).format("YYYY-MM-DD HH:mm:ss");
+        return DateTime.fromJSDate(date).toFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     const lang = getLang();

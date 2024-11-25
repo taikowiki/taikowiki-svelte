@@ -41,7 +41,6 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { DateTime } from "luxon";
     import SongDataDisplayTag from "./SongDataDisplayTag.svelte";
-    import dayjs from "dayjs";
 
     export let bpm: SongData["bpm"];
     export let bpmShiver: SongData["bpmShiver"];
@@ -103,7 +102,7 @@
         <tr>
             <td> {i18n.addedDate} </td>
             <td>
-                {DateTime.fromMillis(addedDate).toFormat("yyyy-MM-dd")}
+                {DateTime.fromMillis(addedDate, {zone: 'Asia/Seoul'}).toFormat("yyyy-MM-dd")}
             </td>
         </tr>
     {/if}

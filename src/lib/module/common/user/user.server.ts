@@ -207,7 +207,7 @@ export const userDonderDBController = {
                     const formerData = await userDonderDBController.getDataColumns(UUID, ['clearData']) as Pick<UserDonderData, 'clearData'>;
                     const mergedClearData = mergeClearData(formerData?.clearData, data.clearData);
                     
-                    await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `lastUpdate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(mergedClearData), UUID]);
+                    await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ? WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(mergedClearData), UUID]);
                 }
             }
         }

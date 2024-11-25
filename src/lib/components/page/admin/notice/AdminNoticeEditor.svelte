@@ -2,9 +2,7 @@
     import type { Notice } from "$lib/module/common/notice/types";
     import { onMount } from "svelte";
     import "@toast-ui/editor/toastui-editor.css";
-    import dayjs from "dayjs";
-    import utc from "dayjs/plugin/utc";
-    import timezone from "dayjs/plugin/timezone";
+    import { DateTime } from "luxon";
 
     export let notice: Omit<Notice, "order" | "writtenDate"> = {
         title: "",
@@ -53,11 +51,8 @@
     let officialDateInput: HTMLInputElement;
     onMount(() => {
         if (officialDateInput && notice.officialDate) {
-            dayjs.extend(utc);
-            dayjs.extend(timezone);
-            const timeZone = dayjs.tz.guess();
-            const officialDate = dayjs(notice.officialDate).tz(timeZone)
-            officialDateInput.value = `${officialDate.format("YYYY-MM-DD")}T${officialDate.format("HH:mm:ss")}`;
+            const officialDate = DateTime.fromJSDate(notice.officialDate, {zone: 'Asia/Seoul'})
+            officialDateInput.value = `${officialDate.toFormat("yyyy-MM-dd")}T${officialDate.toFormat("HH:mm:ss")}`;
         }
     });
 </script>
@@ -72,7 +67,7 @@
             type="datetime-local"
             bind:this={officialDateInput}
             on:input={(event) => {
-                notice.officialDate = new Date(event.currentTarget.value);
+                notice.officialDate = DateTime.fromFormat(event.currentTarget.value, "yyyy-MM-dd'T'HH:mm", {zone: 'Asia/Seoul'}).toJSDate()
             }}
         />
     {/if}

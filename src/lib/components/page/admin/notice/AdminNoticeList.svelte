@@ -1,25 +1,20 @@
 <script lang="ts">
     import type { Notice } from "$lib/module/common/notice/types";
-    import dayjs from "dayjs";
-    import utc from "dayjs/plugin/utc";
-    import timezone from "dayjs/plugin/timezone";
     import { getTheme } from "$lib/module/layout/theme";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { adminNoticeRequestor } from "$lib/module/common/notice/notice.client";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { DateTime } from "luxon";
 
     //props
     export let notices: Omit<Notice, 'content'>[];
 
     //time
-    dayjs.extend(utc);
-    dayjs.extend(timezone);
-    const timeZone = dayjs.tz.guess();
     function getTime(date: Date) {
         if (date.getDate() === new Date().getDate()) {
-            return dayjs(date).tz(timeZone).format("HH:mm:ss");
+            return DateTime.fromJSDate(date).toFormat('HH:mm:ss');
         } else {
-            return dayjs(date).tz(timeZone).format("YYYY-MM-DD");
+            return DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
         }
     }
 

@@ -1,5 +1,5 @@
 import { error, type Handle } from "@sveltejs/kit";
-import { runQuery } from "@sveltekit-board/db";
+import { runQuery } from "@yowza/db-handler"
 
 /**
  * Ban specific Ip.

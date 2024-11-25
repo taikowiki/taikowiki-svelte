@@ -20,7 +20,11 @@ const provider = {
     kakao: new providers.Kakao({
         clientId: process.env.KAKAO_CLIENT_ID ?? "",
         clientSecret: process.env.KAKAO_CLIENT_SECRET ?? ""
-    })
+    }),
+    line: new providers.Line({
+        clientId: process.env.LINE_CLIENT_ID ?? "",
+        clientSecret: process.env.LINE_CLIENT_SECRET ?? ""
+    }, ['profile'])
 }
 
 const authHandle = auth(Object.values(provider), {

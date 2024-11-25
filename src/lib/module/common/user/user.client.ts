@@ -1,4 +1,5 @@
 import { defineRequestHandler } from "@yowza/rrequestor";
+import type { UserDonderData } from "./types";
 
 export const userRequestor = {
     changeNickname: defineRequestHandler<{ newNickname: string }, string>({
@@ -12,9 +13,13 @@ export const userRequestor = {
 }
 
 export const userDonderRequestor = {
-    updateRating: defineRequestHandler<{rating: number}, {count: number, ranking: number}>({
+    updateRating: defineRequestHandler<{rating: number, exp: number, ratingData: UserDonderData['ratingData']}, {count: number, ranking: number}>({
         url: '/api/user/update-rating',
         method: 'post'
+    }),
+    getRanking: defineRequestHandler<null, {count: number, ranking: number}>({
+        url: '/api/user/ranking',
+        method: 'get'
     })
 }
 

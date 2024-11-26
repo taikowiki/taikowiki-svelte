@@ -58,7 +58,7 @@
 
         font-weight: bold;
         
-        padding-left: 5px;
-        padding-right: 5px;
+        padding-inline: 5px;
+        padding-block: 5px;
     }
 </style>

@@ -12,7 +12,7 @@
         });
     }
 
-    const languages: SongLang[] = ["jp", "ko", "ako"];
+    const languages: SongLang[] = ["jp", "ko", "ako", "en", "aen"];
 </script>
 
 <script lang="ts">
@@ -21,6 +21,7 @@
     import { getTheme } from "$lib/module/layout/theme";
     import SongLanguageButton from "./SongLanguageButton.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getIsMobile } from "$lib/module/layout/isMobile";
 
     export let songLang: SongLang = "jp";
     if (browser) {
@@ -49,30 +50,25 @@
     })
     */
     const [theme] = getTheme();
+    const isMobile = getIsMobile();
     const lang = getLang();
     $: i18n = getI18N("/song", $lang);
 </script>
 
-<div class="wrapper">
-    <div class="ghost" bind:this={ghost} data-theme={$theme} />
-    <div class="container">
-        {#if ghost}
-            {#each languages as language}
-                <SongLanguageButton bind:btn bind:songLang value={language}>
-                    {i18n.languages[language]}
-                </SongLanguageButton>
-            {/each}
-            <!--
-            <SongLanguageButton bind:btn bind:songLang value="en">
-                영어
-            </SongLanguageButton>
-            <SongLanguageButton bind:btn bind:songLang value="aen">
-                영어(비공식)
-            </SongLanguageButton>
-        -->
-        {/if}
+{#key $isMobile}
+    <div class="wrapper">
+        <div class="ghost" bind:this={ghost} data-theme={$theme} />
+        <div class="container">
+            {#if ghost}
+                {#each languages as language}
+                    <SongLanguageButton bind:btn bind:songLang value={language}>
+                        {i18n.languages[language]}
+                    </SongLanguageButton>
+                {/each}
+            {/if}
+        </div>
     </div>
-</div>
+{/key}
 
 <style>
     .wrapper {
@@ -82,6 +78,8 @@
     .container {
         display: flex;
         position: inherit;
+        flex-wrap: wrap;
+        row-gap: 5px;
 
         column-gap: 10px;
     }

@@ -62,6 +62,10 @@
             {song.titleKo || song.title}
         {:else if songLang === "ako"}
             {song.aliasKo || song.titleKo || song.title}
+        {:else if songLang === "en"}
+            {song.titleEn || song.title}
+        {:else if songLang === "aen"}
+            {song.aliasEn || song.titleEn || song.title}
         {/if}
     </div>
     <div class="third-container">
@@ -79,7 +83,7 @@
                             data-theme={$theme}
                         />
                     </div>
-                <!--
+                    <!--
                     {:else}
                     <div class="level-item" />
                 -->
@@ -138,7 +142,7 @@
 
         color: white;
     }
-    .genre-item[data-theme="dark"]{
+    .genre-item[data-theme="dark"] {
         filter: brightness(85%);
     }
     /*
@@ -154,7 +158,7 @@
 
         transform: translateY(6px);
 
-        margin-top:4px;
+        margin-top: 4px;
     }
     .artists-container {
         width: calc(100% - 170px);
@@ -163,7 +167,7 @@
 
         transform: translateY(3px);
     }
-    .artists-container[data-theme="dark"]{
+    .artists-container[data-theme="dark"] {
         color: #c9c9c9;
     }
     .title-container,
@@ -173,13 +177,13 @@
         text-overflow: ellipsis;
     }
 
-    .third-container{
+    .third-container {
         width: 100%;
-        display:flex;
+        display: flex;
         flex-direction: row;
         align-items: flex-end;
 
-        margin-top:4px;
+        margin-top: 4px;
     }
 
     .level-container {
@@ -208,20 +212,20 @@
 
         border-radius: 50vh;
     }
-    .level-color[data-theme="dark"]{
+    .level-color[data-theme="dark"] {
         filter: brightness(85%);
     }
-    @media only screen and (max-width: 1000px){
-        .artists-container{
-            width: calc( 100% - 145px );
+    @media only screen and (max-width: 1000px) {
+        .artists-container {
+            width: calc(100% - 145px);
             font-size: 11px;
             transform: translateY(1px);
         }
 
-        .level-container{
+        .level-container {
             width: 145px;
         }
-        .level-item{
+        .level-item {
             width: 25px;
         }
     }

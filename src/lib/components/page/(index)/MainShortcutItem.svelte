@@ -12,7 +12,7 @@
      */
     function noWiki() {
         if (href === "/w") {
-            return 'javascript:alert("공사중입니다.")';
+            return 'javascript:alert("WIP")';
         }
         return href;
     }

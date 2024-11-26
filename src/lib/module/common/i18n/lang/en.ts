@@ -13,7 +13,16 @@ const newEn: RecursiveStringRecord = {
             diffchart: 'Difficulty Chart',
             dani: 'Dan-i Dojo',
             gamecenter: 'Game Centers',
-            measures: 'Rating Mesurements'
+            measures: 'Rating Mesurements',
+            user: {
+                user: 'User',
+                donderData: 'Donder Data',
+                notLogined:'Not Logined',
+                login: 'Login',
+                logout: 'Logout',
+                theme: 'Thene',
+                lang: 'Lang'
+            }
         },
         'dedicated diffchart': {
             type: {
@@ -23,6 +32,7 @@ const newEn: RecursiveStringRecord = {
             }
         },
         '/auth/user': {
+            user: 'User',
             myData: 'My Data',
             donderData: 'Donder Data'
         }
@@ -72,10 +82,12 @@ const newEn: RecursiveStringRecord = {
         '/auth/user/donder': 'Donder Data',
         '/dani': 'Dan-i Dojo',
         '/diffchart/clear': 'Clear Difficulty Chart',
+        '/diffchart/fc': 'Full Combo Difficulty Chart',
+        '/diffchart/dfc': 'Donderful Combo Difficulty Chart',
         '/gamecenter': 'Game Center Map',
         '/gamecenter/report': 'Report Game Center Information',
         '/measures': 'Chart Rating Measurement',
-        '/song': 'Search Chart',
+        '/song': 'Search Song',
         '/song/[songNo]': 'No result',
         '/song/[songNo]/edit': 'Request Edit',
         '/song/add': 'Add Song'
@@ -149,7 +161,98 @@ const newEn: RecursiveStringRecord = {
         }
     },
     page:{
-        
+        index: {
+            shortcut: {
+                song: 'Song',
+                doc: 'Docs',
+                diffchart: 'Difficulty Chart',
+                dani: 'Dan-i Dojo',
+                gamecenter: 'Gamecenter',
+                myData: 'My data'
+            },
+            notice: 'Notice'
+        },
+        songNo: {
+            alert: {
+                deleted: 'This song has been deleted.',
+                krBanned: 'This song is not available to play in Korea.',
+                asiaBanned: 'This song is not available to play in the Asian version.'
+            },
+            multipleTitle: {
+                translatedTitle: 'Transalted Title',
+                ko: 'Korean',
+                aliasKo: 'Korean(Unofficial)',
+                en: 'English',
+                aliasEn: 'English(Unofficial)'
+            },
+            songData: {
+                version: 'Versions',
+                artists: 'Artists',
+                addedDate: 'Added Date'
+            },
+            course: {
+                combos: 'Max Combos',
+                branched: 'Branched',
+                balloons: 'Max Balloons',
+                roll: 'Max Roll Time',
+                density: 'Max Density',
+                playTime: 'Max Play Time',
+                hitsec: 'Hit/Sec',
+                sec: 'Sec',
+                total: 'Total',
+                count: '',
+                daniList: 'Dan-i List',
+                nthSong: 'th',
+                noDani: '',
+                fumenImage: 'Course Image'
+            }
+        },
+        diffchart: {
+            dfc: {
+                '10 level dfc': '★10 Donderful Combo Difficulty Chart',
+                sections: {
+                    'SS': "SS",
+                    'pS+': "Individual S+",
+                    'iS': "Competence S",
+                    'pS': "Individual S",
+                    'iA+': 'Competence A+',
+                    'pA+': 'Individual A+',
+                    'iA': "Competence A",
+                    'pA': "Individual A",
+                    'iB': 'Competence B',
+                    'pB': "Individual B",
+                    'iC': 'Competence C',
+                    'pC': 'Individual C',
+                    'iD': 'Competence D',
+                    'pD': 'Individual D',
+                    'iE': 'Competence E',
+                    'pE': 'Individual E',
+                    'iF': 'Competence F'
+                }
+            }
+        },
+        dani: {
+            go: 'go'
+        },
+        gamecenter:{
+            selector: {
+                search: 'Search'
+            },
+            machineInfo: 'Machine Info'
+        },
+        donder: {
+            rating:{
+                top: 'Top'
+            },
+            section:{
+                song: 'Song Rating',
+                measure: 'Measures',
+                explanation: 'Rating Explanation'
+            },
+            song: 'Song',
+            otherSong: 'Other Songs',
+            link: 'Link'
+        }
     }
 }
 
@@ -290,7 +393,9 @@ const en: LangFile = {
         languages: {
             jp: 'Japanese',
             ko: 'Korean',
-            ako: 'Korean (Unofficial)'
+            ako: 'Korean (Unofficial)',
+            en: 'English',
+            aen: 'English (Unofficial)'
         }
     },
     '/song/[songNo]': {

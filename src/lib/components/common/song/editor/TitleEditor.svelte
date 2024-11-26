@@ -4,6 +4,8 @@
     export let title: string;
     export let titleKo: string | null;
     export let aliasKo: string | null;
+    export let titleEn: string | null;
+    export let aliasEn: string | null;
 
     let titleKoChecked = titleKo !== null;
     $:if(titleKoChecked){
@@ -19,6 +21,20 @@
     else{
         aliasKo = null;
     }
+    let titleEnChecked = titleEn !== null;
+    $:if(titleEnChecked){
+        titleEn = titleEn || '';
+    }
+    else{
+        titleEn = null;
+    }
+    let aliasEnChecked = aliasEn !== null;
+    $:if(aliasEnChecked){
+        aliasEn = aliasEn || '';
+    }
+    else{
+        aliasEn = null;
+    }
 </script>
 
 <TitledContainer title="제목" color="#cf4844">
@@ -30,7 +46,7 @@
             </td>
         </tr>
         <tr>
-            <td> 한국어 제목 </td>
+            <td> 한국어 </td>
             <td>
                 <input
                     type="checkbox"
@@ -47,6 +63,26 @@
                     bind:checked={aliasKoChecked}
                 />
                 <input type="text" bind:value={aliasKo} disabled={aliasKo === null} />
+            </td>
+        </tr>
+        <tr>
+            <td> 영어 </td>
+            <td>
+                <input
+                    type="checkbox"
+                    bind:checked={titleEnChecked}
+                />
+                <input type="text" bind:value={titleEn} disabled={titleEn === null} />
+            </td>
+        </tr>
+        <tr>
+            <td> 영어 비공식 </td>
+            <td>
+                <input
+                    type="checkbox"
+                    bind:checked={aliasEnChecked}
+                />
+                <input type="text" bind:value={aliasEn} disabled={aliasEn === null} />
             </td>
         </tr>
     </table>

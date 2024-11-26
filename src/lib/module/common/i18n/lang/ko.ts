@@ -402,7 +402,9 @@ const ko: LangFile = {
         languages: {
             jp: '일본어',
             ko: '한국어',
-            ako: '한국어(비공식)'
+            ako: '한국어(비공식)',
+            en: '영어',
+            aen: '영어(비공식)'
         }
     },
     '/song/[songNo]': {

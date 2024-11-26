@@ -229,6 +229,33 @@ const newEn: RecursiveStringRecord = {
                     'pE': 'Individual E',
                     'iF': 'Competence F'
                 }
+            },
+            fc: {
+                '10 level fc': '★10 Fullcombo Difficulty Chart',
+                '9 level fc': '★9 Fullcombo Difficulty Chart',
+                '8 level fc': '★8 Fullcombo Difficulty Chart',
+                '7 level fc': '★7 Fullcombo Difficulty Chart',
+                '6 level fc': '★6 Fullcombo Difficulty Chart',
+                sections: {
+                    'SS': "SS",
+                    'S+': "S+",
+                    'pS+': "Individual S+",
+                    'S': "S",
+                    'pS': "Individual S",
+                    'A+': 'A+',
+                    'pA+': 'Individual A+',
+                    'A': "A",
+                    'pA': "Individual A",
+                    'B+': 'B+',
+                    'B': "B",
+                    'pB': "Individual B",
+                    'C+': 'C+',
+                    'C': 'C',
+                    'pC': 'Individual C',
+                    'D': 'D',
+                    'E': 'E',
+                    'F': 'F'
+                }
             }
         },
         dani: {

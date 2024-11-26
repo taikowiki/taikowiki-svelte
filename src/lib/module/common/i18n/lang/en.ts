@@ -276,7 +276,7 @@ const newEn: RecursiveStringRecord = {
                 measure: 'Measures',
                 explanation: 'Rating Explanation'
             },
-            song: 'Song',
+            song: ' Songs',
             otherSong: 'Other Songs',
             link: 'Link'
         }

@@ -5,15 +5,14 @@
     import { DateTime } from "luxon";
 
     export let donderData: UserDonderData;
-    export let Container: ConstructorOfATypedSvelteComponent;
-    export let loaded: boolean;
+    export let loaded: boolean = false;
 
     const [theme] = getTheme();
     const lang = getLang();
     $: i18n = getI18N("/auth/user/donder", $lang);
 </script>
 
-<Container>
+<div class="container">
     <img
         src={donderData.donder.myDon}
         alt={i18n.myDon}
@@ -39,9 +38,18 @@
     <div class="last-update">
         {i18n.lastUpdate}: {DateTime.fromJSDate(donderData.lastUpdate).toFormat("yyyy-MM-dd HH:mm:ss")}
     </div>
-</Container>
+</div>
 
 <style>
+    .container{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        width: 300px;
+        max-width: 100%;
+        row-gap: 5px;
+    }
+
     table {
         width: 100%;
 

@@ -16,7 +16,7 @@ const newJa: RecursiveStringRecord = {
             measures: 'レーティング表',
             user: {
                 user: 'ユーザー',
-                donderData: 'ドンだーデータ',
+                donderData: 'レーティング',
                 notLogined: '非ログイン',
                 login: 'ログイン',
                 logout: 'ログアウト',
@@ -35,7 +35,13 @@ const newJa: RecursiveStringRecord = {
         '/auth/user': {
             user: 'ユーザー',
             myData: 'マイページ',
-            donderData: 'ドンだーデータ'
+            donderData: 'レーティング'
+        },
+        rating:{
+            title: 'レーティング',
+            me: 'マイ·レーティング',
+            ranking: 'ランキング',
+            measure: '定数表'
         }
     },
     component: {

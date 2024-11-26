@@ -17,7 +17,7 @@ const newKo: RecursiveStringRecord = {
             measures: '상수표',
             user: {
                 user: '사용자',
-                donderData: '동더 데이터',
+                donderData: '레이팅',
                 notLogined: '비로그인',
                 login: '로그인',
                 logout: '로그아웃',
@@ -36,7 +36,13 @@ const newKo: RecursiveStringRecord = {
         '/auth/user': {
             user: '유저',
             myData: '내 정보',
-            donderData: '동더 데이터'
+            donderData: '레이팅'
+        },
+        rating:{
+            title: '레이팅',
+            me: '내 레이팅',
+            ranking: '랭킹',
+            measure: '상수표'
         }
     },
     //컴포넌트

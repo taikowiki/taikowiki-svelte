@@ -16,7 +16,7 @@ const newEn: RecursiveStringRecord = {
             measures: 'Rating Mesurements',
             user: {
                 user: 'User',
-                donderData: 'Donder Data',
+                donderData: 'Rating',
                 notLogined:'Not Logined',
                 login: 'Login',
                 logout: 'Logout',
@@ -34,7 +34,13 @@ const newEn: RecursiveStringRecord = {
         '/auth/user': {
             user: 'User',
             myData: 'My Data',
-            donderData: 'Donder Data'
+            donderData: 'Rating'
+        },
+        rating:{
+            title: 'Rating',
+            me: 'My Rating',
+            ranking: 'Ranking',
+            measure: 'Measures'
         }
     },
     component: {
@@ -369,7 +375,7 @@ const en: LangFile = {
     },
     //path
     '/auth/login': {
-        forLogin: 'for Login'
+        forLogin: ' for Login'
     },
     '/auth/user': {
         nickname: 'Username',

@@ -9,14 +9,13 @@
 
     export let ratings: ReturnType<typeof getRating>;
     export let tier: ReturnType<typeof getTier>;
-    export let Container: ConstructorOfATypedSvelteComponent;
-    export let rankingData: {count: number; ranking: number}
+    export let ranking: {count: number; ranking: number}
 
     const lang = getLang();
     $: i18n = getI18N($lang).page.donder.rating
 </script>
 
-<Container>
+<div class="container">
     <TierImage tierName={tier.tierName} grade={tier.detailTierGrade} />
     <div class="exp-rating-container">
         <div class="exp">
@@ -43,11 +42,20 @@
     />
     <TierProgress rating={ratings.rating} tierName={tier.tierName} />
     <div class="ranking">
-        {i18n.top} {Math.round((rankingData.ranking / rankingData.count) * 10000) / 100}%
+        {i18n.top} {Math.round((ranking.ranking / ranking.count) * 10000) / 100}%
     </div>
-</Container>
+</div>
 
 <style>
+    .container{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        width: 300px;
+        max-width: 100%;
+        row-gap: 5px;
+    }
+
     .exp-rating-container {
         width: 100%;
         display: flex;

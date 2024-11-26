@@ -287,7 +287,28 @@ export const userDonderDBController = {
                 ranking
             }
         }
-    })
+    }),
+    /**
+     * get rankings by page
+     */
+    getRanking: defineDBHandler<[number], any>((page) => {
+        return async(run) => {
+            const limitQuery = `LIMIT ${(page - 1) * 50}, 50`;
+            const result = await run("SELECT `user/donder_data`.`UUID`, `user/donder_data`.`currentRating`, `user/donder_data`.`donder`, `user/data`.`showRatingNickname` , `user/data`.`showRatingTaikoNo` FROM `user/donder_data` LEFT OUTER JOIN `user/data` ON `user/donder_data`.`UUID` = `user/data`.`UUID` WHERE `user/donder_data`.`currentRating` IS NOT NULL ORDER BY `currentRating` DESC " + limitQuery);
+            result.forEach(parseDonderData);
+            return result;
+        }
+    }) as (page: number) => Promise<(Pick<UserDonderData, 'UUID' | 'currentRating' | 'donder'> & Pick<UserData, 'UUID' | 'showRatingNickname' | 'showRatingTaikoNo'> & {currentRating: number;})[]>,
+    /**
+     * count donder data
+     */
+    count: defineDBHandler<[], number>(() => {
+        return async (run) => {
+            const count: number = Object.values((await run("SELECT COUNT(*) FROM `user/donder_data` WHERE `currentRating` IS NOT NULL"))[0])[0] as number;
+
+            return count;
+        }
+    }) as () => Promise<number>
 }
 
 // db 동더 데이터 파싱

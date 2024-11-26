@@ -92,6 +92,8 @@
         background-color: #cf4844;
         color: white;
 
+        padding-inline: 5px;
+
         cursor: pointer;
 
         box-sizing: border-box;

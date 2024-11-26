@@ -163,7 +163,7 @@ export const songDBController = {
         }
         if (option?.query) {
             const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
-            sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)})`
+            sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)})`
         }
 
         const columnsQuery = '*';
@@ -197,7 +197,7 @@ export const songDBController = {
         }
         if (option?.query) {
             const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
-            sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)})`
+            sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)})`
         }
 
         const columnsQuery = columns.map(escapeId).join(', ')

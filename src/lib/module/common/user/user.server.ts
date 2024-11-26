@@ -155,6 +155,36 @@ export const userDBController = {
 
             return Object.values(result[0])[0] as string;
         }
+    }),
+    /**
+     * Set Whether Rating Profile Disclose or not.
+     */
+    setShowRating: defineDBHandler<[string, Partial<Record<'nickname' | 'taikoNumber' | 'songs', boolean>>], void>((UUID, options) => {
+        return async(run) => {
+            const setQuery: string[] = [];
+            if(options.nickname === true){
+                setQuery.push('showRatingNickname = 1');
+            }
+            else if(options.nickname === false){
+                setQuery.push('showRatingNickname = 0');
+            }
+            if(options.taikoNumber === true){
+                setQuery.push('showRatingTaikoNo = 1');
+            }
+            else if(options.taikoNumber === false){
+                setQuery.push('showRatingTaikoNo = 0');
+            }
+            if(options.songs === true){
+                setQuery.push('showRatingSongs = 1');
+            }
+            else if(options.songs === false){
+                setQuery.push('showRatingSongs = 0');
+            }
+
+            if(setQuery.length !== 0){
+                await run("UPDATE `user/data` SET " + setQuery.join(',') + " WHERE `UUID` = ?", [UUID]);
+            }
+        }
     })
 }
 

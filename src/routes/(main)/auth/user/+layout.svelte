@@ -17,7 +17,7 @@
     <a href="/auth/user">
         {i18n.myData}
     </a>
-    <a href="/auth/user/donder">
+    <a href="/rating">
         {i18n.donderData}
     </a>
 </PageAside>

@@ -9,7 +9,12 @@ export async function load({ locals }) {
         user: {
             provider: locals.userData.provider,
             UUID: locals.userData.UUID,
-            nickname: locals.userData.nickname
+            nickname: locals.userData.nickname,
+            showRating:{
+                nickname: Boolean(locals.userData.showRatingNickname),
+                taikoNumber: Boolean(locals.userData.showRatingTaikoNo),
+                //songs: Boolean(locals.userData.showRatingSongs)
+            }
         }
     }
 }

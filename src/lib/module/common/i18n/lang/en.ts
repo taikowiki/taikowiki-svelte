@@ -174,7 +174,7 @@ const newEn: RecursiveStringRecord = {
                 diffchart: 'Difficulty Chart',
                 dani: 'Dan-i Dojo',
                 gamecenter: 'Gamecenter',
-                myData: 'My data'
+                rating: 'Rating'
             },
             notice: 'Notice'
         },
@@ -285,6 +285,15 @@ const newEn: RecursiveStringRecord = {
             song: ' Songs',
             otherSong: 'Other Songs',
             link: 'Link'
+        },
+        user: {
+            showRating: {
+                name: 'Show Rating Profile',
+                showRatingNick: 'Show Donderhiroba Nickname',
+                showRatingTaikoNo: 'Show Donderhiroba Taiko Number',
+                showRatingSongs: 'Show Song Ratings',
+                submit: 'Submit'
+            }
         }
     }
 }

@@ -29,9 +29,9 @@
             href: "/gamecenter",
         },
         {
-            src: "/assets/icon/user.svg",
-            name: "내 정보",
-            href: "/auth/user",
+            src: "/assets/icon/rating.svg",
+            name: "레이팅",
+            href: "/rating",
         },
     ];
 
@@ -52,7 +52,7 @@
         items[2].name = i18n.diffchart;
         items[3].name = i18n.dani;
         items[4].name = i18n.gamecenter;
-        items[5].name = i18n.myData;
+        items[5].name = i18n.rating;
     }
 </script>
 

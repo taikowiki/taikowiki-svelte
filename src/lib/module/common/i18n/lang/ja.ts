@@ -176,7 +176,7 @@ const newJa: RecursiveStringRecord = {
                 diffchart: '難易度表',
                 dani: '段位道場',
                 gamecenter: 'ゲーセン',
-                myData: 'マイページ'
+                rating: 'レーティング'
             },
             notice: 'お知らせ'
         },
@@ -287,6 +287,15 @@ const newJa: RecursiveStringRecord = {
             song: '曲',
             otherSong: 'それ以外の曲',
             link: 'リンク'
+        },
+        user: {
+            showRating: {
+                name: 'レーティング プロフィール公開',
+                showRatingNick: 'マイどん名前公開',
+                showRatingTaikoNo: 'マイどん太鼓番公開',
+                showRatingSongs: '曲レーティング公開',
+                submit: '適用'
+            }
         }
     }
 }

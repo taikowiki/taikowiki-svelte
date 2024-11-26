@@ -28,7 +28,7 @@
             {i18n.logout}
         </div>
     </UserItem>
-    <UserItem href="/auth/user/donder" isButton height="30px">
+    <UserItem href="/rating" isButton height="30px">
         <div class="container" on:click={close} role="presentation">
             {i18n.donderData}
         </div>

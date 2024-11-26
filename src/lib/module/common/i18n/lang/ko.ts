@@ -38,7 +38,7 @@ const newKo: RecursiveStringRecord = {
             myData: '내 정보',
             donderData: '레이팅'
         },
-        rating:{
+        rating: {
             title: '레이팅',
             me: '내 레이팅',
             ranking: '랭킹',
@@ -181,7 +181,7 @@ const newKo: RecursiveStringRecord = {
                 diffchart: '서열표',
                 dani: '단위도장',
                 gamecenter: '오락실',
-                myData: '내 정보'
+                rating: '레이팅'
             },
             notice: '공지'
         },
@@ -292,6 +292,15 @@ const newKo: RecursiveStringRecord = {
             song: '곡',
             otherSong: '이외의 곡',
             link: '링크'
+        },
+        user: {
+            showRating: {
+                name: '레이팅 프로필 공개',
+                showRatingNick: '동더히로바 닉네임 공게',
+                showRatingTaikoNo: '동더히로바 북번호 공개',
+                showRatingSongs: '곡 레이팅 공개',
+                submit: '적용'
+            }
         }
     }
 }

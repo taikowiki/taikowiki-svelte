@@ -20,7 +20,7 @@ const newEn: RecursiveStringRecord = {
                 notLogined:'Not Logined',
                 login: 'Login',
                 logout: 'Logout',
-                theme: 'Thene',
+                theme: 'Theme',
                 lang: 'Lang'
             }
         },

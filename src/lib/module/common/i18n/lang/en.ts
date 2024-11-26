@@ -1,8 +1,8 @@
 import { mdToHtml } from "../../util";
 import type { LangFile, RecursiveStringRecord } from "../types";
 
-import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
-import ratingExplanation from '../md/ko/ratingExplanation.md?raw';
+import ratingUploadGuide from '../md/en/ratingUploadGuide.md?raw';
+import ratingExplanation from '../md/en/ratingExplanation.md?raw';
 
 const newEn: RecursiveStringRecord = {
     layout: {

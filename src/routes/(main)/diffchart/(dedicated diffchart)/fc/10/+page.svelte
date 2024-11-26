@@ -52,7 +52,7 @@
     ).set(downloadImage);
 
     const lang = getLang();
-    $: i18n = getI18N("/diffchart/clear/[fc]", $lang);
+    $: i18n = getI18N($lang).page.diffchart.fc;
     $: titleI18n = getI18N('other', $lang).title['/diffchart/fc'];
     $: customedDiffchart = getCustomedDiffchart(diffChartData.data, i18n);
 

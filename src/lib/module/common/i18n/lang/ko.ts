@@ -296,7 +296,7 @@ const newKo: RecursiveStringRecord = {
         user: {
             showRating: {
                 name: '레이팅 프로필 공개',
-                showRatingNick: '동더히로바 닉네임 공게',
+                showRatingNick: '동더히로바 닉네임 공개',
                 showRatingTaikoNo: '동더히로바 북번호 공개',
                 showRatingSongs: '곡 레이팅 공개',
                 submit: '적용'

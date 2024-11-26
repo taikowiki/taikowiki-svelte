@@ -203,7 +203,7 @@ const newEn: RecursiveStringRecord = {
                 count: '',
                 daniList: 'Dan-i List',
                 nthSong: 'th',
-                noDani: '',
+                noDani: 'Dan-i Contained',
                 fumenImage: 'Course Image'
             }
         },

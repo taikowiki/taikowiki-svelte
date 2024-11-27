@@ -5,27 +5,31 @@
 
     export let tierName: UserRatingTierName;
     export let grade: number | null;
+    export let width: string = '180px';
+    export let height: string = '180px';
+    export let fontSize: string = '120px';
+    export let transform: string = 'transform: translate(2px, -7px)';
 </script>
 
 {#if tierName === "omega"}
-    <div class="tier-image omega" />
+    <div class="tier-image omega" style={`width:${width};height:${height};`} />
 {:else if tierName === "pearl"}
-    <div class="tier-image pearl">
+    <div class="tier-image pearl" style={`width:${width};height:${height};`}>
         <img
             src="/assets/icon/rating/tier/plate.avif"
-            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};`}
+            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};width:${width};height:${height};`}
             alt="pearl"
         />
-        <span> P </span>
+        <span style={`font-size:${fontSize};transform:${transform};`}> P </span>
     </div>
 {:else}
-    <div class="tier-image">
+    <div class="tier-image" style={`width:${width};height:${height};`}>
         <img
             src="/assets/icon/rating/tier/plate.avif"
-            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};`}
+            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};width:${width};height:${height};`}
             alt="pearl"
         />
-        <span> {grade} </span>
+        <span style={`font-size:${fontSize};transform:${transform};`}> {grade} </span>
     </div>
 {/if}
 

@@ -17,19 +17,29 @@
     <a href="/auth/user">
         {i18n.myData}
     </a>
-    <a href="/auth/user/donder">
+    <a href="/rating">
         {i18n.donderData}
     </a>
 </PageAside>
 
 {#if $isMobile}
-    <Row.left columnGap="5">
+    <div class="left">
         <a href="/auth/user">
             {i18n.myData}
         </a>
-        <a href="/auth/user/donder">
+        <a href="/rating">
             {i18n.donderData}
         </a>
-    </Row.left>
+    </div>
 {/if}
 <slot />
+
+<style>
+    .left {
+        display: flex;
+        column-gap: 10px;
+        flex-wrap: wrap;
+
+        margin-bottom: 10px;
+    }
+</style>

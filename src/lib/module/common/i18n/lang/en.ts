@@ -308,6 +308,9 @@ const newEn: RecursiveStringRecord = {
             },
             measures:{
                 heading: 'Measures'
+            },
+            user:{
+                nondisclosure: 'Song ratings are private.'
             }
         }
     }

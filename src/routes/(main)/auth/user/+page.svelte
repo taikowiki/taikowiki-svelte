@@ -14,6 +14,7 @@
     import PageTitle from "$lib/components/common/PageTitle.svelte";
 
     import Nickname from "$lib/components/page/auth/user/nickname.svelte";
+    import ShowRating from "$lib/components/page/auth/user/ShowRating.svelte";
     import { getLang, getI18N } from "$lib/module/common/i18n/i18n.js";
 
     export let data;
@@ -39,6 +40,7 @@
         <td>{data.user.UUID}</td>
     </tr>
     <Nickname />
+    <ShowRating bind:showRating={data.user.showRating}/>
     <tr>
         <form method="post" action="/api/user/delete" bind:this={withdrawForm}>
             <input
@@ -60,6 +62,7 @@
 <style>
     table {
         width: 100%;
+        border-spacing: 0px 20px;
     }
 
     .withdraw {
@@ -73,5 +76,15 @@
         border-radius: 5px;
 
         cursor: pointer;
+    }
+
+    table :global(td){
+        display:flex;
+        flex-direction: column;
+        row-gap: 10px;
+    }
+    table :global(td:nth-child(1)){
+        font-weight: bold;
+        font-size: 17px;
     }
 </style>

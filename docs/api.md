@@ -58,14 +58,31 @@ method: "GET"
 responseType: {
     currentRating: number,
     currentExp: number | null,
-    ratingData: { 
+    ratingDataWithScoreData: { 
         songNo: number,
         difficulty: 'oni' | 'ura', 
         songRating: {
             value: number,
             accuracy: number,
             measureValue: number
-        }
+        },
+        scoreData: {
+            crown: 'played' | 'silver' | 'gold' | 'donderfull' | null;
+            badge: 'rainbow' | 'purple' | 'pink' | 'gold' | 'silver' | 'bronze' | 'white' | null;
+            score: number,
+            ranking: number,
+            good: number,
+            ok: number,
+            bad: number,
+            maxCombo: number,
+            roll: number,
+            count: {
+                play: number,
+                clear: number,
+                fullcombo: number,
+                donderfullcombo: number,
+            }
+        } | null
     }[]
 }
 params: {

@@ -50,6 +50,7 @@ responseType: {
     nickname: string //user nickname or ip address
 }
 ```
+Retrieves the login status and the user's nickname or IP address.
 
 ### /user/rating
 ```ts
@@ -71,8 +72,6 @@ params: {
     all?: ['true'] // If "true", server will send all song rating datas. If not, server will only send top 50 song rating datas.
 }
 ```
-
-Retrieves the login status and the user's nickname or IP address.
 
 ###
 

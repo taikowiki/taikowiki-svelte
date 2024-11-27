@@ -35,7 +35,6 @@
             <th> {i18n.accuracy} </th>
             <th> {i18n.crown} </th>
             <th> {i18n.rating} </th>
-            <th> {i18n.hiroba} </th>
         </tr>
         {#each ratingData.slice(0, Math.min(50, ratingData.length)) as songRatingData, index}
             {@const song = songDatas.find(
@@ -64,14 +63,6 @@
                 </td>
                 <td>
                     {Math.round(songRatingData.songRating.value)}
-                </td>
-                <td>
-                    <a
-                        href={`https://donderhiroba.jp/score_detail.php?song_no=${songRatingData.songNo}&level=${getDiffNum(songRatingData.difficulty)}`}
-                        target="_blank"
-                    >
-                        {newI18n.link}
-                    </a>
                 </td>
             </tr>
         {/each}

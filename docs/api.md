@@ -66,7 +66,7 @@ responseType: {
             accuracy: number,
             measureValue: number
         }
-    }
+    }[]
 }
 params: {
     all?: ['true'] // If "true", server will send all song rating datas. If not, server will only send top 50 song rating datas.

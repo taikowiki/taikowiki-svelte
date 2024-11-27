@@ -2,15 +2,26 @@ import { bannerDBController } from '$lib/module/common/banner/banner.server.js';
 import { songDBController } from '$lib/module/common/song/song.server';
 import { UAParser } from 'ua-parser-js';
 
-export async function load({ fetch, request, cookies }) {
-    const user = await (await fetch('/api/user')).json();
-    
+export async function load({ locals, request, cookies, getClientAddress }) {
+    if (locals.userData) {
+        var user = {
+            logined: true,
+            nickname: locals.userData.nickname
+        };
+    }
+    else {
+        var user = {
+            logined: false,
+            nickname: getClientAddress()
+        }
+    }
+
     // Use UA to know if the device is mobile.
     let isMobile = false;
     const userAgent = request.headers.get('user-agent');
-    if(userAgent){
+    if (userAgent) {
         const parsedUA = new UAParser(userAgent);
-        if(parsedUA.getDevice().model === "iPhone" || (parsedUA.getOS().name === 'Android' && parsedUA.getDevice().type !== 'tablet')){
+        if (parsedUA.getDevice().model === "iPhone" || (parsedUA.getOS().name === 'Android' && parsedUA.getDevice().type !== 'tablet')) {
             isMobile = true;
         }
     }
@@ -18,7 +29,7 @@ export async function load({ fetch, request, cookies }) {
     // Use cookie to get theme
     const themeCookie = cookies.get('theme');
     let theme: 'light' | 'dark' = 'light';
-    if(themeCookie && (themeCookie === 'light' || themeCookie === 'dark')){
+    if (themeCookie && (themeCookie === 'light' || themeCookie === 'dark')) {
         theme = themeCookie;
     }
 

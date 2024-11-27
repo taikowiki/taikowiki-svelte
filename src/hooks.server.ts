@@ -8,7 +8,7 @@ import checkPermissions from "$lib/module/server/hooks/permissionCheck.server";
 import BanController from "$lib/module/server/hooks/ban-controller.server";
 import allowOrigin from "$lib/module/server/hooks/allow-origin";
 
-//import logger from "$lib/module/server/hooks/logger.server";
+import { logger } from "$lib/module/server/hooks/logger.server";
 
 config();
 
@@ -51,8 +51,8 @@ const getUserData: Handle = async ({ event, resolve }) => {
     return await resolve(event);
 }
 
-const setAssetsCacheControl: Handle = async({event, resolve}) => {
-    if(event.url.pathname.startsWith('/assets')){
+const setAssetsCacheControl: Handle = async ({ event, resolve }) => {
+    if (event.url.pathname.startsWith('/assets')) {
         event.setHeaders({
             'Cache-Control': `max-age=${3600 * 24 * 7}`
         });
@@ -81,10 +81,10 @@ const checkPermission = checkPermissions([
     }
 ])
 
-const cors = allowOrigin(["https://donderhiroba.jp"], {credentials: true});
+const cors = allowOrigin(["https://donderhiroba.jp"], { credentials: true });
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission, setAssetsCacheControl);
+export const handle = sequence(logger, BanController.checkIp, cors, authHandle, getUserData, checkPermission, setAssetsCacheControl);

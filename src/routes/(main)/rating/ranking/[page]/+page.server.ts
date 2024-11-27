@@ -18,12 +18,12 @@ export async function load({params}){
             donder: {
                 nickname: e.donder.nickname,
                 taikoNumber: e.donder.taikoNumber
-            } as {nickname: string; taikoNumber: number | null},
+            } as {nickname: string | null; taikoNumber: number | null},
             tier: getTier(e.currentRating)
         }
         
         if(!e.showRatingNickname){
-            data.donder.nickname = '???';
+            data.donder.nickname = null;
         }
         if(!e.showRatingTaikoNo){
             data.donder.taikoNumber = null;

@@ -1,4 +1,3 @@
-import MeasureTable from '$lib/components/page/measures/MeasureTable.svelte';
 import type { SongData } from '$lib/module/common/song/types.js';
 import { getTier } from '$lib/module/common/user/getTier.js';
 import type { UserDonderData, UserScoreData } from '$lib/module/common/user/types.js';

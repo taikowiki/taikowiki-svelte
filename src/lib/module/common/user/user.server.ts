@@ -303,7 +303,6 @@ export const userDonderDBController = {
             await run("UPDATE `user/donder_data` SET `currentRating` = ?, `currentExp` = ?, `ratingData` = ?, `lastRatingCalculate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [currentRating, currentExp, JSON.stringify(ratingData), UUID])
         }
     }),
-
     /**
      * get rank by rating
      */
@@ -338,7 +337,22 @@ export const userDonderDBController = {
 
             return count;
         }
-    }) as () => Promise<number>
+    }) as () => Promise<number>,
+    /**
+     * get user rating
+     */
+    getUserRating: defineDBHandler<[UUID: string], (UserDonderData & Pick<UserData, 'UUID'| 'showRatingNickname' | 'showRatingTaikoNo' | 'showRatingSongs'>) | null>((UUID) => {
+        return async(run) => {
+            const result = await run("SELECT `user/donder_data`.*, `user/data`.`showRatingNickname`, `user/data`.`showRatingTaikoNo`, `user/data`.`showRatingSongs` from `user/donder_data` LEFT OUTER JOIN `user/data` ON `user/donder_data`.`UUID` = `user/data`.`UUID` WHERE `user/donder_data`.`UUID` = ?", [UUID]);
+            
+            if(result.length === 0){
+                return null;
+            }
+
+            result.forEach(parseDonderData);
+            return result[0];
+        }
+    })
 }
 
 // db 동더 데이터 파싱

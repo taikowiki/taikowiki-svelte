@@ -310,6 +310,9 @@ const newJa: RecursiveStringRecord = {
             },
             measures:{
                 heading: '定数表'
+            },
+            user:{
+                nondisclosure: '曲のレーティングは非公開です。'
             }
         }
     }

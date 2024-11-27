@@ -6,7 +6,7 @@
     export let showRating: {
         nickname: boolean;
         taikoNumber: boolean;
-        //songs: boolean;
+        songs: boolean;
     };
 
     $: if(!showRating.nickname){
@@ -37,12 +37,10 @@
                     {i18n.showRatingTaikoNo}
                     <input bind:checked={showRating.taikoNumber} type="checkbox"/>
                 </label>
-                <!--
                 <label>
                     {i18n.showRatingSongs}
                     <input bind:checked={showRating.songs} type="checkbox"/>
                 </label>
-                -->
             </div>
             <button on:click={submit} data-theme={$theme}>
                 {i18n.submit}

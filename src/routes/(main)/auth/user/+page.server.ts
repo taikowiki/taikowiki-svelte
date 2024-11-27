@@ -13,7 +13,7 @@ export async function load({ locals }) {
             showRating:{
                 nickname: Boolean(locals.userData.showRatingNickname),
                 taikoNumber: Boolean(locals.userData.showRatingTaikoNo),
-                //songs: Boolean(locals.userData.showRatingSongs)
+                songs: Boolean(locals.userData.showRatingSongs)
             }
         }
     }

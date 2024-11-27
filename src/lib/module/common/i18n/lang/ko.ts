@@ -315,6 +315,9 @@ const newKo: RecursiveStringRecord = {
             },
             measures:{
                 heading: '상수표'
+            },
+            user:{
+                nondisclosure: '곡 레이팅은 비공개입니다.'
             }
         }
     }

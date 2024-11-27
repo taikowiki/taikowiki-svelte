@@ -17,7 +17,7 @@ const newKo: RecursiveStringRecord = {
             measures: '상수표',
             user: {
                 user: '사용자',
-                donderData: '동더 데이터',
+                donderData: '레이팅',
                 notLogined: '비로그인',
                 login: '로그인',
                 logout: '로그아웃',
@@ -36,7 +36,13 @@ const newKo: RecursiveStringRecord = {
         '/auth/user': {
             user: '유저',
             myData: '내 정보',
-            donderData: '동더 데이터'
+            donderData: '레이팅'
+        },
+        rating: {
+            title: '레이팅',
+            me: '내 레이팅',
+            ranking: '랭킹',
+            measure: '상수표'
         }
     },
     //컴포넌트
@@ -95,6 +101,9 @@ const newKo: RecursiveStringRecord = {
         '/song/[songNo]': '곡 없음',
         '/song/[songNo]/edit': '곡 수정',
         '/song/add': '곡 추가',
+        '/rating/me': '내 레이팅',
+        '/rating/ranking': '랭킹',
+        '/rating/measure': '상수표'
     },
     //단위
     dani: {
@@ -175,7 +184,7 @@ const newKo: RecursiveStringRecord = {
                 diffchart: '서열표',
                 dani: '단위도장',
                 gamecenter: '오락실',
-                myData: '내 정보'
+                rating: '레이팅'
             },
             notice: '공지'
         },
@@ -286,6 +295,30 @@ const newKo: RecursiveStringRecord = {
             song: '곡',
             otherSong: '이외의 곡',
             link: '링크'
+        },
+        user: {
+            showRating: {
+                name: '레이팅 프로필 공개',
+                showRatingNick: '동더히로바 닉네임 공개',
+                showRatingTaikoNo: '동더히로바 북번호 공개',
+                showRatingSongs: '곡 레이팅 공개',
+                submit: '적용'
+            }
+        },
+        rating: {
+            ranking: {
+                heading: '랭킹',
+                ranking: '순위',
+                tier: '티어',
+                rating: '레이팅',
+                nickname: '닉네임'
+            },
+            measures:{
+                heading: '상수표'
+            },
+            user:{
+                nondisclosure: '곡 레이팅은 비공개입니다.'
+            }
         }
     }
 }

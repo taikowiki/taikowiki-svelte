@@ -3,13 +3,17 @@ import type { UserDonderData } from "./types";
 
 export const userRequestor = {
     changeNickname: defineRequestHandler<{ newNickname: string }, string>({
-        "url": "/api/user/change_nickname",
+        "url": "/api/user/change-nickname",
         method: "post"
     }),
     getUserData: defineRequestHandler<null, any>({
         url: "/api/user",
         method: 'get'
     }),
+    changeShowRating: defineRequestHandler<{nickname?: boolean; taikoNumber?: boolean; songs?: boolean}, void>({
+        url: '/api/user/change-show-rating',
+        method: 'post'
+    })
 }
 
 export const userDonderRequestor = {

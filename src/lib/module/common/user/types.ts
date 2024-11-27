@@ -1,5 +1,6 @@
 import type { getRating } from "@taiko-wiki/taiko-rating";
 import type { CardData, Clear, ClearData, ScoreData } from "node-hiroba/types";
+import type { Language } from "../i18n/types";
 
 export interface UserData {
     order: number;
@@ -10,6 +11,10 @@ export interface UserData {
     registerTime: number;
     grade: number;
     providerUserData: Object | null;
+    lang: Language;
+    showRatingNickname: 0 | 1;
+    showRatingTaikoNo: 0 | 1;
+    showRatingSongs: 0 | 1;
 }
 
 export interface UserDonderData {

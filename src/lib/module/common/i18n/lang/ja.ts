@@ -16,7 +16,7 @@ const newJa: RecursiveStringRecord = {
             measures: 'レーティング表',
             user: {
                 user: 'ユーザー',
-                donderData: 'ドンだーデータ',
+                donderData: 'レーティング',
                 notLogined: '非ログイン',
                 login: 'ログイン',
                 logout: 'ログアウト',
@@ -35,7 +35,13 @@ const newJa: RecursiveStringRecord = {
         '/auth/user': {
             user: 'ユーザー',
             myData: 'マイページ',
-            donderData: 'ドンだーデータ'
+            donderData: 'レーティング'
+        },
+        rating:{
+            title: 'レーティング',
+            me: 'マイ·レーティング',
+            ranking: 'ランキング',
+            measure: '定数表'
         }
     },
     component: {
@@ -92,7 +98,10 @@ const newJa: RecursiveStringRecord = {
         '/song': '曲サーチ',
         '/song/[songNo]': '曲なし',
         '/song/[songNo]/edit': '曲修正',
-        '/song/add': '曲追加'
+        '/song/add': '曲追加',
+        '/rating/me': 'マイ·レーティング',
+        '/rating/ranking': 'ランキング',
+        '/rating/measure': '定数表'
     },
     dani: {
         dan: {
@@ -170,7 +179,7 @@ const newJa: RecursiveStringRecord = {
                 diffchart: '難易度表',
                 dani: '段位道場',
                 gamecenter: 'ゲーセン',
-                myData: 'マイページ'
+                rating: 'レーティング'
             },
             notice: 'お知らせ'
         },
@@ -281,6 +290,30 @@ const newJa: RecursiveStringRecord = {
             song: '曲',
             otherSong: 'それ以外の曲',
             link: 'リンク'
+        },
+        user: {
+            showRating: {
+                name: 'レーティング プロフィール公開',
+                showRatingNick: 'マイどん名前公開',
+                showRatingTaikoNo: 'マイどん太鼓番公開',
+                showRatingSongs: '曲レーティング公開',
+                submit: '適用'
+            }
+        },
+        rating: {
+            ranking: {
+                heading: 'ランキング',
+                ranking: '順位',
+                tier: 'ティア',
+                rating: 'レーティング',
+                nickname: '名前'
+            },
+            measures:{
+                heading: '定数表'
+            },
+            user:{
+                nondisclosure: '曲のレーティングは非公開です。'
+            }
         }
     }
 }

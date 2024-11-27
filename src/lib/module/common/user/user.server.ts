@@ -155,6 +155,36 @@ export const userDBController = {
 
             return Object.values(result[0])[0] as string;
         }
+    }),
+    /**
+     * Set Whether Rating Profile Disclose or not.
+     */
+    setShowRating: defineDBHandler<[string, Partial<Record<'nickname' | 'taikoNumber' | 'songs', boolean>>], void>((UUID, options) => {
+        return async(run) => {
+            const setQuery: string[] = [];
+            if(options.nickname === true){
+                setQuery.push('showRatingNickname = 1');
+            }
+            else if(options.nickname === false){
+                setQuery.push('showRatingNickname = 0');
+            }
+            if(options.taikoNumber === true){
+                setQuery.push('showRatingTaikoNo = 1');
+            }
+            else if(options.taikoNumber === false){
+                setQuery.push('showRatingTaikoNo = 0');
+            }
+            if(options.songs === true){
+                setQuery.push('showRatingSongs = 1');
+            }
+            else if(options.songs === false){
+                setQuery.push('showRatingSongs = 0');
+            }
+
+            if(setQuery.length !== 0){
+                await run("UPDATE `user/data` SET " + setQuery.join(',') + " WHERE `UUID` = ?", [UUID]);
+            }
+        }
     })
 }
 
@@ -273,7 +303,6 @@ export const userDonderDBController = {
             await run("UPDATE `user/donder_data` SET `currentRating` = ?, `currentExp` = ?, `ratingData` = ?, `lastRatingCalculate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [currentRating, currentExp, JSON.stringify(ratingData), UUID])
         }
     }),
-
     /**
      * get rank by rating
      */
@@ -286,6 +315,42 @@ export const userDonderDBController = {
                 count,
                 ranking
             }
+        }
+    }),
+    /**
+     * get rankings by page
+     */
+    getRanking: defineDBHandler<[number], any>((page) => {
+        return async(run) => {
+            const limitQuery = `LIMIT ${(page - 1) * 50}, 50`;
+            const result = await run("SELECT `user/donder_data`.`UUID`, `user/donder_data`.`currentRating`, `user/donder_data`.`donder`, `user/data`.`showRatingNickname` , `user/data`.`showRatingTaikoNo` FROM `user/donder_data` LEFT OUTER JOIN `user/data` ON `user/donder_data`.`UUID` = `user/data`.`UUID` WHERE `user/donder_data`.`currentRating` IS NOT NULL ORDER BY `currentRating` DESC " + limitQuery);
+            result.forEach(parseDonderData);
+            return result;
+        }
+    }) as (page: number) => Promise<(Pick<UserDonderData, 'UUID' | 'currentRating' | 'donder'> & Pick<UserData, 'UUID' | 'showRatingNickname' | 'showRatingTaikoNo'> & {currentRating: number;})[]>,
+    /**
+     * count donder data
+     */
+    count: defineDBHandler<[], number>(() => {
+        return async (run) => {
+            const count: number = Object.values((await run("SELECT COUNT(*) FROM `user/donder_data` WHERE `currentRating` IS NOT NULL"))[0])[0] as number;
+
+            return count;
+        }
+    }) as () => Promise<number>,
+    /**
+     * get user rating
+     */
+    getUserRating: defineDBHandler<[UUID: string], (UserDonderData & Pick<UserData, 'UUID'| 'showRatingNickname' | 'showRatingTaikoNo' | 'showRatingSongs'>) | null>((UUID) => {
+        return async(run) => {
+            const result = await run("SELECT `user/donder_data`.*, `user/data`.`showRatingNickname`, `user/data`.`showRatingTaikoNo`, `user/data`.`showRatingSongs` from `user/donder_data` LEFT OUTER JOIN `user/data` ON `user/donder_data`.`UUID` = `user/data`.`UUID` WHERE `user/donder_data`.`UUID` = ?", [UUID]);
+            
+            if(result.length === 0){
+                return null;
+            }
+
+            result.forEach(parseDonderData);
+            return result[0];
         }
     })
 }

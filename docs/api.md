@@ -50,6 +50,7 @@ responseType: {
     nickname: string //user nickname or ip address
 }
 ```
+Retrieves the login status and the user's nickname or IP address.
 
 ### /user/rating
 ```ts
@@ -57,22 +58,37 @@ method: "GET"
 responseType: {
     currentRating: number,
     currentExp: number | null,
-    ratingData: { 
+    ratingDataWithScoreData: { 
         songNo: number,
         difficulty: 'oni' | 'ura', 
         songRating: {
             value: number,
             accuracy: number,
             measureValue: number
-        }
-    }
+        },
+        scoreData: {
+            crown: 'played' | 'silver' | 'gold' | 'donderfull' | null;
+            badge: 'rainbow' | 'purple' | 'pink' | 'gold' | 'silver' | 'bronze' | 'white' | null;
+            score: number,
+            ranking: number,
+            good: number,
+            ok: number,
+            bad: number,
+            maxCombo: number,
+            roll: number,
+            count: {
+                play: number,
+                clear: number,
+                fullcombo: number,
+                donderfullcombo: number,
+            }
+        } | null
+    }[]
 }
 params: {
     all?: ['true'] // If "true", server will send all song rating datas. If not, server will only send top 50 song rating datas.
 }
 ```
-
-Retrieves the login status and the user's nickname or IP address.
 
 ###
 

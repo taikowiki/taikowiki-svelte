@@ -181,7 +181,7 @@ export const songDBController = {
     /**
     * Retrieves specific columns of song data.
     */
-    searchColumns: defineDBHandler<[number | null, string[], SongSearchOption?], { songs: Partial<(SongData & { order: number })>[], count: number }>((page, columns, option) => {
+    searchColumns: defineDBHandler<[page: number | null, columns: string[], option?: SongSearchOption], { songs: Partial<(SongData & { order: number })>[], count: number }>((page, columns, option) => {
         let sqlWhereQuery = "WHERE (1)";
         if (option?.difficulty && option?.level) {
             if (option.difficulty === "oniura") {

@@ -16,7 +16,7 @@ const newEn: RecursiveStringRecord = {
             measures: 'Rating Mesurements',
             user: {
                 user: 'User',
-                donderData: 'Donder Data',
+                donderData: 'Rating',
                 notLogined:'Not Logined',
                 login: 'Login',
                 logout: 'Logout',
@@ -34,7 +34,13 @@ const newEn: RecursiveStringRecord = {
         '/auth/user': {
             user: 'User',
             myData: 'My Data',
-            donderData: 'Donder Data'
+            donderData: 'Rating'
+        },
+        rating:{
+            title: 'Rating',
+            me: 'My Rating',
+            ranking: 'Ranking',
+            measure: 'Measures'
         }
     },
     component: {
@@ -90,7 +96,10 @@ const newEn: RecursiveStringRecord = {
         '/song': 'Search Song',
         '/song/[songNo]': 'No result',
         '/song/[songNo]/edit': 'Request Edit',
-        '/song/add': 'Add Song'
+        '/song/add': 'Add Song',
+        '/rating/me': 'My Rating',
+        '/rating/ranking': 'Ranking',
+        '/rating/measure': 'Measures'
     },
     dani: {
         dan: {
@@ -168,7 +177,7 @@ const newEn: RecursiveStringRecord = {
                 diffchart: 'Difficulty Chart',
                 dani: 'Dan-i Dojo',
                 gamecenter: 'Gamecenter',
-                myData: 'My data'
+                rating: 'Rating'
             },
             notice: 'Notice'
         },
@@ -279,6 +288,30 @@ const newEn: RecursiveStringRecord = {
             song: ' Songs',
             otherSong: 'Other Songs',
             link: 'Link'
+        },
+        user: {
+            showRating: {
+                name: 'Show Rating Profile',
+                showRatingNick: 'Show Donderhiroba Nickname',
+                showRatingTaikoNo: 'Show Donderhiroba Taiko Number',
+                showRatingSongs: 'Show Song Ratings',
+                submit: 'Submit'
+            }
+        },
+        rating: {
+            ranking: {
+                heading: 'Ranking',
+                ranking: 'Ranking',
+                tier: 'Tier',
+                rating: 'Rating',
+                nickname: 'Nickname'
+            },
+            measures:{
+                heading: 'Measures'
+            },
+            user:{
+                nondisclosure: 'Song ratings are private.'
+            }
         }
     }
 }
@@ -369,7 +402,7 @@ const en: LangFile = {
     },
     //path
     '/auth/login': {
-        forLogin: 'for Login'
+        forLogin: ' for Login'
     },
     '/auth/user': {
         nickname: 'Username',

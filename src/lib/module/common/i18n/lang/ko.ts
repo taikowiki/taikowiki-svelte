@@ -101,6 +101,9 @@ const newKo: RecursiveStringRecord = {
         '/song/[songNo]': '곡 없음',
         '/song/[songNo]/edit': '곡 수정',
         '/song/add': '곡 추가',
+        '/rating/me': '내 레이팅',
+        '/rating/ranking': '랭킹',
+        '/rating/measure': '상수표'
     },
     //단위
     dani: {
@@ -300,6 +303,18 @@ const newKo: RecursiveStringRecord = {
                 showRatingTaikoNo: '동더히로바 북번호 공개',
                 showRatingSongs: '곡 레이팅 공개',
                 submit: '적용'
+            }
+        },
+        rating: {
+            ranking: {
+                heading: '랭킹',
+                ranking: '순위',
+                tier: '티어',
+                rating: '레이팅',
+                nickname: '닉네임'
+            },
+            measures:{
+                heading: '상수표'
             }
         }
     }

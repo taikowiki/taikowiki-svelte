@@ -96,7 +96,10 @@ const newEn: RecursiveStringRecord = {
         '/song': 'Search Song',
         '/song/[songNo]': 'No result',
         '/song/[songNo]/edit': 'Request Edit',
-        '/song/add': 'Add Song'
+        '/song/add': 'Add Song',
+        '/rating/me': 'My Rating',
+        '/rating/ranking': 'Ranking',
+        '/rating/measure': 'Measures'
     },
     dani: {
         dan: {
@@ -293,6 +296,18 @@ const newEn: RecursiveStringRecord = {
                 showRatingTaikoNo: 'Show Donderhiroba Taiko Number',
                 showRatingSongs: 'Show Song Ratings',
                 submit: 'Submit'
+            }
+        },
+        rating: {
+            ranking: {
+                heading: 'Ranking',
+                ranking: 'Ranking',
+                tier: 'Tier',
+                rating: 'Rating',
+                nickname: 'Nickname'
+            },
+            measures:{
+                heading: 'Measures'
             }
         }
     }

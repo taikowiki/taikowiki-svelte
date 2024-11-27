@@ -98,7 +98,10 @@ const newJa: RecursiveStringRecord = {
         '/song': '曲サーチ',
         '/song/[songNo]': '曲なし',
         '/song/[songNo]/edit': '曲修正',
-        '/song/add': '曲追加'
+        '/song/add': '曲追加',
+        '/rating/me': 'マイ·レーティング',
+        '/rating/ranking': 'ランキング',
+        '/rating/measure': '定数表'
     },
     dani: {
         dan: {
@@ -295,6 +298,18 @@ const newJa: RecursiveStringRecord = {
                 showRatingTaikoNo: 'マイどん太鼓番公開',
                 showRatingSongs: '曲レーティング公開',
                 submit: '適用'
+            }
+        },
+        rating: {
+            ranking: {
+                heading: 'ランキング',
+                ranking: '順位',
+                tier: 'ティア',
+                rating: 'レーティング',
+                nickname: '名前'
+            },
+            measures:{
+                heading: '定数表'
             }
         }
     }

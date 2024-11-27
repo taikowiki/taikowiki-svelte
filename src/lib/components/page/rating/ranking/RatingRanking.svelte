@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { UserRatingTierName } from "$lib/module/common/user/types";
     import { getTheme } from "$lib/module/layout/theme";
     import TierImage from "../me/TierImage.svelte";
@@ -18,15 +19,17 @@
     export let page: number;
 
     const [theme] = getTheme();
+    const lang = getLang();
+    $: i18n = getI18N($lang).page.rating.ranking;
 </script>
 
 <table>
     <thead>
         <tr>
-            <th> 순위 </th>
-            <th> 티어 </th>
-            <th> 레이팅 </th>
-            <th> 닉네임 </th>
+            <th> {i18n.ranking} </th>
+            <th> {i18n.tier} </th>
+            <th> {i18n.rating} </th>
+            <th class="nickname"> {i18n.nickname} </th>
         </tr>
     </thead>
     <tbody data-theme={$theme}>
@@ -69,14 +72,16 @@
     th {
         padding-inline: 5px;
         font-size: 20px;
-    }
-    td {
         text-align: center;
         min-width: 70px;
-        width: min-content;
+        width: fit-content;
+        text-wrap: nowrap;
     }
-    td.nickname {
+    th.nickname {
         width: 100%;
+    }
+    td{
+        text-align: center;
     }
 
     tbody tr:hover{

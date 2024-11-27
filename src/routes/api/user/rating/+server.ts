@@ -14,9 +14,44 @@ export async function GET({locals, url}){
         throw error(404);
     }
 
+    if(loadAll){
+        var ratingDataWithScoreData = userDonderData.ratingData.map((e) => {
+            const scoreData = userDonderData.scoreData?.[e.songNo]?.difficulty?.[e.difficulty];
+            if(scoreData){
+                return {
+                    ...e,
+                    scoreData
+                }
+            }
+            else{
+                return {
+                    ...e,
+                    scoreData: null
+                }
+            }
+        })
+    }
+    else{
+        var ratingDataWithScoreData = userDonderData.ratingData.slice(0, 50).map((e) => {
+            const scoreData = userDonderData.scoreData?.[e.songNo]?.difficulty?.[e.difficulty];
+            if(scoreData){
+                return {
+                    ...e,
+                    scoreData
+                }
+            }
+            else{
+                return {
+                    ...e,
+                    scoreData: null
+                }
+            }
+        })
+    }
+
     return new Response(JSON.stringify({
         currentRating: userDonderData.currentRating,
         currentExp: userDonderData.currentExp,
-        ratingData: loadAll ? userDonderData.ratingData : userDonderData.ratingData.slice(0, 50)
+        ratingDataWithScoreData
     }))
 }

@@ -246,7 +246,7 @@ export const userDonderDBController = {
     /**
      * get donder data
      */
-    getData: defineDBHandler<[string], UserDonderData | null>((UUID) => {
+    getData: defineDBHandler<[UUID: string], UserDonderData | null>((UUID) => {
         return async (run) => {
             const result = await run("SELECT * FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
 

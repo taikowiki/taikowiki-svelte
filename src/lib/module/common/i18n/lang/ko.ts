@@ -302,7 +302,9 @@ const newKo: RecursiveStringRecord = {
                 showRatingNick: '동더히로바 닉네임 공개',
                 showRatingTaikoNo: '동더히로바 북번호 공개',
                 showRatingSongs: '곡 레이팅 공개',
-                submit: '적용'
+                submit: '적용',
+                success: '적용이 완료되었습니다.',
+                error: '오류가 발생했습니다.'
             }
         },
         rating: {

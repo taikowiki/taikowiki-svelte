@@ -11,7 +11,7 @@ export const logger: Handle = async ({ event, resolve }) => {
             UUID = event.locals.userData.UUID
         }
         await runQuery(async (run) => {
-            return await run("INSERT INTO `log` (`UUID`, `ip`, `path`) VALUES (?, ?, ?)", [UUID, event.getClientAddress(), event.url.pathname]);
+            return await run("INSERT INTO `log` (`UUID`, `ip`, `path`) VALUES (?, ?, ?)", [UUID, event.getClientAddress(), event.url.pathname + event.url.search]);
         })
     }
     catch { }

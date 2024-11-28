@@ -297,7 +297,9 @@ const newJa: RecursiveStringRecord = {
                 showRatingNick: 'マイどん名前公開',
                 showRatingTaikoNo: 'マイどん太鼓番公開',
                 showRatingSongs: '曲レーティング公開',
-                submit: '適用'
+                submit: '適用',
+                success: '適用が完了しました。',
+                error: 'エラーが発生しました。'
             }
         },
         rating: {

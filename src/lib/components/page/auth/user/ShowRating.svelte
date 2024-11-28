@@ -18,7 +18,13 @@
     $: i18n = getI18N($lang).page.user.showRating;
 
     async function submit(){
-        await userRequestor.changeShowRating(showRating);
+        const response = await userRequestor.changeShowRating(showRating);
+        if(response.status === "success"){
+            alert('적용이 완료되었습니다.');
+        }
+        else{
+            alert('에러가 발생했습니다.');
+        }
     }
 </script>
 

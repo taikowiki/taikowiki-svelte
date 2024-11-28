@@ -295,7 +295,9 @@ const newEn: RecursiveStringRecord = {
                 showRatingNick: 'Show Donderhiroba Nickname',
                 showRatingTaikoNo: 'Show Donderhiroba Taiko Number',
                 showRatingSongs: 'Show Song Ratings',
-                submit: 'Submit'
+                submit: 'Submit',
+                success: 'Success.',
+                error: 'Error.'
             }
         },
         rating: {

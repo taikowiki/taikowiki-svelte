@@ -10,7 +10,7 @@
         currentRating: number;
         donder: {
             nickname: string | null;
-            taikoNumber: number | null;
+            taikoNumber: string | null;
         };
         tier: {
             tierName: UserRatingTierName;

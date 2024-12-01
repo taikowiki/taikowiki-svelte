@@ -12,7 +12,7 @@
 </script>
 
 <div class="container">
-    <!--<BasicEditor bind:songNo={songData.songNo} {type} {isAdmin}/>-->
+    <BasicEditor bind:songNo={songData.songNo} {type} {isAdmin}/>
     <!--<TitleEditor
         bind:title={songData.title}
         bind:titleKo={songData.titleKo}

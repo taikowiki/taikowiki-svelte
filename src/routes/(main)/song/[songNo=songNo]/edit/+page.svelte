@@ -15,7 +15,7 @@
     $: titleI18n = getI18N('other', $lang).title['/song/[songNo]/edit']
 </script>
 
-<!--<PageTitle title={`${titleI18n} - ${data.song?.title ?? ''}`}/>-->
+<PageTitle title={`${titleI18n} - ${data.song?.title ?? ''}`}/>
 
 <!--<SongEditor bind:songData type="edit" />-->
 

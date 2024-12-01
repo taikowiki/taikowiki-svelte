@@ -8,8 +8,7 @@
     import PageTitle from "$lib/components/common/PageTitle.svelte";
 
     export let data;
-    let maybeSongData: SongData|null = data.song;
-    let songData = maybeSongData as SongData;
+    let songData = data.song;
 
     const lang = getLang();
     $: titleI18n = getI18N('other', $lang).title['/song/[songNo]/edit']

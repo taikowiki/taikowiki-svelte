@@ -222,7 +222,6 @@
                                 {/if}
                             </td>
                         </tr>
-                        <!--
                         <tr>
                             <td> 보면 이미지 </td>
                             <td>
@@ -232,11 +231,11 @@
                                     >
                                         <button
                                             on:click={() => {
-                                                course.images.push("");
-                                                course.images = course.images;
+                                                course.images = [...course.images, ""];
                                             }}>추가</button
                                         >
                                     </div>
+                                    <!--
                                     {#each course.images as image, i}
                                         <div class="image-container">
                                             <input
@@ -255,10 +254,10 @@
                                             >
                                         </div>
                                     {/each}
+                                    -->
                                 </div>
                             </td>
                         </tr>
-                        -->
                     </table>
                 {/if}
             </td>

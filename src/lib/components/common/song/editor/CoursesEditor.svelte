@@ -11,7 +11,7 @@
 <TitledContainer title="보면" color="#cf4844">
     <table>
         {#each DIFFICULTY as difficulty}
-            <CourseEditor {difficulty} bind:course={courses[difficulty]} />
+            <!--<CourseEditor {difficulty} bind:course={courses[difficulty]} />-->
         {/each}
     </table>
 </TitledContainer>

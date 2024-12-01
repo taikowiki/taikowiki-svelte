@@ -87,4 +87,4 @@ Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(cors, authHandle, getUserData, logger, BanController.checkIp, checkPermission, setAssetsCacheControl);
+export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission, setAssetsCacheControl, dynamicHtmlLang);

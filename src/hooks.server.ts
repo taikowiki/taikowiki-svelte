@@ -7,6 +7,7 @@ import { config } from 'dotenv';
 import checkPermissions from "$lib/module/server/hooks/permissionCheck.server";
 import BanController from "$lib/module/server/hooks/ban-controller.server";
 import allowOrigin from "$lib/module/server/hooks/allow-origin";
+import { dynamicHtmlLang } from "$lib/module/server/hooks/dynamicHtmlLang.server";
 
 //import logger from "$lib/module/server/hooks/logger.server";
 
@@ -81,4 +82,4 @@ Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission, setAssetsCacheControl);
+export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission, setAssetsCacheControl, dynamicHtmlLang);

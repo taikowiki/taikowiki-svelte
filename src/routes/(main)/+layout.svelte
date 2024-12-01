@@ -42,7 +42,7 @@
     import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n";
     import { writable, get, type Writable } from "svelte/store";
     import { type PathLangFile } from "$lib/module/common/i18n/types.js";
-    import { afterUpdate, onMount, setContext } from "svelte";
+    import { afterUpdate, getContext, onMount, setContext } from "svelte";
     import {
         afterNavigate,
         beforeNavigate,
@@ -55,6 +55,7 @@
     import { userRequestor } from "$lib/module/common/user/user.client.js";
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
+    import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
 
     export let data;
     //deepFreeze songs
@@ -71,6 +72,12 @@
     const i18nPage = writable<PathLangFile>(setI18N($lang, $page.url.pathname));
     setContext("i18n", i18nPage);
     $: $i18nPage = setI18N($lang, $page.url.pathname);
+    const usingLangParam: boolean = getContext("usingLangParam");
+    beforeNavigate((navigation) => {
+        if (usingLangParam) {
+            navigation.to?.url?.searchParams?.set?.("lang", $lang);
+        }
+    });
 
     //page aside
     const pageAside = usePageAside();
@@ -103,10 +110,14 @@
     afterNavigate((navigation) => {
         try {
             if (navigation.delta === undefined) {
-                const pageScrollsArr = [...pageScrolls].toSorted((a, b) => a[0] - b[0]);
-                const pagePositionIndex = pageScrollsArr.findIndex(([idx, _]) => idx === pagePosition);
+                const pageScrollsArr = [...pageScrolls].toSorted(
+                    (a, b) => a[0] - b[0],
+                );
+                const pagePositionIndex = pageScrollsArr.findIndex(
+                    ([idx, _]) => idx === pagePosition,
+                );
                 pageScrolls = new Map(
-                    pageScrollsArr.slice(0, pagePositionIndex + 1)
+                    pageScrollsArr.slice(0, pagePositionIndex + 1),
                 );
                 pagePosition = pagePosition + 1;
             } else {
@@ -149,6 +160,9 @@
         {/if}
     {/if}
 </svelte:head>
+{#key $navigating}
+<HrefLang />
+{/key}
 
 <div>
     <Header>

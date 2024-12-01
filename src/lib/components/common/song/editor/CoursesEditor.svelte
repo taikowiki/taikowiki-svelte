@@ -9,15 +9,15 @@
 </script>
 
 <TitledContainer title="보면" color="#cf4844">
-    <table>
+    <div>
         {#each DIFFICULTY as difficulty}
             <CourseEditor {difficulty} bind:course={courses[difficulty]} />
         {/each}
-    </table>
+    </div>
 </TitledContainer>
 
 <style>
-    table {
+    div {
         width: 100%;
         border-collapse: collapse;
     }

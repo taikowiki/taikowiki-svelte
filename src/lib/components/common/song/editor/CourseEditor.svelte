@@ -58,6 +58,7 @@
                     />
                 {/if}
             </td>
+            <!--
             <td>
                 {#if course !== null}
                     <table class="data">
@@ -260,6 +261,7 @@
                     </table>
                 {/if}
             </td>
+            -->
         </tr>
     </table>
 </div>

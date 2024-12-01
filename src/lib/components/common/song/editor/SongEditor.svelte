@@ -20,7 +20,7 @@
         bind:titleEn={songData.titleEn}
         bind:aliasEn={songData.aliasEn}
     />
-    <!--<OtherEditor
+    <OtherEditor
         bind:bpm={songData.bpm}
         bind:bpmShiver={songData.bpmShiver}
         bind:version={songData.version}
@@ -30,7 +30,7 @@
         bind:isDeleted={songData.isDeleted}
         bind:isKrBanned={songData.isKrBanned}
         bind:addedDate={songData.addedDate}
-    />-->
+    />
     <!--<CoursesEditor bind:courses={songData.courses} />-->
 </div>
 

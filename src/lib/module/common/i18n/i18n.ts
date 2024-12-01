@@ -1,11 +1,13 @@
 import { getContext, setContext } from "svelte";
 import { type I18N, type Language, type RecursiveStringRecord } from "./types"
-import { writable, type Writable } from "svelte/store";
+import { get, writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
 import ko from "./lang/ko";
 import en from './lang/en';
 import ja from './lang/ja';
 import axios, { type AxiosResponse } from "axios";
+import { page } from "$app/stores";
+import Cookies from 'js-cookie';
 
 const i18nProxyTarget: I18N = {
     ko,
@@ -108,42 +110,52 @@ function getNavigatorLang() {
 
 export function useLang() {
     let lang: Writable<Language | string>;
+    let usingLangParam = false;
     if (browser) {
-        //@ts-expect-error
-        lang = writable<Language | string>((Object.keys(i18nProxyTarget).includes(window.localStorage.getItem('lang')) ? window.localStorage.getItem('lang') : undefined) ?? getNavigatorLang());
-        axios({
-            url: '/api/user/lang/get',
-            method: 'get'
-        }).then((response: AxiosResponse) => {
-            if (response.data in i18nProxyTarget) {
-                lang.set(response.data);
-            }
-        }).catch((err) => {
-            console.warn(err);
-        })
+        const urlLang = get(page).url.searchParams.get('lang');
+        if(urlLang && (Object.keys(i18nProxyTarget).includes(urlLang))){
+            lang = writable<Language | string>(urlLang);
+            usingLangParam = true;
+        }
+        else{
+            //@ts-expect-error
+            lang = writable<Language | string>((Object.keys(i18nProxyTarget).includes(window.localStorage.getItem('lang')) ? window.localStorage.getItem('lang') : undefined) ?? getNavigatorLang());
+        }
     }
     else {
-        lang = writable<Language | string>('ko');
+        const urlLang = get(page).url.searchParams.get('lang');
+        if(urlLang && (Object.keys(i18nProxyTarget).includes(urlLang))){
+            lang = writable<Language | string>(urlLang);
+            usingLangParam = true;
+        }
+        else{
+            lang = writable<Language | string>('ko');
+        }
     }
 
     lang.subscribe((value) => {
         if (browser && typeof (window) !== "undefined") {
-            window.localStorage.setItem('lang', value);
-            try {
-                axios({
-                    url: '/api/user/lang/set',
-                    data: {
-                        lang: value
-                    },
-                    method: 'post'
-                })
-            } catch (err) {
-                console.warn(err);
+            const urlLang = get(page).url.searchParams.get('lang');
+            if(!urlLang || !(Object.keys(i18nProxyTarget).includes(urlLang))){
+                window.localStorage.setItem('lang', value);
+                Cookies.set('language', value);
+                try {
+                    axios({
+                        url: '/api/user/lang/set',
+                        data: {
+                            lang: value
+                        },
+                        method: 'post'
+                    })
+                } catch (err) {
+                    //console.warn(err);
+                }
             }
         }
     })
 
     setContext('lang', lang);
+    setContext('usingLangParam', usingLangParam);
     return lang;
 }
 

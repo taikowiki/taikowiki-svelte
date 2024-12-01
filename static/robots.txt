@@ -1,2 +1,5 @@
 User-agent: *
 Disallow: /auth/
+Disallow: /rating/user/
+Disallow: /rating/me
+Disallow: /rating

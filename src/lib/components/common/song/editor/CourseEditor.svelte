@@ -3,6 +3,7 @@
     import color from "$lib/module/common/color";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Course, Difficulty } from "$lib/module/common/song/types";
+    import { getIsMobile } from "$lib/module/layout/isMobile";
     import DaniEditor from "./DaniEditor.svelte";
 
     export let difficulty: Difficulty;
@@ -31,6 +32,7 @@
         course.isBranched = Number(isBranched) as 0 | 1;
     }
 
+    const isMobile = getIsMobile();
     const lang = getLang();
     $: i18n = getI18N("component", $lang).SongEditor;
 </script>
@@ -40,7 +42,7 @@
 >
     <table class="wrapper">
         <tr>
-            <td class="r" style="font-weight:bold">
+            <td class="r" data-isMobile={isMobile} style="font-weight:bold">
                 {i18n.difficulties[difficulty]}
                 {#if difficulty === "ura"}
                     <input
@@ -48,7 +50,7 @@
                         checked={!(course === null)}
                         on:change={(event) => {
                             if (event.currentTarget.checked) {
-                                course = init;
+                                course = structuredClone(init);
                             } else {
                                 course = null;
                             }
@@ -229,8 +231,7 @@
                                     >
                                         <button
                                             on:click={() => {
-                                                course.images.push("");
-                                                course.images = course.images;
+                                                course.images = [...course.images, ""];
                                             }}>추가</button
                                         >
                                     </div>
@@ -238,16 +239,13 @@
                                         <div class="image-container">
                                             <input
                                                 type="text"
-                                                bind:value={image}
+                                                bind:value={course.images[i]}
                                                 placeholder="이미지 주소"
                                             />
                                             <button
                                                 on:click={() => {
                                                     course.images =
-                                                        course.images.filter(
-                                                            (_, index) =>
-                                                                index !== i,
-                                                        );
+                                                        course.images.filter((_, index) => index !== i);
                                                 }}>X</button
                                             >
                                         </div>
@@ -302,10 +300,8 @@
     .r {
         width: 150px;
     }
-    @media only screen and (max-width: 1000px) {
-        .r {
-            width: 80px;
-        }
+    .r[data-isMobile="true"] {
+        width: 80px;
     }
 
     .dani-container {

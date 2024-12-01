@@ -50,7 +50,7 @@
                         checked={!(course === null)}
                         on:change={(event) => {
                             if (event.currentTarget.checked) {
-                                course = init;
+                                course = structuredClone(init);
                             } else {
                                 course = null;
                             }
@@ -235,26 +235,21 @@
                                             }}>추가</button
                                         >
                                     </div>
-                                    <!--
                                     {#each course.images as image, i}
                                         <div class="image-container">
                                             <input
                                                 type="text"
-                                                bind:value={image}
+                                                bind:value={course.images[i]}
                                                 placeholder="이미지 주소"
                                             />
                                             <button
                                                 on:click={() => {
                                                     course.images =
-                                                        course.images.filter(
-                                                            (_, index) =>
-                                                                index !== i,
-                                                        );
+                                                        course.images.filter((_, index) => index !== i);
                                                 }}>X</button
                                             >
                                         </div>
                                     {/each}
-                                    -->
                                 </div>
                             </td>
                         </tr>

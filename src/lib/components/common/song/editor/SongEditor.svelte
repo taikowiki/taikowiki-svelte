@@ -31,7 +31,7 @@
         bind:isKrBanned={songData.isKrBanned}
         bind:addedDate={songData.addedDate}
     />
-    <!--<CoursesEditor bind:courses={songData.courses} />-->
+    <CoursesEditor bind:courses={songData.courses} />
 </div>
 
 <style>

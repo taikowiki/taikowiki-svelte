@@ -12,15 +12,15 @@
 </script>
 
 <div class="container">
-    <BasicEditor bind:songNo={songData.songNo} {type} {isAdmin}/>
-    <TitleEditor
+    <!--<BasicEditor bind:songNo={songData.songNo} {type} {isAdmin}/>-->
+    <!--<TitleEditor
         bind:title={songData.title}
         bind:titleKo={songData.titleKo}
         bind:aliasKo={songData.aliasKo}
         bind:titleEn={songData.titleEn}
         bind:aliasEn={songData.aliasEn}
-    />
-    <OtherEditor
+    />-->
+    <!--<OtherEditor
         bind:bpm={songData.bpm}
         bind:bpmShiver={songData.bpmShiver}
         bind:version={songData.version}
@@ -30,8 +30,8 @@
         bind:isDeleted={songData.isDeleted}
         bind:isKrBanned={songData.isKrBanned}
         bind:addedDate={songData.addedDate}
-    />
-    <CoursesEditor bind:courses={songData.courses} />
+    />-->
+    <!--<CoursesEditor bind:courses={songData.courses} />-->
 </div>
 
 <style>

@@ -58,7 +58,6 @@
                     />
                 {/if}
             </td>
-            <!--
             <td>
                 {#if course !== null}
                     <table class="data">
@@ -223,6 +222,7 @@
                                 {/if}
                             </td>
                         </tr>
+                        <!--
                         <tr>
                             <td> 보면 이미지 </td>
                             <td>
@@ -258,10 +258,10 @@
                                 </div>
                             </td>
                         </tr>
+                        -->
                     </table>
                 {/if}
             </td>
-            -->
         </tr>
     </table>
 </div>

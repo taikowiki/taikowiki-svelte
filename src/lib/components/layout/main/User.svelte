@@ -6,6 +6,7 @@
     import UserInfo from "./User-Info.svelte";
     import { page } from "$app/stores";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getContext } from "svelte";
 
     let opened = false;
     function close() {
@@ -27,6 +28,7 @@
 
     const [theme] = getTheme();
 
+    const usingLangParam = getContext("usingLangParam");
     const lang = getLang();
     $: i18n = getI18N($lang).layout.main.user;
 
@@ -73,7 +75,9 @@
         <UserItem separated height="30px">
             <span slot="left">{i18n.theme}</span><ThemeToggler slot="right" />
         </UserItem>
-        <LanguageItem />
+        {#if !usingLangParam}
+            <LanguageItem />
+        {/if}
     </div>
 </div>
 

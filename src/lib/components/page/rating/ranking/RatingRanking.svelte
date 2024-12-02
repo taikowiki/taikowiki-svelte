@@ -35,7 +35,7 @@
     </thead>
     <tbody data-theme={$theme}>
         {#each rankings as ranking, index}
-            <tr on:click={() => {goto(`/rating/user/${ranking.UUID}`)}}>
+            <a class="table-row" href={`/rating/user/${ranking.UUID}`}>
                 <td> {(page - 1) * 50 + index + 1} </td>
                 <td>
                     <div class="tier-image">
@@ -66,7 +66,7 @@
                         </span>
                     {/if}
                 </td>
-            </tr>
+            </a>
         {/each}
     </tbody>
 </table>
@@ -91,11 +91,16 @@
         text-align: center;
     }
 
-    tbody tr:hover {
+    .table-row{
+        display:table-row;
+        vertical-align: inherit;
+        color:inherit;
+    }
+    tbody .table-row:hover {
         background-color: rgb(228, 228, 228);
         cursor: pointer;
     }
-    tbody[data-theme="dark"] tr:hover {
+    tbody[data-theme="dark"] .table-row:hover {
         background-color: rgb(53, 53, 53);
     }
 

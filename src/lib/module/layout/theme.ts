@@ -2,6 +2,7 @@ import { browser } from "$app/environment";
 import { getContext, setContext } from "svelte";
 import { get, writable, type Writable } from "svelte/store";
 import type { Action } from "svelte/action";
+import Cookies from 'js-cookie'
 
 /**
  * Save a store to the context indicating theme(light or dark).
@@ -20,10 +21,7 @@ export default function useTheme(init?: 'light' | 'dark'): [Writable<'light' | '
         theme.subscribe((value) => {
             document.body.setAttribute("data-theme", value);
             window.localStorage.theme = value;
-            (async() => {
-                const cookieStore = (await import('$lib/module/common/util.client')).cookieStore;
-                cookieStore.set('theme', value);
-            })().catch()
+            Cookies.set('theme', value);
         })
     }
     else {

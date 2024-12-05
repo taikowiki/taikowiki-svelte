@@ -227,7 +227,7 @@
     }
 
     .detail-layer1 {
-        width: calc(100% - 178px);
+        width: calc(100% - 250px);
 
         display: flex;
         justify-content: center;
@@ -248,7 +248,11 @@
         justify-content: center;
         align-items: center;
 
-        width: 178px;
+        width: 250px;
+
+        & > div:not(.crown-wrapper){
+            width: calc((100% - 34px) / 3);
+        }
     }
     .detail-layer2 > div {
         border-left: 1px solid black;
@@ -260,15 +264,6 @@
     }
     .song[data-theme="dark"] .detail-layer2 > div {
         border-color: rgb(142, 142, 142);
-    }
-    .accuracy {
-        width: 62px;
-    }
-    .measure {
-        width: 33px;
-    }
-    .rating-value {
-        width: 48px;
     }
     .crown-wrapper {
         display: flex;

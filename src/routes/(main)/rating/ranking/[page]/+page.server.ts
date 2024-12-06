@@ -18,7 +18,7 @@ export async function load({ params, locals }) {
             donder: {
                 nickname: e.donder.nickname,
                 taikoNumber: e.donder.taikoNumber
-            } as { nickname: string | null; taikoNumber: number | null },
+            } as {nickname: string | null; taikoNumber: string | null},
             tier: getTier(e.currentRating)
         }
 

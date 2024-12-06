@@ -75,7 +75,7 @@
         <UserItem separated height="30px">
             <span slot="left">{i18n.theme}</span><ThemeToggler slot="right" />
         </UserItem>
-        {#if !usingLangParam}
+        {#if !(usingLangParam && $page.data.isBot)}
             <LanguageItem />
         {/if}
     </div>

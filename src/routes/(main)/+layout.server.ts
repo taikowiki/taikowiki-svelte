@@ -1,6 +1,7 @@
 import { bannerDBController } from '$lib/module/common/banner/banner.server.js';
 import { songDBController } from '$lib/module/common/song/song.server';
 import { UAParser } from 'ua-parser-js';
+import {isbot} from 'isbot';
 
 export async function load({ locals, request, cookies, getClientAddress }) {
     if (locals.userData) {
@@ -26,6 +27,12 @@ export async function load({ locals, request, cookies, getClientAddress }) {
         }
     }
 
+    // IsBot
+    let isBot = false;
+    if(userAgent){
+        isBot = isbot(userAgent);
+    }
+
     // Use cookie to get theme
     const themeCookie = cookies.get('theme');
     let theme: 'light' | 'dark' = 'light';
@@ -39,6 +46,7 @@ export async function load({ locals, request, cookies, getClientAddress }) {
         version: (await import('../../../package.json')).version,
         kakaoKey: process.env.KAKAO_JAVASCRIPT_KEY,
         isMobile,
+        isBot,
         theme,
         asideBanners: await bannerDBController.getAsideBanner()
     }

@@ -4,7 +4,7 @@
     import TierImage from "../me/TierImage.svelte";
     import TierProgress from "../me/TierProgress.svelte";
     import GradeProgress from "../me/GradeProgress.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    //import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     export let currentRating: number;
     export let currentExp: number | null;
@@ -15,8 +15,8 @@
         exp: currentExp
     }
 
-    const lang = getLang();
-    $: i18n = getI18N($lang).page.donder.rating
+    //const lang = getLang();
+    //$: i18n = getI18N($lang).page.donder.rating
 </script>
 
 <div class="container">

@@ -16,6 +16,7 @@
             class="icon-anchor"
             href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`太鼓の達人 ${title}`)}`}
             data-theme={$theme}
+            target="_blank"
         >
             <img class="icon" src="/assets/icon/youtube.svg" alt="edit" />
         </a>

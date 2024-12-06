@@ -428,7 +428,7 @@ const en: LangFile = {
         crown: 'Crown',
         rating: 'Ratings',
         hiroba: 'Hiroba',
-        measureValue: 'Mesurements',
+        measureValue: 'Mesurement',
         uploadGuide: mdToHtml(ratingUploadGuide),
         explanation: mdToHtml(ratingExplanation)
     },

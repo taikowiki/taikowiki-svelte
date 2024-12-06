@@ -74,7 +74,7 @@
     $: $i18nPage = setI18N($lang, $page.url.pathname);
     const usingLangParam: boolean = getContext("usingLangParam");
     beforeNavigate((navigation) => {
-        if (usingLangParam) {
+        if (usingLangParam && data.isBot) {
             navigation.to?.url?.searchParams?.set?.("lang", $lang);
         }
     });

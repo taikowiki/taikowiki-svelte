@@ -1,72 +1,42 @@
 <script lang="ts">
     import type { SongData } from "$lib/module/common/song/types";
-    import color from "$lib/module/common/color";
-    import type { UserDonderData, UserScoreData } from "$lib/module/common/user/types";
+    import type { UserScoreData } from "$lib/module/common/user/types";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { getRating } from "@taiko-wiki/taiko-rating";
+    import SongRatingItem from "../me/SongRatingItem.svelte";
 
     export let songDatas: Pick<SongData, "songNo" | "title">[];
     export let scoreData: UserScoreData;
     export let ratingData: ReturnType<typeof getRating>['songRatingDatas'];
 
-    let subOpened = false;
-
     const [theme] = getTheme();
     const lang = getLang();
-    $: i18n = getI18N("/auth/user/donder", $lang);
     $: newI18n = getI18N($lang).page.donder;
-
-    function getDiffNum(diff: "oni" | "ura") {
-        if (diff === "oni") {
-            return 4;
-        } else {
-            return 5;
-        }
-    }
 </script>
 
 <div class="center">
     <h3>{newI18n.rating.top} 50{newI18n.song}</h3>
-    <table data-theme={$theme}>
-        <tr>
-            <th class="song-title"> {i18n.songTitle} </th>
-            <th> {i18n.measureValue} </th>
-            <th> {i18n.accuracy} </th>
-            <th> {i18n.crown} </th>
-            <th> {i18n.rating} </th>
-        </tr>
+    <div class="song-container" data-theme={$theme}>
         {#each ratingData.slice(0, Math.min(50, ratingData.length)) as songRatingData, index}
-            {@const song = songDatas.find(
+            {@const songData = songDatas.find(
                 ({ songNo }) => songNo === songRatingData.songNo.toString(),
             )}
-            {@const songScoreData = scoreData?.[songRatingData.songNo]}
-            <tr class="song top50">
-                <td class="song-title">
-                    <a
-                        style={`color:${color.difficulty[songRatingData.difficulty]} !important;font-weight: bold;`}
-                        href={`/song/${songRatingData.songNo}`}
-                    >
-                        {song?.title}
-                    </a>
-                </td>
-                <td>
-                    {songRatingData.songRating.measureValue}
-                </td>
-                <td>
-                    {Math.round(songRatingData.songRating.accuracy * 100) /
-                        100}%
-                </td>
-                <td>
-                    {songScoreData?.difficulty[songRatingData.difficulty]
-                        ?.crown}
-                </td>
-                <td>
-                    {Math.round(songRatingData.songRating.value)}
-                </td>
-            </tr>
+            {@const songDifficultyScoreData =
+                scoreData[songRatingData.songNo]?.difficulty?.[
+                    songRatingData.difficulty
+                ]}
+            {#if songData && songDifficultyScoreData}
+                <SongRatingItem
+                    {songRatingData}
+                    {songData}
+                    {songDifficultyScoreData}
+                    isTop50={true}
+                    order={index + 1}
+                />
+            {/if}
         {/each}
-    </table>
+    </div>
 </div>
 
 <style>
@@ -82,37 +52,7 @@
         width: 100%;
         margin-block: 0;
     }
-    table {
+    .song-container {
         width: 100%;
-        border-collapse: collapse;
-    }
-
-    th {
-        font-size: medium;
-        word-break: keep-all;
-    }
-    td {
-        border: 1px solid black;
-        text-align: center;
-        box-sizing: border-box;
-        padding-bottom: 4px;
-        word-break: keep-all;
-    }
-
-    .song-title {
-        word-break: break-all;
-    }
-
-    td:not(:nth-child(1)) {
-        padding-inline: 3px;
-    }
-
-    table[data-theme="dark"] td {
-        border-color: rgb(142, 142, 142);
-    }
-
-    .top50 {
-        background-color: #ffdbe2;
-        color: black;
     }
 </style>

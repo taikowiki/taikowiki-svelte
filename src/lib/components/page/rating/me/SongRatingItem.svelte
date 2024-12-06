@@ -65,12 +65,13 @@
             <div class="detail-head">
                 <div class="detail-preview" data-isMobile={$isMobile}>
                     <div class="detail-layer1">
-                        <div
+                        <a
                             class="song-title"
                             style={`color:${color.difficulty[songRatingData.difficulty]};`}
+                            href={`/song/${songRatingData.songNo}?diff=${songRatingData.difficulty}`}
                         >
                             {songData.title}
-                        </div>
+                        </a>
                     </div>
                     <div class="detail-layer2">
                         <div class="crown-wrapper" title={i18n.crown}>

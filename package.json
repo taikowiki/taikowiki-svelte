@@ -45,6 +45,7 @@
 		"cookie-store": "^3.0.0",
 		"css-filter-converter": "^1.0.109",
 		"html2canvas": "^1.4.1",
+		"isbot": "^5.1.17",
 		"js-cookie": "^3.0.5",
 		"kakao.maps.d.ts": "^0.1.40",
 		"luxon": "^3.5.0",

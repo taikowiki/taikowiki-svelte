@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Course, SongData } from "$lib/module/common/song/types";
     import type { Measure } from "@taiko-wiki/taiko-rating/src/types";
-    import createSSC from "styled-svelte-component/svelte4";
+    import styled from "styled-svelte5";
     import groupBy from "object.groupby";
     import MeasureSubGroup from "./MeasureSubGroup.svelte";
 
@@ -35,7 +35,7 @@
         (measure) => measure.measureValue,
     );
 
-    const GroupTitle = createSSC<{ group: number; }>(
+    const GroupTitle = styled<{ group: number; }>(
         "div",
         ({ group }) => `
     border-bottom:3px solid ${getColor(group)};

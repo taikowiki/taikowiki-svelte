@@ -1,5 +1,5 @@
 <script lang="ts">
-    import createSSC from "styled-svelte-component/svelte4";
+    import styled from "styled-svelte5";
     import { Row } from "../../common/styled";
     import MainSearchTypeSelector from "./MainSearchTypeSelector.svelte";
     import { getTheme } from "$lib/module/layout/theme";
@@ -14,7 +14,7 @@
 
     let selectorOpened: boolean;
 
-    const Container = createSSC<{
+    const Container = styled<{
         theme: "light" | "dark";
         selectorOpened: boolean;
     }>(

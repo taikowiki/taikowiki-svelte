@@ -6,13 +6,21 @@
     import CoursesEditor from "$lib/components/common/song/editor/CoursesEditor.svelte";
     import BasicEditor from "./BasicEditor.svelte";
 
-    export let songData: SongData;
-    export let type: 'edit'|'new' = 'new';
-    export let isAdmin: boolean = false;
+    interface Props {
+        songData: SongData;
+        type: "edit" | "new";
+        isAdmin?: boolean;
+    }
+
+    let {
+        songData = $bindable(),
+        type = "new",
+        isAdmin = false,
+    }: Props = $props();
 </script>
 
 <div class="container">
-    <BasicEditor bind:songNo={songData.songNo} {type} {isAdmin}/>
+    <BasicEditor bind:songNo={songData.songNo} {type} {isAdmin} />
     <TitleEditor
         bind:title={songData.title}
         bind:titleKo={songData.titleKo}

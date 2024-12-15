@@ -34,80 +34,82 @@
         }`}
     >
         <table data-theme={$theme}>
-            <tr class={course.images.length ? "no-image" : "has-image"}>
-                <td> {i18n.combos} </td>
-                <td>
-                    {course.maxCombo}
-                </td>
-                <td> {i18n.branched} </td>
-                <td>
-                    {course.isBranched ? "O" : "X"}
-                </td>
-            </tr>
-            <tr class={course.images.length ? "no-image" : "has-image"}>
-                <td>{i18n.balloons}</td>
-                <td>
-                    <div
-                        class="opener"
-                        class:opened={balloonOpened}
-                        on:click={() => {
-                            balloonOpened = !balloonOpened;
-                        }}
-                        role="presentation"
-                    >
-                        {i18n.total}
-                        <span style="font-weight:bold;"
-                            >{course.balloon.reduce(
-                                (partial, current) => partial + current,
-                                0,
-                            )}</span
-                        >{i18n.count}
-                    </div>
-                    {#if balloonOpened}
-                        <div class="detail">
-                            {course.balloon.join(", ")}
-                        </div>
-                    {/if}
-                </td>
-                <td> {i18n.roll} </td>
-                <td>
-                    <div
-                        class="opener"
-                        class:opened={rollOpened}
-                        on:click={() => {
-                            rollOpened = !rollOpened;
-                        }}
-                        role="presentation"
-                    >
-                        {i18n.total}
-                        <span style="font-weight:bold;"
-                            >{Math.round(
-                                course.rollTime.reduce(
+            <tbody>
+                <tr class={course.images.length ? "no-image" : "has-image"}>
+                    <td> {i18n.combos} </td>
+                    <td>
+                        {course.maxCombo}
+                    </td>
+                    <td> {i18n.branched} </td>
+                    <td>
+                        {course.isBranched ? "O" : "X"}
+                    </td>
+                </tr>
+                <tr class={course.images.length ? "no-image" : "has-image"}>
+                    <td>{i18n.balloons}</td>
+                    <td>
+                        <div
+                            class="opener"
+                            class:opened={balloonOpened}
+                            on:click={() => {
+                                balloonOpened = !balloonOpened;
+                            }}
+                            role="presentation"
+                        >
+                            {i18n.total}
+                            <span style="font-weight:bold;"
+                                >{course.balloon.reduce(
                                     (partial, current) => partial + current,
                                     0,
-                                ) * 1000,
-                            ) / 1000}</span
-                        >{i18n.sec}
-                    </div>
-                    {#if rollOpened}
-                        <div class="detail">
-                            {course.rollTime.join(", ")}
+                                )}</span
+                            >{i18n.count}
                         </div>
-                    {/if}
-                </td>
-            </tr>
-            <tr class={course.images.length ? "no-image" : "has-image"}>
-                <td>{i18n.density}</td>
-                <td>
-                    {course.maxDensity}
-                    {i18n.hitsec}
-                </td>
-                <td> {i18n.playTime} </td>
-                <td>
-                    {course.playTime}
-                    {i18n.sec}
-                </td>
-            </tr>
+                        {#if balloonOpened}
+                            <div class="detail">
+                                {course.balloon.join(", ")}
+                            </div>
+                        {/if}
+                    </td>
+                    <td> {i18n.roll} </td>
+                    <td>
+                        <div
+                            class="opener"
+                            class:opened={rollOpened}
+                            on:click={() => {
+                                rollOpened = !rollOpened;
+                            }}
+                            role="presentation"
+                        >
+                            {i18n.total}
+                            <span style="font-weight:bold;"
+                                >{Math.round(
+                                    course.rollTime.reduce(
+                                        (partial, current) => partial + current,
+                                        0,
+                                    ) * 1000,
+                                ) / 1000}</span
+                            >{i18n.sec}
+                        </div>
+                        {#if rollOpened}
+                            <div class="detail">
+                                {course.rollTime.join(", ")}
+                            </div>
+                        {/if}
+                    </td>
+                </tr>
+                <tr class={course.images.length ? "no-image" : "has-image"}>
+                    <td>{i18n.density}</td>
+                    <td>
+                        {course.maxDensity}
+                        {i18n.hitsec}
+                    </td>
+                    <td> {i18n.playTime} </td>
+                    <td>
+                        {course.playTime}
+                        {i18n.sec}
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
     {#if course.daniUsed}

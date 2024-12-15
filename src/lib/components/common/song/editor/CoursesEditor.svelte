@@ -5,19 +5,23 @@
     import { DIFFICULTY } from "$lib/module/common/song/const";
     import type { SongData } from "$lib/module/common/song/types";
 
-    export let courses: SongData["courses"];
+    interface Props{
+        courses: SongData["courses"]
+    }
+
+    let {courses = $bindable()}: Props = $props();
 </script>
 
 <TitledContainer title="보면" color="#cf4844">
-    <table>
+    <div class="div-table">
         {#each DIFFICULTY as difficulty}
             <CourseEditor {difficulty} bind:course={courses[difficulty]} />
         {/each}
-    </table>
+    </div>
 </TitledContainer>
 
 <style>
-    table {
+    .div-table {
         width: 100%;
         border-collapse: collapse;
     }

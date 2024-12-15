@@ -32,38 +32,40 @@
         </div>
         <div class="table-container" class:opened>
             <table data-theme={$theme}>
-                {#if titleKo}
-                    <tr>
-                        <td> {i18n.ko} </td>
-                        <td>
-                            {titleKo}
-                        </td>
-                    </tr>
-                {/if}
-                {#if aliasKo}
-                    <tr>
-                        <td> {i18n.aliasKo} </td>
-                        <td>
-                            {aliasKo}
-                        </td>
-                    </tr>
-                {/if}
-                {#if titleEn}
-                    <tr>
-                        <td> {i18n.en} </td>
-                        <td>
-                            {titleEn}
-                        </td>
-                    </tr>
-                {/if}
-                {#if aliasEn}
-                    <tr>
-                        <td> {i18n.aliasEn} </td>
-                        <td>
-                            {aliasEn}
-                        </td>
-                    </tr>
-                {/if}
+                <tbody>
+                    {#if titleKo}
+                        <tr>
+                            <td> {i18n.ko} </td>
+                            <td>
+                                {titleKo}
+                            </td>
+                        </tr>
+                    {/if}
+                    {#if aliasKo}
+                        <tr>
+                            <td> {i18n.aliasKo} </td>
+                            <td>
+                                {aliasKo}
+                            </td>
+                        </tr>
+                    {/if}
+                    {#if titleEn}
+                        <tr>
+                            <td> {i18n.en} </td>
+                            <td>
+                                {titleEn}
+                            </td>
+                        </tr>
+                    {/if}
+                    {#if aliasEn}
+                        <tr>
+                            <td> {i18n.aliasEn} </td>
+                            <td>
+                                {aliasEn}
+                            </td>
+                        </tr>
+                    {/if}
+                </tbody>
             </table>
         </div>
     </div>

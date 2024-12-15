@@ -13,7 +13,7 @@
 </script>
 
 <TitledContainer title="보면" color="#cf4844">
-    <div class="div-table">
+    <div>
         {#each DIFFICULTY as difficulty}
             <CourseEditor {difficulty} bind:course={courses[difficulty]} />
         {/each}
@@ -21,7 +21,7 @@
 </TitledContainer>
 
 <style>
-    .div-table {
+    div {
         width: 100%;
         border-collapse: collapse;
     }

@@ -8,18 +8,18 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
 
-    export let data;
+    let {data} = $props();
     const { donderData, songs } = data;
 
-    let diffChart: DiffChart = getDiffchartFromHash();
+    let diffChart: DiffChart = $state(getDiffchartFromHash());
 
-    let downloadImage: (() => Promise<void>) | null = null;
-    $: (
-        getContext("downloadImage") as Writable<(() => Promise<void>) | null>
-    ).set(downloadImage);
+    let downloadImage: (() => Promise<void>) | null = $state(null);
+    $effect.pre(() => {
+        (getContext("downloadImage") as Writable<(() => Promise<void>) | null>).set(downloadImage);
+    })
 
     const isMobile = getIsMobile();
-    let editorOpened = false;
+    let editorOpened = $state(false);
 
     function getDiffchartFromHash(): DiffChart {
         let hash = $page.url.hash;
@@ -69,7 +69,7 @@
 
 {#if !$isMobile}
     <div class="editorContainer">
-        <button class="editorOpened" on:click={() => {editorOpened = !editorOpened}}>
+        <button class="editorOpened" onclick={() => {editorOpened = !editorOpened}}>
             {#if editorOpened}
                 에디터 닫기
             {:else}

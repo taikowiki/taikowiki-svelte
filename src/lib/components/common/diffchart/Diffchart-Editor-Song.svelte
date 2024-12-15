@@ -2,10 +2,14 @@
     import type { Song } from "$lib/module/common/diffchart/types";
     import { difficulty } from "$lib/module/common/color";
 
-    export let song: Song;
-    export let index: number;
-    export let intercept: (from: number, to: number) => any;
-    export let remove: (index: number) => any;
+    interface Props{
+        song: Song;
+        index: number;
+        intercept: (from: number, to: number) => any;
+        remove: (index: number) => any;
+    }
+
+    let {song = $bindable(), index, intercept, remove}: Props = $props();
 
     song.order = index;
 </script>
@@ -15,7 +19,7 @@
         <div class="layer">
             <button
                 class="order-button"
-                on:click={() => {
+                onclick={() => {
                     intercept(song.order, song.order - 1);
                 }}>↑</button
             >
@@ -23,14 +27,14 @@
                 type="number"
                 value={song.order}
                 min="0"
-                on:change={(event) => {
+                onchange={(event) => {
                     intercept(song.order, Number(event.currentTarget.value));
                 }}
                 style="width:calc(100% - 50px);"
             />
             <button
                 class="order-button"
-                on:click={() => {
+                onclick={() => {
                     intercept(song.order, song.order + 1);
                 }}>↓</button
             >
@@ -51,7 +55,7 @@
             <div
                 class="color"
                 style={`background-color:${difficulty[song.difficulty]};`}
-            />
+            ></div>
             <select bind:value={song.difficulty}>
                 {#each ["easy", "normal", "hard", "oni", "ura"] as diff}
                     <option value={diff}>{diff}</option>
@@ -61,7 +65,7 @@
     </td>
     <td> 
         <div class="layer">
-            <button on:click={() => {
+            <button onclick={() => {
                 remove(index)
             }}>삭제</button>
         </div>

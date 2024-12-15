@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function copyJSON(json: string) {
         try {
             navigator.clipboard.writeText(json);
@@ -10,23 +10,34 @@
 </script>
 
 <script lang="ts">
-    import {intercept} from '$lib/module/common/util';
+    import { intercept } from "$lib/module/common/util";
 
     import { type DiffChart } from "$lib/module/common/diffchart/types";
     import DiffchartEditorSection from "./Diffchart-Editor-Section.svelte";
     import { page } from "$app/stores";
     import LZUTF8 from "lzutf8";
+    import { Table } from "../styled";
 
-    export let diffchart: DiffChart;
-    export let mode: "admin" | "normal" = "normal";
+    interface Props {
+        diffchart: DiffChart;
+        mode?: "admin" | "normal";
+    }
+
+    let { diffchart = $bindable(), mode = "normal" }: Props = $props();
+
+    $effect.pre(() => {
+        diffchart.sections.sort((a, b) => a.order - b.order);
+    });
 
     const url = new URL($page.url);
-    $:{
+    $effect.pre(() => {
         const stringified = JSON.stringify(diffchart);
-        const compressed = LZUTF8.compress(stringified, {outputEncoding: 'ByteArray'});
+        const compressed = LZUTF8.compress(stringified, {
+            outputEncoding: "ByteArray",
+        });
         const stringifiedCompressed = JSON.stringify(Array.from(compressed));
         url.hash = btoa(encodeURIComponent(stringifiedCompressed));
-    }
+    });
 
     function copyLink() {
         try {
@@ -48,20 +59,15 @@
                 class="json"
             />
             <button
-                on:click={() => {
+                onclick={() => {
                     copyJSON(JSON.stringify(diffchart));
                 }}
                 >복사하기
             </button>
         {:else}
-            <input
-                type="text"
-                value={url.href}
-                disabled
-                class="json"
-            />
+            <input type="text" value={url.href} disabled class="json" />
             <button
-                on:click={() => {
+                onclick={() => {
                     copyLink();
                 }}
                 >복사하기
@@ -69,7 +75,7 @@
         {/if}
     </div>
     <div class="layer">
-        <table>
+        <Table style="width: 100%;border-collapse: collapse;">
             <tr>
                 <td class="bold"> 제목 </td>
                 <td>
@@ -98,10 +104,10 @@
                     <div class="layer bold" style="justify-content:center;">
                         섹션
                     </div>
-                    <table>
-                        {#each diffchart.sections.sort((a, b) => a.order - b.order) as section, index (section)}
+                    <Table style="width: 100%;border-collapse: collapse;">
+                        {#each diffchart.sections as section, index (section)}
                             <DiffchartEditorSection
-                                bind:section
+                                bind:section={diffchart.sections[index]}
                                 {index}
                                 intercept={(from, to) => {
                                     const intercepted = intercept(
@@ -127,26 +133,24 @@
                         <tr>
                             <td colspan="4">
                                 <button
-                                    on:click={() => {
-                                        diffchart.sections = [
-                                            ...diffchart.sections,
-                                            {
-                                                order: diffchart.sections
-                                                    .length,
-                                                name: "",
-                                                songs: [],
-                                            },
-                                        ];
+                                    onclick={() => {
+                                        diffchart.sections.push({
+                                            order: diffchart.sections.length,
+                                            name: "",
+                                            songs: [],
+                                            color: 'black',
+                                            backgroundColor: 'grey'
+                                        });
                                     }}
                                 >
                                     섹션 추가
                                 </button>
                             </td>
                         </tr>
-                    </table>
+                    </Table>
                 </td>
             </tr>
-        </table>
+        </Table>
     </div>
 </div>
 
@@ -175,10 +179,6 @@
         font-size: 18px;
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
     td {
         border: 1px solid black;
         text-align: center;

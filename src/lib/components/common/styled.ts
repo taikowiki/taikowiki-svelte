@@ -7,7 +7,7 @@ const RowDefault = styled('div', () => '', () => `
 `);
 
 export const Row = {
-    left: styled(RowDefault.styledComponentData.tagName, ({columnGap}) => `
+    left: styled(RowDefault.styledComponentData.tagName, ({ columnGap }) => `
         ${columnGap ? `column-gap:${columnGap}px;` : ''}
     `, () => `
         ${RowDefault.styledComponentData.generateCommonStyle({})}
@@ -22,3 +22,13 @@ export const Row = {
         justify-content: flex-end;
     `)
 };
+
+/*
+Tables
+*/
+export const Table = styled('table', null, () => ``);
+export const Thead = styled('thead', null, () => ``);
+export const Tbody = styled('tbody', null, () => ``);
+export const Tr = styled('tr', null, () => ``);
+export const Th = styled('th', null, () => ``);
+export const Td = styled('td', null, () => ``);

@@ -32,7 +32,8 @@
     const Level = styled<{ diff: "oni" | "ura" }, {}>(
         "div",
         ({ diff }) => `
-        background-color:${color.difficulty[diff]};`,
+        background-color:${color.difficulty[diff]};
+        `,
         () => `
         color:white;
         display:flex;

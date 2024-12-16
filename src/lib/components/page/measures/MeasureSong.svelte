@@ -4,12 +4,12 @@
         SongData,
     } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { Action } from "svelte/action";
     import { getContext } from "svelte";
 
     export let songData: (Pick<SongData, "title" | "songNo" | "genre"> & {
         courses: { oni: Course; ura: Course | null };
-    }) & { diff?: "oni" | "ura" };
+    });
+    export let diff: "oni" | "ura" ;
 
     const [theme] = getTheme();
 
@@ -45,9 +45,9 @@
 
 <a class="song-container" href={`/song/${songData.songNo}`} data-theme={$theme}>
     <Genre genre={songData.genre} />
-    <Level diff={songData.diff ?? "oni"}>
+    <Level {diff}>
         <span>
-            ★{songData.courses[songData.diff ?? "oni"]?.level ?? "??"}
+            ★{songData.courses[diff]?.level ?? "??"}
         </span>
     </Level>
     <div class="title" data-theme={$theme}>

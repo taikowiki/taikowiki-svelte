@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import type { SvelteComponent } from "svelte";
 
     export interface Option {
@@ -12,20 +12,31 @@
     //CSelect means 'Custom Select'
     import COption from "./COption.svelte";
 
-    export let options: Option[];
-    let selected =
-        options.find((option) => option?.default === true) ?? options[0];
-    export let value: undefined | null | string | number | boolean;
-    $: value = selected.value;
+    interface Props{
+        options: Option[];
+        value: undefined | null | string | number | boolean;
+    }
 
-    let opened = false;
+    let {options, value}: Props = $props();
+
+    let selected = $state(options.find((option) => option?.default === true) ?? options[0]);
+    $effect.pre(() => {
+        value = selected.value
+    });
+
+    let opened = $state(false);
+
+    function select(value: Option){
+        selected = value;
+    }
+    function toggle(){
+        opened = !opened;
+    }
 </script>
 
 <div
     class="container"
-    on:click={() => {
-        opened = !opened;
-    }}
+    onclick={toggle}
     role="presentation"
 >
     <div class="display">
@@ -34,7 +45,7 @@
     {#if opened}
         <div class="option-container">
             {#each options as option}
-                <COption bind:selected value={option} />
+                <COption {select} value={option} />
             {/each}
         </div>
     {/if}

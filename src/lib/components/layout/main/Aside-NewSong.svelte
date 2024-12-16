@@ -2,10 +2,17 @@
     import AsideItem from "./AsideItem.svelte";
     import { getI18N, getLang, useLang } from "$lib/module/common/i18n/i18n";
 
-    export let newSongs;
+    interface Props {
+        newSongs: {
+            title: string;
+            songNo: string;
+        }[];
+    }
+
+    let { newSongs }: Props = $props();
 
     const lang = getLang();
-    $: i18nLayout = getI18N("layout", $lang).main;
+    let i18nLayout = $derived(getI18N("layout", $lang).main);
 </script>
 
 <AsideItem title={i18nLayout.newSong}>

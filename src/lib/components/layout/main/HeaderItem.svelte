@@ -1,14 +1,26 @@
 <script lang="ts">
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
+    import type { Snippet } from "svelte";
 
     const isMobile = getIsMobile();
     const [theme] = getTheme();
 
-    export let icon: string = "";
-    export let href: string = "";
-    export let useHover: boolean = true;
-    export let mobileHideSlot: boolean = false;
+    interface Props {
+        icon?: string;
+        href?: string;
+        useHover?: boolean;
+        mobileHideSlot?: boolean;
+        children?: Snippet;
+    }
+
+    let {
+        icon = "",
+        href = "",
+        useHover = true,
+        mobileHideSlot = false,
+        children,
+    }: Props = $props();
 </script>
 
 {#if href}
@@ -17,7 +29,7 @@
             <img src={icon} alt="" />
         {/if}
         {#if !mobileHideSlot || !$isMobile}
-            <slot />
+            {@render children?.()}
         {/if}
     </a>
 {:else}
@@ -26,7 +38,7 @@
             <img src={icon} alt="" />
         {/if}
         {#if !mobileHideSlot || !$isMobile}
-            <slot />
+            {@render children?.()}
         {/if}
     </div>
 {/if}

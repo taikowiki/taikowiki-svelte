@@ -28,11 +28,11 @@
     }
 </script>
 
-<tr>
-    <td>
+<div class="div-tr">
+    <div class="div-td">
         {i18n.name}
-    </td>
-    <td>
+    </div>
+    <div class="div-td">
         <div class="container">
             <div>
                 <label>
@@ -52,8 +52,8 @@
                 {i18n.submit}
             </button>
         </div>
-    </td>
-</tr>
+    </div>
+</div>
 
 <style>
     .container{

@@ -28,20 +28,20 @@
 
 <PageTitle title={titleI18n}/>
 
-<table>
-    <tr>
-        <td width="150px"> {i18n.provider} </td>
-        <td>
+<div class="div-table">
+    <div class="div-tr">
+        <div class="div-td" style="width:150px;"> {i18n.provider} </div>
+        <div class="div-td">
             {data.user.provider}
-        </td>
-    </tr>
-    <tr>
-        <td>UUID</td>
-        <td>{data.user.UUID}</td>
-    </tr>
+        </div>
+    </div>
+    <div class="div-tr">
+        <div class="div-td">UUID</div>
+        <div class="div-td">{data.user.UUID}</div>
+    </div>
     <Nickname />
     <ShowRating bind:showRating={data.user.showRating}/>
-    <tr>
+    <div class="div-tr">
         <form method="post" action="/api/user/delete" bind:this={withdrawForm}>
             <input
                 type="text"
@@ -56,11 +56,11 @@
             }}
             class="withdraw">{i18n.delete}</button
         >
-    </tr>
-</table>
+    </div>
+</div>
 
 <style>
-    table {
+    .div-table {
         width: 100%;
         border-spacing: 0px 20px;
     }
@@ -78,12 +78,12 @@
         cursor: pointer;
     }
 
-    table :global(td){
+    .div-table :global(td){
         display:flex;
         flex-direction: column;
         row-gap: 10px;
     }
-    table :global(td:nth-child(1)){
+    .div-table :global(td:nth-child(1)){
         font-weight: bold;
         font-size: 17px;
     }

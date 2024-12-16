@@ -121,7 +121,7 @@
         />
         <MainSearchResult {searchResults} bind:opened={searchResultOpened} />
     </div>
-    <button class="search-btn" data-theme={$theme} on:click={search} />
+    <button class="search-btn" data-theme={$theme} on:click={search} aria-label="search"></button>
 </Container>
 
 <style>

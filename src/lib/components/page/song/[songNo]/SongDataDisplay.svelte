@@ -137,7 +137,7 @@
         justify-content: center;
         height: auto;
         column-gap: 5px;
-        row-gap: 2px;
+        row-gap: 5px;
     }
 
     .div-table[data-isMobile="false"] > .div-tr > .div-td:nth-child(2) {

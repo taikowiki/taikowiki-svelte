@@ -56,26 +56,26 @@
         >
             {newI18n.machineInfo}
         </div>
-        <table class="machines" class:hidden={!showMachines}>
-            <tr>
-                <th> {i18n.price} </th>
-                <th> {i18n.tunes} </th>
-                <th> {i18n.count} </th>
-            </tr>
+        <div class="div-table machines" class:hidden={!showMachines}>
+            <div class="div-tr">
+                <div class="div-th"> {i18n.price} </div>
+                <div class="div-th"> {i18n.tunes} </div>
+                <div class="div-th"> {i18n.count} </div>
+            </div>
             {#each gamecenterData.machines as machine}
-                <tr>
-                    <td>
+                <div class="div-tr">
+                    <div class="div-td">
                         {machine.price}원
-                    </td>
-                    <td>
+                    </div>
+                    <div class="div-td">
                         {machine.tunes}곡
-                    </td>
-                    <td>
+                    </div>
+                    <div class="div-td">
                         {machine.count}대
-                    </td>
-                </tr>
+                    </div>
+                </div>
             {/each}
-        </table>
+        </div>
     </div>
     <div class="hours-container">
         <div
@@ -226,8 +226,7 @@
     .machines.hidden {
         display: none;
     }
-    .machines td,
-    th {
+    .machines .div-td,.div-th {
         border: 1px solid gray;
         text-align: center;
     }

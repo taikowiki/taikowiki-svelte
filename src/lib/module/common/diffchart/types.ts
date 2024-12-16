@@ -54,3 +54,8 @@ export interface SongScoreDetail {
 };
 export type CrownType = "none" | "silver" | "gold" | "donderfull";
 export type BadgeType = 0 | 3 | 5 | 4 | 1 | 2 | 6 | 7 | 8;
+
+//stringify
+export type DiffchartTuple = [name: string, sections: DiffchartSectionTuple[], color?: string, backgroundColor?: string];
+export type DiffchartSectionTuple = [name: string, songs: DiffchartSongTuple[], color?: string, backgroundColor?: string];
+export type DiffchartSongTuple = [songNo: string, title: string, difficulty: Difficulty];

@@ -99,7 +99,7 @@
     */
 </script>
 
-{#key title}
+{#key [title, song.difficulty, song.songNo, song.title]}
     <a
         class="container"
         href={`/song/${song.songNo}?diff=${song.difficulty}`}

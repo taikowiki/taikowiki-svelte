@@ -164,7 +164,7 @@
 {#key $navigating}
 <HrefLang />
 {/key}
-
+<img src="/assets/img/logo.webp" class="preview" alt="preview">
 <div>
     <Header>
         <svelte:fragment slot="left">
@@ -236,7 +236,7 @@
             {/if}
         </svelte:fragment>
         <Aside slot="aside">
-            <div bind:this={$pageAside} class="page-aside" />
+            <div bind:this={$pageAside} class="page-aside"></div>
             {#if data.asideBanners}
                 <AsideBanner banners={data.asideBanners} />
             {/if}

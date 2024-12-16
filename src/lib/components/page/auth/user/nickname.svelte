@@ -1,9 +1,12 @@
 <script lang="ts" context="module">
     import { replaceState } from "$app/navigation";
 
-    async function changeNickname(newNickname: string) {
+    async function changeNickname(newNickname: string, user: Writable<Record<string, any>>) {
         const result = await userRequestor.changeNickname({ newNickname });
-        replaceState(get(page).url.href, get(page).state);
+        user.update((v) => {
+            v.nickname = newNickname;
+            return v;
+        })
         return result;
     }
 </script>
@@ -30,12 +33,12 @@
 
     const [theme] = getTheme();
     const lang = getLang();
-    $: i18n = getI18N('/auth/user', $lang);
+    $: i18n = getI18N("/auth/user", $lang);
 </script>
 
-<tr>
-    <td> {i18n.nickname} </td>
-    <td>
+<div class="div-tr">
+    <div class="div-td">{i18n.nickname}</div>
+    <div class="div-td">
         <div class="explanation">
             {i18n.nickRule}
         </div>
@@ -54,7 +57,7 @@
                                     "New nickname is not in the correct format"
                                 ];
                         } else {
-                            changeNickname(nickname).then((result) => {
+                            changeNickname(nickname, user).then((result) => {
                                 if (result.status === "success") {
                                     alert(i18n.nickChangeSuccess);
                                 } else {
@@ -74,8 +77,8 @@
                 <div style="color:red;">{error}</div>
             {/if}
         </div>
-    </td>
-</tr>
+    </div>
+</div>
 
 <style>
     .error {

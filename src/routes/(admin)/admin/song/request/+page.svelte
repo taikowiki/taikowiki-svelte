@@ -38,64 +38,68 @@
     </button>
 </div>
 <table>
-    <tr>
-        <th style="width:20px;">
-            <input
-                type="checkbox"
-                checked={allChecked}
-                on:click={(event) => {
-                    if (event.currentTarget.checked) {
-                        checked.push(...data.requests.map((e) => e.order));
-                        checked = checked;
-                    } else {
-                        checked = [];
-                    }
-                }}
-            />
-        </th>
-        <th style="width: 300px;"> createdTime </th>
-        <th> 곡 번호 </th>
-        <th> uuid </th>
-        <th> ip </th>
-        <th style="width: 150px;">-</th>
-    </tr>
-    {#each data.requests as request}
+    <thead>
         <tr>
-            <td>
+            <th style="width:20px;">
                 <input
                     type="checkbox"
-                    checked={checked.includes(request.order)}
+                    checked={allChecked}
                     on:click={(event) => {
                         if (event.currentTarget.checked) {
-                            checked.push(request.order);
+                            checked.push(...data.requests.map((e) => e.order));
                             checked = checked;
                         } else {
-                            checked = checked.filter(
-                                (e) => e !== request.order,
-                            );
+                            checked = [];
                         }
                     }}
                 />
-            </td>
-            <td>
-                {new Date(request.createdTime).toLocaleString()}
-            </td>
-            <td>
-                {request.songNo}
-            </td>
-            <td>
-                {request.UUID}
-            </td>
-            <td>
-                {request.ip}
-            </td>
-            <td>
-                <a href={`/admin/song/request/order/${request.order}`}
-                    >살펴보기</a
-                >
-            </td>
+            </th>
+            <th style="width: 300px;"> createdTime </th>
+            <th> 곡 번호 </th>
+            <th> uuid </th>
+            <th> ip </th>
+            <th style="width: 150px;">-</th>
         </tr>
-    {/each}
+    </thead>
+    <tbody>
+        {#each data.requests as request}
+            <tr>
+                <td>
+                    <input
+                        type="checkbox"
+                        checked={checked.includes(request.order)}
+                        on:click={(event) => {
+                            if (event.currentTarget.checked) {
+                                checked.push(request.order);
+                                checked = checked;
+                            } else {
+                                checked = checked.filter(
+                                    (e) => e !== request.order,
+                                );
+                            }
+                        }}
+                    />
+                </td>
+                <td>
+                    {new Date(request.createdTime).toLocaleString()}
+                </td>
+                <td>
+                    {request.songNo}
+                </td>
+                <td>
+                    {request.UUID}
+                </td>
+                <td>
+                    {request.ip}
+                </td>
+                <td>
+                    <a href={`/admin/song/request/order/${request.order}`}
+                        >살펴보기</a
+                    >
+                </td>
+            </tr>
+        {/each}
+    </tbody>
 </table>
 
 <style>

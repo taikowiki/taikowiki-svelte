@@ -3,7 +3,7 @@
     import type { Measure } from "@taiko-wiki/taiko-rating/src/types";
     import groupBy from "object.groupby";
     import MeasureGroup from "./MeasureGroup.svelte";
-    import createSSC from "styled-svelte-component/svelte4";
+    import styled from "styled-svelte5";
     import color from "$lib/module/common/color";
     import { setContext } from "svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
@@ -18,7 +18,7 @@
         (measure) => measure.range
     );
 
-    const Genre = createSSC<{ genre: Genre[] }, {}>(
+    const GenreDiv = styled<{ genre: Genre[] }, {}>(
         "div",
         ({ genre }) => `
         background: linear-gradient(${genre.length === 1 ? `${color.genre[genre[0]]}, ${color.genre[genre[0]]}` : genre.map((g, i) => `${color.genre[g]} calc(100% / ${genre.length} * ${i}), ${color.genre[g]} calc(100% / ${genre.length} * ${i + 1})`).join(", ")});`,
@@ -29,7 +29,7 @@
         border-radius: 50vh;`,
     );
 
-    const Level = createSSC<{ diff: "oni" | "ura" }, {}>(
+    const Level = styled<{ diff: "oni" | "ura" }, {}>(
         "div",
         ({ diff }) => `
         background-color:${color.difficulty[diff]};`,
@@ -49,13 +49,13 @@
         }`,
     );
     
-    setContext('Genre', Genre);
+    setContext('Genre', GenreDiv);
     setContext('Level', Level);
 
     const lang = getLang();
 </script>
 
-<Genre.common/>
+<GenreDiv.common/>
 <Level.common/>
 
 {#each Object.entries(groupedMeasures).toSorted((a, b) => Number(b[0]) - Number(a[0])) as [group, measures]}

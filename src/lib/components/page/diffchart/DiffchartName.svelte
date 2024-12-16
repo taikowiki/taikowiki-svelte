@@ -28,8 +28,4 @@
 
         margin-bottom: 10px;
     }
-
-    .name:has(.subname){
-        height: 90px;
-    }
 </style>

@@ -1,66 +1,74 @@
 <script lang="ts">
-    import { gamecenterAdminRequestor } from '$lib/module/common/gamecenter/gamecenter.client';
+    import { gamecenterAdminRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
 
     export let data;
     let { gamecenterDatas } = data;
 
-    async function deleteGamecenter(order:number){
-        if(!confirm("정말 삭제하시겠습니까?")){
+    async function deleteGamecenter(order: number) {
+        if (!confirm("정말 삭제하시겠습니까?")) {
             return;
         }
 
-        const response = await gamecenterAdminRequestor.delete({order})
+        const response = await gamecenterAdminRequestor.delete({ order });
 
-        if(response.status === "success"){
-            alert('삭제가 완료되었습니다.');
+        if (response.status === "success") {
+            alert("삭제가 완료되었습니다.");
             return response;
-        }
-        else{
-            alert('에러 발생.');
+        } else {
+            alert("에러 발생.");
             return response;
         }
     }
 </script>
 
-<a href={`/admin/gamecenter/add`}>
-    추가하기
-</a>
-<a href={`/admin/gamecenter/report`}>
-    제보확인
-</a>
+<a href={`/admin/gamecenter/add`}> 추가하기 </a>
+<a href={`/admin/gamecenter/report`}> 제보확인 </a>
 <table>
-    <tr>
-        <th> order </th>
-        <th> 이름 </th>
-        <th> 수정 </th>
-        <th> 삭제 </th>
-    </tr>
-    {#each gamecenterDatas as gamecenterData}
+    <thead>
         <tr>
-            <td>
-                {gamecenterData.order}
-            </td>
-            <td>
-                {gamecenterData.name}
-            </td>
-            <td>
-                <a href={`/admin/gamecenter/edit/${gamecenterData.order}`}>
-                    수정하기
-                </a>
-            </td>
-            <td>
-                <button on:click={() => {
-                    deleteGamecenter(gamecenterData.order).then(response => {
-                        if(response?.status === "success"){
-                            gamecenterDatas = gamecenterDatas.filter(data => data.order !== gamecenterData.order)
-                        }
-                    })
-                }}>
-                    삭제
-                </button>
-            </td>
+            <th> order </th>
+            <th> 이름 </th>
+            <th> 수정 </th>
+            <th> 삭제 </th>
         </tr>
-    {/each}
+    </thead>
+    <tbody>
+        {#each gamecenterDatas as gamecenterData}
+            <tr>
+                <td>
+                    {gamecenterData.order}
+                </td>
+                <td>
+                    {gamecenterData.name}
+                </td>
+                <td>
+                    <a href={`/admin/gamecenter/edit/${gamecenterData.order}`}>
+                        수정하기
+                    </a>
+                </td>
+                <td>
+                    <button
+                        on:click={() => {
+                            deleteGamecenter(gamecenterData.order).then(
+                                (response) => {
+                                    if (response?.status === "success") {
+                                        gamecenterDatas =
+                                            gamecenterDatas.filter(
+                                                (data) =>
+                                                    data.order !==
+                                                    gamecenterData.order,
+                                            );
+                                    }
+                                },
+                            );
+                        }}
+                    >
+                        삭제
+                    </button>
+                </td>
+            </tr>
+        {/each}
+    </tbody>
 </table>
 
 <style>

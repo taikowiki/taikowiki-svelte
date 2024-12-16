@@ -1,16 +1,34 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function getClearedSongScores(
         scoreData: SongScore[] | null,
         songs: Song[],
     ): SongScore[] {
-        return scoreData?.filter((score) => songs.find((song) => song.songNo === score.songNo && score.details[uraToOniUra(song.difficulty)]?.crown !== "none")) ?? [];
+        return (
+            scoreData?.filter((score) =>
+                songs.find(
+                    (song) =>
+                        song.songNo === score.songNo &&
+                        score.details[uraToOniUra(song.difficulty)]?.crown !==
+                            "none",
+                ),
+            ) ?? []
+        );
     }
 
     function getPlayedSongScores(
         scoreData: SongScore[] | null,
         songs: Song[],
     ): SongScore[] {
-        return scoreData?.filter((score) => songs.find((song) => song.songNo === score.songNo && score.details[uraToOniUra(song.difficulty)]?.badge !== null)) ?? [];
+        return (
+            scoreData?.filter((score) =>
+                songs.find(
+                    (song) =>
+                        song.songNo === score.songNo &&
+                        score.details[uraToOniUra(song.difficulty)]?.badge !==
+                            null,
+                ),
+            ) ?? []
+        );
     }
 
     function uraToOniUra(diff: Difficulty): DifficultyType {
@@ -30,17 +48,27 @@
     import type { Difficulty } from "$lib/module/common/song/types";
     import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
 
-    export let section: Section;
-    export let songs: SongDataPickedForDiffchart[];
-    export let theme: string;
-    export let useMobile: boolean = true;
-    export let userScoreData: SongScore[] | null;
+    interface Props {
+        section: Section;
+        songs: SongDataPickedForDiffchart[];
+        theme: string;
+        useMobile?: boolean;
+        userScoreData: SongScore[] | null;
+    }
 
-    let closed = false;
+    let {
+        section,
+        songs,
+        theme,
+        useMobile = true,
+        userScoreData,
+    }: Props = $props();
 
-    $: clearedSongScores = getClearedSongScores(userScoreData, section.songs);
-    $: playedSongScores = getPlayedSongScores(userScoreData, section.songs);
-    $: clearedSongsCount = userScoreData ? clearedSongScores.length : null;
+    let closed = $state(false);
+
+    let clearedSongScores = $derived(getClearedSongScores(userScoreData, section.songs));
+    let playedSongScores = $derived(getPlayedSongScores(userScoreData, section.songs));
+    let clearedSongsCount = $derived(userScoreData ? clearedSongScores.length : null);
 </script>
 
 <div class="section">
@@ -49,21 +77,23 @@
         {clearedSongsCount}
         color={section.color}
         backgroundColor={section.backgroundColor}
-        closed={closed}
-        on:click={() => closed = !closed}
+        {closed}
+        on:click={() => (closed = !closed)}
     />
     {#if !closed}
-    <div class="song-container" class:useMobile>
-        {#each section.songs.toSorted((a, b) => a.order - b.order) as song}
-            <DiffchartSong
-                {song}
-                {songs}
-                {theme}
-                {useMobile}
-                userScore={playedSongScores.find((score) => score.songNo === song.songNo)?.details[uraToOniUra(song.difficulty)] ?? null}
-            />
-        {/each}
-    </div>
+        <div class="song-container" class:useMobile>
+            {#each section.songs.toSorted((a, b) => a.order - b.order) as song}
+                <DiffchartSong
+                    {song}
+                    {songs}
+                    {theme}
+                    {useMobile}
+                    userScore={playedSongScores.find(
+                        (score) => score.songNo === song.songNo,
+                    )?.details[uraToOniUra(song.difficulty)] ?? null}
+                />
+            {/each}
+        </div>
     {/if}
 </div>
 

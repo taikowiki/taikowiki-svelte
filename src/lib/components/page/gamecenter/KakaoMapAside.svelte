@@ -62,7 +62,7 @@
 
 <!--pc-->
 <PageAside>
-    <div bind:this={pcContentContainer} class="container" />
+    <div bind:this={pcContentContainer} class="container"></div>
 </PageAside>
 
 <!--mobile-->
@@ -74,17 +74,18 @@
     {#if $mobileOpened}
         <button
             class="mobile-close"
-            on:click={() => {
+            onclick={() => {
                 $mobileOpened = false;
             }}>X</button
         >
     {:else}
         <button
             class="mobile-open"
-            on:click={() => {
+            onclick={() => {
                 $mobileOpened = true;
             }}
-        />
+            aria-label="mobile open"
+        ></button>
     {/if}
 </div>
 

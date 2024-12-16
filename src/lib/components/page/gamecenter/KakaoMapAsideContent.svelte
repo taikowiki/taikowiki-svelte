@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { GameCenterData } from "$lib/module/common/gamecenter/types";
-    import { afterUpdate, getContext, onMount } from "svelte";
+    import { afterUpdate, getContext, mount, onMount } from "svelte";
     import KakaoMapAsideContentSearch from "./KakaoMapAsideContentSearch.svelte";
     import KakaoMapAsideContentFavorites from "./KakaoMapAsideContentFavorites.svelte";
     import { getTheme } from "$lib/module/layout/theme";
@@ -31,7 +31,7 @@
     const [theme, setTheme] = getTheme();
     const lang = getLang();
     const user = getContext("user");
-    const mobileAsideOpened = getContext('mobileAsideOpened');
+    const mobileAsideOpened = getContext("mobileAsideOpened");
 
     const distanceMap = new Map<GameCenterData, number>();
     if (currentPositionMarker) {
@@ -69,26 +69,26 @@
         context.set("user", user);
         context.set("mobileAsideOpened", mobileAsideOpened);
 
-        new KakaoMapAsideContentSearch({
+        mount(KakaoMapAsideContentSearch, {
             target: searchContainer,
             props: {
                 gamecenterDatas,
                 gamecenterMarkers,
                 map,
                 favorites,
-                distanceMap
+                distanceMap,
             },
             context,
         });
 
-        new KakaoMapAsideContentFavorites({
+        mount(KakaoMapAsideContentFavorites, {
             target: favoritesContainer,
             props: {
                 favorites,
                 gamecenterDatas,
                 distanceMap,
                 gamecenterMarkers,
-                map
+                map,
             },
             context,
         });
@@ -117,7 +117,7 @@
     });
 </script>
 
-<div bind:this={container} class="container" />
+<div bind:this={container} class="container"></div>
 
 <style>
     .container {

@@ -10,7 +10,7 @@
     export let daniData: Dani;
     export let deleteDani: MouseEventHandler<any>;
 
-    function gaidenInit(dan: Dani['dan']) {
+    function gaidenInit(dan: Dani["dan"]) {
         daniData.dan = dan;
         if (daniData.dan === "gaiden") {
             daniData.name = {
@@ -24,29 +24,29 @@
 </script>
 
 <table>
-    <AdminDaniEditorDan bind:dan={daniData.dan} {gaidenInit} />
-    {#if daniData.dan === "gaiden"}
-        <AdminDaniEditorName bind:name={daniData.name} />
-        <AdminDaniEditorQr bind:qr={daniData.qr}/>
-    {/if}
-    <AdminDaniEditorSong bind:songs={daniData.songs} />
-    <AdminDaniEditorCondition bind:conditions={daniData.conditions}/>
-    <tr>
-        <td>
-            <button on:click={deleteDani}>
-                삭제
-            </button>
-        </td>
-    </tr>
+    <tbody>
+        <AdminDaniEditorDan bind:dan={daniData.dan} {gaidenInit} />
+        {#if daniData.dan === "gaiden"}
+            <AdminDaniEditorName bind:name={daniData.name} />
+            <AdminDaniEditorQr bind:qr={daniData.qr} />
+        {/if}
+        <AdminDaniEditorSong bind:songs={daniData.songs} />
+        <AdminDaniEditorCondition bind:conditions={daniData.conditions} />
+        <tr>
+            <td>
+                <button on:click={deleteDani}> 삭제 </button>
+            </td>
+        </tr>
+    </tbody>
 </table>
 
 <style>
-    table{
+    table {
         border-collapse: collapse;
         border: 3px solid black;
     }
 
-    td{
+    td {
         text-align: center;
     }
 </style>

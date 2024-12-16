@@ -1,4 +1,4 @@
-<div class="border"/>
+<div class="border"></div>
 
 <style>
     .border{

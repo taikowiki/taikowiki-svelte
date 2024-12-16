@@ -4,18 +4,19 @@
 
     export let banners: MainBanner[];
 
-    async function submit(){
-        if(!confirm('저장하시겠습니까?')){
+    async function submit() {
+        if (!confirm("저장하시겠습니까?")) {
             return;
         }
 
-        const response = await bannerAdminRequestor.updateMainBanner({banners});
+        const response = await bannerAdminRequestor.updateMainBanner({
+            banners,
+        });
 
-        if(response.status === "success"){
-            alert('저장 완료')
-        }
-        else{
-            alert('저장 오류')
+        if (response.status === "success") {
+            alert("저장 완료");
+        } else {
+            alert("저장 오류");
         }
     }
 </script>
@@ -37,64 +38,66 @@
     >
         추가
     </button>
-    <button on:click={submit}>
-        저장
-    </button>
+    <button on:click={submit}> 저장 </button>
 </h2>
 <div class="container">
     {#each banners as banner, index}
         <div class="banner-data-container">
             <table class="banner-data">
-                <tr>
-                    <td class="key"> 이미지 주소 </td>
-                    <td class="value">
-                        <div class="input-container">
-                            <input type="text" bind:value={banner.src} />
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="key"> 크기 </td>
-                    <td class="value">
-                        <select bind:value={banner.size}>
-                            <option value="narrow"> 좁음 </option>
-                            <option value="wide"> 넓음 </option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="key"> 링크 </td>
-                    <td>
-                        <div class="input-container">
-                            <input type="text" bind:value={banner.href} />
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="key"> target </td>
-                    <td>
-                        <select bind:value={banner.target}>
-                            <option value=""> none </option>
-                            {#each ["blank", "parent", "self", "top"] as t}
-                                <option value={"_" + t}>
-                                    {t}
-                                </option>
-                            {/each}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="key"> 삭제 </td>
-                    <td>
-                        <button
-                            on:click={() => {
-                                banners = banners.filter((_, i) => i !== index);
-                            }}
-                        >
-                            삭제
-                        </button>
-                    </td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td class="key"> 이미지 주소 </td>
+                        <td class="value">
+                            <div class="input-container">
+                                <input type="text" bind:value={banner.src} />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="key"> 크기 </td>
+                        <td class="value">
+                            <select bind:value={banner.size}>
+                                <option value="narrow"> 좁음 </option>
+                                <option value="wide"> 넓음 </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="key"> 링크 </td>
+                        <td>
+                            <div class="input-container">
+                                <input type="text" bind:value={banner.href} />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="key"> target </td>
+                        <td>
+                            <select bind:value={banner.target}>
+                                <option value=""> none </option>
+                                {#each ["blank", "parent", "self", "top"] as t}
+                                    <option value={"_" + t}>
+                                        {t}
+                                    </option>
+                                {/each}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="key"> 삭제 </td>
+                        <td>
+                            <button
+                                on:click={() => {
+                                    banners = banners.filter(
+                                        (_, i) => i !== index,
+                                    );
+                                }}
+                            >
+                                삭제
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     {/each}

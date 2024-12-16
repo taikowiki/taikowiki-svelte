@@ -6,15 +6,16 @@
     import CoursesEditor from "./admin-CoursesEditor.svelte";
     import BasicEditor from "./admin-BasicEditor.svelte";
 
-    export let compare: any | null;
+    interface Props {
+        compare: any | null;
+        songData: SongData;
+    }
 
-    export let songData: SongData;
-
-    let container: HTMLDivElement;
+    let {compare, songData = $bindable()}: Props = $props();
 </script>
 
-<div class="container" bind:this={container}>
-    <BasicEditor bind:songNo={songData.songNo}/>
+<div class="container">
+    <BasicEditor bind:songNo={songData.songNo} />
     <TitleEditor
         bind:title={songData.title}
         bind:titleKo={songData.titleKo}

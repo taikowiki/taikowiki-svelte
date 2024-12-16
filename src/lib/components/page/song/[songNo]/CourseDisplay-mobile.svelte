@@ -21,116 +21,122 @@
 </script>
 
 <table data-theme={$theme}>
-    <tr>
-        <td> {i18n.combos} </td>
-        <td>
-            {course.maxCombo}
-        </td>
-    </tr>
-    <tr>
-        <td> {i18n.branched} </td>
-        <td>
-            {course.isBranched ? "O" : "X"}
-        </td>
-    </tr>
-    <tr>
-        <td>{i18n.balloons}</td>
-        <td>
-            <div
-                class="opener"
-                class:opened={balloonOpened}
-                on:click={() => {
-                    balloonOpened = !balloonOpened;
-                }}
-                role="presentation"
-            >
-            {i18n.total} <span style="font-weight:bold;"
-                    >{course.balloon.reduce(
-                        (partial, current) => partial + current,
-                        0,
-                    )}</span
-                >{i18n.count}
-            </div>
-            {#if balloonOpened}
-                <div class="detail">
-                    {course.balloon.join(", ")}
-                </div>
-            {/if}
-        </td>
-    </tr>
-    <tr>
-        <td> {i18n.roll} </td>
-        <td>
-            <div
-                class="opener"
-                class:opened={rollOpened}
-                on:click={() => {
-                    rollOpened = !rollOpened;
-                }}
-                role="presentation"
-            >
-            {i18n.total} <span style="font-weight:bold;"
-                    >{Math.round(
-                        course.rollTime.reduce(
-                            (partial, current) => partial + current,
-                            0,
-                        ) * 1000,
-                    ) / 1000}</span
-                >{i18n.sec}
-            </div>
-            {#if rollOpened}
-                <div class="detail">
-                    {course.rollTime.join(", ")}
-                </div>
-            {/if}
-        </td>
-    </tr>
-    <tr>
-        <td>{i18n.density}</td>
-        <td>
-            {course.maxDensity} {i18n.hitsec}
-        </td>
-    </tr>
-    <tr>
-        <td> {i18n.playTime} </td>
-        <td>
-            {course.playTime} {i18n.sec}
-        </td>
-    </tr>
-    {#if course.daniUsed}
+    <tbody>
         <tr>
-            <td colspan="4" class="dani-td">
-                <div class="dani-container" data-theme={$theme}>
-                    <div
-                        class="dani-opener"
-                        class:opened={daniOpened}
-                        role="presentation"
-                        on:click={() => {
-                            daniOpened = !daniOpened;
-                        }}
-                    >
-                    {i18n.daniList}
-                    </div>
-                    {#if daniOpened}
-                        <div class="dani">
-                            {#each course.dani as dani}
-                                <span>
-                                    {daniI18n.version[dani.version]}
-                                    {daniI18n.dan[dani.dan]}
-                                    {dani.order}{i18n.nthSong}
-                                </span>
-                            {/each}
-                        </div>
-                    {/if}
-                </div>
+            <td> {i18n.combos} </td>
+            <td>
+                {course.maxCombo}
             </td>
         </tr>
-    {:else}
         <tr>
-            <td>{i18n.noDani}</td>
-            <td>X</td>
+            <td> {i18n.branched} </td>
+            <td>
+                {course.isBranched ? "O" : "X"}
+            </td>
         </tr>
-    {/if}
+        <tr>
+            <td>{i18n.balloons}</td>
+            <td>
+                <div
+                    class="opener"
+                    class:opened={balloonOpened}
+                    on:click={() => {
+                        balloonOpened = !balloonOpened;
+                    }}
+                    role="presentation"
+                >
+                    {i18n.total}
+                    <span style="font-weight:bold;"
+                        >{course.balloon.reduce(
+                            (partial, current) => partial + current,
+                            0,
+                        )}</span
+                    >{i18n.count}
+                </div>
+                {#if balloonOpened}
+                    <div class="detail">
+                        {course.balloon.join(", ")}
+                    </div>
+                {/if}
+            </td>
+        </tr>
+        <tr>
+            <td> {i18n.roll} </td>
+            <td>
+                <div
+                    class="opener"
+                    class:opened={rollOpened}
+                    on:click={() => {
+                        rollOpened = !rollOpened;
+                    }}
+                    role="presentation"
+                >
+                    {i18n.total}
+                    <span style="font-weight:bold;"
+                        >{Math.round(
+                            course.rollTime.reduce(
+                                (partial, current) => partial + current,
+                                0,
+                            ) * 1000,
+                        ) / 1000}</span
+                    >{i18n.sec}
+                </div>
+                {#if rollOpened}
+                    <div class="detail">
+                        {course.rollTime.join(", ")}
+                    </div>
+                {/if}
+            </td>
+        </tr>
+        <tr>
+            <td>{i18n.density}</td>
+            <td>
+                {course.maxDensity}
+                {i18n.hitsec}
+            </td>
+        </tr>
+        <tr>
+            <td> {i18n.playTime} </td>
+            <td>
+                {course.playTime}
+                {i18n.sec}
+            </td>
+        </tr>
+        {#if course.daniUsed}
+            <tr>
+                <td colspan="4" class="dani-td">
+                    <div class="dani-container" data-theme={$theme}>
+                        <div
+                            class="dani-opener"
+                            class:opened={daniOpened}
+                            role="presentation"
+                            on:click={() => {
+                                daniOpened = !daniOpened;
+                            }}
+                        >
+                            {i18n.daniList}
+                        </div>
+                        {#if daniOpened}
+                            <div class="dani">
+                                {#each course.dani as dani}
+                                    <span>
+                                        {daniI18n.version[dani.version]}
+                                        {daniI18n.dan[dani.dan]}
+                                        {dani.order}{i18n.nthSong}
+                                    </span>
+                                {/each}
+                            </div>
+                        {/if}
+                    </div>
+                </td>
+            </tr>
+        {:else}
+            <tr>
+                <td>{i18n.noDani}</td>
+                <td>X</td>
+            </tr>
+        {/if}
+    </tbody>
 </table>
 {#if course?.images}
     <FumenDisplay images={course.images} />

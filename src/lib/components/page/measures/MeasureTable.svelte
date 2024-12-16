@@ -18,7 +18,7 @@
         (measure) => measure.range
     );
 
-    const Genre = styled<{ genre: Genre[] }, {}>(
+    const GenreDiv = styled<{ genre: Genre[] }, {}>(
         "div",
         ({ genre }) => `
         background: linear-gradient(${genre.length === 1 ? `${color.genre[genre[0]]}, ${color.genre[genre[0]]}` : genre.map((g, i) => `${color.genre[g]} calc(100% / ${genre.length} * ${i}), ${color.genre[g]} calc(100% / ${genre.length} * ${i + 1})`).join(", ")});`,
@@ -49,13 +49,13 @@
         }`,
     );
     
-    setContext('Genre', Genre);
+    setContext('Genre', GenreDiv);
     setContext('Level', Level);
 
     const lang = getLang();
 </script>
 
-<Genre.common/>
+<GenreDiv.common/>
 <Level.common/>
 
 {#each Object.entries(groupedMeasures).toSorted((a, b) => Number(b[0]) - Number(a[0])) as [group, measures]}

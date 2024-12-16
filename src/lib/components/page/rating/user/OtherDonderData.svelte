@@ -32,18 +32,18 @@
             ?
         </div>
     {/if}
-    <table data-theme={$theme}>
-        <tr>
-            <td class="taikonumber">
+    <div class="div-table" data-theme={$theme}>
+        <div class="div-tr">
+            <div class="div-td taikonumber">
                 {donder.taikoNumber ?? '???'}
-            </td>
-        </tr>
-        <tr>
-            <td>
+            </div>
+        </div>
+        <div class="div-tr">
+            <div class="div-td">
                 {donder.nickname ?? '???'}
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -56,7 +56,7 @@
         row-gap: 5px;
     }
 
-    table {
+    .div-table {
         width: 100%;
 
         border: 1px solid black;
@@ -81,18 +81,18 @@
         color:rgb(83, 83, 83);
     }
 
-    td {
+    .div-td {
         text-align: center;
         padding: 0;
         transform: translateY(-2px);
     }
-    tr:nth-child(1) td {
+    .div-tr:nth-child(1) .div-td {
         padding-bottom: 1px;
         border-bottom: 1px solid black;
     }
 
-    table[data-theme="dark"],
-    table[data-theme="dark"] td {
+    .div-table[data-theme="dark"],
+    .div-table[data-theme="dark"] .div-td {
         border-color: #818181;
     }
 

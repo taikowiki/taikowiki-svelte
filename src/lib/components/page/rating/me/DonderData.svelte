@@ -23,18 +23,18 @@
             loaded = true;
         }}
     />
-    <table data-theme={$theme}>
-        <tr>
-            <td class="taikonumber">
+    <div class="div-table" data-theme={$theme}>
+        <div class="div-tr">
+            <div class="div-td taikonumber">
                 {donderData.donder.taikoNumber}
-            </td>
-        </tr>
-        <tr>
-            <td>
+            </div>
+        </div>
+        <div class="div-tr">
+            <div class="div-td">
                 {donderData.donder.nickname}
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
     <div class="last-update">
         {i18n.lastUpdate}: {DateTime.fromJSDate(donderData.lastUpdate).toFormat("yyyy-MM-dd HH:mm:ss")}
     </div>
@@ -50,7 +50,7 @@
         row-gap: 5px;
     }
 
-    table {
+    .div-table {
         width: 100%;
 
         border: 1px solid black;
@@ -62,18 +62,18 @@
         max-width: 200px;
     }
 
-    td {
+    .div-td {
         text-align: center;
         padding: 0;
         transform: translateY(-2px);
     }
-    tr:nth-child(1) td {
+    .div-tr:nth-child(1) .div-td {
         padding-bottom: 1px;
         border-bottom: 1px solid black;
     }
 
-    table[data-theme="dark"],
-    table[data-theme="dark"] td {
+    .div-table[data-theme="dark"],
+    .div-table[data-theme="dark"] .div-td {
         border-color: #818181;
     }
 

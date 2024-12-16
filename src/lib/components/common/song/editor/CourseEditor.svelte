@@ -265,10 +265,7 @@
                                             >
                                                 <button
                                                     onclick={() => {
-                                                        course.images = [
-                                                            ...course.images,
-                                                            "",
-                                                        ];
+                                                        course?.images.push("");
                                                     }}>추가</button
                                                 >
                                             </div>
@@ -276,8 +273,7 @@
                                                 <div class="image-container">
                                                     <input
                                                         type="text"
-                                                        bind:value={course
-                                                            .images[i]}
+                                                        bind:value={course.images[i]}
                                                         placeholder="이미지 주소"
                                                     />
                                                     <button

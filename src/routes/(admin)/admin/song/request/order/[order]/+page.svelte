@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     async function approve(
         request: any & { order: number },
         songData: SongData,
@@ -17,13 +17,12 @@
 
     async function disapprove(request: any & { order: number }) {
         const response = await songAdminRequestor.disapproveRequest({
-            order: [request.order]
-        })
-        if(response.status === 'success'){
+            order: [request.order],
+        });
+        if (response.status === "success") {
             alert("거부 성공");
             await goto("/admin/song/request");
-        }
-        else{
+        } else {
             alert("거부 실패");
         }
     }
@@ -36,49 +35,54 @@
     import type { SongData } from "$lib/module/common/song/types.js";
     import { songAdminRequestor } from "$lib/module/common/song/song.client.js";
 
-    export let data;
+    let {data} = $props();
 
-    const { song, request } = data;
+    let song = $state(data.song);
+    let request = $state(data.request);
 
-    let compare = null;
+    let compare = $state(null);
     if (song !== null) {
         compare = compareSong(song, request.data);
     }
+
+    $inspect(request);
 </script>
 
 <table>
-    <tr>
-        <td style="width: 150px;"> 요청자 </td>
-        <td>
-            {data.requestor}
-        </td>
-    </tr>
-    <tr>
-        <td style="width: 150px;"> ip </td>
-        <td>
-            {data.request.ip}
-        </td>
-    </tr>
-    <tr>
-        <td> 타입 </td>
-        <td>
-            {data.request.type}
-        </td>
-    </tr>
+    <tbody>
+        <tr>
+            <td style="width: 150px;"> 요청자 </td>
+            <td>
+                {data.requestor}
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 150px;"> ip </td>
+            <td>
+                {data.request.ip}
+            </td>
+        </tr>
+        <tr>
+            <td> 타입 </td>
+            <td>
+                {data.request.type}
+            </td>
+        </tr>
+    </tbody>
 </table>
 
 <AdminRequestEditor bind:songData={request.data} {compare} />
 
 <div class="button-container">
     <button
-        on:click={() => {
+        onclick={() => {
             approve(request, request.data);
         }}
     >
         수락
     </button>
     <button
-        on:click={() => {
+        onclick={() => {
             disapprove(request);
         }}
     >

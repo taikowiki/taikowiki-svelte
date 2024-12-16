@@ -1,16 +1,16 @@
 <script lang="ts">
-    export let version: string|undefined;
+    interface Props {
+        version?: string;
+    }
+
+    let { version }: Props = $props();
 </script>
 
 <div class="container">
     <div>
-        © 2024 <a href="https://github.com/hotsixman">Hotsixman</a>
-    </div>
-    <div>
-        <a href="https://github.com/taikowiki/taikowiki-svelte">Taikowiki-Svelte{version ? `@${version}` : ""}</a>
-    </div>
-    <div>
-        <a href="https://github.com/taikowiki">Github</a>
+        <a href="https://github.com/taikowiki/taikowiki-svelte" target="_blank">
+            Taikowiki-Svelte{version ? `@${version}` : ""}
+        </a>
     </div>
 </div>
 

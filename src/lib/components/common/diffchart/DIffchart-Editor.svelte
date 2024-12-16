@@ -15,8 +15,8 @@
     import { type DiffChart } from "$lib/module/common/diffchart/types";
     import DiffchartEditorSection from "./Diffchart-Editor-Section.svelte";
     import { page } from "$app/stores";
-    import LZUTF8 from "lzutf8";
     import { Table } from "../styled";
+    import { encodeDiffchart } from "$lib/module/common/diffchart/diffchart";
 
     interface Props {
         diffchart: DiffChart;
@@ -31,12 +31,7 @@
 
     const url = new URL($page.url);
     $effect.pre(() => {
-        const stringified = JSON.stringify(diffchart);
-        const compressed = LZUTF8.compress(stringified, {
-            outputEncoding: "ByteArray",
-        });
-        const stringifiedCompressed = JSON.stringify(Array.from(compressed));
-        url.hash = btoa(encodeURIComponent(stringifiedCompressed));
+        url.hash = encodeDiffchart(diffchart);
     });
 
     function copyLink() {

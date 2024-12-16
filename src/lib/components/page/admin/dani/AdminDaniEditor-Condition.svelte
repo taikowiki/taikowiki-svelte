@@ -24,12 +24,12 @@
     $: condition.criteria.red = redCriteria
         .split(",")
         .map((e) => e.trim())
-        .filter(e => e !== '')
+        .filter((e) => e !== "")
         .map((e) => Number(e));
     $: condition.criteria.gold = goldCriteria
         .split(",")
         .map((e) => e.trim())
-        .filter(e => e !== '')
+        .filter((e) => e !== "")
         .map((e) => Number(e));
 
     const lang = getLang();
@@ -37,41 +37,43 @@
 </script>
 
 <table>
-    <tr>
-        <td> 종류 </td>
-        <td>
-            <select bind:value={condition.type}>
-                {#each conditionTypes as conditionType}
-                    <option value={conditionType}>
-                        {conditionI18n[conditionType]}
-                    </option>
-                {/each}
-            </select>
-        </td>
-        <td rowspan="3">
-            <button on:click={deleteCondition}>삭제</button>
-        </td>
-    </tr>
-    <tr>
-        <td> 적합격 </td>
-        <td>
-            <input
-                type="text"
-                bind:value={redCriteria}
-                placeholder="콤마로 구분할 것"
-            />
-        </td>
-    </tr>
-    <tr>
-        <td> 금합격 </td>
-        <td>
-            <input
-                type="text"
-                bind:value={goldCriteria}
-                placeholder="콤마로 구분할 것"
-            />
-        </td>
-    </tr>
+    <tbody>
+        <tr>
+            <td> 종류 </td>
+            <td>
+                <select bind:value={condition.type}>
+                    {#each conditionTypes as conditionType}
+                        <option value={conditionType}>
+                            {conditionI18n[conditionType]}
+                        </option>
+                    {/each}
+                </select>
+            </td>
+            <td rowspan="3">
+                <button on:click={deleteCondition}>삭제</button>
+            </td>
+        </tr>
+        <tr>
+            <td> 적합격 </td>
+            <td>
+                <input
+                    type="text"
+                    bind:value={redCriteria}
+                    placeholder="콤마로 구분할 것"
+                />
+            </td>
+        </tr>
+        <tr>
+            <td> 금합격 </td>
+            <td>
+                <input
+                    type="text"
+                    bind:value={goldCriteria}
+                    placeholder="콤마로 구분할 것"
+                />
+            </td>
+        </tr>
+    </tbody>
 </table>
 
 <style>

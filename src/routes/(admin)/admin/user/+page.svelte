@@ -9,8 +9,7 @@
         });
         if (response.status === "success") {
             alert("변경 성공");
-        }
-        else {
+        } else {
             alert("변경 실패");
         }
     }
@@ -28,36 +27,40 @@
 </script>
 
 <table>
-    <tr>
-        <th> UUID </th>
-        <th> 닉네임 </th>
-        <th> 등급 </th>
-    </tr>
-    {#each users as user, index}
+    <thead>
         <tr>
-            <td>
-                {user.UUID}
-            </td>
-            <td>
-                {user.nickname}
-            </td>
-            <td>
-                <input
-                    bind:value={grades[index]}
-                    type="number"
-                    min="1"
-                    max="10"
-                />
-                <button
-                    on:click={() => {
-                        setGrade(user.UUID, user.grade, grades[index]);
-                    }}
-                >
-                    변경
-                </button>
-            </td>
+            <th> UUID </th>
+            <th> 닉네임 </th>
+            <th> 등급 </th>
         </tr>
-    {/each}
+    </thead>
+    <tbody>
+        {#each users as user, index}
+            <tr>
+                <td>
+                    {user.UUID}
+                </td>
+                <td>
+                    {user.nickname}
+                </td>
+                <td>
+                    <input
+                        bind:value={grades[index]}
+                        type="number"
+                        min="1"
+                        max="10"
+                    />
+                    <button
+                        on:click={() => {
+                            setGrade(user.UUID, user.grade, grades[index]);
+                        }}
+                    >
+                        변경
+                    </button>
+                </td>
+            </tr>
+        {/each}
+    </tbody>
 </table>
 
 <style>

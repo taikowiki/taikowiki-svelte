@@ -66,41 +66,45 @@
 <input type="text" bind:value={url} placeholder="링크" />
 <button on:click={uploadFile}>업로드</button>
 <table>
-    <tr>
-        <th> 원본 파일명 </th>
-        <th> 새 파일명 </th>
-        <th> 주소 </th>
-        <th> 복사 </th>
-    </tr>
-    {#each fileLog as log}
+    <thead>
         <tr>
-            <td class="original">
-                {log.originalFileName}
-            </td>
-            <td>
-                {log.fileName}
-            </td>
-            <td>
-                {`https://file.taiko.wiki/img/${log.fileName}`}
-            </td>
-            <td>
-                <button
-                    on:click={() => {
-                        try {
-                            navigator.clipboard.writeText(
-                                `https://file.taiko.wiki/img/${log.fileName}`,
-                            );
-                            alert("복사 완료");
-                        } catch {
-                            alert("복사 실패");
-                        }
-                    }}
-                >
-                    복사
-                </button>
-            </td>
+            <th> 원본 파일명 </th>
+            <th> 새 파일명 </th>
+            <th> 주소 </th>
+            <th> 복사 </th>
         </tr>
-    {/each}
+    </thead>
+    <tbody>
+        {#each fileLog as log}
+            <tr>
+                <td class="original">
+                    {log.originalFileName}
+                </td>
+                <td>
+                    {log.fileName}
+                </td>
+                <td>
+                    {`https://file.taiko.wiki/img/${log.fileName}`}
+                </td>
+                <td>
+                    <button
+                        on:click={() => {
+                            try {
+                                navigator.clipboard.writeText(
+                                    `https://file.taiko.wiki/img/${log.fileName}`,
+                                );
+                                alert("복사 완료");
+                            } catch {
+                                alert("복사 실패");
+                            }
+                        }}
+                    >
+                        복사
+                    </button>
+                </td>
+            </tr>
+        {/each}
+    </tbody>
 </table>
 
 <style>
@@ -115,7 +119,7 @@
         word-break: keep-all;
     }
 
-    .original{
+    .original {
         word-break: break-all;
     }
 </style>

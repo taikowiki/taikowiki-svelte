@@ -7,7 +7,7 @@
 
     export let subGroup: number;
     export let measures: Measure[];
-    export let songDatas: ((Pick<SongData, 'title' | 'songNo' | 'genre'> & {courses: {oni: Course; ura: Course | null;}}) & {diff?: 'oni'|'ura'})[];
+    export let songDatas: (Pick<SongData, 'title' | 'songNo' | 'genre'> & {courses: {oni: Course; ura: Course | null;}})[];
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
@@ -20,8 +20,7 @@
     {#each measures as measure}
         {@const songData = songDatas.find(e => e.songNo === measure.songno.toString())}
         {#if songData}
-            {(songData.diff = measure.diff) && ''}
-            <MeasureSong {songData}/>
+            <MeasureSong {songData} diff={measure.diff}/>
         {/if}
     {/each}
 </div>

@@ -1,12 +1,24 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
+    import type { Snippet } from "svelte";
 
     const [theme] = getTheme();
 
-    export let title: string = "";
-    export let titleHref: string = "";
-    export let align: "left" | "center" | "right" = "center";
-    export let icon: string = "";
+    interface Props {
+        title?: string;
+        titleHref?: string;
+        align?: "left" | "center" | "right";
+        icon?: string;
+        children?: Snippet;
+    }
+
+    let {
+        title = "",
+        titleHref = "",
+        align = "center",
+        icon = "",
+        children,
+    }: Props = $props();
 </script>
 
 <div class="item" data-theme={$theme}>
@@ -24,7 +36,7 @@
         </a>
     {/if}
     <div class="content" data-align={align}>
-        <slot />
+        {@render children?.()}
     </div>
 </div>
 
@@ -64,8 +76,8 @@
     .title:has(*:nth-child(2)) {
         justify-content: space-between;
     }
-    .title span{
-        display:flex;
+    .title span {
+        display: flex;
         align-items: center;
 
         column-gap: 5px;
@@ -74,7 +86,7 @@
         width: 20px;
         height: 20px;
     }
-    .title[data-theme="dark"] img{
+    .title[data-theme="dark"] img {
         filter: invert(100%);
     }
 

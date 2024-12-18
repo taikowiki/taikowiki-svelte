@@ -129,22 +129,26 @@
                 return;
             }
 
-            let [x, y]: [number, number] = await new Promise((res) => {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        res([
-                            position.coords.latitude,
-                            position.coords.longitude,
-                        ]);
-                    },
-                    (error) => {
-                        if (error.code == error.PERMISSION_DENIED) {
-                            canUseGeolocation = false;
-                        }
-                        throw error;
-                    },
-                );
-            });
+            try {
+                var [x, y]: [number, number] = await new Promise((res, rej) => {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            res([
+                                position.coords.latitude,
+                                position.coords.longitude,
+                            ]);
+                        },
+                        (error) => {
+                            if (error.code == error.PERMISSION_DENIED) {
+                                canUseGeolocation = false;
+                            }
+                            rej(error);
+                        },
+                    );
+                });
+            } catch {
+                return;
+            }
 
             map.setCenter(new kakaoMap.LatLng(x, y));
 

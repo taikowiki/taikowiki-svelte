@@ -1,40 +1,35 @@
-import { daniDBController } from '$lib/module/common/dani/dani.server';
-import { songDBController } from '$lib/module/common/song/song.server';
-import type { SongDataPickedForDani } from '$lib/module/common/dani/types';
-import { error } from '@sveltejs/kit';
-import { DAN } from '$lib/module/common/song/const.js';
+import { daniDBController } from "$lib/module/common/dani/dani.server";
+import { songDBController } from "$lib/module/common/song/song.server";
+import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
+import { error } from "@sveltejs/kit";
+import { DAN } from "$lib/module/common/song/const.js";
 
 export async function load({ params }) {
-    const daniData = await daniDBController.getByVersion(params.version);
+  const daniData = await daniDBController.getByVersion(params.version);
 
-    if (daniData === null) {
-        throw error(404);
-    }
+  if (daniData === null) {
+    throw error(404);
+  }
 
-    const songNos = new Set<string>();
-    if (!daniData) {
-        throw error(404);
-    }
+  daniData.data.sort((a, b) => {
+    const aIndex = DAN.indexOf(a as any);
+    const bIndex = DAN.indexOf(b as any);
 
-    daniData.data.sort((a, b) => {
-        const aIndex = DAN.indexOf(a as any);
-        const bIndex = DAN.indexOf(b as any);
+    return bIndex - aIndex;
+  });
 
-        return bIndex - aIndex;
-    })
+  const songNos = new Set<string>(
+    daniData.data.flatMap((dani) => dani.songs.map((song) => song.songNo ?? ""))
+  );
+  songNos.delete("");
 
-    daniData.data.forEach(dani => {
-        dani.songs.forEach(song => {
-            if(typeof(song.songNo) === "string"){
-                songNos.add(song.songNo)
-            }
-        })
-    });
-    
-    const songDatas = await songDBController.getSongsColumnsBySongNo([...songNos], ["songNo", "genre", "title", "courses"]) as SongDataPickedForDani[]
+  const songDatas = (await songDBController.getSongsColumnsBySongNo(
+    [...songNos],
+    ["songNo", "genre", "title", "courses"]
+  )) as SongDataPickedForDani[];
 
-    return {
-        daniData,
-        songDatas
-    }
+  return {
+    daniData,
+    songDatas,
+  };
 }

@@ -1,5 +1,9 @@
 <script lang="ts">
-    export let version: string|undefined;
+    interface Props {
+        version?: string;
+    }
+
+    let { version }: Props = $props();
 </script>
 
 <div class="container">

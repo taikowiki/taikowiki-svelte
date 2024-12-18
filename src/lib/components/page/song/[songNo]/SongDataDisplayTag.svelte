@@ -1,6 +1,9 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
-    export let item: string;
+    interface Props {
+        item: string;
+    }
+    let { item }: Props = $props();
 
     const [theme] = getTheme();
 </script>
@@ -25,7 +28,7 @@
         border-width: 0.1em;
     }
 
-    span{
+    span {
         transform: translateY(-1px);
     }
 </style>

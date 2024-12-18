@@ -9,24 +9,26 @@
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let data;
+    let { data } = $props();
 
-    if(data.logined === false){
-        location.replace(`/auth/login?redirect_to=${encodeURIComponent('/rating/me')}`)
+    if (data.logined === false) {
+        location.replace(
+            `/auth/login?redirect_to=${encodeURIComponent("/rating/me")}`,
+        );
     }
 
-    const opened = {
+    let opened = $state({
         songRatings: false,
         measureTable: false,
         explanation: false,
-    };
-    let loaded: boolean = false;
+    });
+    let loaded: boolean = $state(false);
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
     const lang = getLang();
-    $: i18n = getI18N("/auth/user/donder", $lang);
-    $: newI18n = getI18N($lang).page.donder;
+    let i18n = $derived(getI18N("/auth/user/donder", $lang));
+    let newI18n = $derived(getI18N($lang).page.donder);
 </script>
 
 <div class="container">

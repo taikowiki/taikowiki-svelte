@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function modifyLevelByDifficulty(
         difficulty: SongSearchOption["difficulty"],
         option: SongSearchOption,
@@ -43,59 +43,54 @@
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import color from "$lib/module/common/color";
-    import { getI18N } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import type { SongSearchOption } from "$lib/module/common/song/types";
     import SearchBoxDifficultyItem from "./SearchBox-DifficultyItem.svelte";
 
-    export let option: SongSearchOption;
+    interface Props {
+        option: SongSearchOption;
+    }
 
-    $: modifyLevelByDifficulty(option.difficulty, option);
+    let { option = $bindable() }: Props = $props();
+
+    $effect.pre(() => {
+        modifyLevelByDifficulty(option.difficulty, option);
+    });
 
     const isMobile = getIsMobile();
 
     const [theme] = getTheme();
 
-    const i18n = getI18N();
+    const lang = getLang();
+    let i18n = $derived(getI18N($lang)['/song']);
 </script>
 
 <TitledContainer
-    title={$i18n.difficulty}
+    title={i18n.difficulty}
     color={$theme === "light" ? "#cf4844" : "#1c1c1c"}
     titleSize="16px"
     type={`${$isMobile ? "vertical" : "horizontal"}`}
 >
     <div class="wrapper">
-        <SearchBoxDifficultyItem
-            value="easy"
-            bind:group={option.difficulty}
-        >
-            {$i18n.easy}
+        <SearchBoxDifficultyItem value="easy" bind:group={option.difficulty}>
+            {i18n.easy}
         </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem
-            value="normal"
-            bind:group={option.difficulty}
-        >
-            {$i18n.normal}
+        <SearchBoxDifficultyItem value="normal" bind:group={option.difficulty}>
+            {i18n.normal}
         </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem
-            value="hard"
-            bind:group={option.difficulty}
-        >
-            {$i18n.hard}
+        <SearchBoxDifficultyItem value="hard" bind:group={option.difficulty}>
+            {i18n.hard}
         </SearchBoxDifficultyItem>
         <SearchBoxDifficultyItem value="oni" bind:group={option.difficulty}>
-            {$i18n.omote}
+            {i18n.omote}
         </SearchBoxDifficultyItem>
         <SearchBoxDifficultyItem value="ura" bind:group={option.difficulty}>
-            {$i18n.ura}
+            {i18n.ura}
         </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem
-            value="oniura"
-            bind:group={option.difficulty}
-        >
-            {$i18n.oni}
+        <SearchBoxDifficultyItem value="oniura" bind:group={option.difficulty}>
+            {i18n.oni}
         </SearchBoxDifficultyItem>
         <div class="level-container">
             <img

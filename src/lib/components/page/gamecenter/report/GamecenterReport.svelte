@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { goto } from "$app/navigation";
 
     async function submit(gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount' | 'coor'>>){
@@ -40,7 +40,7 @@
     import { gamecenterRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
     import type { GameCenterDataWithoutOrder } from "$lib/module/common/gamecenter/types";
 
-    const gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount' | 'coor'>> = {
+    let gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount' | 'coor'>> = $state({
         name: "",
         address: "",
         amenity: {
@@ -65,10 +65,10 @@
             5: "",
             6: "",
         },
-    };
+    });
 
     const lang = getLang();
-    $: i18n = getI18N('/gamecenter', $lang);
+    let i18n = $derived(getI18N('/gamecenter', $lang));
 </script>
 
 <h1>오락실 제보</h1>
@@ -114,12 +114,12 @@
             가격 <input type="number" bind:value={machine.price}>
             튠 수 <input type="number" bind:value={machine.tunes}>
             대수 <input type="number" bind:value={machine.count}>
-            <button on:click={() => {gamecenterData.machines = gamecenterData.machines.filter((_,i) => i !== index)}}>
+            <button onclick={() => {gamecenterData.machines = gamecenterData.machines.filter((_,i) => i !== index)}}>
                 삭제
             </button>
         </div>
     {/each}
-    <button on:click={() => {gamecenterData.machines = [...gamecenterData.machines, {price: 0, tunes: 0, count: 0}]}}>
+    <button onclick={() => {gamecenterData.machines = [...gamecenterData.machines, {price: 0, tunes: 0, count: 0}]}}>
         기체 추가
     </button>
 </div>
@@ -133,7 +133,7 @@
     {/each}
 </div>
 
-<button on:click={() => {submit(gamecenterData)}}>
+<button onclick={() => {submit(gamecenterData)}}>
     제출하기
 </button>
 

@@ -3,16 +3,27 @@
     import type { UserRatingTierName } from "$lib/module/common/user/types";
     import CssFilterConverter from "css-filter-converter";
 
-    export let tierName: UserRatingTierName;
-    export let grade: number | null;
-    export let width: string = '180px';
-    export let height: string = '180px';
-    export let fontSize: string = '120px';
-    export let transform: string = 'transform: translate(2px, -7px)';
+    interface Props{
+        tierName: UserRatingTierName;
+        grade: number | null;
+        width?: string;
+        height?: string;
+        fontSize?: string;
+        transform?: string;
+    }
+
+    let {
+        tierName,
+        grade,
+        width = "180px",
+        height = '180px',
+        fontSize = '120px',
+        transform = 'transform: translate(2px, -7px)'
+    }: Props = $props();
 </script>
 
 {#if tierName === "omega"}
-    <div class="tier-image omega" style={`width:${width};height:${height};`} />
+    <div class="tier-image omega" style={`width:${width};height:${height};`}></div>
 {:else if tierName === "pearl"}
     <div class="tier-image pearl" style={`width:${width};height:${height};`}>
         <img

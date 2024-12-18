@@ -3,10 +3,14 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DIFFICULTY } from "$lib/module/common/song/const";
 
-    export let songs: DaniSong[];
+    interface Props {
+        songs: DaniSong[];
+    }
+
+    let { songs = $bindable() }: Props = $props();
 
     const lang = getLang();
-    $: diffI18n = getI18N("other", $lang).difficulty;
+    let diffI18n = $derived(getI18N("other", $lang).difficulty);
 </script>
 
 <tr>
@@ -28,11 +32,11 @@
 </tr>
 
 <style>
-    td{
+    td {
         border: 1px solid black;
     }
 
-    td:nth-child(1){
+    td:nth-child(1) {
         width: 100px;
         text-align: center;
     }

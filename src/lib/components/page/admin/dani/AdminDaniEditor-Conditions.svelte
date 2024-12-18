@@ -2,19 +2,23 @@
     import type { DaniCondition } from "$lib/module/common/dani/types";
     import AdminDaniEditorCondition from "./AdminDaniEditor-Condition.svelte";
 
-    export let conditions: DaniCondition[];
-
-    function addCondition(){
-        conditions = [...conditions, {
-            type: 'gauge',
-            criteria:{
-                red: [],
-                gold: []
-            }
-        }]
+    interface Props {
+        conditions: DaniCondition[];
     }
 
-    function deleteCondition(index: number){
+    let { conditions = $bindable() }: Props = $props();
+
+    function addCondition() {
+        conditions.push({
+            type: "gauge",
+            criteria: {
+                red: [],
+                gold: [],
+            },
+        });
+    }
+
+    function deleteCondition(index: number) {
         conditions = conditions.filter((_, i) => i !== index);
     }
 </script>
@@ -22,21 +26,24 @@
 <tr>
     <td>
         조건
-        <button on:click={addCondition}> + </button>
+        <button onclick={addCondition}> + </button>
     </td>
     <td>
-        {#each conditions as condition, index}
-            <AdminDaniEditorCondition bind:condition deleteCondition={() => deleteCondition(index)}/>
+        {#each conditions as _, index}
+            <AdminDaniEditorCondition
+                bind:condition={conditions[index]}
+                deleteCondition={() => deleteCondition(index)}
+            />
         {/each}
     </td>
 </tr>
 
 <style>
-    td{
+    td {
         border: 1px solid black;
     }
 
-    td:nth-child(1){
+    td:nth-child(1) {
         width: 100px;
         text-align: center;
     }

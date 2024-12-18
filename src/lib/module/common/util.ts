@@ -107,3 +107,29 @@ export function mdToHtml(md: string){
 export function htmlToMd(html: string){
     return converter.makeMarkdown(html);
 }
+
+/*
+ * pipe
+ */
+import type { Last, MakePromise } from './util.types';
+export function pipe<T, const U extends readonly ((v: any) => any)[]>(value: T, callbacks: U) : ReturnType<Last<U>> {
+    let v: any = value;
+    for(const callback of callbacks){
+        v = callback(v);
+    }
+    return v;
+};
+//@ts-expect-error
+export async function asyncPipe<T, const U extends readonly ((v: any) => (any | Promise<any>))[]>(value: T, callbacks: U) : MakePromise<ReturnType<Last<U>>> {
+    let v: any = value;
+    for(const callback of callbacks){
+        const callbackResult = callback(v);
+        if(callbackResult instanceof Promise){
+            v = await callbackResult;
+        }
+        else{
+            v = callbackResult;
+        }
+    }
+    return v;
+}

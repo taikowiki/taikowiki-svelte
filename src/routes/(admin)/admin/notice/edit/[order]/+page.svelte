@@ -4,8 +4,8 @@
     import { adminNoticeRequestor } from "$lib/module/common/notice/notice.client";
     import type { Notice } from "$lib/module/common/notice/types";
 
-    export let data;
-    let notice: Notice = data.notice;
+    let {data} = $props();
+    let notice: Notice = $state(data.notice);
 
     async function submit() {
         if (!confirm("작성하시겠습니까?")) {
@@ -42,7 +42,7 @@
 </script>
 
 <AdminNoticeEditor bind:notice />
-<button on:click={submit}> 제출 </button>
+<button onclick={submit}> 제출 </button>
 
 <style>
     button {

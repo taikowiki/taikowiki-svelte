@@ -2,17 +2,21 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let donder: { nickname: string | null; taikoNumber: string | null };
-    export let loaded: boolean = false;
+    interface Props {
+        donder: { nickname: string | null; taikoNumber: string | null };
+        loaded?: boolean;
+    }
+
+    let {donder, loaded = $bindable(false)}: Props = $props();
 
     const myDon = `https://img.taiko-p.jp/imgsrc.php?v=&kind=mydon&fn=mydon_${donder.taikoNumber}`;
-    if(!donder.taikoNumber){
+    if (!donder.taikoNumber) {
         loaded = true;
     }
 
     const [theme] = getTheme();
     const lang = getLang();
-    $: i18n = getI18N("/auth/user/donder", $lang);
+    let i18n = $derived(getI18N("/auth/user/donder", $lang));
 </script>
 
 <div class="container">
@@ -20,30 +24,28 @@
         <img
             src={myDon}
             alt={i18n.myDon}
-            on:load={() => {
+            onload={() => {
                 loaded = true;
             }}
-            on:error={() => {
+            onerror={() => {
                 loaded = true;
             }}
         />
     {:else}
-        <div class="anonymous">
-            ?
-        </div>
+        <div class="anonymous">?</div>
     {/if}
-    <table data-theme={$theme}>
-        <tr>
-            <td class="taikonumber">
-                {donder.taikoNumber ?? '???'}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {donder.nickname ?? '???'}
-            </td>
-        </tr>
-    </table>
+    <div class="div-table" data-theme={$theme}>
+        <div class="div-tr">
+            <div class="div-td taikonumber">
+                {donder.taikoNumber ?? "???"}
+            </div>
+        </div>
+        <div class="div-tr">
+            <div class="div-td">
+                {donder.nickname ?? "???"}
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -56,7 +58,7 @@
         row-gap: 5px;
     }
 
-    table {
+    .div-table {
         width: 100%;
 
         border: 1px solid black;
@@ -67,32 +69,32 @@
         width: 100%;
         max-width: 200px;
     }
-    .anonymous{
+    .anonymous {
         width: 100%;
         max-width: 200px;
         aspect-ratio: 1 / 1;
         border-radius: 50%;
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
         background-color: rgb(236, 236, 236);
         font-size: 50px;
         font-weight: bold;
-        color:rgb(83, 83, 83);
+        color: rgb(83, 83, 83);
     }
 
-    td {
+    .div-td {
         text-align: center;
         padding: 0;
         transform: translateY(-2px);
     }
-    tr:nth-child(1) td {
+    .div-tr:nth-child(1) .div-td {
         padding-bottom: 1px;
         border-bottom: 1px solid black;
     }
 
-    table[data-theme="dark"],
-    table[data-theme="dark"] td {
+    .div-table[data-theme="dark"],
+    .div-table[data-theme="dark"] .div-td {
         border-color: #818181;
     }
 

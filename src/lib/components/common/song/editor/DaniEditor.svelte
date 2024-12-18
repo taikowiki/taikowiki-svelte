@@ -3,10 +3,14 @@
     import { DAN, DANIVERSION } from "$lib/module/common/song/const";
     import type { Dani } from "$lib/module/common/song/types";
 
-    export let dani: Dani;
+    interface Props {
+        dani: Dani;
+    }
+
+    let { dani = $bindable() }: Props = $props();
 
     const lang = getLang();
-    $: i18n = getI18N('other', $lang).dani
+    let i18n = $derived(getI18N("other", $lang).dani);
 </script>
 
 <div class="container">
@@ -25,20 +29,14 @@
         {/each}
     </select>
     <select bind:value={dani.order}>
-        <option value={1}>
-            첫 번째
-        </option>
-        <option value={2}>
-            두 번째
-        </option>
-        <option value={3}>
-            세 번째
-        </option>
+        <option value={1}> 첫 번째 </option>
+        <option value={2}> 두 번째 </option>
+        <option value={3}> 세 번째 </option>
     </select>
 </div>
 
 <style>
-    .container{
-        display:flex;
+    .container {
+        display: flex;
     }
 </style>

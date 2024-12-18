@@ -5,8 +5,12 @@
     import { DIFFICULTY } from "$lib/module/common/song/const";
     import type { SongData } from "$lib/module/common/song/types";
 
-    export let courses: SongData["courses"];
-    export let compare: any;
+    interface Props {
+        courses: SongData["courses"];
+        compare: any;
+    }
+
+    let { courses = $bindable(), compare }: Props = $props();
 </script>
 
 <TitledContainer title="보면" color="#cf4844">

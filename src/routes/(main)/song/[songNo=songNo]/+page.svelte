@@ -10,26 +10,29 @@
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
     import { page } from "$app/stores";
-    import { DIFFICULTY } from "$lib/module/common/song/const.js";
     import type { Difficulty } from "$lib/module/common/song/types.js";
+    import { DIFFICULTY } from "$lib/module/common/song/const.js";
 
-    export let data;
+    let { data } = $props();
     const song = data.song;
     const isMobile = getIsMobile();
 
     const lang = getLang();
-    $: i18n = getI18N('/song/[songNo]', $lang);
-    $: titleI18n = getI18N('other', $lang).title['/song/[songNo]'];
+    let i18n = $derived(getI18N("/song/[songNo]", $lang));
+    let titleI18n = $derived(getI18N("other", $lang).title["/song/[songNo]"]);
 
-    let diff: Difficulty = "oni";
-    $: {
-        let diffParam = $page.url.searchParams.get('diff') as Difficulty;
-        diff = song?.courses?.[diffParam] ? diffParam : "oni";
-    }
+    let diff: Difficulty = $derived.by(() => {
+        let diffParam = $page.url.searchParams.get("diff") as Difficulty | null;
+        if (diffParam && DIFFICULTY.includes(diffParam)) {
+            return song?.courses?.[diffParam] ? diffParam : "oni";
+        } else {
+            return "oni";
+        }
+    });
 </script>
 
 {#if song}
-    <PageTitle title={song.title}/>
+    <PageTitle title={song.title} />
     <AlertDisplay
         isAsiaBanned={song.isAsiaBanned}
         isKrBanned={song.isKrBanned}
@@ -54,7 +57,7 @@
     </div>
     <CourseContainer courses={song.courses} selectedDifficulty={diff} />
 {:else}
-    <PageTitle title={titleI18n}/>
+    <PageTitle title={titleI18n} />
     {i18n.noSong}
     <AddSongButton />
 {/if}

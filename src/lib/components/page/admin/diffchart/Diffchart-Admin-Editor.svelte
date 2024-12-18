@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     async function save(data: DiffchartData) {
         const response = await diffchartRequestor.save(data);
         if (response.status === "success") {
@@ -26,12 +26,19 @@
     import DIffchartEditor from "$lib/components/common/diffchart/DIffchart-Editor.svelte";
     import { diffchartRequestor } from "$lib/module/common/diffchart/diffchart.client";
     import { type DiffchartData } from "$lib/module/common/diffchart/types";
-    export let diffchartData: DiffchartData;
 
-    $: diffchartData.name = `${diffchartData.level} level ${diffchartData.type}`;
+    interface Props {
+        diffchartData: DiffchartData;
+    }
 
-    let opened = false;
-    let commentOpened = false;
+    let { diffchartData }: Props = $props();
+
+    $effect.pre(() => {
+        diffchartData.name = `${diffchartData.level} level ${diffchartData.type}`;
+    })
+
+    let opened = $state(false);
+    let commentOpened = $state(false);
 </script>
 
 <tr>
@@ -56,7 +63,7 @@
     </td>
     <td>
         <button
-            on:click={() => {
+            onclick={() => {
                 opened = !opened;
             }}
         >
@@ -66,9 +73,9 @@
                 펼치기
             {/if}
         </button>
-        
+
         <button
-            on:click={() => {
+            onclick={() => {
                 commentOpened = !commentOpened;
             }}
         >
@@ -80,14 +87,14 @@
         </button>
 
         <button
-            on:click={async () => {
+            onclick={async () => {
                 save(diffchartData);
             }}
             >저장하기
         </button>
 
         <button
-            on:click={async () => {
+            onclick={async () => {
                 remove(diffchartData.level, diffchartData.type);
             }}
             >삭제
@@ -98,14 +105,14 @@
     <tr>
         <td> 코멘트 </td>
         <td colspan="2">
-            <textarea bind:value={diffchartData.comment} />
+            <textarea bind:value={diffchartData.comment}></textarea>
         </td>
     </tr>
 {/if}
 {#if opened}
     <tr>
         <td colspan="3" style="border: 3px solid red;">
-            <DIffchartEditor bind:diffchart={diffchartData.data} mode="admin"/>
+            <DIffchartEditor bind:diffchart={diffchartData.data} mode="admin" />
         </td>
     </tr>
 {/if}

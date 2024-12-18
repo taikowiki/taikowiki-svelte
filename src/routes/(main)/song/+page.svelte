@@ -10,22 +10,22 @@
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
 
-    export let data;
+    let {data} = $props();
 
-    let songLang: SongLang;
+    let songLang: SongLang = $state("ja");
 
-    $: pageNum = data.pageNum;
-    $: option = data.option;
-    $: songs = data.songs;
-    $: length = data.count;
+    let pageNum = $derived(data.pageNum);
+    let option = $derived(data.option);
+    let songs = $derived(data.songs);
+    let length = $derived(data.count);
 
     const lang = getLang();
-    $: titleI18n = getI18N("other", $lang).title["/song"];
+    let titleI18n = $derived(getI18N("other", $lang).title["/song"]);
 </script>
 
 <PageTitle title={titleI18n} />
 
-<SearchBox {option} />
+<SearchBox option={$state.snapshot(option)} />
 {#if $navigating}
     <Loading />
 {:else}

@@ -6,30 +6,33 @@
     import type { Writable } from "svelte/store";
     import FavoriteButton from "./FavoriteButton.svelte";
 
-    export let gamecenterData: GameCenterData;
-    export let clickHandle: () => any;
-    export let distance: number | undefined;
-    export let favorites: Writable<number[]>;
+    interface Props {
+        gamecenterData: GameCenterData;
+        clickHandle: () => any;
+        distance?: number;
+        favorites: Writable<number[]>;
+    }
+
+    let { gamecenterData = $bindable(), clickHandle, distance, favorites }: Props = $props();
 
     const lang = getLang();
-    $: i18n = getI18N("/gamecenter", $lang);
-    $: newI18n = getI18N($lang).page.gamecenter;
+    let i18n = $derived(getI18N("/gamecenter", $lang));
+    let newI18n = $derived(getI18N($lang).page.gamecenter);
 
     const [theme] = getTheme();
 
     const naverLink = `https://map.naver.com/p/search/${encodeURIComponent(gamecenterData.address)}`;
     const kakaoLink = `https://map.kakao.com/link/search/${gamecenterData.address}`;
 
-    const user: Writable<{ logined: boolean; nickname: string }> =
-        getContext("user");
+    const user: Writable<{ logined: boolean; nickname: string }> = getContext("user");
 
     const today = new Date().getDay();
 
-    let showOtherDayBusinessHours = false;
-    let showMachines = false;
+    let showOtherDayBusinessHours = $state(false);
+    let showMachines = $state(false);
 </script>
 
-<div class="container" on:click={clickHandle} role="presentation">
+<div class="container" onclick={clickHandle} role="presentation">
     <div class="name">
         {gamecenterData.name}
     </div>
@@ -48,7 +51,8 @@
     <div class="machines-container">
         <div
             class="machines-opener"
-            on:click|stopPropagation={() => {
+            onclick={(event) => {
+                event.stopPropagation();
                 showMachines = !showMachines;
             }}
             role="presentation"
@@ -56,31 +60,32 @@
         >
             {newI18n.machineInfo}
         </div>
-        <table class="machines" class:hidden={!showMachines}>
-            <tr>
-                <th> {i18n.price} </th>
-                <th> {i18n.tunes} </th>
-                <th> {i18n.count} </th>
-            </tr>
+        <div class="div-table machines" class:hidden={!showMachines}>
+            <div class="div-tr">
+                <div class="div-th">{i18n.price}</div>
+                <div class="div-th">{i18n.tunes}</div>
+                <div class="div-th">{i18n.count}</div>
+            </div>
             {#each gamecenterData.machines as machine}
-                <tr>
-                    <td>
+                <div class="div-tr">
+                    <div class="div-td">
                         {machine.price}원
-                    </td>
-                    <td>
+                    </div>
+                    <div class="div-td">
                         {machine.tunes}곡
-                    </td>
-                    <td>
+                    </div>
+                    <div class="div-td">
                         {machine.count}대
-                    </td>
-                </tr>
+                    </div>
+                </div>
             {/each}
-        </table>
+        </div>
     </div>
     <div class="hours-container">
         <div
             class="today"
-            on:click|stopPropagation={() => {
+            onclick={(event) => {
+                event.stopPropagation();
                 showOtherDayBusinessHours = !showOtherDayBusinessHours;
             }}
             role="presentation"
@@ -117,7 +122,7 @@
                 <FavoriteButton
                     {favorites}
                     gamecenterOrder={gamecenterData.order}
-                    favoriteCount={gamecenterData.favoriteCount}
+                    bind:favoriteCount={gamecenterData.favoriteCount}
                 />
             {:else}
                 <div class="favorite-count">
@@ -226,8 +231,8 @@
     .machines.hidden {
         display: none;
     }
-    .machines td,
-    th {
+    .machines .div-td,
+    .div-th {
         border: 1px solid gray;
         text-align: center;
     }

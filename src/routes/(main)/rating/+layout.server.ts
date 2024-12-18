@@ -2,38 +2,30 @@ import { songDBController } from "$lib/module/common/song/song.server.js";
 import type { SongData } from "$lib/module/common/song/types.js";
 import { userDonderDBController } from "$lib/module/common/user/user.server";
 
-export async function load({ locals }) {
-    const songDatas = (await songDBController.getAllColumns(['title', 'songNo', 'genre', 'courses'])) as Pick<SongData, 'songNo' | 'title' | 'genre' | 'courses'>[];
+export async function load({ locals: { userData } }) {
+    const songDatas = (await songDBController.getAllColumns([
+        "title",
+        "songNo",
+        "genre",
+        "courses",
+    ])) as Pick<SongData, "songNo" | "title" | "genre" | "courses">[];
 
-    if (locals.userData) {
-        const donderData = await userDonderDBController.getData(locals.userData.UUID);
-        if(donderData && donderData.scoreData){
-            const ranking = await userDonderDBController.getRankByRating(locals.userData.UUID);
-            return {
-                ratingDataExists: true,
-                donderData,
-                songDatas,
-                ranking,
-                logined: true
-            }
-        }
-        else{
-            return {
-                ratingDataExists: false,
-                donderData: null,
-                songDatas,
-                ranking: null,
-                logined: true
-            }
-        }
-    }
+    const logined = !!userData;
+    const donderData = logined
+        ? await userDonderDBController.getData(userData.UUID)
+        : null;
+    const ratingDataExists = !!donderData?.scoreData;
+    const ranking = ratingDataExists
+        ? await userDonderDBController.getRankByRating(userData!.UUID)
+        : null;
+
     return {
-        ratingDataExists: false,
-        donderData: null,
+        ratingDataExists,
+        donderData,
         songDatas,
-        ranking: null,
-        logined: false
-    }
+        ranking,
+        logined,
+    };
 }
 
 export const ssr = false;

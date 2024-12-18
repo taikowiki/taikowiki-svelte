@@ -6,6 +6,7 @@
     import AdminDaniEditorCondition from "./AdminDaniEditor-Conditions.svelte";
     import type { MouseEventHandler } from "svelte/elements";
     import AdminDaniEditorQr from "./AdminDaniEditor-Qr.svelte";
+    import { dani } from "$lib/module/common/color";
 
     interface Props {
         daniData: Dani;
@@ -24,7 +25,7 @@
                 ja: daniData?.name?.ja ?? "",
                 ko: daniData?.name?.ko ?? "",
             };
-            daniData.qr = "";
+            daniData.qr = daniData.qr || "";
         } else {
             daniData.name = null;
             //@ts-expect-error

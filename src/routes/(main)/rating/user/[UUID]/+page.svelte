@@ -8,7 +8,7 @@
     import { getTier } from "$lib/module/common/user/getTier.js";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
-    export let data;
+    let {data} = $props();
 
     const donder = {
         nickname: data.otherDonderData.nickname,
@@ -16,13 +16,13 @@
     };
     const tier = getTier(data.otherDonderData.currentRating);
 
-    let loaded = false;
-    let songOpened = false;
+    let loaded = $state(false);
+    let songOpened = $state(false);
 
     const isMobile = getIsMobile();
     const lang = getLang();
-    $: newI18n = getI18N($lang).page.donder;
-    $: i18n = getI18N($lang).page.rating.user;
+    let newI18n = $derived(getI18N($lang).page.donder);
+    let i18n = $derived(getI18N($lang).page.rating.user);
 </script>
 
 <div class="container">

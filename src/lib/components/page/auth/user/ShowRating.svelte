@@ -3,27 +3,32 @@
     import { userRequestor } from "$lib/module/common/user/user.client";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let showRating: {
-        nickname: boolean;
-        taikoNumber: boolean;
-        songs: boolean;
-    };
-
-    $: if(!showRating.nickname){
-        showRating.taikoNumber = false;
+    interface Props {
+        showRating: {
+            nickname: boolean;
+            taikoNumber: boolean;
+            songs: boolean;
+        };
     }
+
+    let { showRating = $bindable() }: Props = $props();
+
+    $effect.pre(() => {
+        if (!showRating.nickname) {
+            showRating.taikoNumber = false;
+        }
+    });
 
     const [theme] = getTheme();
     const lang = getLang();
-    $: i18n = getI18N($lang).page.user.showRating;
+    let i18n = $derived(getI18N($lang).page.user.showRating);
 
-    async function submit(){
+    async function submit() {
         const response = await userRequestor.changeShowRating(showRating);
-        if(response.status === "success"){
-            alert('적용이 완료되었습니다.');
-        }
-        else{
-            alert('에러가 발생했습니다.');
+        if (response.status === "success") {
+            alert("적용이 완료되었습니다.");
+        } else {
+            alert("에러가 발생했습니다.");
         }
     }
 </script>
@@ -37,18 +42,21 @@
             <div>
                 <label>
                     {i18n.showRatingNick}
-                    <input bind:checked={showRating.nickname} type="checkbox"/>
+                    <input bind:checked={showRating.nickname} type="checkbox" />
                 </label>
                 <label>
                     {i18n.showRatingTaikoNo}
-                    <input bind:checked={showRating.taikoNumber} type="checkbox"/>
+                    <input
+                        bind:checked={showRating.taikoNumber}
+                        type="checkbox"
+                    />
                 </label>
                 <label>
                     {i18n.showRatingSongs}
-                    <input bind:checked={showRating.songs} type="checkbox"/>
+                    <input bind:checked={showRating.songs} type="checkbox" />
                 </label>
             </div>
-            <button on:click={submit} data-theme={$theme}>
+            <button onclick={submit} data-theme={$theme}>
                 {i18n.submit}
             </button>
         </div>
@@ -56,15 +64,15 @@
 </div>
 
 <style>
-    .container{
-        display:flex;
+    .container {
+        display: flex;
         flex-direction: row;
         align-items: center;
         column-gap: 10px;
     }
 
-    label{
-        display:block;
+    label {
+        display: block;
         cursor: pointer;
     }
 

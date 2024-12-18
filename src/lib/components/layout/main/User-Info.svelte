@@ -5,7 +5,11 @@
     import UserBorder from "./User-Border.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let close: () => void;
+    interface Props {
+        close: () => void;
+    }
+
+    let { close }: Props = $props();
 
     const user = getContext("user") as Writable<{
         logined: boolean;
@@ -13,12 +17,12 @@
     }>;
 
     const lang = getLang();
-    $: i18n = getI18N($lang).layout.main.user;
+    let i18n = $derived(getI18N($lang).layout.main.user);
 </script>
 
 {#if $user.logined}
     <UserItem href="/auth/user" isButton>
-        <div class="container" on:click={close} role="presentation">
+        <div class="container" onclick={close} role="presentation">
             <div class="s">{i18n.user}</div>
             <div class="n">{$user.nickname}</div>
         </div>
@@ -29,24 +33,24 @@
         </div>
     </UserItem>
     <UserItem href="/rating" isButton height="30px">
-        <div class="container" on:click={close} role="presentation">
+        <div class="container" onclick={close} role="presentation">
             {i18n.donderData}
         </div>
     </UserItem>
 {:else}
     <UserItem>
-        <div class="container" on:click={close} role="presentation">
+        <div class="container" onclick={close} role="presentation">
             <div class="s">{i18n.notLogined}</div>
             <div class="n">{$user.nickname}</div>
         </div>
     </UserItem>
     <UserItem href="/auth/login" isButton height="30px">
-        <div class="container" on:click={close} role="presentation">
+        <div class="container" onclick={close} role="presentation">
             {i18n.login}
         </div>
     </UserItem>
 {/if}
-<UserBorder/>
+<UserBorder />
 
 <style>
     .container {
@@ -62,7 +66,7 @@
     .s {
         font-size: 12px;
     }
-    .n{
+    .n {
         font-size: 15px;
     }
 </style>

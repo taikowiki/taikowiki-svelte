@@ -3,15 +3,19 @@
     import type { Notice } from "$lib/module/common/notice/types";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let notices: {
-        wiki: Omit<Notice, "content">[];
-        official: Omit<Notice, "content">[];
-    };
+    interface Props {
+        notices: {
+            wiki: Omit<Notice, "content">[];
+            official: Omit<Notice, "content">[];
+        };
+    }
+
+    let {notices}: Props = $props();
 
     const [theme] = getTheme();
     const lang = getLang();
-    $: noticeI18n = getI18N("/notice", $lang);
-    $: indexNoticeI18n = getI18N($lang).page.index.notice;
+    let noticeI18n = $derived(getI18N("/notice", $lang));
+    let indexNoticeI18n = $derived(getI18N($lang).page.index.notice);
 </script>
 
 <div class="container">
@@ -22,11 +26,16 @@
             href="/notice?type=wiki"
         >
             <span>
-                {noticeI18n.type.wiki} {indexNoticeI18n}
+                {noticeI18n.type.wiki}
+                {indexNoticeI18n}
             </span>
         </a>
         {#each notices.wiki as notice}
-            <a class="notice-title" data-theme={$theme} href={`/notice/${notice.order}`}>
+            <a
+                class="notice-title"
+                data-theme={$theme}
+                href={`/notice/${notice.order}`}
+            >
                 {notice.title}
             </a>
         {/each}
@@ -38,11 +47,16 @@
             href="/notice?type=official"
         >
             <span>
-                {noticeI18n.type.official} {indexNoticeI18n}
+                {noticeI18n.type.official}
+                {indexNoticeI18n}
             </span>
         </a>
         {#each notices.official as notice}
-            <a class="notice-title" data-theme={$theme} href={`/notice/${notice.order}`}>
+            <a
+                class="notice-title"
+                data-theme={$theme}
+                href={`/notice/${notice.order}`}
+            >
                 {notice.title}
             </a>
         {/each}
@@ -73,7 +87,7 @@
         display: flex;
         flex-direction: column;
     }
-    .sub-container[data-theme="dark"]{
+    .sub-container[data-theme="dark"] {
         box-shadow: none;
         background-color: #1c1c1c;
     }
@@ -87,7 +101,7 @@
         padding-inline-start: 5px;
 
         margin-bottom: 3px;
-        
+
         font-weight: bold;
         color: black;
         &[data-theme="dark"] {
@@ -99,14 +113,14 @@
         border-bottom: 2px solid #cf4844;
         font-size: 18px;
     }
-    .sub-container-title[data-theme="dark"] > span{
+    .sub-container-title[data-theme="dark"] > span {
         border-color: gray;
     }
     .sub-container-title::after {
         content: "〉";
         color: #cf4844;
     }
-    .sub-container-title[data-theme="dark"]::after{
+    .sub-container-title[data-theme="dark"]::after {
         color: gray;
     }
 
@@ -121,7 +135,7 @@
             color: white;
         }
     }
-    .notice-title:hover{
+    .notice-title:hover {
         text-decoration: underline;
     }
 </style>

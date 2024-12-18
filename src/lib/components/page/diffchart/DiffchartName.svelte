@@ -1,7 +1,11 @@
 <script lang="ts">
-    export let name: string;
-    export let color: string = "black";
-    export let backgroundColor: string = "grey";
+    interface Props {
+        name: string;
+        color?: string;
+        backgroundColor?: string;
+    }
+
+    let { name, color = "black", backgroundColor = "gray" }: Props = $props();
 </script>
 
 <div class="name" style={`color:${color};background:${backgroundColor};`}>
@@ -9,11 +13,11 @@
 </div>
 
 <style>
-    .name{
+    .name {
         width: 100%;
         height: 70px;
 
-        display:flex;
+        display: flex;
         flex-direction: column;
         justify-content: center;
 

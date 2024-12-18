@@ -1,5 +1,9 @@
 <script lang="ts">
-    export let qr: string = '';
+    interface Props{
+        qr: string;
+    }
+
+    let {qr = $bindable()}: Props = $props();
 </script>
 
 <tr>

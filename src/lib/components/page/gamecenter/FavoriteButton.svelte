@@ -2,31 +2,39 @@
     import { gamecenterRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
     import type { Writable } from "svelte/store";
 
-    export let favorites: Writable<number[]>;
-    export let gamecenterOrder: number;
-    export let favoriteCount: number;
+    interface Props {
+        favorites: Writable<number[]>;
+        gamecenterOrder: number;
+        favoriteCount: number;
+    }
 
-    $: favorite = $favorites.includes(gamecenterOrder);
+    let {favorites, gamecenterOrder, favoriteCount = $bindable()}: Props = $props();
+
+    let favorite = $derived($favorites.includes(gamecenterOrder));
 
     async function addFavorite() {
-        const response = await gamecenterRequestor.addFavorite({gamecenterOrder});
+        const response = await gamecenterRequestor.addFavorite({
+            gamecenterOrder,
+        });
 
         if (response.status === "success") {
-            if(!favorite){
+            favoriteCount = favoriteCount + 1;
+            if (!favorite) {
                 $favorites = [...$favorites, gamecenterOrder];
             }
-            favoriteCount = favoriteCount + 1;
         }
     }
 
     async function deleteFavorite() {
-        const response = await gamecenterRequestor.deleteFavorite({gamecenterOrder});
+        const response = await gamecenterRequestor.deleteFavorite({
+            gamecenterOrder,
+        });
 
         if (response.status === "success") {
-            if(favorite){
-                $favorites = $favorites.filter(e => e !== gamecenterOrder);
+            favoriteCount = Math.max(favoriteCount - 1, 0);
+            if (favorite) {
+                $favorites = $favorites.filter((e) => e !== gamecenterOrder);
             }
-            favoriteCount = Math.max(favoriteCount - 1, 0)
         }
     }
 </script>
@@ -34,7 +42,8 @@
 <div
     class="container"
     role="presentation"
-    on:click|stopPropagation={() => {
+    onclick={(event) => {
+        event.stopPropagation();
         favorite ? deleteFavorite() : addFavorite();
     }}
 >

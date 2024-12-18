@@ -462,7 +462,7 @@ const ko: LangFile = {
             classic: '클래식'
         },
         languages: {
-            jp: '일본어',
+            ja: '일본어',
             ko: '한국어',
             ako: '한국어(비공식)',
             en: '영어',

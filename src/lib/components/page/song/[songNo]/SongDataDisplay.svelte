@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function setTdMinWidth(node: HTMLDivElement, isMobile: boolean) {
         function updateFunc(isMobile: boolean) {
             if (!isMobile && node.clientHeight > 30) {
@@ -44,11 +44,15 @@
     import { DateTime } from "luxon";
     import SongDataDisplayTag from "./SongDataDisplayTag.svelte";
 
-    export let bpm: SongData["bpm"];
-    export let bpmShiver: SongData["bpmShiver"];
-    export let version: string[];
-    export let artists: string[];
-    export let addedDate: number | null;
+    interface Props {
+        bpm: SongData["bpm"];
+        bpmShiver: SongData["bpmShiver"];
+        version: string[];
+        artists: string[];
+        addedDate: number | null;
+    }
+
+    let {bpm, bpmShiver, version, artists, addedDate}: Props = $props();
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
@@ -58,7 +62,7 @@
     let table: HTMLDivElement;
 
     const lang = getLang();
-    $: i18n = getI18N($lang).page.songNo.songData;
+    let i18n = $derived(getI18N($lang).page.songNo.songData);
 </script>
 
 <div
@@ -69,7 +73,7 @@
     use:setTdMinWidth={$isMobile}
 >
     <div class="div-tr">
-        <div class="div-td"> BPM </div>
+        <div class="div-td">BPM</div>
         <div class="div-td">
             {#if bpm.min === bpm.max}
                 {bpm.min}
@@ -83,7 +87,7 @@
     </div>
     {#if version.length}
         <div class="div-tr">
-            <div class="div-td"> {i18n.version} </div>
+            <div class="div-td">{i18n.version}</div>
             <div class="div-td">
                 {#each version as v}
                     <SongDataDisplayTag item={v} />
@@ -93,7 +97,7 @@
     {/if}
     {#if artists.length}
         <div class="div-tr">
-            <div class="div-td"> {i18n.artists} </div>
+            <div class="div-td">{i18n.artists}</div>
             <div class="div-td">
                 {#each artists as artist}
                     <SongDataDisplayTag item={artist} />
@@ -103,7 +107,7 @@
     {/if}
     {#if addedDate}
         <div class="div-tr">
-            <div class="div-td"> {i18n.addedDate} </div>
+            <div class="div-td">{i18n.addedDate}</div>
             <div class="div-td">
                 {DateTime.fromMillis(addedDate, {
                     zone: "Asia/Seoul",

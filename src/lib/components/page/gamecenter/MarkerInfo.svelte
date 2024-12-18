@@ -1,7 +1,11 @@
 <script lang="ts">
     import type { GameCenterData } from "$lib/module/common/gamecenter/types";
 
-    export let gamecenterData: GameCenterData;
+    interface Props {
+        gamecenterData: GameCenterData;
+    }
+
+    let { gamecenterData }: Props = $props();
 
     const naverLink = `https://map.naver.com/p/search/${encodeURIComponent(gamecenterData.address)}`;
     const kakaoLink = `https://map.kakao.com/link/search/${gamecenterData.address}`;
@@ -16,8 +20,12 @@
     </div>
 
     <div class="map-link-container">
-        <a class="map-link kakao-link" href={kakaoLink} target='_blank'> 카카오맵 </a>
-        <a class="map-link naver-link" href={naverLink} target='_blank'> 네이버맵 </a>
+        <a class="map-link kakao-link" href={kakaoLink} target="_blank">
+            카카오맵
+        </a>
+        <a class="map-link naver-link" href={naverLink} target="_blank">
+            네이버맵
+        </a>
     </div>
 </div>
 
@@ -73,10 +81,10 @@
     }
     .kakao-link {
         background-color: #fae100;
-        color:black;
+        color: black;
     }
     .naver-link {
         background-color: #05c046;
-        color:white;
+        color: white;
     }
 </style>

@@ -3,8 +3,12 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { MouseEventHandler } from "svelte/elements";
 
-    export let condition: DaniCondition;
-    export let deleteCondition: MouseEventHandler<any>;
+    interface Props {
+        condition: DaniCondition;
+        deleteCondition: MouseEventHandler<any>;
+    }
+
+    let { condition = $bindable(), deleteCondition }: Props = $props();
 
     const conditionTypes = [
         "gauge",
@@ -18,22 +22,26 @@
         "score_sum",
     ];
 
-    let redCriteria = condition.criteria.red.join(", ");
-    let goldCriteria = condition.criteria.gold.join(", ");
+    let redCriteria = $state(condition.criteria.red.join(", "));
+    let goldCriteria = $state(condition.criteria.gold.join(", "));
 
-    $: condition.criteria.red = redCriteria
-        .split(",")
-        .map((e) => e.trim())
-        .filter((e) => e !== "")
-        .map((e) => Number(e));
-    $: condition.criteria.gold = goldCriteria
-        .split(",")
-        .map((e) => e.trim())
-        .filter((e) => e !== "")
-        .map((e) => Number(e));
+    $effect.pre(() => {
+        condition.criteria.red = redCriteria
+            .split(",")
+            .map((e) => e.trim())
+            .filter((e) => e !== "")
+            .map((e) => Number(e));
+    });
+    $effect.pre(() => {
+        condition.criteria.gold = goldCriteria
+            .split(",")
+            .map((e) => e.trim())
+            .filter((e) => e !== "")
+            .map((e) => Number(e));
+    });
 
     const lang = getLang();
-    $: conditionI18n = getI18N("component", $lang).DaniDisplay.type;
+    let conditionI18n = $derived(getI18N("component", $lang).DaniDisplay.type);
 </script>
 
 <table>
@@ -50,7 +58,7 @@
                 </select>
             </td>
             <td rowspan="3">
-                <button on:click={deleteCondition}>삭제</button>
+                <button onclick={deleteCondition}>삭제</button>
             </td>
         </tr>
         <tr>

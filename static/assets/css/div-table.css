@@ -1,4 +1,4 @@
-.div-table{
+.div-table {
     display: table;
     border-collapse: separate;
     box-sizing: border-box;
@@ -16,15 +16,23 @@
     font-variant: normal;
 }
 
-.div-tr{
+.div-tr {
     display: table-row;
     vertical-align: inherit;
     unicode-bidi: isolate;
     border-color: inherit;
 }
 
-.div-td{
+.div-td {
     display: table-cell;
     vertical-align: inherit;
+    unicode-bidi: isolate;
+}
+
+.div-th {
+    display: table-cell;
+    vertical-align: inherit;
+    font-weight: bold;
+    text-align: center;
     unicode-bidi: isolate;
 }

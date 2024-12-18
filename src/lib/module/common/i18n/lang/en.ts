@@ -453,7 +453,7 @@ const en: LangFile = {
             classic: 'Classic'
         },
         languages: {
-            jp: 'Japanese',
+            ja: 'Japanese',
             ko: 'Korean',
             ako: 'Korean (Unofficial)',
             en: 'English',

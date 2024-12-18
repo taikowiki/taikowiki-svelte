@@ -1,5 +1,9 @@
 <script lang="ts">
-    import type { Course, Genre, SongData } from "$lib/module/common/song/types";
+    import type {
+        Course,
+        Genre,
+        SongData,
+    } from "$lib/module/common/song/types";
     import type { Measure } from "@taiko-wiki/taiko-rating/src/types";
     import groupBy from "object.groupby";
     import MeasureGroup from "./MeasureGroup.svelte";
@@ -8,15 +12,16 @@
     import { setContext } from "svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let measures: Measure[];
-    export let songDatas: (Pick<SongData, "title" | "songNo" | "genre"> & {
-        courses: { oni: Course; ura: Course | null };
-    })[];
+    interface Props {
+        measures: Measure[];
+        songDatas: (Pick<SongData, "title" | "songNo" | "genre"> & {
+            courses: { oni: Course; ura: Course | null };
+        })[];
+    }
 
-    const groupedMeasures = groupBy(
-        measures,
-        (measure) => measure.range
-    );
+    let { measures, songDatas }: Props = $props();
+
+    const groupedMeasures = groupBy(measures, (measure) => measure.range);
 
     const GenreDiv = styled<{ genre: Genre[] }, {}>(
         "div",
@@ -49,15 +54,15 @@
             transform: translateY(-1px);
         }`,
     );
-    
-    setContext('Genre', GenreDiv);
-    setContext('Level', Level);
+
+    setContext("Genre", GenreDiv);
+    setContext("Level", Level);
 
     const lang = getLang();
 </script>
 
-<GenreDiv.common/>
-<Level.common/>
+<GenreDiv.common />
+<Level.common />
 
 {#each Object.entries(groupedMeasures).toSorted((a, b) => Number(b[0]) - Number(a[0])) as [group, measures]}
     <MeasureGroup group={Number(group)} {measures} {songDatas} />

@@ -2,10 +2,18 @@
     import type { Genre } from "$lib/module/common/song/types";
     import color from "$lib/module/common/color";
 
-    let genres:Genre[];
-    export {genres as genre};
-    export let width:string;
-    export let height:string;
+    interface Props{
+        width: string;
+        height: string;
+        genre: Genre[];
+    }
+
+    let {
+        width,
+        height,
+        genre: genres
+    }: Props = $props();
+
 </script>
 
 <div class="container" style={`width:${width};height:${height};`}>

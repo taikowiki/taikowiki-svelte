@@ -2,7 +2,11 @@
     import { bannerAdminRequestor } from "$lib/module/common/banner/banner.client";
     import type { AsideBanner } from "$lib/module/common/banner/types";
 
-    export let banners: AsideBanner[];
+    interface Props {
+        banners: AsideBanner[];
+    }
+
+    let { banners }: Props = $props();
 
     async function submit() {
         if (!confirm("저장하시겠습니까?")) {
@@ -24,20 +28,28 @@
 <h2>
     사이드 배너
     <button
-        on:click={() => {
-            banners = [
-                ...banners,
-                {
-                    src: "",
-                    href: "",
-                    target: "",
-                },
-            ];
+        onclick={() => {
+            banners.unshift({
+                src: "",
+                href: "",
+                target: "",
+            });
         }}
     >
-        추가
+        앞에 추가
     </button>
-    <button on:click={submit}> 저장 </button>
+    <button
+        onclick={() => {
+            banners.push({
+                src: "",
+                href: "",
+                target: "",
+            });
+        }}
+    >
+        뒤에 추가
+    </button>
+    <button onclick={submit}> 저장 </button>
 </h2>
 <div class="container">
     {#each banners as banner, index}
@@ -77,7 +89,7 @@
                         <td class="key"> 삭제 </td>
                         <td>
                             <button
-                                on:click={() => {
+                                onclick={() => {
                                     banners = banners.filter(
                                         (_, i) => i !== index,
                                     );

@@ -3,19 +3,21 @@
     import CourseDisplay from "./CourseDisplay.svelte";
     import color from "$lib/module/common/color";
     import { getIsMobile } from "$lib/module/layout/isMobile";
-    import { getTheme } from "$lib/module/layout/theme";
-    import FumenDisplay from "./FumenDisplay.svelte";
     import { page } from "$app/stores";
     import { replaceState } from "$app/navigation";
 
-    export let courses: SongData["courses"];
-    export let selectedDifficulty: Difficulty = "oni";
+    interface Props {
+        courses: SongData["courses"];
+        selectedDifficulty: Difficulty;
+    }
+
+    let {courses, selectedDifficulty = $bindable()}: Props = $props();
 
     let difficulties: Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
 
     const isMobile = getIsMobile();
 
-    $: course = courses[selectedDifficulty];
+    let course = $derived(courses[selectedDifficulty]);
 </script>
 
 <div class="container" data-isMobile={$isMobile}>
@@ -26,9 +28,9 @@
                     class="difficulty"
                     class:selected={selectedDifficulty === difficulty}
                     role="presentation"
-                    on:click={() => {
+                    onclick={() => {
                         selectedDifficulty = difficulty;
-                        $page.url.searchParams.set('diff', difficulty);
+                        $page.url.searchParams.set("diff", difficulty);
                         replaceState($page.url, $page.state);
                     }}
                     style={`background-color:${color.difficulty[difficulty]};`}
@@ -122,7 +124,7 @@
         padding-bottom: 10px;
     }
 
-    span[data-isMobile="false"]{
+    span[data-isMobile="false"] {
         transform: translateY(-1px);
     }
 </style>

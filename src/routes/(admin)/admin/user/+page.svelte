@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { userAdminRequestor } from "$lib/module/common/user/user.client.js";
 
     async function setGrade(UUID: string, from: number, to: number) {
@@ -16,7 +16,7 @@
 </script>
 
 <script lang="ts">
-    export let data;
+    let {data} = $props();
 
     const { users } = data;
 
@@ -51,7 +51,7 @@
                         max="10"
                     />
                     <button
-                        on:click={() => {
+                        onclick={() => {
                             setGrade(user.UUID, user.grade, grades[index]);
                         }}
                     >

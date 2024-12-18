@@ -1,19 +1,38 @@
 <script lang="ts">
-    import { afterUpdate, getContext, onMount } from "svelte";
+    import { getContext, onMount, type Snippet } from "svelte";
     import type { Writable } from "svelte/store";
     import AsideItem from "./AsideItem.svelte";
 
-    export let title: string = "";
-    export let titleHref: string = "";
-    export let align: "left" | "center" | "right" = "center";
-    export let icon: string = "";
+    interface Props {
+        title?: string;
+        titleHref?: string;
+        align?: "left" | "center" | "right";
+        icon?: string;
+        children?: Snippet;
+    }
 
-    const pageAsideRoot = getContext('pageAside') as Writable<HTMLDivElement|null>
-    let wrapper:HTMLDivElement;
-    afterUpdate(() => {
-        if($pageAsideRoot && wrapper){
-            $pageAsideRoot.innerHTML = "";
-            $pageAsideRoot.appendChild(wrapper);
+    let {
+        title = "",
+        titleHref = "",
+        align = "center",
+        icon = "",
+        children,
+    }: Props = $props();
+
+    const pageAsideRootStore = getContext("pageAside") as Writable<HTMLDivElement | null>;
+    let pageAsideRoot = $state.raw($pageAsideRootStore);
+    $effect(() => {
+        if(!pageAsideRoot){
+            pageAsideRoot = $pageAsideRootStore;
+        }
+    })
+    let wrapper: HTMLDivElement;
+
+    let isPageAsideRootExists = $derived(pageAsideRoot !== null);
+    $effect(() => {
+        if(isPageAsideRootExists && wrapper){
+            (pageAsideRoot as HTMLDivElement).innerHTML = "";
+            (pageAsideRoot as HTMLDivElement).appendChild(wrapper);
         }
     })
 </script>
@@ -21,13 +40,13 @@
 <div class="container">
     <div class="wrapper" bind:this={wrapper}>
         <AsideItem {title} {titleHref} {align} {icon}>
-            <slot/>
+            {@render children?.()}
         </AsideItem>
     </div>
 </div>
 
 <style>
-    .container{
-        display:none;
+    .container {
+        display: none;
     }
 </style>

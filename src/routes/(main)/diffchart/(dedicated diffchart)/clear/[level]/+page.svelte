@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     const sectionColor: Record<string, string> = {
         SSS: "#B93FEA",
         SS: "#E8348F",
@@ -34,23 +34,27 @@
     import type { Writable } from "svelte/store";
     import type { DiffChart } from "$lib/module/common/diffchart/types";
 
-    export let data;
+    let { data } = $props();
     const { songs, diffChartData } = data;
 
-    let downloadImage: (() => Promise<void>) | null = null;
-    $: (
-        getContext("downloadImage") as Writable<(() => Promise<void>) | null>
-    ).set(downloadImage);
+    let downloadImage: (() => Promise<void>) | null = $state(null);
+    $effect(() => {
+        (
+            getContext("downloadImage") as Writable<
+                (() => Promise<void>) | null
+            >
+        ).set(downloadImage);
+    });
 
     const lang = getLang();
-    $: i18n = getI18N("/diffchart/clear/[level]", $lang);
-    $: titleI18n = getI18N('other', $lang).title['/diffchart/clear'];
-    $: customedDiffchart = getCustomedDiffchart(diffChartData.data, i18n);
+    let i18n = $derived(getI18N("/diffchart/clear/[level]", $lang));
+    let titleI18n = $derived(getI18N("other", $lang).title["/diffchart/clear"]);
+    let customedDiffchart = $derived(getCustomedDiffchart(diffChartData.data, i18n));
 
     const donderData = data.donderData;
 </script>
 
-<PageTitle title={`★${$page.url.pathname.split('/')[3]} ${titleI18n}`}/>
+<PageTitle title={`★${$page.url.pathname.split("/")[3]} ${titleI18n}`} />
 
 <Diffchart
     diffChart={customedDiffchart}
@@ -66,8 +70,8 @@
 {/if}
 
 <style>
-    .comment-container{
-        display:flex;
+    .comment-container {
+        display: flex;
         flex-direction: column;
         align-items: center;
     }

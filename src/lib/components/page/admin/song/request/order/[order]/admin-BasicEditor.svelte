@@ -1,39 +1,45 @@
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
 
-    export let songNo: string;
+    interface Props{
+        songNo: string;
+    }
+
+    let {songNo = $bindable()}: Props = $props();
 </script>
 
 <TitledContainer title="곡 번호" color="#cf4844">
     <table>
-        <tr>
-            <td> 곡 번호 </td>
-            <td class="title">
-                <input type="text" bind:value={songNo}/>
-            </td>
-        </tr>
+        <tbody>
+            <tr>
+                <td> 곡 번호 </td>
+                <td class="title">
+                    <input type="text" bind:value={songNo} />
+                </td>
+            </tr>
+        </tbody>
     </table>
 </TitledContainer>
 
 <style>
-    table{
+    table {
         width: 100%;
     }
 
-    td:nth-child(1){
+    td:nth-child(1) {
         width: 150px;
         font-weight: bold;
     }
-    td:nth-child(2){
-        display:flex;
+    td:nth-child(2) {
+        display: flex;
         align-items: center;
     }
 
-    .title{
+    .title {
         box-sizing: border-box;
     }
 
-    input[type="text"]{
+    input[type="text"] {
         height: 20px;
         font-size: 17px;
     }

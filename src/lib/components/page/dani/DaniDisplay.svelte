@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import type { Dan } from "$lib/module/common/dani/types";
     import { dani as daniColor } from "$lib/module/common/color";
 
@@ -6,20 +6,24 @@
         let d = "kyu";
         if (/^[1-5]dan$/.test(dan) || dan === "senpo") {
             d = "lowdan";
-        } else if (/^[6-9]dan$/.test(dan) || /^10dan$/.test(dan) || dan === "taisho") {
+        } else if (
+            /^[6-9]dan$/.test(dan) ||
+            /^10dan$/.test(dan) ||
+            dan === "taisho"
+        ) {
             d = "highdan";
         } else if (dan === "kuroto" || dan === "meijin" || dan === "chojin") {
             d = "jin";
         } else if (dan === "tatsujin") {
             d = "tatsujin";
-        } else if (dan === "jiho"){
+        } else if (dan === "jiho") {
             d = "jiho";
-        } else if (dan === "chiuken"){
+        } else if (dan === "chiuken") {
             d = "chiuken";
-        } else if (dan === "fukusho"){
+        } else if (dan === "fukusho") {
             d = "fukusho";
-        } else if (dan === "gaiden"){
-            d = "gaiden"
+        } else if (dan === "gaiden") {
+            d = "gaiden";
         }
 
         return (daniColor.backgroundColor?.[theme] as any)?.[d] ?? "";
@@ -35,10 +39,14 @@
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
 
-    export let dani: Dani;
-    export let songDatas: SongDataPickedForDani[];
+    interface Props {
+        dani: Dani;
+        songDatas: SongDataPickedForDani[];
+    }
 
-    let opened: boolean = false;
+    let { dani, songDatas }: Props = $props();
+
+    let opened: boolean = $state(false);
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();

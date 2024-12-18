@@ -3,28 +3,31 @@
     import UserItem from "./User-Item.svelte";
 
     const lang = getLang();
-    let currentLang = $lang;
+    let currentLang = $state($lang);
 
-    $: i18n = getI18N($lang).layout.main.user;
+    let i18n = $derived(getI18N($lang).layout.main.user);
 </script>
 
 <UserItem separated height="30px">
-    <span slot="left"> {i18n.lang} </span>
-    <select
-        bind:value={currentLang}
-        on:change={() => {
-            $lang = currentLang;
-        }}
-        slot="right"
-    >
-        <option value="ko"> 한국어 </option>
-        <option value="ja"> 日本語 </option>
-        <option value="en"> English </option>
-    </select>
+    {#snippet left()}
+        <span> {i18n.lang} </span>
+    {/snippet}
+    {#snippet right()}
+        <select
+            bind:value={currentLang}
+            onchange={() => {
+                $lang = currentLang;
+            }}
+        >
+            <option value="ko"> 한국어 </option>
+            <option value="ja"> 日本語 </option>
+            <option value="en"> English </option>
+        </select>
+    {/snippet}
 </UserItem>
 
 <style>
-    select{
+    select {
         height: 25px;
     }
 </style>

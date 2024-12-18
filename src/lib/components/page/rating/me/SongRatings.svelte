@@ -6,17 +6,21 @@
     import type { getRating } from "@taiko-wiki/taiko-rating";
     import SongRatingItem from "./SongRatingItem.svelte";
 
-    export let ratings: ReturnType<typeof getRating>;
-    export let songDatas: Pick<SongData, "songNo" | "title">[];
-    export let donderData: UserDonderData;
-    export let only50: boolean = false;
+    interface Props {
+        ratings: ReturnType<typeof getRating>;
+        songDatas: Pick<SongData, "songNo" | "title">[];
+        donderData: UserDonderData;
+        only50?: boolean;
+    }
 
-    let subOpened = false;
+    let {ratings, songDatas, donderData, only50 = false}: Props = $props();
+
+    let subOpened = $state(false);
 
     const [theme] = getTheme();
     const lang = getLang();
-    $: i18n = getI18N("/auth/user/donder", $lang);
-    $: newI18n = getI18N($lang).page.donder;
+    let i18n = $derived(getI18N("/auth/user/donder", $lang));
+    let newI18n = $derived(getI18N($lang).page.donder);
 </script>
 
 <div class="center">
@@ -46,7 +50,7 @@
             class="other"
             class:subOpened
             role="presentation"
-            on:click={() => {
+            onclick={() => {
                 subOpened = !subOpened;
             }}
         >
@@ -55,23 +59,23 @@
         {#if subOpened}
             <div class="song-container" data-theme={$theme}>
                 {#each ratings.songRatingDatas.slice(Math.min(50, ratings.songRatingDatas.length), ratings.songRatingDatas.length) as songRatingData, index}
-                        {@const songData = songDatas.find(
-                            ({ songNo }) =>
-                                songNo === songRatingData.songNo.toString(),
-                        )}
-                        {@const songDifficultyScoreData =
-                            donderData.scoreData?.[songRatingData.songNo]
-                                ?.difficulty?.[songRatingData.difficulty]}
-                        {#if songData && songDifficultyScoreData}
-                            <SongRatingItem
-                                {songRatingData}
-                                {songData}
-                                {songDifficultyScoreData}
-                                isTop50={false}
-                                order={index + 51}
-                            />
-                        {/if}
-                    {/each}
+                    {@const songData = songDatas.find(
+                        ({ songNo }) =>
+                            songNo === songRatingData.songNo.toString(),
+                    )}
+                    {@const songDifficultyScoreData =
+                        donderData.scoreData?.[songRatingData.songNo]
+                            ?.difficulty?.[songRatingData.difficulty]}
+                    {#if songData && songDifficultyScoreData}
+                        <SongRatingItem
+                            {songRatingData}
+                            {songData}
+                            {songDifficultyScoreData}
+                            isTop50={false}
+                            order={index + 51}
+                        />
+                    {/if}
+                {/each}
             </div>
         {/if}
     {/if}

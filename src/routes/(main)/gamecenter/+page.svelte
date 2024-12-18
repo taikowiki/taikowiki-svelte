@@ -6,13 +6,13 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.ts";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let data;
+    let {data} = $props();
 
     const lang = getLang();
-    $: i18n = getI18N('/gamecenter', $lang);
-    $: titleI18n = getI18N('other', $lang).title['/gamecenter'];
+    let i18n = $derived(getI18N('/gamecenter', $lang));
+    let titleI18n = $derived(getI18N('other', $lang).title['/gamecenter']);
 
-    let showAlert = (typeof(window) !== "undefined" ?( window.localStorage.getItem('show gamecenter alert') === 'false' ? false : true) : true);
+    let showAlert = $state(typeof(window) !== "undefined" ?( window.localStorage.getItem('show gamecenter alert') === 'false' ? false : true) : true);
 </script>
 
 <PageTitle title={titleI18n}/>
@@ -22,7 +22,7 @@
         <span class="alert">
             {i18n.koreanGamecenterAlert}
         </span>
-        <button on:click={() => {showAlert = !showAlert; window.localStorage.setItem('show gamecenter alert', false)}}>
+        <button onclick={() => {showAlert = !showAlert; window.localStorage.setItem('show gamecenter alert', false)}}>
             X
         </button>
     {/if}

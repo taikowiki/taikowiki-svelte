@@ -1,10 +1,14 @@
 <script lang="ts">
-    export let title:string = '';
+    interface Props{
+        title?: string;
+    }
+
+    let {title = $bindable("")}:Props = $props();
 
     import {getLang, getI18N} from '$lib/module/common/i18n/i18n';
 
     const lang = getLang();
-    $: i18n = getI18N('other', $lang).title
+    let i18n = $derived(getI18N('other', $lang).title);
 </script>
 
 <svelte:head>

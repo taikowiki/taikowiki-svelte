@@ -4,17 +4,18 @@
     import "@toast-ui/editor/toastui-editor.css";
     import { DateTime } from "luxon";
 
-    export let notice: Omit<Notice, "order" | "writtenDate"> = {
-        title: "",
-        content: "",
-        type: "wiki",
-        officialDate: null,
-    };
+    interface Props {
+        notice: Omit<Notice, "order" | "writtenDate">;
+    }
+
+    let { notice = $bindable() }: Props = $props();
 
     //official date
-    $: if (notice.type === "wiki") {
-        notice.officialDate = null;
-    }
+    $effect.pre(() => {
+        if (notice.type === "wiki") {
+            notice.officialDate = null;
+        }
+    });
 
     //editor
     let editorContainer: HTMLDivElement;
@@ -48,10 +49,12 @@
     });
 
     //official date
-    let officialDateInput: HTMLInputElement;
+    let officialDateInput: HTMLInputElement|undefined = $state();
     onMount(() => {
         if (officialDateInput && notice.officialDate) {
-            const officialDate = DateTime.fromJSDate(notice.officialDate, {zone: 'Asia/Seoul'})
+            const officialDate = DateTime.fromJSDate(notice.officialDate, {
+                zone: "Asia/Seoul",
+            });
             officialDateInput.value = `${officialDate.toFormat("yyyy-MM-dd")}T${officialDate.toFormat("HH:mm:ss")}`;
         }
     });
@@ -66,8 +69,12 @@
         <input
             type="datetime-local"
             bind:this={officialDateInput}
-            on:input={(event) => {
-                notice.officialDate = DateTime.fromFormat(event.currentTarget.value, "yyyy-MM-dd'T'HH:mm", {zone: 'Asia/Seoul'}).toJSDate()
+            oninput={(event) => {
+                notice.officialDate = DateTime.fromFormat(
+                    event.currentTarget.value,
+                    "yyyy-MM-dd'T'HH:mm",
+                    { zone: "Asia/Seoul" },
+                ).toJSDate();
             }}
         />
     {/if}

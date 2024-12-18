@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function resizeTitle(
         node: HTMLDivElement,
         value: [browser: boolean, theme: string],
@@ -57,12 +57,23 @@
     import { getLang } from "$lib/module/common/i18n/i18n";
     import { browser } from "$app/environment";
 
-    export let song: Song;
-    export let title: string;
-    export let genre: Genre[];
-    export let krTitle: string;
-    export let theme: string;
-    export let userScore: SongScoreDetail | null = null;
+    interface Props {
+        song: Song;
+        title: string;
+        genre: Genre[];
+        krTitle: string;
+        theme: string;
+        userScore?: SongScoreDetail | null;
+    }
+
+    let {
+        song,
+        title,
+        genre,
+        krTitle,
+        theme,
+        userScore = null,
+    }: Props = $props();
 
     const lang = getLang();
 
@@ -99,7 +110,7 @@
     */
 </script>
 
-{#key title}
+{#key [title, song.difficulty, song.songNo, song.title]}
     <a
         class="container"
         href={`/song/${song.songNo}?diff=${song.difficulty}`}
@@ -107,10 +118,7 @@
         data-crown={userScore?.crown || ""}
     >
         <DiffchartSongGenre {genre} width="6px" height="36px" />
-        <div
-            class="title-container"
-            use:resizeTitle={[browser, theme]}
-        >
+        <div class="title-container" use:resizeTitle={[browser, theme]}>
             <div
                 class="title"
                 style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}

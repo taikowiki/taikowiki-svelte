@@ -4,13 +4,17 @@
     import type { UserRatingTierName } from "$lib/module/common/user/types";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let rating: number;
-    export let tierName: UserRatingTierName;
-    export let grade: 1 | 2 | 3 | 4 | 5 | null;
+    interface Props {
+        rating: number;
+        tierName: UserRatingTierName;
+        grade: 1 | 2 | 3 | 4 | 5 | null;
+    }
+
+    let { rating, tierName, grade }: Props = $props();
 
     const nextTier = getNextTier(tierName);
 
-    let progress: number =
+    const progress: number =
         tierName === "omega"
             ? 100
             : tierName === "pearl"
@@ -92,7 +96,7 @@
                 (tierName === "omega"
                     ? "background: linear-gradient(90deg, rgba(255,160,254,1) 0%, rgba(86,251,185,1) 50%, rgba(99,171,248,1) 100%);"
                     : `background:${TIER_COLOR[tierName]};`)}
-        />
+        ></div>
     </div>
 </div>
 

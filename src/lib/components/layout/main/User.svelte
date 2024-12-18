@@ -8,38 +8,41 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getContext } from "svelte";
 
-    let opened = false;
+    let opened = $state(false);
     function close() {
         opened = false;
-    }
-
-    $: if (itemContainer) {
-        if (opened) {
-            itemContainer.style.display = "flex";
-            itemContainer.focus();
-        } else {
-            itemContainer.style.display = "none";
-        }
     }
 
     let itemContainer: HTMLDivElement;
     let container: HTMLDivElement;
     let opener: HTMLDivElement;
+    $effect(() => {
+        if (itemContainer) {
+            if (opened) {
+                itemContainer.style.display = "flex";
+                itemContainer.focus();
+            } else {
+                itemContainer.style.display = "none";
+            }
+        }
+    });
 
     const [theme] = getTheme();
 
     const usingLangParam = getContext("usingLangParam");
     const lang = getLang();
-    $: i18n = getI18N($lang).layout.main.user;
+    let i18n = $derived(getI18N($lang).layout.main.user);
 
-    $: if ($page.url || $page.state) {
-        close();
-    }
+    $effect(() => {
+        if ($page.url || $page.state) {
+            close();
+        }
+    });
 </script>
 
 <div
     class="container"
-    on:focusout={(event) => {
+    onfocusout={(event) => {
         if (
             event.relatedTarget instanceof Node &&
             itemContainer?.contains(event.relatedTarget)
@@ -55,12 +58,12 @@
     <div
         class="opener"
         bind:this={opener}
-        on:click={() => {
+        onclick={() => {
             opened = !opened;
         }}
         role="button"
         tabindex="0"
-        on:keydown={() => {}}
+        onkeydown={() => {}}
     >
         <img src="/assets/icon/user.svg" alt="" />
     </div>
@@ -73,7 +76,12 @@
     >
         <UserInfo {close} />
         <UserItem separated height="30px">
-            <span slot="left">{i18n.theme}</span><ThemeToggler slot="right" />
+            {#snippet left()}
+                <span>{i18n.theme}</span>
+            {/snippet}
+            {#snippet right()}
+                <ThemeToggler/>
+            {/snippet}
         </UserItem>
         {#if !(usingLangParam && $page.data.isBot)}
             <LanguageItem />

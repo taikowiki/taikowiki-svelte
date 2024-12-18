@@ -3,7 +3,7 @@
     import { DANIVERSION } from "$lib/module/common/song/const";
     import { daniAdminRequestor } from "$lib/module/common/dani/dani.client";
 
-    export let data;
+    let {data} = $props();
 
     const { versions } = data;
 
@@ -12,9 +12,9 @@
     });
 
     const lang = getLang();
-    $: versionI18n = getI18N("other", $lang).dani.version;
+    let versionI18n = $derived(getI18N("other", $lang).dani.version);
 
-    let newVersion: string = "";
+    let newVersion: string = $state("");
 
     async function addVersion(version: string){
         const response = await daniAdminRequestor.addVersion(version);
@@ -31,7 +31,7 @@
 <div class="container">
     <div class="add">
         <input type="text" placeholder="버전" bind:value={newVersion} />
-        <button on:click={() => {addVersion(newVersion)}}> 추가 </button>
+        <button onclick={() => {addVersion(newVersion)}}> 추가 </button>
     </div>
     {#each versions as version}
         <div>

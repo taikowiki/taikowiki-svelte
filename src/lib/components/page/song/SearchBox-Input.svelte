@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { goto } from "$app/navigation";
 
     function search(option: SongSearchOption) {
@@ -26,10 +26,14 @@
 <script lang="ts">
     import type { SongSearchOption } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import { getI18N } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let opened: boolean;
-    export let option: SongSearchOption;
+    interface Props {
+        opened: boolean;
+        option: SongSearchOption;
+    }
+
+    let {opened = $bindable(), option = $bindable()}: Props = $props();
 
     function open() {
         opened = !opened;
@@ -37,19 +41,20 @@
 
     const [theme] = getTheme();
 
-    const i18n = getI18N();
+    const lang = getLang();
+    let i18n = $derived(getI18N($lang)['/song']);
 </script>
 
 <div class="search-container" data-theme={$theme}>
-    <button class="search-detail-toggler" on:click={open} class:opened>
+    <button class="search-detail-toggler" onclick={open} class:opened>
         <img src="/assets/icon/arrow.svg" alt="" />
     </button>
     <input
         class="search-input"
         type="text"
         bind:value={option.query}
-        placeholder={$i18n.placeholder}
-        on:keypress={(event) => {
+        placeholder={i18n?.placeholder}
+        onkeypress={(event) => {
             if (event.key === "Enter") {
                 search(option);
             }
@@ -59,7 +64,7 @@
     />
     <button
         class="search-button"
-        on:click={() => {
+        onclick={() => {
             search(option);
         }}
     >

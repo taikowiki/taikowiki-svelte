@@ -1,7 +1,10 @@
 <script lang="ts">
     import { browser } from "$app/environment";
 
-    export let src: string;
+    interface Props{
+        src: string
+    }
+    let {src}: Props = $props();
 </script>
 
 <div class="container">
@@ -11,10 +14,10 @@
             {src}
             class="fumen"
             alt="fumen"
-            on:load={(event) => {
+            onload={(event) => {
                 event.currentTarget.parentElement?.children[0]?.remove();
             }}
-            on:error={(event) => {
+            onerror={(event) => {
                 event.currentTarget.parentElement?.remove();
             }}
         />

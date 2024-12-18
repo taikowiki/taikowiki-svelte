@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { dani as daniColor } from "$lib/module/common/color";
 
     function getColor(dan: Dan, theme: "dark" | "light"): string {
@@ -50,9 +50,14 @@
     import { getI18N } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import DaniPlate from "./DaniPlate.svelte";
+    import { stopPropagation } from "svelte/legacy";
 
-    export let opened: boolean;
-    export let dani: Dani;
+    interface Props {
+        opened: boolean;
+        dani: Dani;
+    }
+
+    let { opened = $bindable(), dani }: Props = $props();
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
@@ -64,14 +69,14 @@
             : `https://www.youtube.com/results?search_query=${encodeURI(`太鼓の達人 ${jpDaniI18n.version[dani.version]} ${jpDaniI18n.dan[dani.dan]}`)}`;
 
     const lang = getLang();
-    $: i18n = getI18N("other", $lang).dani;
+    let i18n = $derived(getI18N("other", $lang).dani);
 
-    let dialog: HTMLDialogElement;
+    let dialog: HTMLDialogElement | undefined = $state();
 </script>
 
 <div
     class="head"
-    on:click={() => {
+    onclick={() => {
         if ($isMobile) opened = !opened;
     }}
     role="presentation"
@@ -92,7 +97,7 @@
             class="yt-link"
             {href}
             target="_blank"
-            on:click|stopPropagation={() => {}}
+            onclick={(event) => {event.stopPropagation()}}
         >
             <img
                 src={`/assets/icon/dani/youtube${$theme === "dark" ? "_dark" : "_dark"}_256px.svg`}
@@ -103,7 +108,9 @@
             <img
                 src={"/assets/icon/dani/qr_dark.svg"}
                 alt="qr button"
-                on:click|stopPropagation={() => {
+                onclick={(event) => {
+                    event.stopPropagation();
+                    if(!dialog) return;
                     dialog.showModal();
                 }}
                 role="presentation"
@@ -111,7 +118,10 @@
             />
             <dialog
                 bind:this={dialog}
-                on:click|stopPropagation={outsideClickHandler}
+                onclick={(event) => {
+                    event.stopPropagation();
+                    outsideClickHandler(event);
+                }}
                 role="presentation"
             >
                 <div class="dialog-content-wrapper">
@@ -120,7 +130,9 @@
                     </div>
                     <img class="qr" src={dani.qr} alt="qr" />
                     <button
-                        on:click|stopPropagation={() => {
+                        onclick={({stopPropagation}) => {
+                            stopPropagation();
+                            if(!dialog) return;
                             dialog.close();
                         }}
                     >

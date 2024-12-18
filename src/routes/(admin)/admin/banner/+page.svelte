@@ -2,7 +2,7 @@
     import AdminAsideBannerEditor from "$lib/components/page/admin/banner/AdminAsideBannerEditor.svelte";
     import AdminMainBannerEditor from "$lib/components/page/admin/banner/AdminMainBannerEditor.svelte";
 
-    export let data;
+    let {data} = $props();
 
     if(!data.mainBanners){
         data.mainBanners = [];

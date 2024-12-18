@@ -1,11 +1,14 @@
 <script lang="ts">
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let scene: "search" | "favorites";
+    interface Props {
+        scene: "search" | "favorites";
+    }
+    let { scene = $bindable() }: Props = $props();
 
     const lang = getLang();
-    $: i18n = getI18N('/gamecenter', $lang);
-    $: newI18n = getI18N($lang).page.gamecenter.selector
+    let i18n = $derived(getI18N("/gamecenter", $lang));
+    let newI18n = $derived(getI18N($lang).page.gamecenter.selector);
 </script>
 
 <div>
@@ -13,7 +16,7 @@
         <div
             class="button"
             role="presentation"
-            on:click={() => {
+            onclick={() => {
                 scene = "search";
             }}
         >
@@ -22,7 +25,7 @@
         <div
             class="button"
             role="presentation"
-            on:click={() => {
+            onclick={() => {
                 scene = "favorites";
             }}
         >
@@ -34,7 +37,7 @@
             class="slider"
             class:search={scene === "search"}
             class:favorites={scene === "favorites"}
-        />
+        ></div>
     </div>
 </div>
 

@@ -1,9 +1,13 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let src: string;
-    export let name: string;
-    export let href: string;
+    interface Props {
+        src: string;
+        name: string;
+        href: string;
+    }
+
+    let { src, name, href }: Props = $props();
 
     const [theme] = getTheme();
 
@@ -73,7 +77,7 @@
         filter: invert(100%);
     }
 
-    span{
+    span {
         text-align: center;
     }
 </style>

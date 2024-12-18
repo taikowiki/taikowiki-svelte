@@ -457,7 +457,7 @@ const ja: LangFile = {
             classic: 'クラシック'
         },
         languages: {
-            jp: '日本語',
+            ja: '日本語',
             ko: '韓国語',
             ako: '韓国語(非公式)'
         }

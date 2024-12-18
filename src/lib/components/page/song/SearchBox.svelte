@@ -4,9 +4,14 @@
     import SearchBoxGenre from "./SearchBox-Genre.svelte";
     import SearchBoxInput from "./SearchBox-Input.svelte";
 
-    export let option: SongSearchOption;
+    interface Props{
+        option: SongSearchOption;
+    }
 
-    export let opened = false;
+    let {option: _option}: Props = $props();
+
+    let option = $state(_option);
+    let opened = $state(false);
 </script>
 
 <div class="wrapper">

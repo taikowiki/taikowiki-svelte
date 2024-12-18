@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function parseSongScoreJSON(json: string): SongScore[] | null {
         try {
             let result = JSON.parse(json);
@@ -19,26 +19,38 @@
     } from "$lib/module/common/diffchart/types";
     import DiffchartName from "./DiffchartName.svelte";
     import DiffchartSection from "./DiffchartSection.svelte";
-    import { afterUpdate } from "svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { browser } from "$app/environment";
     import html2canvas from "html2canvas";
     import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let diffChart: DiffChart;
-    export let songs: SongDataPickedForDiffchart[];
-    export let donderData: SongScore[] | null;
-    export let color: string | undefined = undefined;
-    export let backgroundColor: string | undefined = undefined;
-    export let downloadImage: (() => Promise<void>) | null = null;
+    interface Props {
+        diffChart: DiffChart;
+        songs: SongDataPickedForDiffchart[];
+        donderData: SongScore[] | null;
+        color?: string | undefined;
+        backgroundColor?: string | undefined;
+        downloadImage: (() => Promise<void>) | null;
+    }
+
+    let {
+        diffChart,
+        songs,
+        donderData,
+        color = undefined,
+        backgroundColor = undefined,
+        downloadImage = $bindable(null),
+    }: Props = $props();
 
     const [theme] = getTheme();
-    $: colorValue = color ?? diffChart.color;
-    $: backgroundColorValue = backgroundColor ?? diffChart.backgroundColor;
+    let colorValue = $derived(color ?? diffChart.color);
+    let backgroundColorValue = $derived(
+        backgroundColor ?? diffChart.backgroundColor,
+    );
 
     let replica: HTMLDivElement;
-    afterUpdate(async () => {
+    $effect(() => {
         if (!browser) {
             return;
         }
@@ -58,31 +70,43 @@
     });
 
     let userScoreDataJSON: string = ""; // 확장 프로그램
-    $: userScoreData = parseSongScoreJSON(userScoreDataJSON) ?? donderData;
+    let userScoreData = $derived(
+        parseSongScoreJSON(userScoreDataJSON) ?? donderData,
+    );
 
     const lang = getLang();
-    $: i18n = getI18N("component", $lang).Diffchart;
+    let i18n = $derived(getI18N("component", $lang).Diffchart);
 
-    $: sortedDifferChartSections = diffChart.sections.toSorted((a, b) => a.order - b.order)
+    let sortedDifferChartSections = $derived(
+        diffChart.sections.toSorted((a, b) => a.order - b.order),
+    );
 </script>
 
 <input
     type="text"
-    on:change={(event) => {
+    onchange={(event) => {
         userScoreDataJSON = event.currentTarget.value;
     }}
     id="scoredata_input"
     style="display:none;"
 />
 <div class="container">
-    <DiffchartName name={diffChart.name} color={colorValue} backgroundColor={backgroundColorValue} />
+    <DiffchartName
+        name={diffChart.name}
+        color={colorValue}
+        backgroundColor={backgroundColorValue}
+    />
     {#each sortedDifferChartSections as section}
         <DiffchartSection {section} {songs} theme={$theme} {userScoreData} />
     {/each}
 </div>
 
 <div class="replica" bind:this={replica}>
-    <DiffchartName name={diffChart.name} color={colorValue} backgroundColor={backgroundColorValue} />
+    <DiffchartName
+        name={diffChart.name}
+        color={colorValue}
+        backgroundColor={backgroundColorValue}
+    />
     {#each sortedDifferChartSections as section}
         <DiffchartSection
             {section}

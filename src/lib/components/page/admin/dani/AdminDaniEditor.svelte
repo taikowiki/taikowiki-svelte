@@ -6,47 +6,63 @@
     import AdminDaniEditorCondition from "./AdminDaniEditor-Conditions.svelte";
     import type { MouseEventHandler } from "svelte/elements";
     import AdminDaniEditorQr from "./AdminDaniEditor-Qr.svelte";
+    import { dani } from "$lib/module/common/color";
 
-    export let daniData: Dani;
-    export let deleteDani: MouseEventHandler<any>;
+    interface Props {
+        daniData: Dani;
+        deleteDani: MouseEventHandler<any>;
+    }
 
-    function gaidenInit(dan: Dani['dan']) {
+    let { daniData = $bindable(), deleteDani }: Props = $props();
+
+    function changeDan(dan: Dani["dan"]) {
+        daniData.dan = dan;
+    }
+    function init(dan: Dani["dan"]) {
         daniData.dan = dan;
         if (daniData.dan === "gaiden") {
             daniData.name = {
                 ja: daniData?.name?.ja ?? "",
                 ko: daniData?.name?.ko ?? "",
             };
+            daniData.qr = daniData.qr || "";
         } else {
             daniData.name = null;
+            //@ts-expect-error
+            if (typeof daniData.qr === "string") {
+                //@ts-expect-error
+                delete daniData.qr;
+            }
         }
     }
 </script>
 
 <table>
-    <AdminDaniEditorDan bind:dan={daniData.dan} {gaidenInit} />
-    {#if daniData.dan === "gaiden"}
-        <AdminDaniEditorName bind:name={daniData.name} />
-        <AdminDaniEditorQr bind:qr={daniData.qr}/>
-    {/if}
-    <AdminDaniEditorSong bind:songs={daniData.songs} />
-    <AdminDaniEditorCondition bind:conditions={daniData.conditions}/>
-    <tr>
-        <td>
-            <button on:click={deleteDani}>
-                삭제
-            </button>
-        </td>
-    </tr>
+    <tbody>
+        <AdminDaniEditorDan dan={daniData.dan} {changeDan} {init} />
+        {#if daniData.dan === "gaiden"}
+            <AdminDaniEditorName bind:name={daniData.name} />
+            {#if typeof daniData.qr === "string"}
+                <AdminDaniEditorQr bind:qr={daniData.qr} />
+            {/if}
+        {/if}
+        <AdminDaniEditorSong bind:songs={daniData.songs} />
+        <AdminDaniEditorCondition bind:conditions={daniData.conditions} />
+        <tr>
+            <td>
+                <button onclick={deleteDani}> 삭제 </button>
+            </td>
+        </tr>
+    </tbody>
 </table>
 
 <style>
-    table{
+    table {
         border-collapse: collapse;
         border: 3px solid black;
     }
 
-    td{
+    td {
         text-align: center;
     }
 </style>

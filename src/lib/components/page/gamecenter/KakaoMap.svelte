@@ -125,7 +125,7 @@
 
         //현재 위치
         await (async () => {
-            if (!canUseGeolocation || !map || !currentPositionMarker) {
+            if (!canUseGeolocation || !map) {
                 return;
             }
 

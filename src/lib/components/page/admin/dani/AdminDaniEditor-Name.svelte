@@ -1,5 +1,9 @@
 <script lang="ts">
-    export let name: Record<string, string>;
+    interface Props {
+        name: Record<string, string>;
+    }
+
+    let { name = $bindable() }: Props = $props();
 </script>
 
 <tr>
@@ -11,11 +15,11 @@
 </tr>
 
 <style>
-    td{
+    td {
         border: 1px solid black;
     }
 
-    td:nth-child(1){
+    td:nth-child(1) {
         width: 100px;
         text-align: center;
     }

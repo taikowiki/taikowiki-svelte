@@ -1,20 +1,21 @@
 <script lang="ts">
-    import type {
-        Course,
-        SongData,
-    } from "$lib/module/common/song/types";
+    import type { Course, SongData } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { Action } from "svelte/action";
-    import { getContext } from "svelte";
+    import { getContext, type Component } from "svelte";
 
-    export let songData: (Pick<SongData, "title" | "songNo" | "genre"> & {
-        courses: { oni: Course; ura: Course | null };
-    }) & { diff?: "oni" | "ura" };
+    interface Props {
+        songData: Pick<SongData, "title" | "songNo" | "genre"> & {
+            courses: { oni: Course; ura: Course | null };
+        };
+        diff: "oni" | "ura";
+    }
+
+    let { songData, diff }: Props = $props();
 
     const [theme] = getTheme();
 
-    const Genre = getContext('Genre') as ConstructorOfATypedSvelteComponent;
-    const Level = getContext('Level') as ConstructorOfATypedSvelteComponent;
+    const Genre = getContext("Genre") as Component;
+    const Level = getContext("Level") as Component;
 
     /*
     const visibilityAction: Action<HTMLElement> = (node) => {
@@ -43,11 +44,15 @@
     */
 </script>
 
-<a class="song-container" href={`/song/${songData.songNo}`} data-theme={$theme}>
+<a
+    class="song-container"
+    href={`/song/${songData.songNo}?diff=${diff}`}
+    data-theme={$theme}
+>
     <Genre genre={songData.genre} />
-    <Level diff={songData.diff ?? "oni"}>
+    <Level {diff}>
         <span>
-            ★{songData.courses[songData.diff ?? "oni"]?.level ?? "??"}
+            ★{songData.courses[diff]?.level ?? "??"}
         </span>
     </Level>
     <div class="title" data-theme={$theme}>

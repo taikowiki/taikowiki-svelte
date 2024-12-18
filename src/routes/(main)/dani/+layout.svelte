@@ -7,22 +7,22 @@
     import { goto } from "$app/navigation";
     import { getIsMobile } from "$lib/module/layout/isMobile.ts";
 
-    export let data;
+    let {data, children} = $props();
 
     const { versions } = data;
-    let version = $page.url.pathname.replace("/dani/", "") || "24";
+    let version = $state($page.url.pathname.replace("/dani/", "") || "24");
 
     const isMobile = getIsMobile();
 
     const lang = getLang()
-    $: go = getI18N($lang).page.dani.go
+    let go = $derived(getI18N($lang).page.dani.go)
 </script>
 
 <PageAside>
     <Row.center>
         <DaniSelector {versions} bind:version />
         <button
-            on:click={() => {
+            onclick={() => {
                 goto(`/dani/${version}`);
             }}
         >
@@ -35,7 +35,7 @@
     <Row.left class="mobileNavigator" style=" margin-bottom: 10px;">
         <DaniSelector {versions} bind:version />
         <button
-            on:click={() => {
+            onclick={() => {
                 goto(`/dani/${version}`);
             }}
         >
@@ -44,7 +44,7 @@
     </Row.left>
 {/if}
 
-<slot />
+{@render children?.()}
 
 <style>
     button{

@@ -4,8 +4,8 @@
     import { gamecenterAdminRequestor } from "$lib/module/common/gamecenter/gamecenter.client.js";
     import { goto } from "$app/navigation";
 
-    export let data;
-    const { gamecenterData } = data;
+    let {data} = $props();
+    let gamecenterData = data.gamecenterData;
 
     async function submit(gamecenterData: GameCenterDataWithoutOrder){
         if(!gamecenterData.name){

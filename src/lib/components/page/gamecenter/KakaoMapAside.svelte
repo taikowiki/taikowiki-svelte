@@ -10,59 +10,71 @@
     import { setContext } from "svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let map: kakao.maps.Map;
-    export let currentPositionMarker: kakao.maps.Marker | undefined;
-    export let gamecenterMarkers: Record<
-        number,
-        {
-            marker: kakao.maps.Marker;
-            iwOpened: boolean;
-            iw: kakao.maps.InfoWindow;
-        }
-    >;
-    export let gamecenterDatas: GameCenterData[];
+    interface Props {
+        map: kakao.maps.Map;
+        currentPositionMarker?: kakao.maps.Marker;
+        gamecenterMarkers: Record<
+            number,
+            {
+                marker: kakao.maps.Marker;
+                iwOpened: boolean;
+                iw: kakao.maps.InfoWindow;
+            }
+        >;
+        gamecenterDatas: GameCenterData[];
+    }
 
-    let scene: "search" | "favorites" = "search";
+    let {
+        map,
+        currentPositionMarker,
+        gamecenterMarkers,
+        gamecenterDatas,
+    }: Props = $props();
 
-    let content: HTMLDivElement;
-    let pcContentContainer: HTMLDivElement;
-    let mobileContentContainer: HTMLDivElement;
+    let scene: "search" | "favorites" = $state("search");
+
+    let content: HTMLDivElement | undefined = $state();
+    let pcContentContainer: HTMLDivElement | undefined = $state();
+    let mobileContentContainer: HTMLDivElement | undefined = $state();
 
     const isMobile = getIsMobile();
 
-    $: if (browser && mobileContentContainer && pcContentContainer) {
-        if ($isMobile) {
-            mobileContentContainer.appendChild(content);
-        } else {
-            pcContentContainer.appendChild(content);
+    $effect.pre(() => {
+        if (browser && mobileContentContainer && pcContentContainer && content) {
+            if ($isMobile) {
+                mobileContentContainer.appendChild(content);
+            } else {
+                pcContentContainer.appendChild(content);
+            }
         }
-    }
+    });
 
     const mobileOpened = writable<boolean>(false);
-    setContext('mobileAsideOpened', mobileOpened);
-    $: if (mobileContentContainer) {
-        if ($mobileOpened) {
-            mobileContentContainer.style.transform = "translateX(0)";
-        } else {
-            mobileContentContainer.style.transform = "translateX(-100%)";
+    setContext("mobileAsideOpened", mobileOpened);
+    $effect.pre(() => {
+        if (mobileContentContainer) {
+            if ($mobileOpened) {
+                mobileContentContainer.style.transform = "translateX(0)";
+            } else {
+                mobileContentContainer.style.transform = "translateX(-100%)";
+            }
+            if (!$isMobile) {
+                mobileContentContainer.style.display = "none";
+            } else {
+                mobileContentContainer.style.display = "block";
+            }
         }
-        if(!$isMobile){
-            mobileContentContainer.style.display = 'none';
-        }
-        else{
-            mobileContentContainer.style.display = 'block';
-        }
-    }
+    });
 
     const [theme] = getTheme();
 
     const lang = getLang();
-    $: i18n = getI18N('/gamecenter', $lang);
+    let i18n = $derived(getI18N("/gamecenter", $lang));
 </script>
 
 <!--pc-->
 <PageAside>
-    <div bind:this={pcContentContainer} class="container" />
+    <div bind:this={pcContentContainer} class="container"></div>
 </PageAside>
 
 <!--mobile-->
@@ -74,17 +86,18 @@
     {#if $mobileOpened}
         <button
             class="mobile-close"
-            on:click={() => {
+            onclick={() => {
                 $mobileOpened = false;
             }}>X</button
         >
     {:else}
         <button
             class="mobile-open"
-            on:click={() => {
+            onclick={() => {
                 $mobileOpened = true;
             }}
-        />
+            aria-label="mobile open"
+        ></button>
     {/if}
 </div>
 

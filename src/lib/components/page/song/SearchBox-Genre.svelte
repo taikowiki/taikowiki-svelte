@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     const genres: Genre[] = [
         "pops",
         "anime",
@@ -13,32 +13,37 @@
 
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
-    import { getI18N } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Genre } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import type { SongSearchOption } from "$lib/module/common/song/types";
     import SearchBoxGenreItem from "./SearchBox-GenreItem.svelte";
 
-    export let option: SongSearchOption;
+    interface Props{
+        option: SongSearchOption;
+    }
+
+    let {option = $bindable()}: Props = $props();
 
     const isMobile = getIsMobile();
 
     const [theme] = getTheme();
 
-    const i18n = getI18N();
+    const lang = getLang();
+    let i18n = $derived(getI18N($lang)['/song']);
 </script>
 
 <TitledContainer
-    title={$i18n.genre}
+    title={i18n.genre}
     color={$theme === "light" ? "#cf4844" : "#1c1c1c"}
     titleSize="16px"
     type={`${$isMobile ? "vertical" : "horizontal"}`}
 >
     <div class="wrapper">
         {#each genres as genre}
-            <SearchBoxGenreItem bind:group={option.genre} value={genre}>
-                {$i18n.genres[genre]}
+            <SearchBoxGenreItem bind:genre={option.genre} value={genre}>
+                {i18n.genres[genre]}
             </SearchBoxGenreItem>
         {/each}
     </div>

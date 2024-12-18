@@ -6,35 +6,33 @@
     import { DateTime } from "luxon";
 
     //props
-    export let notices: Omit<Notice, 'content'>[];
+    interface Props {
+        notices: Omit<Notice, "content">[];
+    }
+
+    let { notices }: Props = $props();
 
     //time
     function getTime(date: Date) {
         if (date.getDate() === new Date().getDate()) {
-            return DateTime.fromJSDate(date).toFormat('HH:mm:ss');
+            return DateTime.fromJSDate(date).toFormat("HH:mm:ss");
         } else {
-            return DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
+            return DateTime.fromJSDate(date).toFormat("yyyy-MM-dd");
         }
     }
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
     const lang = getLang();
-    $: i18n = getI18N('/notice', $lang);
+    let i18n = $derived(getI18N("/notice", $lang));
 </script>
 
 <table data-theme={$theme} data-isMobile={$isMobile}>
     <thead>
         <tr>
-            <th>
-                번호
-            </th>
-            <th>
-                제목
-            </th>
-            <th>
-                작성일
-            </th>
+            <th> 번호 </th>
+            <th> 제목 </th>
+            <th> 작성일 </th>
         </tr>
     </thead>
     <tbody>
@@ -62,23 +60,23 @@
         border-collapse: collapse;
     }
 
-    tr{
+    tr {
         border-bottom: 1px solid black;
     }
-    table[data-theme="dark"] tr{
+    table[data-theme="dark"] tr {
         border-color: gray;
     }
 
     td:not(:nth-last-child(1)) {
         border-right: 1px solid black;
     }
-    table[data-theme="dark"] td{
+    table[data-theme="dark"] td {
         border-color: gray;
     }
     .td-date {
         width: 100px;
     }
-    .td-title{
+    .td-title {
         padding-inline: 2px;
     }
     .td-order,
@@ -86,10 +84,10 @@
         text-align: center;
     }
 
-    tbody tr{
+    tbody tr {
         height: 30px;
     }
-    table[data-isMobile="true"] tbody tr{
+    table[data-isMobile="true"] tbody tr {
         height: 35px;
     }
 </style>

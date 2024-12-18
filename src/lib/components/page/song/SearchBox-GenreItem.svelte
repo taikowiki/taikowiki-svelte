@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function clickHandle(group: string | undefined, value: Genre) {
         if (group !== value) {
             return value;
@@ -12,37 +12,49 @@
     import color from "$lib/module/common/color";
     import type { Genre } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import type { Snippet } from "svelte";
 
-    export let group: string | undefined;
-    export let value: Genre;
-
-    let data: HTMLElement;
-    $: text = data?.innerText;
-
-    let transform = "";
-    $: if (text?.includes(" ")) {
-        transform = "transform: translateY(-1px);";
+    interface Props {
+        genre: string | undefined;
+        value: Genre;
+        children?: Snippet;
     }
+
+    let {
+        genre = $bindable(),
+        value = $bindable(),
+        children,
+    }: Props = $props();
+
+    let data: HTMLElement | undefined = $state();
+    let text = $derived(data?.innerText);
+
+    let transform = $state("");
+    $effect.pre(() => {
+        if (text?.includes(" ")) {
+            transform = "transform: translateY(-1px);";
+        }
+    });
 
     const [theme] = getTheme();
 </script>
 
 <div
     class={`button`}
-    class:selected={group === value}
-    class:unselected={group !== value && group !== undefined}
+    class:selected={genre === value}
+    class:unselected={genre !== value && genre !== undefined}
     style={`background-color:${color.genre[value]};`}
-    on:click={() => {
-        group = clickHandle(group, value);
+    onclick={() => {
+        genre = clickHandle(genre, value);
     }}
     role="presentation"
     data-theme={$theme}
 >
     <span bind:this={data} style={`${transform} text-wrap:nowrap;`}>
-        <slot />
+        {@render children?.()}
     </span>
 </div>
-<input type="radio" bind:group {value} />
+<input type="radio" bind:group={genre} {value} />
 
 <style>
     input {

@@ -4,47 +4,45 @@
         GAMECENTERREGION,
         AMENITY,
     } from "$lib/module/common/gamecenter/const.js";
-    import { gamecenterAdminRequestor } from '$lib/module/common/gamecenter/gamecenter.client'
+    import { gamecenterAdminRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
     import { goto } from "$app/navigation";
 
-    export let data;
+    let { data } = $props();
     const { report, nickname } = data;
     const { data: gamecenterData } = report;
 
     const lang = getLang();
-    $: i18n = getI18N("/gamecenter", $lang);
+    let i18n = $derived(getI18N("/gamecenter", $lang));
 
-    async function approve(order:number){
-        if(!confirm('수락하시겠습니까?')){
+    async function approve(order: number) {
+        if (!confirm("수락하시겠습니까?")) {
             return;
         }
 
-        const response = await gamecenterAdminRequestor.approve({order});
+        const response = await gamecenterAdminRequestor.approve({ order });
 
-        if(response.status === 'success'){
-            alert('완료되었습니다.');
-            await goto('/admin/gamecenter/report')
+        if (response.status === "success") {
+            alert("완료되었습니다.");
+            await goto("/admin/gamecenter/report");
             return;
-        }
-        else{
-            alert('에러 발생.');
+        } else {
+            alert("에러 발생.");
             return;
         }
     }
-    async function disapprove(order:number){
-        if(!confirm('거부하시겠습니까?')){
+    async function disapprove(order: number) {
+        if (!confirm("거부하시겠습니까?")) {
             return;
         }
 
-        const response = await gamecenterAdminRequestor.disapprove({order});
+        const response = await gamecenterAdminRequestor.disapprove({ order });
 
-        if(response.status === 'success'){
-            alert('완료되었습니다.');
-            await goto('/admin/gamecenter/report')
+        if (response.status === "success") {
+            alert("완료되었습니다.");
+            await goto("/admin/gamecenter/report");
             return;
-        }
-        else{
-            alert('에러 발생.');
+        } else {
+            alert("에러 발생.");
             return;
         }
     }
@@ -112,7 +110,7 @@
                 <input readonly type="number" bind:value={machine.tunes} />
                 대수 <input readonly type="number" bind:value={machine.count} />
                 <button
-                    on:click={() => {
+                    onclick={() => {
                         gamecenterData.machines =
                             gamecenterData.machines.filter(
                                 (_, i) => i !== index,
@@ -124,7 +122,7 @@
             </div>
         {/each}
         <button
-            on:click={() => {
+            onclick={() => {
                 gamecenterData.machines = [
                     ...gamecenterData.machines,
                     { price: 0, tunes: 0, count: 0 },
@@ -149,10 +147,18 @@
         {/each}
     </div>
 
-    <button on:click={() => {approve(report.order)}}>
+    <button
+        onclick={() => {
+            approve(report.order);
+        }}
+    >
         수락
     </button>
-    <button on:click={() => {disapprove(report.order)}}>
+    <button
+        onclick={() => {
+            disapprove(report.order);
+        }}
+    >
         거부
     </button>
 </div>

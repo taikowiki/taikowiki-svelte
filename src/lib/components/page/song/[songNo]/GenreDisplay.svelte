@@ -4,11 +4,15 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
-    export let genres: Genre[];
+    interface Props {
+        genres: Genre[];
+    }
+
+    let { genres }: Props = $props();
 
     const isMobile = getIsMobile();
     const lang = getLang();
-    $: i18n = getI18N("/song/[songNo]", $lang);
+    let i18n = $derived(getI18N("/song/[songNo]", $lang));
 </script>
 
 <div class="container">
@@ -43,11 +47,11 @@
         justify-content: center;
         align-items: center;
 
-        color:white;
+        color: white;
         text-decoration: none;
     }
 
-    .item[data-isMobile="true"]{
+    .item[data-isMobile="true"] {
         width: 40px;
         height: 8px;
     }

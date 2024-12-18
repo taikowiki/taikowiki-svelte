@@ -1,12 +1,16 @@
 <script lang="ts">
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let isAsiaBanned: 1 | 0;
-    export let isKrBanned: 1 | 0;
-    export let isDeleted: 1 | 0;
+    interface Props {
+        isAsiaBanned: 1 | 0;
+        isKrBanned: 1 | 0;
+        isDeleted: 1 | 0;
+    }
+
+    let {isAsiaBanned, isKrBanned, isDeleted}: Props = $props();
 
     const lang = getLang();
-    $: i18n = getI18N($lang).page.songNo.alert;
+    let i18n = $derived(getI18N($lang).page.songNo.alert);
 </script>
 
 <div class="container">
@@ -23,8 +27,8 @@
 </div>
 
 <style>
-    .container{
-        display:flex;
+    .container {
+        display: flex;
         align-items: center;
 
         column-gap: 5px;
@@ -40,7 +44,7 @@
     span {
         color: #c14d4c;
         font-weight: bold;
-        
+
         transform: translateY(-1px);
     }
 </style>

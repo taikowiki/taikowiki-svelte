@@ -1,20 +1,31 @@
 <script lang="ts">
     import type { Section } from "$lib/module/common/diffchart/types";
     import DiffchartEditorSong from "./Diffchart-Editor-Song.svelte";
-    import {intercept as _intercept} from '$lib/module/common/util';
+    import { intercept as _intercept } from "$lib/module/common/util";
+    import styled from "styled-svelte5";
 
-    export let section: Section;
-    export let index;
-    export let intercept: (from: number, to: number) => any;
-    export let remove: (index: number) => any;
+    interface Props {
+        section: Section;
+        index: number;
+        intercept: (from: number, to: number) => any;
+        remove: (index: number) => any;
+    }
+
+    let { section = $bindable(), index, intercept, remove }: Props = $props();
+
+    const Table = styled("table", () => "");
+
+    $effect.pre(() => {
+        section.songs.sort((a, b) => a.order - b.order);
+    });
 
     section.order = index;
 </script>
 
-<tr class="container">
+<tr class="container" style="vertical-align:middle;">
     <td class="bold" style="text-align:center;width:150px;">
         <button
-            on:click={() => {
+            onclick={() => {
                 intercept(section.order, section.order - 1);
             }}>↑</button
         >
@@ -22,22 +33,23 @@
             class="bold"
             type="text"
             bind:value={section.name}
+            placeholder="section name"
             style="width:80px;display:inline-block;text-align:center;"
         />
         <button
-            on:click={() => {
+            onclick={() => {
                 intercept(section.order, section.order + 1);
             }}>↓</button
         >
 
         <button
-            on:click={() => {
+            onclick={() => {
                 remove(index);
             }}>삭제</button
         >
     </td>
     <td style="padding:0;">
-        <table>
+        <Table style="width: 100%;border-collapse: collapse;">
             <tr>
                 <td>
                     <div class="layer" style="justify-content:center;">
@@ -62,7 +74,7 @@
                     <div class="layer" style="justify-content:center;">곡</div>
                 </td>
                 <td>
-                    <table>
+                    <Table style="width: 100%;border-collapse: collapse;">
                         <tr>
                             <th style="width:110px; "> 순서 </th>
                             <th style="width:110px;"> 곡 번호 </th>
@@ -70,9 +82,9 @@
                             <th style="width:110px;"> 난이도 </th>
                             <th style="width: 110px;">삭제</th>
                         </tr>
-                        {#each section.songs.sort((a, b) => a.order - b.order) as song, index (song)}
+                        {#each section.songs as song, index (song)}
                             <DiffchartEditorSong
-                                bind:song
+                                bind:song={section.songs[index]}
                                 {index}
                                 intercept={(from, to) => {
                                     const intercepted = _intercept(
@@ -96,9 +108,9 @@
                             />
                         {/each}
                         <tr>
-                            <td colspan="5">
+                            <td colspan="5" style="text-align:center;">
                                 <button
-                                    on:click={() => {
+                                    onclick={() => {
                                         section.songs = [
                                             ...section.songs,
                                             {
@@ -112,10 +124,10 @@
                                 >
                             </td>
                         </tr>
-                    </table>
+                    </Table>
                 </td>
             </tr>
-        </table>
+        </Table>
     </td>
 </tr>
 
@@ -123,12 +135,6 @@
     .container:hover {
         background-color: rgba(156, 156, 255, 0.495);
     }
-    table {
-        width: 100%;
-
-        border-collapse: collapse;
-    }
-
     th,
     td {
         border: 1px solid black;

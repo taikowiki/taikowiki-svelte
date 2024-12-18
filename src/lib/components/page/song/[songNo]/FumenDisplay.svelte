@@ -5,9 +5,12 @@
     import { getTheme } from "$lib/module/layout/theme";
     import FumenImg from "./FumenImg.svelte";
 
-    export let images: string[];
+    interface Props{
+        images: string[];
+    }
+    let {images}:Props = $props();
 
-    let opened = true;
+    let opened = $state(true);
     if (browser) {
         const fumenImageOpened =
             window.localStorage.getItem("fumenImageOpened");
@@ -20,7 +23,7 @@
     const isMobile = getIsMobile();
 
     const lang = getLang();
-    $: i18n = getI18N($lang).page.songNo.course
+    let i18n = $derived(getI18N($lang).page.songNo.course);
 </script>
 
 {#if images.length}
@@ -28,7 +31,7 @@
         <div
             class="opener"
             role="presentation"
-            on:click={() => {
+            onclick={() => {
                 opened = !opened;
                 if (typeof window !== undefined) {
                     window.localStorage.setItem(

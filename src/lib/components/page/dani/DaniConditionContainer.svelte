@@ -2,7 +2,11 @@
     import type { Dani } from "$lib/module/common/dani/types";
     import DaniCondition from "./DaniCondition.svelte";
 
-    export let conditions: Dani["conditions"];
+    interface Props {
+        conditions: Dani["conditions"];
+    }
+
+    let { conditions }: Props = $props();
 </script>
 
 <div class="container">

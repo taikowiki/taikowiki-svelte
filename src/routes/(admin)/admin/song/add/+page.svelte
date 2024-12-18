@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     async function upload(songNo: string, songData: Partial<SongData>) {
         if (!songData.title || !songData.songNo) {
             alert("곡 번호와 제목을 입력해주세요.");
@@ -23,7 +23,7 @@
     import { goto } from "$app/navigation";
     import { songAdminRequestor } from "$lib/module/common/song/song.client";
 
-    let songData: SongData = {
+    let songData: SongData = $state({
         songNo: $page.url.searchParams.get("song_no") || "",
         title: "",
         titleEn: null,
@@ -93,13 +93,13 @@
             },
             ura: null,
         },
-    };
+    });
 </script>
 
 <SongEditor bind:songData type="new" />
 
 <button
-    on:click={() => {
+    onclick={() => {
         upload(songData.songNo, songData).then(() => {
             goto("/admin/song");
         });

@@ -2,11 +2,15 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
-    export let versions: string;
-    export let version: string;
+    interface Props {
+        versions: string;
+        version: string;
+    }
+
+    let {versions, version = $bindable()}: Props = $props();
 
     const lang = getLang();
-    $: versionI18n = getI18N('other', $lang).dani.version;
+    let versionI18n = $derived(getI18N("other", $lang).dani.version);
 
     const isMobile = getIsMobile();
 </script>
@@ -18,12 +22,12 @@
 </select>
 
 <style>
-    select{
+    select {
         box-sizing: border-box;
         height: 24px;
     }
 
-    select[data-isMobile="true"]{
+    select[data-isMobile="true"] {
         flex: 1 0 auto;
     }
 </style>

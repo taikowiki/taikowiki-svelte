@@ -1,8 +1,8 @@
-import createSSC from "styled-svelte-component/svelte4";
+import styled from "styled-svelte5";
 import color from "./color";
 import type { Difficulty } from "./song/types";
 
-export const Center = createSSC(
+export const Center = styled(
     "div",
     () => `
     display:flex;
@@ -13,7 +13,7 @@ export const Center = createSSC(
 `,
 );
 
-export const DifficultyColor = createSSC<{ difficulty: Difficulty }>("div",
+export const DifficultyColor = styled<{ difficulty: Difficulty }>("div",
     ({difficulty}) => `
     width: 40px;
     height: 18px;

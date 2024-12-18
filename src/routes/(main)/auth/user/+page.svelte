@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function deleteUser(form: HTMLFormElement) {
         if (
             confirm(
@@ -17,31 +17,31 @@
     import ShowRating from "$lib/components/page/auth/user/ShowRating.svelte";
     import { getLang, getI18N } from "$lib/module/common/i18n/i18n.js";
 
-    export let data;
+    let {data} = $props();
 
     let withdrawForm: HTMLFormElement;
 
     const lang = getLang();
-    $: i18n = getI18N('/auth/user', $lang);
-    $: titleI18n = getI18N('other', $lang).title['/auth/user'];
+    let i18n = $derived(getI18N('/auth/user', $lang));
+    let titleI18n = $derived(getI18N('other', $lang).title['/auth/user']);
 </script>
 
 <PageTitle title={titleI18n}/>
 
-<table>
-    <tr>
-        <td width="150px"> {i18n.provider} </td>
-        <td>
+<div class="div-table">
+    <div class="div-tr">
+        <div class="div-td" style="width:150px;"> {i18n.provider} </div>
+        <div class="div-td">
             {data.user.provider}
-        </td>
-    </tr>
-    <tr>
-        <td>UUID</td>
-        <td>{data.user.UUID}</td>
-    </tr>
+        </div>
+    </div>
+    <div class="div-tr">
+        <div class="div-td">UUID</div>
+        <div class="div-td">{data.user.UUID}</div>
+    </div>
     <Nickname />
     <ShowRating bind:showRating={data.user.showRating}/>
-    <tr>
+    <div class="div-tr">
         <form method="post" action="/api/user/delete" bind:this={withdrawForm}>
             <input
                 type="text"
@@ -51,16 +51,16 @@
             />
         </form>
         <button
-            on:click={() => {
+            onclick={() => {
                 deleteUser(withdrawForm);
             }}
             class="withdraw">{i18n.delete}</button
         >
-    </tr>
-</table>
+    </div>
+</div>
 
 <style>
-    table {
+    .div-table {
         width: 100%;
         border-spacing: 0px 20px;
     }
@@ -78,12 +78,12 @@
         cursor: pointer;
     }
 
-    table :global(td){
+    .div-table :global(td){
         display:flex;
         flex-direction: column;
         row-gap: 10px;
     }
-    table :global(td:nth-child(1)){
+    .div-table :global(td:nth-child(1)){
         font-weight: bold;
         font-size: 17px;
     }

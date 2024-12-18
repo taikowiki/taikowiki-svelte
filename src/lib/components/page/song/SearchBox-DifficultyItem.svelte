@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function clickHandle(
         group: Difficulty | "oniura" | undefined,
         value: Difficulty | "oniura",
@@ -15,9 +15,15 @@
     import type { Difficulty } from "$lib/module/common/song/types";
     import color from "$lib/module/common/color";
     import { getTheme } from "$lib/module/layout/theme";
+    import type { Snippet } from "svelte";
 
-    export let value: Difficulty | "oniura";
-    export let group: Difficulty | "oniura" | undefined;
+    interface Props {
+        value: Difficulty | "oniura";
+        group?: Difficulty | "oniura";
+        children?: Snippet;
+    }
+
+    let { value, group = $bindable(), children }: Props = $props();
 
     const [theme] = getTheme();
 </script>
@@ -27,13 +33,15 @@
     class:selected={group === value}
     class:unselected={group !== value && group !== undefined}
     style={`background:${color.difficulty[value]};`}
-    on:click={() => {
+    onclick={() => {
         group = clickHandle(group, value);
     }}
     role="presentation"
     data-theme={$theme}
 >
-    <span><slot /></span>
+    <span>
+        {@render children?.()}
+    </span>
 </div>
 <input type="radio" bind:group {value} />
 
@@ -81,7 +89,7 @@
         border-color: white;
     }
 
-    span{
+    span {
         transform: translateY(-1px);
     }
 </style>

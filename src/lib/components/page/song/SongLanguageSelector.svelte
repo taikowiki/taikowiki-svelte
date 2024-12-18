@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function saveSongLang(songLang: SongLang) {
         window.localStorage?.setItem("songLang", songLang);
     }
@@ -12,7 +12,7 @@
         });
     }
 
-    const languages: SongLang[] = ["jp", "ko", "ako", "en", "aen"];
+    const languages: SongLang[] = ["ja", "ko", "ako", "en", "aen"];
 </script>
 
 <script lang="ts">
@@ -23,26 +23,37 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
-    export let songLang: SongLang = "jp";
+    interface Props {
+        songLang: SongLang;
+    }
+
+    let { songLang = $bindable("ja") }: Props = $props();
     if (browser) {
         songLang =
             (window.localStorage?.getItem("songLang") as SongLang | null) ||
             songLang;
+        if (!languages.includes(songLang)) {
+            songLang = "ja";
+        }
     }
 
-    $: if (browser) {
-        saveSongLang(songLang);
-    }
+    $effect(() => {
+        if (browser) {
+            saveSongLang(songLang);
+        }
+    });
 
-    let ghost: HTMLDivElement;
-    let btn: HTMLElement;
+    let ghost: HTMLDivElement | undefined = $state();
+    let btn: HTMLElement | undefined = $state();
 
-    $: resizeObserver = ghost ? getResizeObserver(ghost) : null;
+    let resizeObserver = $derived(ghost ? getResizeObserver(ghost) : null);
 
-    $: if (btn && resizeObserver) {
-        resizeObserver.disconnect();
-        resizeObserver.observe(btn);
-    }
+    $effect(() => {
+        if (btn && resizeObserver) {
+            resizeObserver.disconnect();
+            resizeObserver.observe(btn);
+        }
+    });
 
     /*
     onDestroy(() => {
@@ -52,12 +63,12 @@
     const [theme] = getTheme();
     const isMobile = getIsMobile();
     const lang = getLang();
-    $: i18n = getI18N("/song", $lang);
+    let i18n = $derived(getI18N("/song", $lang));
 </script>
 
 {#key $isMobile}
     <div class="wrapper">
-        <div class="ghost" bind:this={ghost} data-theme={$theme} />
+        <div class="ghost" bind:this={ghost} data-theme={$theme}></div>
         <div class="container">
             {#if ghost}
                 {#each languages as language}

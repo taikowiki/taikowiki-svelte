@@ -3,13 +3,17 @@
     import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
     import DaniSong from "./DaniSong.svelte";
 
-    export let songs: DaniSongType[];
-    export let songDatas: SongDataPickedForDani[];
+    interface Props {
+        songs: DaniSongType[];
+        songDatas: SongDataPickedForDani[];
+    }
+    
+    let { songs, songDatas }: Props = $props();
 </script>
 
 <div class="container">
     {#each songs as song}
-        <DaniSong {song} {songDatas}/>
+        <DaniSong {song} {songDatas} />
     {/each}
 </div>
 

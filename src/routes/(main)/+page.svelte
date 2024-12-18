@@ -6,7 +6,7 @@
     import MainShortcut from "$lib/components/page/(index)/MainShortcut.svelte";
     import { Center } from "$lib/module/common/styled";
 
-    export let data;
+    let {data} = $props();
 </script>
 
 <PageTitle />

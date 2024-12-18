@@ -36,7 +36,7 @@ export interface Course {
     images: string[];
 }
 export type Version = typeof VERSION[number][number]
-export type SongLang = "jp" | "ko" | "ako" | "en" | "aen";
+export type SongLang = "ja" | "ko" | "ako" | "en" | "aen";
 export type DaniVersion = typeof DANIVERSION[number];
 export type Dan = typeof DAN[number];
 export interface Dani {

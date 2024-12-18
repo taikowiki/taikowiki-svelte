@@ -4,53 +4,59 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DateTime } from "luxon";
 
-    export let donderData: UserDonderData;
-    export let loaded: boolean = false;
+    interface Props {
+        donderData: UserDonderData;
+        loaded?: boolean;
+    }
+
+    let { donderData, loaded = $bindable(false) }: Props = $props();
 
     const [theme] = getTheme();
     const lang = getLang();
-    $: i18n = getI18N("/auth/user/donder", $lang);
+    let i18n = $derived(getI18N("/auth/user/donder", $lang));
 </script>
 
 <div class="container">
     <img
         src={donderData.donder.myDon}
         alt={i18n.myDon}
-        on:load={() => {
+        onload={() => {
             loaded = true;
         }}
-        on:error={() => {
+        onerror={() => {
             loaded = true;
         }}
     />
-    <table data-theme={$theme}>
-        <tr>
-            <td class="taikonumber">
+    <div class="div-table" data-theme={$theme}>
+        <div class="div-tr">
+            <div class="div-td taikonumber">
                 {donderData.donder.taikoNumber}
-            </td>
-        </tr>
-        <tr>
-            <td>
+            </div>
+        </div>
+        <div class="div-tr">
+            <div class="div-td">
                 {donderData.donder.nickname}
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
     <div class="last-update">
-        {i18n.lastUpdate}: {DateTime.fromJSDate(donderData.lastUpdate).toFormat("yyyy-MM-dd HH:mm:ss")}
+        {i18n.lastUpdate}: {DateTime.fromJSDate(donderData.lastUpdate).toFormat(
+            "yyyy-MM-dd HH:mm:ss",
+        )}
     </div>
 </div>
 
 <style>
-    .container{
-        display:flex;
-        flex-direction:column;
-        align-items:center;
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 300px;
         max-width: 100%;
         row-gap: 5px;
     }
 
-    table {
+    .div-table {
         width: 100%;
 
         border: 1px solid black;
@@ -62,18 +68,18 @@
         max-width: 200px;
     }
 
-    td {
+    .div-td {
         text-align: center;
         padding: 0;
         transform: translateY(-2px);
     }
-    tr:nth-child(1) td {
+    .div-tr:nth-child(1) .div-td {
         padding-bottom: 1px;
         border-bottom: 1px solid black;
     }
 
-    table[data-theme="dark"],
-    table[data-theme="dark"] td {
+    .div-table[data-theme="dark"],
+    .div-table[data-theme="dark"] .div-td {
         border-color: #818181;
     }
 

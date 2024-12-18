@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function getSuffix2(conditionType: DaniCondition["type"]) {
         if (conditionType === "bad" || conditionType === "ok") {
             return "down";
@@ -27,13 +27,17 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let condition: DaniCondition;
+    interface Props {
+        condition: DaniCondition;
+    }
+
+    let { condition = $bindable() }: Props = $props();
 
     const suffix1 = getSuffix1(condition.type);
     const suffix2 = getSuffix2(condition.type);
 
     const lang = getLang();
-    $: i18n = getI18N("component", $lang).DaniDisplay;
+    let i18n = $derived(getI18N("component", $lang).DaniDisplay);
 
     const [theme] = getTheme();
 </script>
@@ -48,14 +52,18 @@
         <div class="item">
             <div class="red">
                 <span>
-                    {condition.criteria.red.length === 0? '?' : `${condition.criteria.red.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
+                    {condition.criteria.red.length === 0
+                        ? "?"
+                        : `${condition.criteria.red.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
                 </span>
             </div>
         </div>
         <div class="item">
             <div class="gold">
                 <span>
-                    {condition.criteria.gold.length === 0? '?' : `${condition.criteria.gold.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
+                    {condition.criteria.gold.length === 0
+                        ? "?"
+                        : `${condition.criteria.gold.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
                 </span>
             </div>
         </div>
@@ -140,6 +148,6 @@
         transform: translateY(-1px);
         text-align: center;
         word-wrap: break-word;
-        word-break:keep-all;
+        word-break: keep-all;
     }
 </style>

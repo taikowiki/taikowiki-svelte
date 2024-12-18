@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     const sectionColor: Record<string, string> = {
         'SS': "#B93FEA",
         'S+': "#f00eac",
@@ -43,18 +43,23 @@
     import type { Writable } from "svelte/store";
     import type { DiffChart } from "$lib/module/common/diffchart/types";
 
-    export let data;
+    let { data } = $props();
     const { songs, diffChartData } = data;
 
-    let downloadImage: (() => Promise<void>) | null = null;
-    $: (
-        getContext("downloadImage") as Writable<(() => Promise<void>) | null>
-    ).set(downloadImage);
+    let downloadImage: (() => Promise<void>) | null = $state(null);
+    $effect(() => {
+        (
+            getContext("downloadImage") as Writable<
+                (() => Promise<void>) | null
+            >
+        ).set(downloadImage);
+    });
 
     const lang = getLang();
-    $: i18n = getI18N($lang).page.diffchart.fc;
-    $: titleI18n = getI18N('other', $lang).title['/diffchart/fc'];
-    $: customedDiffchart = getCustomedDiffchart(diffChartData.data, i18n);
+    let i18n = $derived(getI18N("/diffchart/clear/[level]", $lang));
+    let titleI18n = $derived(getI18N("other", $lang).title["/diffchart/clear"]);
+    let customedDiffchart = $derived(getCustomedDiffchart(diffChartData.data, i18n));
+
 
     const donderData = data.donderData;
 </script>

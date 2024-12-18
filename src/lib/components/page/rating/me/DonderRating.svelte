@@ -7,12 +7,16 @@
     import GradeProgress from "./GradeProgress.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let ratings: ReturnType<typeof getRating>;
-    export let tier: ReturnType<typeof getTier>;
-    export let ranking: {count: number; ranking: number}
+    interface Props {
+        ratings: ReturnType<typeof getRating>;
+        tier: ReturnType<typeof getTier>;
+        ranking: { count: number; ranking: number };
+    }
+
+    let {ratings, tier, ranking}: Props = $props();
 
     const lang = getLang();
-    $: i18n = getI18N($lang).page.donder.rating
+   let i18n = $derived(getI18N($lang).page.donder.rating);
 </script>
 
 <div class="container">
@@ -42,15 +46,16 @@
     />
     <TierProgress rating={ratings.rating} tierName={tier.tierName} />
     <div class="ranking">
-        {i18n.top} {Math.round((ranking.ranking / ranking.count) * 10000) / 100}%
+        {i18n.top}
+        {Math.round((ranking.ranking / ranking.count) * 10000) / 100}%
     </div>
 </div>
 
 <style>
-    .container{
-        display:flex;
-        flex-direction:column;
-        align-items:center;
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 300px;
         max-width: 100%;
         row-gap: 5px;
@@ -99,7 +104,7 @@
         color: #95003c;
     }
 
-    .ranking{
+    .ranking {
         font-size: 14px;
     }
 </style>

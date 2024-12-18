@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { goto } from "$app/navigation";
 
     function movePage(p: number) {
@@ -29,8 +29,12 @@
 <script lang="ts">
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
-    export let pageNum: number;
-    export let length: number;
+    interface Props {
+        pageNum: number;
+        length: number;
+    }
+
+    let { pageNum = $bindable(), length }: Props = $props();
 
     let maxPage = Math.ceil(length / 30);
     let displayPages = getDisplayPages(pageNum, maxPage);
@@ -44,7 +48,7 @@
             <div
                 class="btn"
                 role="presentation"
-                on:click={() => {
+                onclick={() => {
                     movePage(1);
                 }}
             >
@@ -55,7 +59,7 @@
             <div
                 class="btn"
                 role="presentation"
-                on:click={() => {
+                onclick={() => {
                     movePage(displayPages[0] - 10);
                 }}
             >
@@ -65,7 +69,7 @@
         {#if $isMobile}
             <select
                 bind:value={pageNum}
-                on:change={() => {
+                onchange={() => {
                     movePage(pageNum);
                 }}
             >
@@ -79,7 +83,7 @@
             {#each displayPages as pNum}
                 <div
                     class="btn"
-                    on:click={() => {
+                    onclick={() => {
                         movePage(pNum);
                     }}
                     role="presentation"
@@ -93,7 +97,7 @@
             <div
                 class="btn"
                 role="presentation"
-                on:click={() => {
+                onclick={() => {
                     movePage(displayPages[displayPages.length - 1] + 1);
                 }}
             >
@@ -108,7 +112,7 @@
             <div
                 class="btn"
                 role="presentation"
-                on:click={() => {
+                onclick={() => {
                     movePage(maxPage);
                 }}
             >

@@ -3,8 +3,12 @@
     import type { SongLang } from "$lib/module/common/song/types";
     import type { SongDataPickedForSearch } from "$lib/module/common/song/types";
 
-    export let songLang: SongLang;
-    export let songs: SongDataPickedForSearch[];
+    interface Props {
+        songLang: SongLang;
+        songs: SongDataPickedForSearch[];
+    }
+
+    let { songLang, songs }: Props = $props();
 </script>
 
 <div class="container">

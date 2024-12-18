@@ -1,18 +1,30 @@
 <script lang="ts">
-    export let name: string;
-    export let color: string = "white";
-    export let backgroundColor: string = "#7f7f7f";
-    export let clearedSongsCount: number|null;
-    export let closed: boolean;
+    interface Props {
+        name: string;
+        color?: string;
+        backgroundColor?: string;
+        clearedSongsCount: number | null;
+        closed: boolean;
+        onclick: (event: MouseEvent) => void
+    }
+
+    let {
+        name,
+        color = "white",
+        backgroundColor = "#7f7f7f",
+        clearedSongsCount,
+        closed,
+        onclick
+    }: Props = $props();
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div 
-    class="name" 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+    class="name"
     class:closed
     style={`color:${color};background-color:${backgroundColor};`}
-    on:click
+    {onclick}
 >
     {name}{clearedSongsCount !== null ? ` (${clearedSongsCount})` : ""}
 </div>
@@ -38,6 +50,7 @@
         filter: brightness(0.7);
         margin-bottom: 8px;
         height: 42px;
+        padding-bottom: 3px;
     }
 
     .name:hover {

@@ -2,11 +2,20 @@
     //CSelect means 'Custom Option'
     import { type Option } from "./CSelect.svelte";
 
-    export let selected: Option;
-    export let value: Option;
+    interface Props {
+        value: Option;
+        select: (value: Option) => void
+    }
 
+    let { value, select }: Props = $props();
 </script>
 
-<div class="container" role="presentation" on:click={() => {selected = value}}>
+<div
+    class="container"
+    role="presentation"
+    onclick={() => {
+        select(value);
+    }}
+>
     {value.display}
 </div>

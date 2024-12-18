@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     //오락실 마커 생성
     function createGamecenterMarkers(
         gamecenterDatas: GameCenterData[],
@@ -37,7 +37,7 @@
             infoWindowDiv.style.justifyContent = "center";
             infoWindowDiv.style.width = "200px";
             infoWindowDiv.style.height = "auto";
-            new MarkerInfo({
+            mount(MarkerInfo, {
                 target: infoWindowDiv,
                 props: {
                     gamecenterData,
@@ -78,40 +78,46 @@
 <script lang="ts">
     import type { GameCenterData } from "$lib/module/common/gamecenter/types";
     import getKakaoMap from "$lib/module/common/gamecenter/kakao.client";
-    import { onDestroy, onMount } from "svelte";
+    import { mount, onDestroy, onMount } from "svelte";
     import KakaoMapAside from "./KakaoMapAside.svelte";
     import MarkerInfo from "./MarkerInfo.svelte";
 
-    //오락실
-    export let gamecenterDatas: GameCenterData[];
+    interface Props {
+        gamecenterDatas: GameCenterData[];
+        markerLoaded?: boolean;
+    }
 
-    const gamecenterMarkers: Record<
+    let { gamecenterDatas, markerLoaded = false }: Props = $props();
+
+    //오락실
+    let gamecenterMarkers: Record<
         number,
         {
             marker: kakao.maps.Marker;
             iwOpened: boolean;
             iw: kakao.maps.InfoWindow;
         }
-    > = {};
-    export let markerLoaded = false;
+    > = $state({});
 
     //지도 관련 변수
     const kakaoMap = getKakaoMap();
 
-    let mapContainer: HTMLDivElement;
-    let map: kakao.maps.Map;
+    let mapContainer: HTMLDivElement | undefined = $state();
+    let map: kakao.maps.Map | undefined = $state();
 
-    let canUseGeolocation = "geolocation" in window.navigator;
-    let currentPositionMarker: kakao.maps.Marker;
+    let canUseGeolocation = $state("geolocation" in window.navigator);
+    let currentPositionMarker: kakao.maps.Marker | undefined = $state();
     let watchCallbackId: number;
 
-    let setCenterToCurrentPosition: () => any = () => {};
+    let setCenterToCurrentPosition: () => any = $state(() => {});
 
     onMount(async () => {
         //오락실 마커 로딩 되면 지도 표시
         //mapContainer.style.display = "none";
 
         //지도 생성
+        if (!mapContainer) return;
+
         map = new kakaoMap.Map(mapContainer, {
             level: 12,
             center: new kakaoMap.LatLng(36.59378832827889, 128.0195306619556),
@@ -119,26 +125,30 @@
 
         //현재 위치
         await (async () => {
-            if (!canUseGeolocation) {
+            if (!canUseGeolocation || !map) {
                 return;
             }
 
-            let [x, y]: [number, number] = await new Promise((res) => {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        res([
-                            position.coords.latitude,
-                            position.coords.longitude,
-                        ]);
-                    },
-                    (error) => {
-                        if (error.code == error.PERMISSION_DENIED) {
-                            canUseGeolocation = false;
-                        }
-                        throw error;
-                    },
-                );
-            });
+            try {
+                var [x, y]: [number, number] = await new Promise((res, rej) => {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            res([
+                                position.coords.latitude,
+                                position.coords.longitude,
+                            ]);
+                        },
+                        (error) => {
+                            if (error.code == error.PERMISSION_DENIED) {
+                                canUseGeolocation = false;
+                            }
+                            rej(error);
+                        },
+                    );
+                });
+            } catch {
+                return;
+            }
 
             map.setCenter(new kakaoMap.LatLng(x, y));
 
@@ -153,12 +163,14 @@
             });
 
             setCenterToCurrentPosition = () => {
-                map.setCenter(currentPositionMarker.getPosition());
+                (map as kakao.maps.Map).setCenter(
+                    (currentPositionMarker as kakao.maps.Marker).getPosition(),
+                );
             };
 
             watchCallbackId = navigator.geolocation.watchPosition(
                 (position) => {
-                    currentPositionMarker.setPosition(
+                    (currentPositionMarker as kakao.maps.Marker).setPosition(
                         new kakaoMap.LatLng(
                             position.coords.latitude,
                             position.coords.longitude,
@@ -195,24 +207,29 @@
         {#if canUseGeolocation}
             <button
                 class="map-button current-button"
-                on:click={setCenterToCurrentPosition}
-            />
+                onclick={setCenterToCurrentPosition}
+                aria-label="current position"
+            ></button>
         {/if}
         <button
             class="map-button plus-button"
-            on:click={() => {
+            onclick={() => {
+                if (!map) return;
                 map.setLevel(map.getLevel() - 1);
             }}
-        />
+            aria-label="zoom in"
+        ></button>
         <button
             class="map-button minus-button"
-            on:click={() => {
+            onclick={() => {
+                if (!map) return;
                 map.setLevel(map.getLevel() + 1);
             }}
-        />
+            aria-label="zoom out"
+        ></button>
     </div>
 
-    {#if markerLoaded}
+    {#if markerLoaded && map}
         <KakaoMapAside
             {currentPositionMarker}
             {gamecenterMarkers}

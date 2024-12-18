@@ -1,5 +1,5 @@
 <script lang="ts">
-    import createSSC from "styled-svelte-component/svelte4";
+    import styled from "styled-svelte5";
     import { Row } from "../../common/styled";
     import MainSearchTypeSelector from "./MainSearchTypeSelector.svelte";
     import { getTheme } from "$lib/module/layout/theme";
@@ -12,9 +12,9 @@
     let keyword: string = "";
     let searchType: "all" | "song" | "docs" = "song";
 
-    let selectorOpened: boolean;
+    let selectorOpened: boolean = false;
 
-    const Container = createSSC<{
+    const Container = styled<{
         theme: "light" | "dark";
         selectorOpened: boolean;
     }>(
@@ -69,7 +69,7 @@
             }
         }
     }
-    let searchResultOpened: boolean;
+    let searchResultOpened: boolean = false;
     let inputContianer: HTMLDivElement;
 
     //검색
@@ -121,7 +121,7 @@
         />
         <MainSearchResult {searchResults} bind:opened={searchResultOpened} />
     </div>
-    <button class="search-btn" data-theme={$theme} on:click={search} />
+    <button class="search-btn" data-theme={$theme} on:click={search} aria-label="search"></button>
 </Container>
 
 <style>

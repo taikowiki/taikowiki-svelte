@@ -4,7 +4,7 @@
     import NoticeList from "$lib/components/page/notice/NoticeList.svelte";
     import NoticePageSelector from "$lib/components/page/notice/NoticePageSelector.svelte";
 
-    export let data;
+    let {data} = $props();
 
     const pageNum = Number($page.url.searchParams.get("page")) || 1;
 </script>

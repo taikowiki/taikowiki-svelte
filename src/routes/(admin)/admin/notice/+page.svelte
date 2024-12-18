@@ -1,7 +1,7 @@
 <script>
     import AdminNoticeList from "$lib/components/page/admin/notice/AdminNoticeList.svelte";
 
-    export let data;
+    let {data} = $props();
 </script>
 
 <a href="/admin/notice/write">

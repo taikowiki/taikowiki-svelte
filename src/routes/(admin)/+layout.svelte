@@ -6,18 +6,22 @@
     import User from "$lib/components/layout/main/User.svelte";
     import { writable } from "svelte/store";
     import { navigating, page } from "$app/stores";
-    import { setContext } from "svelte";
+    import { setContext, type Snippet } from "svelte";
     import { useLang } from "$lib/module/common/i18n/i18n.js";
     import { userRequestor } from "$lib/module/common/user/user.client.js";
 
-    export let data;
+    let { data, children } = $props();
 
     //theme
     let [theme, _] = useTheme();
-    $: if($theme === "dark") $theme = "light"
-    $: if (browser) {
-        document.body.setAttribute("data-theme", $theme);
-    }
+    $effect.pre(() => {
+        if ($theme === "dark") $theme = "light";
+    });
+    $effect.pre(() => {
+        if (browser) {
+            document.body.setAttribute("data-theme", $theme);
+        }
+    });
 
     //lang
     useLang();
@@ -25,13 +29,15 @@
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);
-    $: if (($navigating || $page.state) && browser) {
-        userRequestor.getUserData(null).then((response) => {
-            if(response.status === 'success'){
-                user.set(response.data);
-            }
-        })
-    }
+    $effect.pre(() => {
+        if (($navigating || $page.state) && browser) {
+            userRequestor.getUserData(null).then((response) => {
+                if (response.status === "success") {
+                    user.set(response.data);
+                }
+            });
+        }
+    });
 </script>
 
 <Header>
@@ -41,13 +47,13 @@
         </HeaderItem>
     </svelte:fragment>
     <svelte:fragment slot="right">
-        <User/>
+        <User />
     </svelte:fragment>
 </Header>
 
 <div class="container">
     <main style="background-color:white;">
-        <slot />
+        {@render children?.()}
     </main>
 </div>
 
@@ -56,12 +62,12 @@
         height: 30px;
     }
 
-    .container{
-        display:flex;
+    .container {
+        display: flex;
         justify-content: center;
     }
 
-    main{
+    main {
         width: 100%;
         max-width: 1400px;
     }

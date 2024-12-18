@@ -3,8 +3,8 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { DateTime } from "luxon";
-    export let data;
-
+   
+    let {data} = $props();
     const {notice} = data;
 
     //time
@@ -13,7 +13,7 @@
     }
 
     const lang = getLang();
-    $: i18n = getI18N('/notice', $lang);
+    let i18n = $derived(getI18N('/notice', $lang));
 </script>
 
 <PageTitle title={`[${i18n.type[notice.type]}]${notice.title}`}/>

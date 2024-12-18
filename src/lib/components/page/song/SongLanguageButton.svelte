@@ -1,31 +1,39 @@
 <script lang="ts">
     import type { SongLang } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import type { Snippet } from "svelte";
 
-    export let songLang: SongLang;
-    export let value: SongLang;
-    export let btn:HTMLElement;
-
-    let b: HTMLElement;
-
-    $: if(songLang === value && b){
-        btn = b;
+    interface Props {
+        songLang: SongLang;
+        value: SongLang;
+        btn?: HTMLElement;
+        children?: Snippet;
     }
+
+    let { songLang = $bindable(), btn = $bindable(), value, children }: Props = $props();
+
+    let b: HTMLElement | undefined = $state();
+
+    $effect.pre(() => {
+        if (songLang === value && b) {
+            btn = b;
+        }
+    });
 
     const [theme] = getTheme();
 </script>
 
 <div
     class="button"
-    on:click={() => {
+    onclick={() => {
         songLang = value;
     }}
     bind:this={b}
     role="presentation"
-    class:selected={songLang===value}
+    class:selected={songLang === value}
     data-theme={$theme}
 >
-    <slot />
+    {@render children?.()}
 </div>
 
 <style>
@@ -48,16 +56,16 @@
 
         transition: color 0.2s;
     }
-    .button[data-theme="dark"]{
+    .button[data-theme="dark"] {
         border-color: #1c1c1c;
     }
-    .button.selected{
-        color:white;
+    .button.selected {
+        color: white;
 
-        border:0;
+        border: 0;
 
         font-weight: bold;
-        
+
         padding-inline: 5px;
         padding-block: 5px;
     }

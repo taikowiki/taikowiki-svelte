@@ -6,14 +6,18 @@
     import GradeProgress from "../me/GradeProgress.svelte";
     //import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let currentRating: number;
-    export let currentExp: number | null;
-    export let tier: ReturnType<typeof getTier>;
+    interface Props {
+        currentRating: number;
+        currentExp: number | null;
+        tier: ReturnType<typeof getTier>;
+    }
+
+    let { currentRating, currentExp, tier }: Props = $props();
 
     const ratings = {
         rating: currentRating,
-        exp: currentExp
-    }
+        exp: currentExp,
+    };
 
     //const lang = getLang();
     //$: i18n = getI18N($lang).page.donder.rating
@@ -48,10 +52,10 @@
 </div>
 
 <style>
-    .container{
-        display:flex;
-        flex-direction:column;
-        align-items:center;
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 300px;
         max-width: 100%;
         row-gap: 5px;

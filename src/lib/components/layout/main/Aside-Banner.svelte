@@ -2,7 +2,11 @@
     import type { AsideBanner } from "$lib/module/common/banner/types";
     import AsideItem from "./AsideItem.svelte";
 
-    export let banners: AsideBanner[];
+    interface Props {
+        banners: AsideBanner[];
+    }
+
+    let { banners }: Props = $props();
 </script>
 
 {#each banners as banner}

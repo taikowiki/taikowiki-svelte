@@ -1,13 +1,17 @@
 <script lang="ts">
     import color from "$lib/module/common/color";
-    import type { Difficulty, SongData } from "$lib/module/common/song/types";
+    import type { Difficulty } from "$lib/module/common/song/types";
     import { onDestroy, onMount } from "svelte";
     import type { SongLang } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
     import type { SongDataPickedForSearch } from "$lib/module/common/song/types";
 
-    export let song: SongDataPickedForSearch;
-    export let songLang: SongLang;
+    interface Props {
+        song: SongDataPickedForSearch;
+        songLang: SongLang;
+    }
+
+    let { song, songLang }: Props = $props();
 
     const diffs: Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
 
@@ -56,7 +60,7 @@
         {/each}
     </div>
     <div class="title-container">
-        {#if songLang === "jp"}
+        {#if songLang === "ja"}
             {song.title}
         {:else if songLang === "ko"}
             {song.titleKo || song.title}
@@ -81,7 +85,7 @@
                             class="level-color"
                             style={`background-color:${color.difficulty[diff]};`}
                             data-theme={$theme}
-                        />
+                        ></div>
                     </div>
                     <!--
                     {:else}

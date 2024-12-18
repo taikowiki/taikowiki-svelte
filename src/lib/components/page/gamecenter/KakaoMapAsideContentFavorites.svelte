@@ -5,24 +5,38 @@
     import { getContext } from "svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let gamecenterDatas: GameCenterData[];
-    export let favorites: Writable<number[]>;
-    export let distanceMap: Map<GameCenterData, number>;
-    export let gamecenterMarkers: Record<
-        number,
-        {
-            marker: kakao.maps.Marker;
-            iwOpened: boolean;
-            iw: kakao.maps.InfoWindow;
-        }
-    >;
-    export let map: kakao.maps.Map;
+    interface Props {
+        gamecenterDatas: GameCenterData[];
+        favorites: Writable<number[]>;
+        distanceMap: Map<GameCenterData, number>;
+        gamecenterMarkers: Record<
+            number,
+            {
+                marker: kakao.maps.Marker;
+                iwOpened: boolean;
+                iw: kakao.maps.InfoWindow;
+            }
+        >;
+        map: kakao.maps.Map;
+    }
+
+    let {
+        gamecenterDatas = $bindable(),
+        favorites,
+        distanceMap,
+        gamecenterMarkers,
+        map,
+    }: Props = $props();
 
     const user = getContext("user") as Writable<{ logined: boolean }>;
 
-    $: favoriteGamecenters = $favorites
-        .map((order) => gamecenterDatas.find((data) => data.order === order))
-        .filter((e) => e !== undefined);
+    let favoriteGamecenters = $derived(
+        $favorites
+            .map((order) =>
+                gamecenterDatas.find((data) => data.order === order),
+            )
+            .filter((e) => e !== undefined),
+    );
 
     //모바일 사이드
     const mobileAsideOpened = getContext(
@@ -30,14 +44,14 @@
     ) as Writable<boolean>;
 
     const lang = getLang();
-    $: i18n = getI18N('/gamecenter', $lang);
+    let i18n = $derived(getI18N("/gamecenter", $lang));
 </script>
 
 <div class="container">
     {#if $user.logined}
-        {#each favoriteGamecenters as gamecenterData}
+        {#each favoriteGamecenters as gamecenterData, index}
             <GamecenterInfo
-                {gamecenterData}
+                bind:gamecenterData={favoriteGamecenters[index]}
                 {favorites}
                 distance={distanceMap.get(gamecenterData)}
                 clickHandle={() => {
@@ -79,5 +93,7 @@
         margin-top: 3px;
 
         overflow-y: auto;
+
+        row-gap: 5px;
     }
 </style>

@@ -1,7 +1,11 @@
 <script lang="ts">
     import type { MainBanner } from "$lib/module/common/banner/types";
 
-    export let banners: MainBanner[];
+    interface Props {
+        banners: MainBanner[];
+    }
+
+    let { banners }: Props = $props();
 </script>
 
 {#if banners.length > 0}

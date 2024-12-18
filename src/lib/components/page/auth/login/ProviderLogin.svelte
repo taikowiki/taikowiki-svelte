@@ -1,15 +1,19 @@
 <script lang="ts">
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let href: string;
-    export let name: string;
-    export let icon: string;
-    export let color: string;
-    export let backgroundColor: string;
-    export let invert: boolean = false;
+    interface Props {
+        href: string;
+        name: string;
+        icon: string;
+        color: string;
+        backgroundColor: string;
+        invert?: boolean;
+    }
+
+    let {href, name, icon, color, backgroundColor, invert = false}: Props = $props();
 
     const lang = getLang();
-    $: i18n = getI18N('/auth/login', $lang);
+    let i18n = $derived(getI18N("/auth/login", $lang));
 </script>
 
 <a {href} style={`color:${color};background-color:${backgroundColor};`}>
@@ -39,7 +43,7 @@
         text-decoration: none;
     }
 
-    span{
+    span {
         transform: translateY(-1px);
     }
 </style>

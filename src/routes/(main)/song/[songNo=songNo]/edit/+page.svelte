@@ -3,15 +3,14 @@
     import submit from "$lib/module/common/song/submit.client";
 
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
-    import type { SongData } from "$lib/module/common/song/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
 
-    export let data;
-    let songData = data.song;
+    let {data} = $props();
+    let songData = $state(data.song);
 
     const lang = getLang();
-    $: titleI18n = getI18N('other', $lang).title['/song/[songNo]/edit']
+    let titleI18n = $derived(getI18N('other', $lang).title['/song/[songNo]/edit']);
 </script>
 
 <SongEditor bind:songData type="edit" />
@@ -19,7 +18,7 @@
 <PageTitle title={`${titleI18n} - ${data.song?.title ?? ''}`}/>
 
 <button
-    on:click={() => {
+    onclick={() => {
         submit(songData.songNo, songData, `/song/${$page.params.songNo}`);
     }}
 >

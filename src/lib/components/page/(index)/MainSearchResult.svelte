@@ -2,7 +2,12 @@
     import type { SearchResult } from "$lib/module/common/search/types";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let searchResults: SearchResult[];
+    interface Props{
+        searchResults: SearchResult[];
+        opened?: boolean;
+    }
+
+    let {searchResults, opened = $bindable(false)}: Props = $props();
 
     function getTypeImgSrc(searchType: "song" | "docs") {
         switch (searchType) {
@@ -25,8 +30,6 @@
             }
         }
     }
-
-    export let opened: boolean = false;
 
     const [theme] = getTheme();
 </script>

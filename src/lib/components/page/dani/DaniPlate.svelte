@@ -2,35 +2,59 @@
     import type { Dan } from "$lib/module/common/dani/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
-    export let dan:Dan;
+    interface Props {
+        dan: Dan;
+    }
+
+    let { dan }: Props = $props();
 
     const lang = getLang();
-    $: i18n = getI18N('other', $lang);
+    let i18n = $derived(getI18N("other", $lang));
 
-    $: danPlate = dan === 'gaiden' ? 'gaiden'
-                : dan === 'tatsujin' ? 'tatsujin'
-                : dan === 'chojin' || dan === 'meijin' || dan === 'kuroto' ? 'jin'
-                : dan === 'fukusho' ? 'fukusho'
-                : dan === 'chiuken' ? 'chiuken'
-                : dan === 'jiho' ? 'jiho'
-                : dan.endsWith('kyu') || dan === 'beginner' ? 'kyu'
-                : dan === '10dan' || dan === '9dan' || dan === '8dan' || dan === '7dan' || dan === '6dan' || dan === 'taisho' ? 'red-dan' : 'blue-dan'
+    let danPlate = $derived(
+        dan === "gaiden"
+            ? "gaiden"
+            : dan === "tatsujin"
+              ? "tatsujin"
+              : dan === "chojin" || dan === "meijin" || dan === "kuroto"
+                ? "jin"
+                : dan === "fukusho"
+                  ? "fukusho"
+                  : dan === "chiuken"
+                    ? "chiuken"
+                    : dan === "jiho"
+                      ? "jiho"
+                      : dan.endsWith("kyu") || dan === "beginner"
+                        ? "kyu"
+                        : dan === "10dan" ||
+                            dan === "9dan" ||
+                            dan === "8dan" ||
+                            dan === "7dan" ||
+                            dan === "6dan" ||
+                            dan === "taisho"
+                          ? "red-dan"
+                          : "blue-dan",
+    );
 </script>
 
-<div style={`background-image: url('/assets/icon/dani/plate/${danPlate}.webp');`} class:ko={$lang === 'ko'} class:ja={$lang === "ja"}>
+<div
+    style={`background-image: url('/assets/icon/dani/plate/${danPlate}.webp');`}
+    class:ko={$lang === "ko"}
+    class:ja={$lang === "ja"}
+>
     <span>
         {i18n.dani.dan[dan]}
     </span>
 </div>
 
 <style>
-    div{
+    div {
         min-width: 56px;
         height: 34px;
 
         padding-inline: 3px;
 
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
 
@@ -40,31 +64,31 @@
 
         font-size: 19px;
         font-weight: bold;
-        font-family: 'Han';
-        color:white;
+        font-family: "Han";
+        color: white;
 
         text-shadow: 1px 1px black;
 
         transform: translateY(0px);
     }
 
-    span{
+    span {
         transform: translateY(-1px);
     }
 
-    .ko{
-        font-family: 'KuK';
+    .ko {
+        font-family: "KuK";
     }
 
-    .ko span{
-        transform:translateY(0.5px);
+    .ko span {
+        transform: translateY(0.5px);
     }
 
-    .ja{
-        font-family: 'Hak';
+    .ja {
+        font-family: "Hak";
     }
-    
-    .ja span{
+
+    .ja span {
         transform: translate(-0.25px, -0.5px);
     }
 </style>

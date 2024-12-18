@@ -2,24 +2,24 @@
     import { page } from "$app/stores";
     import DiffchartEditor from "$lib/components/common/diffchart/DIffchart-Editor.svelte";
     import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
+    import { decodeDiffchart } from "$lib/module/common/diffchart/diffchart.js";
     import type { DiffChart } from "$lib/module/common/diffchart/types";
     import { getIsMobile } from "$lib/module/layout/isMobile.js";
-    import LZUTF8 from "lzutf8";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
 
-    export let data;
+    let {data} = $props();
     const { donderData, songs } = data;
 
-    let diffChart: DiffChart = getDiffchartFromHash();
+    let diffChart: DiffChart = $state(getDiffchartFromHash());
 
-    let downloadImage: (() => Promise<void>) | null = null;
-    $: (
-        getContext("downloadImage") as Writable<(() => Promise<void>) | null>
-    ).set(downloadImage);
+    let downloadImage: (() => Promise<void>) | null = $state(null);
+    $effect.pre(() => {
+        (getContext("downloadImage") as Writable<(() => Promise<void>) | null>).set(downloadImage);
+    })
 
     const isMobile = getIsMobile();
-    let editorOpened = false;
+    let editorOpened = $state(false);
 
     function getDiffchartFromHash(): DiffChart {
         let hash = $page.url.hash;
@@ -43,10 +43,7 @@
         }
 
         try {
-            const stringifiedCompressed = decodeURIComponent(atob(hash));
-            const compressed = Uint8Array.from(JSON.parse(stringifiedCompressed));
-            const stringified = LZUTF8.decompress(compressed);
-            const diffchart = JSON.parse(stringified);
+            const diffchart = decodeDiffchart(hash);
             return diffchart;
         } catch {
             try{
@@ -69,7 +66,7 @@
 
 {#if !$isMobile}
     <div class="editorContainer">
-        <button class="editorOpened" on:click={() => {editorOpened = !editorOpened}}>
+        <button class="editorOpened" onclick={() => {editorOpened = !editorOpened}}>
             {#if editorOpened}
                 에디터 닫기
             {:else}

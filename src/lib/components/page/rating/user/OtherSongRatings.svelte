@@ -6,13 +6,17 @@
     import type { getRating } from "@taiko-wiki/taiko-rating";
     import SongRatingItem from "../me/SongRatingItem.svelte";
 
-    export let songDatas: Pick<SongData, "songNo" | "title">[];
-    export let scoreData: UserScoreData;
-    export let ratingData: ReturnType<typeof getRating>['songRatingDatas'];
+    interface Props {
+        songDatas: Pick<SongData, "songNo" | "title">[];
+        scoreData: UserScoreData;
+        ratingData: ReturnType<typeof getRating>["songRatingDatas"];
+    }
+
+    let { songDatas, scoreData, ratingData }: Props = $props();
 
     const [theme] = getTheme();
     const lang = getLang();
-    $: newI18n = getI18N($lang).page.donder;
+    let newI18n = $derived(getI18N($lang).page.donder);
 </script>
 
 <div class="center">

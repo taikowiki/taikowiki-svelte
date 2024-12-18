@@ -5,27 +5,29 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DAN } from "$lib/module/common/song/const.js";
 
-    export let data;
+    let { data } = $props();
 
-    const {daniData, songDatas} = data;
+    const { daniData, songDatas } = data;
 
     const lang = getLang();
-    $: versionI18n = getI18N('other', $lang).dani.version;
-    $: titleI18n = getI18N('other', $lang).title['/dani'];
+    let versionI18n = $derived(getI18N("other", $lang).dani.version);
+    let titleI18n = $derived(getI18N("other", $lang).title["/dani"]);
 
     daniData.data.sort((a, b) => {
         return DAN.indexOf(a.dan) - DAN.indexOf(b.dan);
-    })
+    });
 </script>
 
-<PageTitle title={versionI18n[$page.url.pathname.split('/')[2]]+ ' ' + titleI18n}/>
+<PageTitle
+    title={versionI18n[$page.url.pathname.split("/")[2]] + " " + titleI18n}
+/>
 
 <div class="container">
     {#each daniData.data as dani}
         <DaniDisplay {dani} {songDatas} />
     {/each}
     {#if daniData.data.length % 2 === 1}
-        <div class="dummy"/>
+        <div class="dummy"></div>
     {/if}
 </div>
 
@@ -39,7 +41,7 @@
         row-gap: 20px;
     }
 
-    .dummy{
+    .dummy {
         width: 400px;
     }
 

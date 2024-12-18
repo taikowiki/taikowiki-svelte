@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function usePageAside() {
         let pageAside = writable<HTMLDivElement | null>(null);
         setContext("pageAside", pageAside);
@@ -11,18 +11,6 @@
             let p = get(pageAside);
             if (p) {
                 p.innerHTML = "";
-            }
-        };
-    }
-    function setPageAsideDisplay(pageAside: Writable<HTMLDivElement | null>) {
-        return () => {
-            let p = get(pageAside);
-            if (p) {
-                if (p.innerHTML === "") {
-                    p.style.display = "none";
-                } else {
-                    p.style.display = "block";
-                }
             }
         };
     }
@@ -43,7 +31,7 @@
     import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n";
     import { writable, get, type Writable } from "svelte/store";
     import { type PathLangFile } from "$lib/module/common/i18n/types.js";
-    import { afterUpdate, getContext, onMount, setContext } from "svelte";
+    import { getContext, onMount, setContext } from "svelte";
     import {
         afterNavigate,
         beforeNavigate,
@@ -58,7 +46,7 @@
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
 
-    export let data;
+    let { data, children } = $props();
     //deepFreeze songs
 
     //theme
@@ -69,10 +57,12 @@
 
     //lang
     const lang = useLang();
-    $: i18nLayout = i18n[$lang].layout.main;
+    let i18nLayout = $derived(i18n[$lang].layout.main);
     const i18nPage = writable<PathLangFile>(setI18N($lang, $page.url.pathname));
     setContext("i18n", i18nPage);
-    $: $i18nPage = setI18N($lang, $page.url.pathname);
+    $effect.pre(() => {
+        $i18nPage = setI18N($lang, $page.url.pathname);
+    });
     const usingLangParam: boolean = getContext("usingLangParam");
     beforeNavigate((navigation) => {
         if (usingLangParam && data.isBot) {
@@ -83,20 +73,10 @@
     //page aside
     const pageAside = usePageAside();
     beforeNavigate(resetPageAside(pageAside));
-    /*afterNavigate(setPageAsideDisplay(pageAside));*/
 
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);
-    /*
-    $: if (($navigating || $page.state) && browser) {
-        userRequestor.getUserData(null).then((response) => {
-            if (response.status === "success") {
-                user.set(response.data);
-            }
-        });
-    }
-    */
 
     //page scroll
     let pagePosition: number = 0;
@@ -162,9 +142,9 @@
     {/if}
 </svelte:head>
 {#key $navigating}
-<HrefLang />
+    <HrefLang />
 {/key}
-<img src="/assets/img/logo.webp" class="preview" alt="preview">
+<img src="/assets/img/logo.webp" class="preview" alt="preview" />
 <div>
     <Header>
         <svelte:fragment slot="left">
@@ -229,7 +209,7 @@
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
-                <slot />
+                {@render children?.()}
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />
                 {/if}

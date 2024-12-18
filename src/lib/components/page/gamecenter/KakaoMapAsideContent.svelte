@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { GameCenterData } from "$lib/module/common/gamecenter/types";
-    import { afterUpdate, getContext, mount, onMount } from "svelte";
+    import { getContext, onMount } from "svelte";
     import KakaoMapAsideContentSearch from "./KakaoMapAsideContentSearch.svelte";
     import KakaoMapAsideContentFavorites from "./KakaoMapAsideContentFavorites.svelte";
     import { getTheme } from "$lib/module/layout/theme";
@@ -9,34 +9,39 @@
     import { writable } from "svelte/store";
     import getKakaoMap from "$lib/module/common/gamecenter/kakao.client";
 
-    export let map: kakao.maps.Map;
-    export let scene: "search" | "favorites";
-    export let currentPositionMarker: kakao.maps.Marker | undefined;
-    export let gamecenterMarkers: Record<
-        number,
-        {
-            marker: kakao.maps.Marker;
-            iwOpened: boolean;
-            iw: kakao.maps.InfoWindow;
-        }
-    >;
-    export let gamecenterDatas: GameCenterData[];
+    interface Props {
+        map: kakao.maps.Map;
+        scene: "search" | "favorites";
+        currentPositionMarker: kakao.maps.Marker | undefined;
+        gamecenterMarkers: Record<
+            number,
+            {
+                marker: kakao.maps.Marker;
+                iwOpened: boolean;
+                iw: kakao.maps.InfoWindow;
+            }
+        >;
+        gamecenterDatas: GameCenterData[];
+    }
+
+    let {
+        map,
+        scene,
+        currentPositionMarker,
+        gamecenterMarkers,
+        gamecenterDatas: gcData,
+    }: Props = $props();
 
     const kakaoMap = getKakaoMap();
 
     let container: HTMLDivElement;
-    let searchContainer: HTMLDivElement;
-    let favoritesContainer: HTMLDivElement;
-
-    const [theme, setTheme] = getTheme();
-    const lang = getLang();
-    const user = getContext("user");
-    const mobileAsideOpened = getContext("mobileAsideOpened");
+    let gamecenterDatas = $state(gcData);
 
     const distanceMap = new Map<GameCenterData, number>();
     if (currentPositionMarker) {
         const coords = currentPositionMarker.getPosition();
 
+        //svelte-ignore state_referenced_locally
         gamecenterDatas.forEach((data) => {
             const marker = gamecenterMarkers[data.order];
 
@@ -56,68 +61,33 @@
     let favorites = writable<number[]>([]);
 
     onMount(() => {
-        searchContainer = document.createElement("div");
-        favoritesContainer = document.createElement("div");
-
-        searchContainer.style.width = "100%";
-        favoritesContainer.style.width = "100%";
-
-        const context = new Map<any, any>();
-        context.set("theme", theme);
-        context.set("setTheme", setTheme);
-        context.set("lang", lang);
-        context.set("user", user);
-        context.set("mobileAsideOpened", mobileAsideOpened);
-
-        mount(KakaoMapAsideContentSearch, {
-            target: searchContainer,
-            props: {
-                gamecenterDatas,
-                gamecenterMarkers,
-                map,
-                favorites,
-                distanceMap,
-            },
-            context,
-        });
-
-        mount(KakaoMapAsideContentFavorites, {
-            target: favoritesContainer,
-            props: {
-                favorites,
-                gamecenterDatas,
-                distanceMap,
-                gamecenterMarkers,
-                map,
-            },
-            context,
-        });
-
         gamecenterRequestor.getFavorites(null).then((response) => {
             if (response.status === "success") {
                 $favorites = response.data;
             }
         });
     });
-
-    afterUpdate(() => {
-        if (!container || !searchContainer || !favoritesContainer) {
-            return;
-        }
-
-        container.childNodes.forEach((child) => {
-            container.removeChild(child);
-        });
-
-        if (scene === "search") {
-            container.appendChild(searchContainer);
-        } else {
-            container.appendChild(favoritesContainer);
-        }
-    });
 </script>
 
-<div bind:this={container} class="container"></div>
+<div bind:this={container} class="container">
+    {#if scene === "search"}
+        <KakaoMapAsideContentSearch
+            {favorites}
+            bind:gamecenterDatas
+            {distanceMap}
+            {gamecenterMarkers}
+            {map}
+        />
+    {:else}
+        <KakaoMapAsideContentFavorites
+            {favorites}
+            bind:gamecenterDatas
+            {distanceMap}
+            {gamecenterMarkers}
+            {map}
+        />
+    {/if}
+</div>
 
 <style>
     .container {

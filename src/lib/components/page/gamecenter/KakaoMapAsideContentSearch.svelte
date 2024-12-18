@@ -12,18 +12,28 @@
     import escape from "regex-escape";
     import { getContext } from "svelte";
 
-    export let map: kakao.maps.Map;
-    export let gamecenterMarkers: Record<
-        number,
-        {
-            marker: kakao.maps.Marker;
-            iwOpened: boolean;
-            iw: kakao.maps.InfoWindow;
-        }
-    >;
-    export let gamecenterDatas: GameCenterData[];
-    export let favorites: Writable<number[]>;
-    export let distanceMap: Map<GameCenterData, number>;
+    interface Props {
+        map: kakao.maps.Map;
+        gamecenterMarkers: Record<
+            number,
+            {
+                marker: kakao.maps.Marker;
+                iwOpened: boolean;
+                iw: kakao.maps.InfoWindow;
+            }
+        >;
+        gamecenterDatas: GameCenterData[];
+        favorites: Writable<number[]>;
+        distanceMap: Map<GameCenterData, number>;
+    }
+
+    let {
+        map,
+        gamecenterMarkers,
+        gamecenterDatas = $bindable(),
+        favorites,
+        distanceMap,
+    }: Props = $props();
 
     //거리순 정렬
     if (distanceMap.size > 0) {
@@ -42,46 +52,52 @@
         });
     }
 
-    let filteredGamecenterDatas = [...gamecenterDatas];
+    let filteredGamecenterDatas = $state([...gamecenterDatas]);
     //키워드 검색
-    let searchKeyword = "";
-    let region: "null" | (typeof GAMECENTERREGION)[number] = "null";
-    let amenities: (typeof AMENITY)[number][] = [];
-    let input: HTMLInputElement;
-    $: {
-        filteredGamecenterDatas = gamecenterDatas.filter((data) =>
-            new RegExp(
-                searchKeyword
-                    .split(" ")
-                    .map((e) => escape(e))
-                    .join("(.*?)"),
-            ).test(data.name),
-        );
-
-        if (region !== "null") {
-            filteredGamecenterDatas = filteredGamecenterDatas.filter(
-                (data) => data.region === region,
+    let searchKeyword = $state("");
+    let region: "null" | (typeof GAMECENTERREGION)[number] = $state("null");
+    let amenities: (typeof AMENITY)[number][] = $state([]);
+    let input: HTMLInputElement | undefined = $state();
+    $effect.pre(() => {
+        {
+            filteredGamecenterDatas = gamecenterDatas.filter((data) =>
+                new RegExp(
+                    searchKeyword
+                        .split(" ")
+                        .map((e) => escape(e))
+                        .join("(.*?)"),
+                ).test(data.name),
             );
-        }
 
-        if (amenities.length > 0) {
-            filteredGamecenterDatas = filteredGamecenterDatas.filter((data) => {
-                return amenities.every((amenity) => {
-                    return data.amenity[amenity] === true;
-                });
-            });
+            if (region !== "null") {
+                filteredGamecenterDatas = filteredGamecenterDatas.filter(
+                    (data) => data.region === region,
+                );
+            }
+
+            if (amenities.length > 0) {
+                filteredGamecenterDatas = filteredGamecenterDatas.filter(
+                    (data) => {
+                        return amenities.every((amenity) => {
+                            return data.amenity[amenity] === true;
+                        });
+                    },
+                );
+            }
         }
-    }
+    });
 
     //테마
     const [theme] = getTheme();
 
     //언어
     const lang = getLang();
-    $: i18n = getI18N("/gamecenter", $lang);
+    let i18n = $derived(getI18N("/gamecenter", $lang));
 
     //모바일 사이드
-    const mobileAsideOpened = getContext('mobileAsideOpened') as Writable<boolean>
+    const mobileAsideOpened = getContext(
+        "mobileAsideOpened",
+    ) as Writable<boolean>;
 </script>
 
 <div class="container">
@@ -105,7 +121,9 @@
             </select>
         </div>
         <div class="option-container">
-            <div class="option-name" data-theme={$theme}>{i18n.amenityText}</div>
+            <div class="option-name" data-theme={$theme}>
+                {i18n.amenityText}
+            </div>
             <div class="amenity-container">
                 {#each AMENITY as amenity}
                     <label
@@ -125,9 +143,9 @@
     </div>
     <!--오락실 정보-->
     <div class="info-container">
-        {#each filteredGamecenterDatas as gamecenterData}
+        {#each filteredGamecenterDatas as gamecenterData, index}
             <GamecenterInfo
-                {gamecenterData}
+                bind:gamecenterData={filteredGamecenterDatas[index]}
                 {favorites}
                 distance={distanceMap.get(gamecenterData)}
                 clickHandle={() => {
@@ -163,6 +181,7 @@
     .search-container {
         display: flex;
         flex-direction: column;
+        row-gap: 8px;
 
         position: sticky;
 

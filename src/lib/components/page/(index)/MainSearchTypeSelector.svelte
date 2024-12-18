@@ -1,10 +1,14 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let searchType: "all" | "song" | "docs";
-    const types = ["all", "song", "docs"] as const;
+    interface Props{
+        searchType: "all" | "song" | "docs";
+        opened: boolean;
+    }
 
-    export let opened: boolean = false;
+    let {searchType = $bindable(), opened = $bindable(false)} = $props();
+
+    const types = ["all", "song", "docs"] as const;
 
     const [theme] = getTheme();
 
@@ -26,7 +30,7 @@
 <div
     class="container"
     class:opened
-    on:focusout={() => {
+    onfocusout={() => {
         opened = false;
     }}
     role="button"
@@ -35,7 +39,7 @@
 >
     <div
         class="display"
-        on:click={() => {
+        onclick={() => {
             opened = !opened;
         }}
         role="presentation"
@@ -55,7 +59,7 @@
             <div
                 class="option"
                 role="presentation"
-                on:click={() => {
+                onclick={() => {
                     searchType = type;
                     opened = false;
                 }}

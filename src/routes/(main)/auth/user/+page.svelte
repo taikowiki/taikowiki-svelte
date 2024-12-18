@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     function deleteUser(form: HTMLFormElement) {
         if (
             confirm(
@@ -17,13 +17,13 @@
     import ShowRating from "$lib/components/page/auth/user/ShowRating.svelte";
     import { getLang, getI18N } from "$lib/module/common/i18n/i18n.js";
 
-    export let data;
+    let {data} = $props();
 
     let withdrawForm: HTMLFormElement;
 
     const lang = getLang();
-    $: i18n = getI18N('/auth/user', $lang);
-    $: titleI18n = getI18N('other', $lang).title['/auth/user'];
+    let i18n = $derived(getI18N('/auth/user', $lang));
+    let titleI18n = $derived(getI18N('other', $lang).title['/auth/user']);
 </script>
 
 <PageTitle title={titleI18n}/>
@@ -51,7 +51,7 @@
             />
         </form>
         <button
-            on:click={() => {
+            onclick={() => {
                 deleteUser(withdrawForm);
             }}
             class="withdraw">{i18n.delete}</button

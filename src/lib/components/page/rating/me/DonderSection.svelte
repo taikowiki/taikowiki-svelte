@@ -1,37 +1,50 @@
 <script lang="ts">
-    export let opened: boolean;
-    export let sectionName: string;
+    import type { Snippet } from "svelte";
+
+    interface Props {
+        opened: boolean;
+        sectionName: string;
+        children?: Snippet;
+    }
+
+    let { opened = $bindable(), sectionName, children }: Props = $props();
 </script>
 
 <div class="container">
-    <h2 class:opened role="presentation" on:click={() => {opened = !opened}}>
+    <h2
+        class:opened
+        role="presentation"
+        onclick={() => {
+            opened = !opened;
+        }}
+    >
         {sectionName}
     </h2>
     <div class="content" class:opened>
-        <slot/>
+        {@render children?.()}
     </div>
 </div>
 
 <style>
-    .container{
-        display:flex;
+    .container {
+        display: flex;
         flex-direction: column;
         width: 100%;
     }
 
-    h2{
+    h2 {
         margin-block: 0;
         border-bottom: 3px solid black;
         cursor: pointer;
     }
-    h2::before{
-        content: '▼'
+    h2::before {
+        content: "▼";
     }
-    h2.opened::before{
-        content: '▲'
+    h2.opened::before {
+        content: "▲";
     }
 
-    .content{
+    .content {
         width: 100%;
         visibility: hidden;
         position: absolute;
@@ -39,7 +52,7 @@
         top: 0;
         transform: translate(-100%, -100%);
     }
-    .content.opened{
+    .content.opened {
         position: static;
         transform: translate(0, 0);
         visibility: visible;

@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import type { SongData } from "$lib/module/common/song/types";
 
     function songSortCallback(
@@ -15,7 +15,7 @@
 </script>
 
 <script lang="ts">
-    export let data;
+    let {data} = $props();
     const { songs } = data;
 </script>
 

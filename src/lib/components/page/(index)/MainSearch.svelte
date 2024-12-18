@@ -12,7 +12,7 @@
     let keyword: string = "";
     let searchType: "all" | "song" | "docs" = "song";
 
-    let selectorOpened: boolean;
+    let selectorOpened: boolean = false;
 
     const Container = styled<{
         theme: "light" | "dark";
@@ -69,7 +69,7 @@
             }
         }
     }
-    let searchResultOpened: boolean;
+    let searchResultOpened: boolean = false;
     let inputContianer: HTMLDivElement;
 
     //검색

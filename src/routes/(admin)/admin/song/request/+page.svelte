@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { songAdminRequestor } from "$lib/module/common/song/song.client.js";
 
     async function disapproveSelected(checked: number[]) {
@@ -19,18 +19,19 @@
 </script>
 
 <script lang="ts">
-    export let data;
+    let { data } = $props();
 
-    let checked: number[] = [];
+    let checked: number[] = $state([]);
 
-    $: allChecked =
-        checked.length === data.requests.length && checked.length !== 0;
+    let allChecked = $derived(
+        checked.length === data.requests.length && checked.length !== 0,
+    );
 </script>
 
 <a href="/admin/song">곡 목록으로 돌아가기</a>
 <div class="button-container">
     <button
-        on:click={() => {
+        onclick={() => {
             disapproveSelected(checked);
         }}
     >
@@ -44,7 +45,7 @@
                 <input
                     type="checkbox"
                     checked={allChecked}
-                    on:click={(event) => {
+                    onclick={(event) => {
                         if (event.currentTarget.checked) {
                             checked.push(...data.requests.map((e) => e.order));
                             checked = checked;
@@ -68,7 +69,7 @@
                     <input
                         type="checkbox"
                         checked={checked.includes(request.order)}
-                        on:click={(event) => {
+                        onclick={(event) => {
                             if (event.currentTarget.checked) {
                                 checked.push(request.order);
                                 checked = checked;

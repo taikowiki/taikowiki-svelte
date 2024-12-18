@@ -8,12 +8,23 @@
     import color from "$lib/module/common/color";
     import { getLang } from "$lib/module/common/i18n/i18n";
 
-    export let song: Song;
-    export let title: string;
-    export let genre: Genre[];
-    export let krTitle: string;
-    export let theme: string;
-    export let userScore: SongScoreDetail | null = null;
+    interface Props {
+        song: Song;
+        title: string;
+        genre: Genre[];
+        krTitle: string;
+        theme: string;
+        userScore?: SongScoreDetail | null;
+    }
+
+    let {
+        song,
+        title,
+        genre,
+        krTitle,
+        theme,
+        userScore = null,
+    }: Props = $props();
 
     const lang = getLang();
 </script>
@@ -138,7 +149,7 @@
 
         z-index: 0;
     }
-    .hidden{
-        display:none;
+    .hidden {
+        display: none;
     }
 </style>

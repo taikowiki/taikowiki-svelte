@@ -4,20 +4,24 @@
     import { getTheme } from "$lib/module/layout/theme";
     import FumenDisplay from "./FumenDisplay.svelte";
 
-    export let course: Course;
+    interface Props {
+        course: Course;
+    }
+    let { course }: Props = $props();
+
     const [theme] = getTheme();
 
     course.balloon = course.balloon ?? [0];
     course.rollTime = course.rollTime ?? [0];
     course.daniUsed = course.daniUsed ?? 0;
 
-    let balloonOpened = false;
-    let rollOpened = false;
-    let daniOpened = false;
+    let balloonOpened = $state(false);
+    let rollOpened = $state(false);
+    let daniOpened = $state(false);
 
     const lang = getLang();
-    $: daniI18n = getI18N("other", $lang).dani;
-    $: i18n = getI18N($lang).page.songNo.course;
+    let daniI18n = $derived(getI18N("other", $lang).dani);
+    let i18n = $derived(getI18N($lang).page.songNo.course);
 </script>
 
 <div
@@ -51,7 +55,7 @@
                         <div
                             class="opener"
                             class:opened={balloonOpened}
-                            on:click={() => {
+                            onclick={() => {
                                 balloonOpened = !balloonOpened;
                             }}
                             role="presentation"
@@ -75,7 +79,7 @@
                         <div
                             class="opener"
                             class:opened={rollOpened}
-                            on:click={() => {
+                            onclick={() => {
                                 rollOpened = !rollOpened;
                             }}
                             role="presentation"
@@ -121,7 +125,7 @@
                     : "height: 32.5px;"}
                 class:opened={daniOpened}
                 role="presentation"
-                on:click={() => {
+                onclick={() => {
                     daniOpened = !daniOpened;
                 }}
             >

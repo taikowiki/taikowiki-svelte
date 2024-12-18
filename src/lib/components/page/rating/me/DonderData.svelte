@@ -4,22 +4,26 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DateTime } from "luxon";
 
-    export let donderData: UserDonderData;
-    export let loaded: boolean = false;
+    interface Props {
+        donderData: UserDonderData;
+        loaded?: boolean;
+    }
+
+    let { donderData, loaded = $bindable(false) }: Props = $props();
 
     const [theme] = getTheme();
     const lang = getLang();
-    $: i18n = getI18N("/auth/user/donder", $lang);
+    let i18n = $derived(getI18N("/auth/user/donder", $lang));
 </script>
 
 <div class="container">
     <img
         src={donderData.donder.myDon}
         alt={i18n.myDon}
-        on:load={() => {
+        onload={() => {
             loaded = true;
         }}
-        on:error={() => {
+        onerror={() => {
             loaded = true;
         }}
     />
@@ -36,15 +40,17 @@
         </div>
     </div>
     <div class="last-update">
-        {i18n.lastUpdate}: {DateTime.fromJSDate(donderData.lastUpdate).toFormat("yyyy-MM-dd HH:mm:ss")}
+        {i18n.lastUpdate}: {DateTime.fromJSDate(donderData.lastUpdate).toFormat(
+            "yyyy-MM-dd HH:mm:ss",
+        )}
     </div>
 </div>
 
 <style>
-    .container{
-        display:flex;
-        flex-direction:column;
-        align-items:center;
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 300px;
         max-width: 100%;
         row-gap: 5px;

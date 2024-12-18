@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import color from "$lib/module/common/color";
 
     function getGenreColors(genre: Genre[]): string {
@@ -19,17 +19,21 @@
     import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
     import { DifficultyColor } from "$lib/module/common/styled";
 
-    export let song: DaniSong;
-    export let songDatas: SongDataPickedForDani[];
+    interface Props {
+        song: DaniSong;
+        songDatas: SongDataPickedForDani[];
+    }
+
+    let { song, songDatas }: Props = $props();
 
     const [theme] = getTheme();
 
     const songData = songDatas.find(
-        (songData) => songData.songNo === song.songNo
+        (songData) => songData.songNo === song.songNo,
     );
     const genre = songData?.genre ?? [];
     const title = songData?.title ?? "-";
-    const level = songData?.courses?.[song.difficulty]?.level ?? ' -';
+    const level = songData?.courses?.[song.difficulty]?.level ?? " -";
     const combo =
         songData?.courses?.[song.difficulty]?.maxCombo?.toString() ?? "-";
 </script>

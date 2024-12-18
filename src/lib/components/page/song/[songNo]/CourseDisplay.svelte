@@ -4,8 +4,11 @@
     import CourseDisplayMobile from "./CourseDisplay-mobile.svelte";
     import CourseDisplayPc from "./CourseDisplay-pc.svelte";
 
-    //export let difficulty: Difficulty;
-    export let course: Course | null;
+    interface Props{
+        course: Course | null;
+    }
+
+    let {course}: Props = $props();
 
     const isMobile = getIsMobile();
 </script>

@@ -1,8 +1,8 @@
 <script lang="ts">
     import { gamecenterAdminRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
 
-    export let data;
-    let { gamecenterDatas } = data;
+    let {data} = $props();
+    let gamecenterDatas = $state(data.gamecenterDatas);
 
     async function deleteGamecenter(order: number) {
         if (!confirm("정말 삭제하시겠습니까?")) {
@@ -48,7 +48,7 @@
                 </td>
                 <td>
                     <button
-                        on:click={() => {
+                        onclick={() => {
                             deleteGamecenter(gamecenterData.order).then(
                                 (response) => {
                                     if (response?.status === "success") {

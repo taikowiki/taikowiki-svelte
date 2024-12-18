@@ -5,11 +5,15 @@
     import groupBy from "object.groupby";
     import MeasureSubGroup from "./MeasureSubGroup.svelte";
 
-    export let group: number;
-    export let measures: Measure[];
-    export let songDatas: (Pick<SongData, "title" | "songNo" | "genre"> & {
-        courses: { oni: Course; ura: Course | null };
-    })[];
+    interface Props {
+        group: number;
+        measures: Measure[];
+        songDatas: (Pick<SongData, "title" | "songNo" | "genre"> & {
+            courses: { oni: Course; ura: Course | null };
+        })[];
+    }
+
+    let { group, measures, songDatas }: Props = $props();
 
     function getColor(g: number) {
         const one = [0, 18, 214];
@@ -35,7 +39,7 @@
         (measure) => measure.measureValue,
     );
 
-    const GroupTitle = styled<{ group: number; }>(
+    const GroupTitle = styled<{ group: number }>(
         "div",
         ({ group }) => `
     border-bottom:3px solid ${getColor(group)};
@@ -48,9 +52,7 @@
     );
 </script>
 
-<GroupTitle
-    {group}
->
+<GroupTitle {group}>
     {group}
 </GroupTitle>
 {#each Object.entries(subGroupedMeasures).toSorted((a, b) => Number(b[0]) - Number(a[0])) as [subGroup, measures]}

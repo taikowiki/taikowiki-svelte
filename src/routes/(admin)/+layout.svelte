@@ -6,7 +6,7 @@
     import User from "$lib/components/layout/main/User.svelte";
     import { writable } from "svelte/store";
     import { navigating, page } from "$app/stores";
-    import { setContext, type Snippet } from "svelte";
+    import { setContext } from "svelte";
     import { useLang } from "$lib/module/common/i18n/i18n.js";
     import { userRequestor } from "$lib/module/common/user/user.client.js";
 
@@ -14,9 +14,6 @@
 
     //theme
     let [theme, _] = useTheme();
-    $effect.pre(() => {
-        if ($theme === "dark") $theme = "light";
-    });
     $effect.pre(() => {
         if (browser) {
             document.body.setAttribute("data-theme", $theme);
@@ -70,5 +67,10 @@
     main {
         width: 100%;
         max-width: 1400px;
+        color: black;
+    }
+
+    main :global(a){
+        color: #cf4844;
     }
 </style>

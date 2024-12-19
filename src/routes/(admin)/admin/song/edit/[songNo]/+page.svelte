@@ -25,12 +25,15 @@
     import { songAdminRequestor } from "$lib/module/common/song/song.client.js";
 
     let {data} = $props();
+    let songData = $state(data.song);
+
+    $inspect(songData);
 </script>
 
-<SongEditor bind:songData={data.song} type="edit" isAdmin={true}/>
+<SongEditor bind:songData type="edit" isAdmin={true}/>
 <button
     onclick={() => {
-        upload($page.params.songNo, data.song).then(() => {
+        upload($page.params.songNo, songData).then(() => {
             goto("/admin/song");
         });
     }}

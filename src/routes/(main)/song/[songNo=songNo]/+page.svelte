@@ -46,6 +46,7 @@
             titleEn={song.titleEn}
             aliasKo={song.aliasKo}
             aliasEn={song.aliasEn}
+            romaji={song.romaji}
         />
         <SongDataDisplay
             bpm={song.bpm}

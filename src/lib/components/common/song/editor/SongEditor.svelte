@@ -27,6 +27,7 @@
         bind:aliasKo={songData.aliasKo}
         bind:titleEn={songData.titleEn}
         bind:aliasEn={songData.aliasEn}
+        bind:romaji={songData.romaji}
     />
     <OtherEditor
         bind:bpm={songData.bpm}

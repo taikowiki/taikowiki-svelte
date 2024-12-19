@@ -20,6 +20,9 @@
         bind:title={songData.title}
         bind:titleKo={songData.titleKo}
         bind:aliasKo={songData.aliasKo}
+        bind:titleEn={songData.titleEn}
+        bind:aliasEn={songData.aliasEn}
+        bind:romaji={songData.romaji}
         {compare}
     />
     <OtherEditor

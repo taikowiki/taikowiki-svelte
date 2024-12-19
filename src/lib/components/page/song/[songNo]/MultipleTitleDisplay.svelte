@@ -8,9 +8,16 @@
         titleEn?: string | null;
         aliasKo?: string | null;
         aliasEn?: string | null;
+        romaji?: string | null;
     }
 
-    let {titleKo = null, titleEn = null, aliasKo = null, aliasEn = null}: Props = $props();
+    let {
+        titleKo = null,
+        titleEn = null,
+        aliasKo = null,
+        aliasEn = null,
+        romaji = null,
+    }: Props = $props();
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
@@ -66,6 +73,14 @@
                             <td> {i18n.aliasEn} </td>
                             <td>
                                 {aliasEn}
+                            </td>
+                        </tr>
+                    {/if}
+                    {#if romaji}
+                        <tr>
+                            <td> {i18n.romaji} </td>
+                            <td>
+                                {romaji}
                             </td>
                         </tr>
                     {/if}

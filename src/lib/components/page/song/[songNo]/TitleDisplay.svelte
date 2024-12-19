@@ -54,6 +54,8 @@
 
         font-weight: bold;
         font-size: 35px;
+
+        word-break: break-all;
     }
 
     .icon-container {

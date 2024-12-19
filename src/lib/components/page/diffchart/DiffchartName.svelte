@@ -15,7 +15,7 @@
 <style>
     .name {
         width: 100%;
-        height: 70px;
+        min-height: 70px;
 
         display: flex;
         flex-direction: column;
@@ -31,5 +31,7 @@
         padding-inline: 10px;
 
         margin-bottom: 10px;
+
+        word-break: break-all;
     }
 </style>

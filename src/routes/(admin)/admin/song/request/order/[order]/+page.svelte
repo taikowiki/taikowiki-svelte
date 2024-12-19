@@ -44,8 +44,6 @@
     if (song !== null) {
         compare = compareSong(song, request.data);
     }
-
-    $inspect(request);
 </script>
 
 <table>

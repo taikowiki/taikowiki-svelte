@@ -54,6 +54,56 @@ const newKo: RecursiveStringRecord = {
                 hard: '어려움',
                 oni: '오니(앞)',
                 ura: '오니(뒤)'
+            },
+            BasicEditor: {
+                songNo: '곡 번호'
+            },
+            TitleEditor: {
+                title: '제목',
+                songTitle: '곡 제목',
+                titleKo: '한국어',
+                aliasKo: '한국어 비공식',
+                titleEn: '영어',
+                aliasEn: '영어 비공식',
+                romaji: '로마자'
+            },
+            OtherEditor: {
+                other: '기타',
+                genre: '장르',
+                bpmShiver: 'BPM 흔들림',
+                version: '수록 버전',
+                artist: '아티스트',
+                commaPlz: '쉼표로 구분하여 작성해주세요.',
+                included: '수록 여부',
+                deleted: '삭제',
+                asiaBanned: '아시아판 밴',
+                krBanned: '한국판 밴',
+                addedDate: '추가 날짜',
+                use: '사용'
+            },
+            CoursesEditor: {
+                course: '보면'
+            },
+            CourseEditor: {
+                level: '레벨',
+                branched: '분기 여부',
+                maxCombo: '최대 노트 수',
+                playTime: '최대 연주 시간(초)',
+                playTimeSub: '첫 번째 동/캇 노트에서 마지막 동/캇 노트까지의 시간입니다.',
+                density: '최대 밀도(타/초)',
+                calculate: '계산하기',
+                maxBalloon: '최대 풍선 수',
+                commaPlz: '쉼표로 구분해주세요.',
+                maxRoll: '최대 연타 시간(초)',
+                dani: '단위',
+                add: '추가',
+                img: '보면 이미지',
+                imgLink: '이미지 주소'
+            },
+            DaniEditor: {
+                first: '첫 번째',
+                second: '두 번째',
+                third: '세 번째'
             }
         },
         DaniDisplay: {
@@ -199,7 +249,8 @@ const newKo: RecursiveStringRecord = {
                 ko: '한국어',
                 aliasKo: '한국어(비공식)',
                 en: '영어',
-                aliasEn: '영어(비공식)'
+                aliasEn: '영어(비공식)',
+                romaji: '로마자'
             },
             songData: {
                 version: '수록 버전',
@@ -466,7 +517,8 @@ const ko: LangFile = {
             ko: '한국어',
             ako: '한국어(비공식)',
             en: '영어',
-            aen: '영어(비공식)'
+            aen: '영어(비공식)',
+            rom: '로마자'
         }
     },
     '/song/[songNo]': {

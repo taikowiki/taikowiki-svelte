@@ -1,5 +1,6 @@
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     interface Props {
         title: string;
@@ -7,9 +8,10 @@
         aliasKo: string | null;
         titleEn: string | null;
         aliasEn: string | null;
+        romaji: string | null;
     }
 
-    let { title = $bindable(), titleKo = $bindable(), aliasKo = $bindable(), titleEn = $bindable(), aliasEn = $bindable() }: Props = $props();
+    let { title = $bindable(), titleKo = $bindable(), aliasKo = $bindable(), titleEn = $bindable(), aliasEn = $bindable(), romaji = $bindable() }: Props = $props();
 
     let titleKoChecked = $state(titleKo !== null);
     $effect.pre(() => {
@@ -43,19 +45,30 @@
             aliasEn = null;
         }
     });
+    let romajiChecked = $state(romaji !== null);
+    $effect.pre(() => {
+        if (romajiChecked) {
+            romaji = romaji || "";
+        } else {
+            romaji = null;
+        }
+    });
+
+    const lang = getLang();
+    let i18n = $derived(getI18N($lang).component.SongEditor.TitleEditor);
 </script>
 
-<TitledContainer title="제목" color="#cf4844">
+<TitledContainer title={i18n.title} color="#cf4844">
     <table>
         <tbody>
             <tr>
-                <td> 곡 제목 </td>
+                <td> {i18n.songTitle} </td>
                 <td class="title">
                     <input type="text" bind:value={title} />
                 </td>
             </tr>
             <tr>
-                <td> 한국어 </td>
+                <td> {i18n.titleKo} </td>
                 <td>
                     <input type="checkbox" bind:checked={titleKoChecked} />
                     <input
@@ -66,7 +79,7 @@
                 </td>
             </tr>
             <tr>
-                <td> 한국어 비공식 </td>
+                <td> {i18n.aliasKo} </td>
                 <td>
                     <input type="checkbox" bind:checked={aliasKoChecked} />
                     <input
@@ -77,7 +90,7 @@
                 </td>
             </tr>
             <tr>
-                <td> 영어 </td>
+                <td> {i18n.titleEn} </td>
                 <td>
                     <input type="checkbox" bind:checked={titleEnChecked} />
                     <input
@@ -88,13 +101,24 @@
                 </td>
             </tr>
             <tr>
-                <td> 영어 비공식 </td>
+                <td> {i18n.aliasEn} </td>
                 <td>
                     <input type="checkbox" bind:checked={aliasEnChecked} />
                     <input
                         type="text"
                         bind:value={aliasEn}
                         disabled={aliasEn === null}
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td> {i18n.romaji} </td>
+                <td>
+                    <input type="checkbox" bind:checked={romajiChecked} />
+                    <input
+                        type="text"
+                        bind:value={romaji}
+                        disabled={romaji === null}
                     />
                 </td>
             </tr>

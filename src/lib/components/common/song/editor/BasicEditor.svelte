@@ -1,5 +1,6 @@
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     interface Props {
         songNo: string;
@@ -8,13 +9,16 @@
     }
 
     let { songNo = $bindable(), type = "new", isAdmin }: Props = $props();
+
+    const lang = getLang();
+    let i18n = $derived(getI18N($lang).component.SongEditor.BasicEditor)
 </script>
 
-<TitledContainer title="곡 번호" color="#cf4844">
+<TitledContainer title={i18n.songNo} color="#cf4844">
     <table>
         <tbody>
             <tr>
-                <td> 곡 번호 </td>
+                <td> {i18n.songNo} </td>
                 <td class="title">
                     <input
                         type="text"

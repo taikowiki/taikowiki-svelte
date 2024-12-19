@@ -106,14 +106,15 @@ export const songDBController = {
     /**
      * Retrieve specific columns of a song by its songNo.
      */
-    getSongColumnsBySongNo: defineDBHandler<[string, string[]], Partial<SongData> | null>((songNo, columns) => {
+    getSongColumnsBySongNo: defineDBHandler<[songNo: string, columns: (keyof SongData | "order")[]], Partial<SongData> | null>((songNo, columns) => {
         return async (run) => {
-            const columnsQuery = columns.map(escapeId).join(', ');
+            const columnsQuery = columns.map((e) => escapeId(e)).join(', ');
             let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` = ?`, [songNo]);
             result.forEach(parseSongDataFromDB);
-            return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
+            return result[0] ?? null;
         }
-    }),
+    }) as <T extends (keyof SongData | "order")[]>(songNo: string, columns: T) => Promise<Pick<SongData & { order: number }, T[number]> | null>,
+
     /**
      * Retrieve data of multiple songs by their songNos.
      */
@@ -132,18 +133,18 @@ export const songDBController = {
     /**
      * Retrieve specific columns of multiple songs by their songNos.
      */
-    getSongsColumnsBySongNo: defineDBHandler<[string[], string[]], Partial<SongData>[]>((songNo, columns) => {
+    getSongsColumnsBySongNo: defineDBHandler<[string[], (keyof SongData | "order")[]], Partial<SongData>[]>((songNo, columns) => {
         return async (run) => {
             if (songNo.length === 0) {
                 return [];
             }
 
-            const columnsQuery = columns.map(escapeId).join(', ');
+            const columnsQuery = columns.map((e) => escapeId(e)).join(', ');
             let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${[...songNo].fill('?').join(', ')})`, [...songNo]);
             result.forEach(parseSongDataFromDB);
             return JSON.parse(JSON.stringify(result));
         }
-    }),
+    }) as <T extends (keyof SongData | "order")[]>(songNo: string[], columns: T) => Promise<Pick<SongData & { order: number }, T[number]>[]>,
 
     /**
      * Search and retrieve song data.
@@ -163,7 +164,7 @@ export const songDBController = {
         }
         if (option?.query) {
             const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
-            sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)})`
+            sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)} OR \`romaji\` LIKE ${escape(query)})`;
         }
 
         const columnsQuery = '*';
@@ -182,7 +183,7 @@ export const songDBController = {
     /**
     * Retrieves specific columns of song data.
     */
-    searchColumns: defineDBHandler<[page: number | null, columns: string[], option?: SongSearchOption], { songs: Partial<(SongData & { order: number })>[], count: number }>((page, columns, option) => {
+    searchColumns: defineDBHandler<[page: number | null, columns: (keyof SongData | "order")[], option?: SongSearchOption], { songs: Partial<(SongData & { order: number })>[], count: number }>((page, columns, option) => {
         let sqlWhereQuery = "WHERE (1)";
         if (option?.difficulty && option?.level) {
             if (option.difficulty === "oniura") {
@@ -197,21 +198,21 @@ export const songDBController = {
         }
         if (option?.query) {
             const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
-            sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)})`
+            sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)} OR \`romaji\` LIKE ${escape(query)})`;
         }
 
-        const columnsQuery = columns.map(escapeId).join(', ')
+        const columnsQuery = columns.map((e) => escapeId(e)).join(', ')
 
         return async (run) => {
             const songs = (page === null || page < 1) ? await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC`) : await run(`SELECT ${columnsQuery} FROM \`song\` ${sqlWhereQuery} ORDER BY \`addedDate\` DESC LIMIT ${(page - 1) * 30}, 30`);
             songs.forEach(parseSongDataFromDB);
             const count = Object.values((await run(`SELECT COUNT(\`order\`) FROM \`song\` ${sqlWhereQuery}`))[0])?.[0] as number ?? 0
             return {
-                songs: JSON.parse(JSON.stringify(songs)),
+                songs,
                 count
             }
         };
-    }),
+    }) as <T extends (keyof SongData | "order")[]>(page: number, columns: T, option?: SongSearchOption) => Promise<{ songs: Pick<SongData & { order: number }, T[number]>[], count: number }>,
 
     /**
      * Adds a song.
@@ -324,10 +325,10 @@ export const songDBController = {
             }
             const song = await songDBController.getSongBySongNo.getCallback(songNo)(run);
             if (song === null) {
-                await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])
+                await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `romaji`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, songData.romaji, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])
             }
             else {
-                await run("UPDATE `song` SET `songNo` = ?, `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songNo])
+                await run("UPDATE `song` SET `songNo` = ?, `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `romaji` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, songData.romaji, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songNo])
             }
 
             await run("INSERT INTO `song/log` (`songNo`, `before`, `after`, `updatedTime`) VALUES (?, ?, ?, ?)", [songData.songNo, song ? JSON.stringify(song) : null, JSON.stringify(songData), Date.now()]);
@@ -432,7 +433,7 @@ export const songRequestDBController = {
     disapprove: defineDBHandler<[number | number[]], void>((order) => {
         return async (run) => {
             if (Array.isArray(order)) {
-                await run(`UPDATE \`song/request\` SET \`status\` = 'disapproved' WHERE \`order\` IN (${order.map(escape).join(', ')})`)
+                await run(`UPDATE \`song/request\` SET \`status\` = 'disapproved' WHERE \`order\` IN (${order.map((e) => escape(e)).join(', ')})`)
             }
             else {
                 await run("UPDATE `song/request` SET `status` = 'disapproved' WHERE `order` = ?", [order])

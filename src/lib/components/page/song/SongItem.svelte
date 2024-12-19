@@ -70,6 +70,8 @@
             {song.titleEn || song.title}
         {:else if songLang === "aen"}
             {song.aliasEn || song.titleEn || song.title}
+        {:else if songLang === "rom"}
+            {song.romaji || song.title}
         {/if}
     </div>
     <div class="third-container">

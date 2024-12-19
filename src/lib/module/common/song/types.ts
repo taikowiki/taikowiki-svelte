@@ -1,6 +1,6 @@
 import { GENRE, DIFFICULTY, VERSION, DANIVERSION, DAN } from './const'
 
-export type SongDataPickedForSearch = Pick<SongData, "songNo" | "genre" | "title" | "titleKo" | "aliasKo" | "titleEn" | "aliasEn" | "artists" | "courses"> & { order: number }
+export type SongDataPickedForSearch = Pick<SongData, "songNo" | "genre" | "title" | "titleKo" | "aliasKo" | "titleEn" | "aliasEn" | "romaji" | "artists" | "courses"> & { order: number }
 
 export interface SongData {
     songNo: string;
@@ -9,6 +9,7 @@ export interface SongData {
     aliasKo: string | null;
     titleEn: string | null;
     aliasEn: string | null;
+    romaji: string | null;
     bpm: Record<'min' | 'max', number>;
     bpmShiver: 1 | 0;
     version: Version[];
@@ -36,7 +37,7 @@ export interface Course {
     images: string[];
 }
 export type Version = typeof VERSION[number][number]
-export type SongLang = "ja" | "ko" | "ako" | "en" | "aen";
+export type SongLang = "ja" | "ko" | "ako" | "en" | "aen" | "rom";
 export type DaniVersion = typeof DANIVERSION[number];
 export type Dan = typeof DAN[number];
 export interface Dani {

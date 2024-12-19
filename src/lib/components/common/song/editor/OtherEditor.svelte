@@ -53,14 +53,15 @@
     });
 
     const lang = getLang();
-    let i18n = $derived(getI18N("/song/add", $lang));
+    let genreI18n = $derived(getI18N("/song/add", $lang).genres);
+    let i18n = $derived(getI18N($lang).component.SongEditor.OtherEditor);
 </script>
 
-<TitledContainer title="기타" color="#cf4844">
+<TitledContainer title={i18n.other} color="#cf4844">
     <table>
         <tbody>
             <tr>
-                <td> 장르 </td>
+                <td> {i18n.genre} </td>
                 <td>
                     <div class="genre">
                         {#each GENRE as gen}
@@ -70,7 +71,7 @@
                                     value={gen}
                                     bind:group={genre}
                                 />
-                                {i18n.genres[gen]}
+                                {genreI18n[gen]}
                             </label>
                         {/each}
                     </div>
@@ -92,7 +93,7 @@
                             checked={Boolean(bpmShiver)}
                         />
                         <div style="margin-right: 10px; font-size:13px">
-                            BPM 흔들림
+                            {i18n.bpmShiver}
                         </div>
                         <div>
                             <input type="number" bind:value={bpm.min} />
@@ -104,7 +105,7 @@
             </tr>
             <tr>
                 <td>
-                    <div>수록 버전</div>
+                    <div>{i18n.versoin}</div>
                 </td>
                 <td>
                     <div class="version">
@@ -127,8 +128,8 @@
             </tr>
             <tr>
                 <td>
-                    <div>아티스트</div>
-                    <div class="sub">쉼표로 구분하여 작성해주세요.</div>
+                    <div>{i18n.artist}</div>
+                    <div class="sub">{i18n.commaPlz}</div>
                 </td>
                 <td>
                     <textarea bind:value={artistsString}></textarea>
@@ -136,7 +137,7 @@
             </tr>
             <tr>
                 <td>
-                    <div>수록 여부</div>
+                    <div>{i18n.included}</div>
                 </td>
                 <td>
                     <div>
@@ -152,7 +153,7 @@
                                 }}
                                 checked={Boolean(isDeleted)}
                             />
-                            삭제
+                            {i18n.deleted}
                         </label>
                         <label>
                             <input
@@ -166,7 +167,7 @@
                                 }}
                                 checked={Boolean(isAsiaBanned)}
                             />
-                            아시아판 밴
+                            {i18n.asiaBanned}
                         </label>
                         <label>
                             <input
@@ -180,13 +181,13 @@
                                 }}
                                 checked={Boolean(isKrBanned)}
                             />
-                            한국판 밴
+                            {i18n.krBanned}
                         </label>
                     </div>
                 </td>
             </tr>
             <tr>
-                <td> <div>추가 날짜</div> </td>
+                <td> <div>{i18n.addedDate}</div> </td>
                 <td>
                     <div>
                         <input
@@ -201,7 +202,7 @@
                             checked={addedDate === null ? false : true}
                         />
                         <div style="margin-right: 10px; font-size:13px">
-                            사용
+                            {i18n.use}
                         </div>
                         <input
                             type="date"

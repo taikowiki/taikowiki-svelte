@@ -3,6 +3,7 @@ export const DIFFICULTY = ["easy", "normal", "hard", "oni", "ura"] as const
 export const VERSION = [
     ["NAC"],
     ["AC1", "AC2", "AC3", "AC4", "AC5", "AC6", "AC7", "AC8", "AC9", "AC10", "AC11", "AC12", "AC12.5", "AC13", "AC14"],
+    ["DF"],
     ["NS2", "NS1", "NSRPG"],
     ["PS4"],
     ["TDM"],

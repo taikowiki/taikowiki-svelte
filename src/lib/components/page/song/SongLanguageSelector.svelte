@@ -12,7 +12,7 @@
         });
     }
 
-    const languages: SongLang[] = ["ja", "ko", "ako", "en", "aen"];
+    const languages: SongLang[] = ["ja", "ko", "ako", "en", "aen", "rom"];
 </script>
 
 <script lang="ts">

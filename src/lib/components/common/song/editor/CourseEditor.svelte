@@ -42,7 +42,10 @@
 
     const isMobile = getIsMobile();
     const lang = getLang();
-    let i18n = $derived(getI18N("component", $lang).SongEditor);
+    let diffI18n = $derived(
+        getI18N("component", $lang).SongEditor.difficulties,
+    );
+    let i18n = $derived(getI18N($lang).component.SongEditor.CourseEditor);
 </script>
 
 <div
@@ -52,7 +55,7 @@
         <tbody>
             <tr>
                 <td class="r" data-isMobile={isMobile} style="font-weight:bold">
-                    {i18n.difficulties[difficulty]}
+                    {diffI18n[difficulty]}
                     {#if difficulty === "ura"}
                         <input
                             type="checkbox"
@@ -72,7 +75,7 @@
                         <table class="data">
                             <tbody>
                                 <tr>
-                                    <td> 레벨 </td>
+                                    <td> {i18n.level} </td>
                                     <td>
                                         <input
                                             type="number"
@@ -83,7 +86,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td> 분기 여부 </td>
+                                    <td> {i18n.branched} </td>
                                     <td>
                                         <input
                                             type="checkbox"
@@ -92,7 +95,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td> 최대 노트 수 </td>
+                                    <td> {i18n.maxCombo} </td>
                                     <td>
                                         <input
                                             type="number"
@@ -103,10 +106,9 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div>최대 연주 시간(초)</div>
+                                        <div>{i18n.playTime}</div>
                                         <div class="sub">
-                                            첫 번째 동/캇 노트에서 마지막 동/캇
-                                            노트까지의 시간입니다.
+                                            {i18n.playTimeSub}
                                         </div>
                                     </td>
                                     <td>
@@ -118,7 +120,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td> 최대 밀도 (타/초) </td>
+                                    <td> {i18n.density} </td>
                                     <td>
                                         <input
                                             type="number"
@@ -139,15 +141,15 @@
                                                 }
                                             }}
                                         >
-                                            계산하기
+                                            {i18n.calculate}
                                         </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div>최대 풍선 수</div>
+                                        <div>{i18n.maxBalloon}</div>
                                         <div class="sub">
-                                            쉼표로 구분 해 주세요.
+                                            {i18n.commaPlz}
                                         </div>
                                     </td>
                                     <td>
@@ -179,9 +181,9 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div>최대 연타 시간 (초)</div>
+                                        <div>{i18n.maxRoll}</div>
                                         <div class="sub">
-                                            쉼표로 구분 해 주세요.
+                                            {i18n.commaPlz}
                                         </div>
                                     </td>
                                     <td>
@@ -214,7 +216,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        단위
+                                        {i18n.dani}
                                         <input
                                             type="checkbox"
                                             bind:checked={daniUsed}
@@ -229,14 +231,17 @@
                                                         dan: "senpo",
                                                         order: 1,
                                                     });
-                                                }}>추가</button
+                                                }}>{i18n.add}</button
                                             >
                                             <div
                                                 class="dani-container-container"
                                             >
                                                 {#each course.dani as dani, i}
                                                     <div class="dani-container">
-                                                        <DaniEditor bind:dani={course.dani[i]} />
+                                                        <DaniEditor
+                                                            bind:dani={course
+                                                                .dani[i]}
+                                                        />
                                                         <button
                                                             onclick={() => {
                                                                 course.dani =
@@ -257,7 +262,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td> 보면 이미지 </td>
+                                    <td> {i18n.img} </td>
                                     <td>
                                         <div class="image-container-container">
                                             <div
@@ -266,15 +271,16 @@
                                                 <button
                                                     onclick={() => {
                                                         course?.images.push("");
-                                                    }}>추가</button
+                                                    }}>{i18n.add}</button
                                                 >
                                             </div>
                                             {#each course.images as image, i}
                                                 <div class="image-container">
                                                     <input
                                                         type="text"
-                                                        bind:value={course.images[i]}
-                                                        placeholder="이미지 주소"
+                                                        bind:value={course
+                                                            .images[i]}
+                                                        placeholder={i18n.imgLink}
                                                     />
                                                     <button
                                                         onclick={() => {

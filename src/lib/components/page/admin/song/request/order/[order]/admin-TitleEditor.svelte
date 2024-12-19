@@ -5,6 +5,9 @@
         title: string;
         titleKo: string | null;
         aliasKo: string | null;
+        titleEn: string | null;
+        aliasEn: string | null;
+        romaji: string | null;
         compare: any;
     }
 
@@ -12,6 +15,9 @@
         title = $bindable(),
         titleKo = $bindable(),
         aliasKo = $bindable(),
+        titleEn = $bindable(),
+        aliasEn = $bindable(),
+        romaji = $bindable(),
         compare,
     }: Props = $props();
 
@@ -29,6 +35,30 @@
             aliasKo = aliasKo || "";
         } else {
             aliasKo = null;
+        }
+    });
+    let titleEnChecked = $state(titleEn !== null);
+    $effect.pre(() => {
+        if (titleEnChecked) {
+            titleEn = titleEn || "";
+        } else {
+            titleEn = null;
+        }
+    });
+    let aliasEnChecked = $state(aliasEn !== null);
+    $effect.pre(() => {
+        if (aliasEnChecked) {
+            aliasEn = aliasEn || "";
+        } else {
+            aliasEn = null;
+        }
+    });
+    let romajiChecked = $state(romaji !== null);
+    $effect.pre(() => {
+        if (romajiChecked) {
+            romaji = romaji || "";
+        } else {
+            romaji = null;
         }
     });
 </script>
@@ -61,6 +91,39 @@
                         type="text"
                         bind:value={aliasKo}
                         disabled={aliasKo === null}
+                    />
+                </td>
+            </tr>
+            <tr class:different={compare?.titleEn === true}>
+                <td> 영어 제목 </td>
+                <td>
+                    <input type="checkbox" bind:checked={titleEnChecked} />
+                    <input
+                        type="text"
+                        bind:value={titleEn}
+                        disabled={titleEn === null}
+                    />
+                </td>
+            </tr>
+            <tr class:different={compare?.aliasEn === true}>
+                <td> 영어 비공식 </td>
+                <td>
+                    <input type="checkbox" bind:checked={aliasEnChecked} />
+                    <input
+                        type="text"
+                        bind:value={aliasEn}
+                        disabled={aliasEn === null}
+                    />
+                </td>
+            </tr>
+            <tr class:different={compare?.romaji === true}>
+                <td> 로마자 </td>
+                <td>
+                    <input type="checkbox" bind:checked={romajiChecked} />
+                    <input
+                        type="text"
+                        bind:value={romaji}
+                        disabled={romaji === null}
                     />
                 </td>
             </tr>

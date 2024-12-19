@@ -17,7 +17,7 @@ const newEn: RecursiveStringRecord = {
             user: {
                 user: 'User',
                 donderData: 'Rating',
-                notLogined:'Not Logined',
+                notLogined: 'Not Logined',
                 login: 'Login',
                 logout: 'Logout',
                 theme: 'Theme',
@@ -36,7 +36,7 @@ const newEn: RecursiveStringRecord = {
             myData: 'My Data',
             donderData: 'Rating'
         },
-        rating:{
+        rating: {
             title: 'Rating',
             me: 'My Rating',
             ranking: 'Ranking',
@@ -49,8 +49,58 @@ const newEn: RecursiveStringRecord = {
                 easy: 'Easy',
                 normal: 'Normal',
                 hard: 'Hard',
-                oni: 'Extreme (Front)',
-                ura: 'Extreme (Inner)'
+                oni: 'Oni(Front)',
+                ura: 'Oni(Inner)'
+            },
+            BasicEditor: {
+                songNo: 'Song No.'
+            },
+            TitleEditor: {
+                title: 'Title',
+                songTitle: 'Song Title',
+                titleKo: 'Korean',
+                aliasKo: 'Korean (unofficial)',
+                titleEn: 'English',
+                aliasEn: 'English (unofficial)',
+                romaji: 'Romaji'
+            },
+            OtherEditor: {
+                other: 'Others',
+                genre: 'Geners',
+                bpmShiver: 'BPM Shiver',
+                version: 'Versions',
+                artist: 'Artists',
+                commaPlz: 'Please seperate with commas.',
+                included: 'Included',
+                deleted: 'Deleted',
+                asiaBanned: 'Asia Banned',
+                krBanned: 'Korea Banned',
+                addedDate: 'Added Date',
+                use: 'Use'
+            },
+            CoursesEditor: {
+                course: 'Courses'
+            },
+            CourseEditor: {
+                level: 'Level',
+                branched: 'Branches',
+                maxCombo: 'Max combo',
+                playTime: 'Max play time(sec)',
+                playTimeSub: 'First Don/Ka note to last Don/Ka note.',
+                density: 'Max density(hit/sec)',
+                calculate: 'Calculate',
+                maxBalloon: 'Max balloons',
+                commaPlz: 'Please seperate with commas.',
+                maxRoll: 'Max roll time(sec)',
+                dani: 'Dan-i',
+                add: 'Add',
+                img: 'Fumen images',
+                imgLink: 'Image link'
+            },
+            DaniEditor: {
+                first: '1st',
+                second: '2nd',
+                third: '3rd'
             }
         },
         DaniDisplay: {
@@ -160,7 +210,7 @@ const newEn: RecursiveStringRecord = {
             '30': 'Nijiiro 2030'
         }
     },
-    song:{
+    song: {
         difficulty: {
             easy: 'Easy',
             normal: 'Normal',
@@ -169,7 +219,7 @@ const newEn: RecursiveStringRecord = {
             ura: 'Extreme (Inner)'
         }
     },
-    page:{
+    page: {
         index: {
             shortcut: {
                 song: 'Song',
@@ -192,7 +242,8 @@ const newEn: RecursiveStringRecord = {
                 ko: 'Korean',
                 aliasKo: 'Korean(Unofficial)',
                 en: 'English',
-                aliasEn: 'English(Unofficial)'
+                aliasEn: 'English(Unofficial)',
+                romaji: 'Romaji'
             },
             songData: {
                 version: 'Versions',
@@ -270,17 +321,17 @@ const newEn: RecursiveStringRecord = {
         dani: {
             go: 'go'
         },
-        gamecenter:{
+        gamecenter: {
             selector: {
                 search: 'Search'
             },
             machineInfo: 'Machine Info'
         },
         donder: {
-            rating:{
+            rating: {
                 top: 'Top'
             },
-            section:{
+            section: {
                 song: 'Song Rating',
                 measure: 'Measures',
                 explanation: 'Rating Explanation'
@@ -308,10 +359,10 @@ const newEn: RecursiveStringRecord = {
                 rating: 'Rating',
                 nickname: 'Nickname'
             },
-            measures:{
+            measures: {
                 heading: 'Measures'
             },
-            user:{
+            user: {
                 nondisclosure: 'Song ratings are private.'
             }
         }
@@ -457,7 +508,8 @@ const en: LangFile = {
             ko: 'Korean',
             ako: 'Korean (Unofficial)',
             en: 'English',
-            aen: 'English (Unofficial)'
+            aen: 'English (Unofficial)',
+            rom: 'Romaji'
         }
     },
     '/song/[songNo]': {

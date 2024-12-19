@@ -12,6 +12,7 @@ This project is being developed on `dev/main` branch, and will be merged to `mai
 - [API](/docs/api.md)
 - [module](/docs/module.md)
     - [server module](/docs/server_module.md)
+- [song data](/docs/song%20data.md)
 
 ## Contributors
 

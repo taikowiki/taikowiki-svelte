@@ -38,6 +38,7 @@ KAKAO_CLIENT_SECRET=
 - [API](/docs/ko/api.md)
 - [모듈](/docs/ko/module.md)
     - [서버 모듈](/docs/ko/server_module.md)
+- [곡 데이터](/docs/ko/song%20data.md)
 
 ## 후원하기
 

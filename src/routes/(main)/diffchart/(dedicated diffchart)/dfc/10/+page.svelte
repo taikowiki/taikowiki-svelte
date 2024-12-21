@@ -55,8 +55,8 @@
     });
 
     const lang = getLang();
-    let i18n = $derived(getI18N("/diffchart/clear/[level]", $lang));
-    let titleI18n = $derived(getI18N("other", $lang).title["/diffchart/clear"]);
+    let i18n = $derived(getI18N($lang).page.diffchart.dfc);
+    let titleI18n = $derived(getI18N("other", $lang).title["/diffchart/dfc"]);
     let customedDiffchart = $derived(getCustomedDiffchart(diffChartData.data, i18n));
 
 

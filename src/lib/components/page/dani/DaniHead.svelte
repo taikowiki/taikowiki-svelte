@@ -50,7 +50,6 @@
     import { getI18N } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import DaniPlate from "./DaniPlate.svelte";
-    import { stopPropagation } from "svelte/legacy";
 
     interface Props {
         opened: boolean;
@@ -130,8 +129,8 @@
                     </div>
                     <img class="qr" src={dani.qr} alt="qr" />
                     <button
-                        onclick={({stopPropagation}) => {
-                            stopPropagation();
+                        onclick={(event) => {
+                            event.stopPropagation();
                             if(!dialog) return;
                             dialog.close();
                         }}

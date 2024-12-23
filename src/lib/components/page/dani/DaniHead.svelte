@@ -130,7 +130,10 @@
                     <img class="qr" src={dani.qr} alt="qr" />
                     <button
                         onclick={(event) => {
-                            event.stopPropagation();
+                            try{
+                                event.stopPropagation();
+                            }
+                            catch{}
                             if(!dialog) return;
                             dialog.close();
                         }}

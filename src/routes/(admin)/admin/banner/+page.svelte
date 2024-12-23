@@ -4,18 +4,14 @@
 
     let {data} = $props();
 
-    if(!data.mainBanners){
-        data.mainBanners = [];
-    }
-    if(!data.asideBanners){
-        data.asideBanners = [];
-    }
+    let mainBanners = $state(data.mainBanners ?? []);
+    let asideBanners = $state(data.asideBanners ?? []);
 </script>
 
 {#if data.mainBanners}
-    <AdminMainBannerEditor banners={data.mainBanners} />
+    <AdminMainBannerEditor banners={mainBanners} />
 {/if}
 
 {#if data.asideBanners}
-    <AdminAsideBannerEditor banners={data.asideBanners} />
+    <AdminAsideBannerEditor banners={asideBanners} />
 {/if}

@@ -60,30 +60,28 @@
     let input: HTMLInputElement | undefined = $state();
     $effect.pre(() => {
         {
-            filteredGamecenterDatas = gamecenterDatas.filter((data) =>
-                new RegExp(
+            let filteredTemp = gamecenterDatas.filter((data) => {
+                return new RegExp(
                     searchKeyword
                         .split(" ")
                         .map((e) => escape(e))
                         .join("(.*?)"),
-                ).test(data.name),
-            );
+                ).test(data.name);
+            });
 
             if (region !== "null") {
-                filteredGamecenterDatas = filteredGamecenterDatas.filter(
-                    (data) => data.region === region,
-                );
+                filteredTemp = filteredTemp.filter((data) => data.region === region);
             }
 
             if (amenities.length > 0) {
-                filteredGamecenterDatas = filteredGamecenterDatas.filter(
-                    (data) => {
-                        return amenities.every((amenity) => {
-                            return data.amenity[amenity] === true;
-                        });
-                    },
-                );
+                filteredTemp = filteredTemp.filter((data) => {
+                    return amenities.every((amenity) => {
+                        return data.amenity[amenity] === true;
+                    });
+                });
             }
+
+            filteredGamecenterDatas = filteredTemp;
         }
     });
 

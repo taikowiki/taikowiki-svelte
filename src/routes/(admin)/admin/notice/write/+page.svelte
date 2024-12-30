@@ -4,12 +4,12 @@
     import { adminNoticeRequestor } from "$lib/module/common/notice/notice.client";
     import type { Notice } from "$lib/module/common/notice/types";
 
-    let notice: Omit<Notice, "order" | "writtenDate"> = {
+    let notice: Omit<Notice, "order" | "writtenDate"> = $state({
         title: "",
         content: "",
         type: "wiki",
         officialDate: null,
-    };
+    });
 
     async function submit() {
         if (!confirm("작성하시겠습니까?")) {
@@ -43,7 +43,7 @@
 </script>
 
 <AdminNoticeEditor bind:notice />
-<button on:click={submit}> 제출 </button>
+<button onclick={submit}> 제출 </button>
 
 <style>
     button {

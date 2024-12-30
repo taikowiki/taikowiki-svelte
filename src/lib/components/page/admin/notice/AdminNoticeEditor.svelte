@@ -9,10 +9,12 @@
     }
 
     let { notice = $bindable() }: Props = $props();
+    let noticeType = $state(notice.type);
 
     //official date
     $effect.pre(() => {
-        if (notice.type === "wiki") {
+        notice.type = noticeType;
+        if (noticeType === "wiki") {
             notice.officialDate = null;
         }
     });
@@ -61,11 +63,11 @@
 </script>
 
 <div class="title-container">
-    <select bind:value={notice.type}>
+    <select bind:value={noticeType}>
         <option value="wiki"> 위키 </option>
         <option value="official"> 공식 </option>
     </select>
-    {#if notice.type === "official"}
+    {#if noticeType === "official"}
         <input
             type="datetime-local"
             bind:this={officialDateInput}

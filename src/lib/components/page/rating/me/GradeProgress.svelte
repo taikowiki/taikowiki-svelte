@@ -15,21 +15,34 @@
 
     const nextTier = getNextTier(tierName);
 
-    const progress: number = pipe(tierName, [(tierName: UserRatingTierName) => {
-        if(tierName === "omega"){
-            return 100;
-        }
-        if(tierName === "pearl"){
-            return ((rating - TIER_BORDER[tierName]) / 2255) * 100;
-        }
-        if(tierName === "master" || tierName === "grandmaster"){
-            return ((rating - TIER_BORDER[tierName]) / 451) * 100;
-        }
-        if(tierName === "sapphire"){
-            return ((rating - (TIER_BORDER[tierName] + 451 * (3 - (grade as number)))) / 451) * 100;
-        }
-        return ((rating - (TIER_BORDER[tierName] + 451 * (5 - (grade as number)))) /451) * 100;
-    }])
+    const progress: number = pipe(tierName, [
+        (tierName: UserRatingTierName) => {
+            if (tierName === "omega") {
+                return 100;
+            }
+            if (tierName === "pearl") {
+                return ((rating - TIER_BORDER[tierName]) / 2255) * 100;
+            }
+            if (tierName === "master" || tierName === "grandmaster") {
+                return ((rating - TIER_BORDER[tierName]) / 451) * 100;
+            }
+            if (tierName === "sapphire") {
+                return (
+                    ((rating -
+                        (TIER_BORDER[tierName] +
+                            451 * (3 - (grade as number)))) /
+                        451) *
+                    100
+                );
+            }
+            return (
+                ((rating -
+                    (TIER_BORDER[tierName] + 451 * (5 - (grade as number)))) /
+                    451) *
+                100
+            );
+        },
+    ]);
 
     const [theme] = getTheme();
 
@@ -37,10 +50,10 @@
         grade: 1 | 2 | 3 | 4 | 5 | null,
         tierName: UserRatingTierName,
     ) {
-        if(tierName === "grandmaster"){
-            return "color:#00d17d;"
+        if (tierName === "grandmaster") {
+            return "color:#00d17d;";
         }
-        if(tierName === "master"){
+        if (tierName === "master") {
             return `color:${TIER_COLOR[nextTier]};`;
         }
         if (grade === 1) {
@@ -59,51 +72,55 @@
         if (tierName === "pearl") {
             return "Bronze5";
         }
-        if (tierName === "ruby"){
-                return "Sapphire3";
-            }
-            else if (tierName === "sapphire") {
-                return "Master";
-            } 
-            else if (tierName === "master"){
-                return "GrandMaster";
-            }
-            else if (tierName === "grandmaster"){
-                return "Omega";
-            }
+        if (tierName === "ruby") {
+            return "Sapphire3";
+        } else if (tierName === "master") {
+            return "GrandMaster";
+        } else if (tierName === "grandmaster") {
+            return "Omega";
+        }
         if (grade === 1) {
+            if (tierName === "sapphire") {
+                return "Master";
+            }
             return `${nextTier.charAt(0).toUpperCase() + nextTier.slice(1)}5`;
         }
         return `${tierName.charAt(0).toUpperCase() + tierName.slice(1)}${grade ? grade - 1 : ""}`;
     }
 
-    function getLeft(tierName: UserRatingTierName, grade: 1 | 2 | 3 | 4 | 5 | null){
-        if(tierName === "omega"){
+    function getLeft(
+        tierName: UserRatingTierName,
+        grade: 1 | 2 | 3 | 4 | 5 | null,
+    ) {
+        if (tierName === "omega") {
             return 13530;
         }
-        if(tierName === "grandmaster"){
+        if (tierName === "grandmaster") {
             return 13079;
         }
-        if(tierName === "master"){
+        if (tierName === "master") {
             return 12628;
         }
-        if(tierName === "sapphire"){
+        if (tierName === "sapphire") {
             return TIER_BORDER[tierName] + 451 * (3 - (grade ?? 0));
         }
         return TIER_BORDER[tierName] + 451 * (5 - (grade ?? 0));
     }
 
-    function getRight(tierName: UserRatingTierName, grade: 1 | 2 | 3 | 4 | 5 | null){
-        if(tierName === "pearl"){
+    function getRight(
+        tierName: UserRatingTierName,
+        grade: 1 | 2 | 3 | 4 | 5 | null,
+    ) {
+        if (tierName === "pearl") {
             return 2255;
         }
-        if(tierName === "grandmaster"){
+        if (tierName === "grandmaster") {
             return 13530;
         }
-        if(tierName === "master"){
+        if (tierName === "master") {
             return 13079;
         }
-        if(tierName === "sapphire"){
+        if (tierName === "sapphire") {
             return TIER_BORDER[tierName] + 451 * (4 - (grade || 0));
         }
         return TIER_BORDER[tierName] + 451 * (6 - (grade || 0));

@@ -48,7 +48,9 @@
         tierName={tier.tierName}
         grade={tier.detailTierGrade}
     />
-    <TierProgress rating={ratings.rating} tierName={tier.tierName} />
+    {#if tier.tierName !== "omega" && tier.tierName !== "grandmaster" && tier.tierName !== "master"}
+        <TierProgress rating={ratings.rating} tierName={tier.tierName} />
+    {/if}
 </div>
 
 <style>

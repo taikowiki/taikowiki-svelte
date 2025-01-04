@@ -13,10 +13,10 @@
         ranking: { count: number; ranking: number };
     }
 
-    let {ratings, tier, ranking}: Props = $props();
+    let { ratings, tier, ranking }: Props = $props();
 
     const lang = getLang();
-   let i18n = $derived(getI18N($lang).page.donder.rating);
+    let i18n = $derived(getI18N($lang).page.donder.rating);
 </script>
 
 <div class="container">
@@ -44,7 +44,9 @@
         tierName={tier.tierName}
         grade={tier.detailTierGrade}
     />
-    <TierProgress rating={ratings.rating} tierName={tier.tierName} />
+    {#if tier.tierName !== "omega" && tier.tierName !== "grandmaster" && tier.tierName !== "master"}
+        <TierProgress rating={ratings.rating} tierName={tier.tierName} />
+    {/if}
     <div class="ranking">
         {i18n.top}
         {Math.round((ranking.ranking / ranking.count) * 10000) / 100}%

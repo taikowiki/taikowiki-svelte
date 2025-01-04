@@ -18,16 +18,35 @@ export function getTier(rating: number) {
     else if (rating < 11275) {
         tierName = 'ruby'
     }
-    else if (rating < 13530) {
+    else if (rating < 12628) {
         tierName = 'sapphire'
+    }
+    else if (rating < 13079) {
+        tierName = "master"
+    }
+    else if (rating < 13530) {
+        tierName = "grandmaster"
     }
     else {
         tierName = 'omega';
     }
 
     let detailTierGrade: 1 | 2 | 3 | 4 | 5 | null;
-    if (tierName === 'omega' || tierName === 'pearl') {
+    if (tierName === 'omega' || tierName === 'pearl' || tierName === "master" || tierName === "grandmaster") {
         detailTierGrade = null;
+    }
+    else if (tierName === "sapphire") {
+        const startBorder = TIER_BORDER[tierName];
+
+        if (rating < startBorder + 451) {
+            detailTierGrade = 3;
+        }
+        else if (rating < startBorder + 451 * 2) {
+            detailTierGrade = 2;
+        }
+        else {
+            detailTierGrade = 1;
+        }
     }
     else {
         const startBorder = TIER_BORDER[tierName];
@@ -72,7 +91,10 @@ export function getNextTier(tierName: UserRatingTierName): UserRatingTierName {
         return 'sapphire'
     }
     if (tierName === 'sapphire') {
-        return 'omega'
+        return 'master'
+    }
+    if (tierName === "master") {
+        return "grandmaster";
     }
     return 'omega'
 }

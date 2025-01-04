@@ -2,8 +2,8 @@ import type { UserRatingTierName } from "./types";
 
 export const TIER_COLOR = {
     omega: ["#ffa0fe", "#56fbb9", "#63abf8"],
-    grandmaster: "#8600e8",
-    master: "#00b896",
+    grandmaster: "#a11313",
+    master: "#7d00d9",
     sapphire: "#0e76e6",
     ruby: "#ff005d",
     gold: "#e6ac00",

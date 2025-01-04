@@ -41,18 +41,31 @@
     <div class="tbody" data-theme={$theme}>
         {#each rankings as ranking, index}
             <a class="tr" href={`/rating/user/${ranking.UUID}`}>
-                <div class="td"> {(page - 1) * 50 + index + 1} </div>
+                <div class="td">{(page - 1) * 50 + index + 1}</div>
                 <div class="td">
-                    <div class="td tier-image">
-                        <TierImage
-                            tierName={ranking.tier.tierName}
-                            grade={ranking.tier.detailTierGrade}
-                            width="50px"
-                            height="50px"
-                            fontSize="34px"
-                            transform="translate(0px, -2px)"
-                        />
-                    </div>
+                    {#if ranking.tier.tierName === "master"}
+                        <div class="td tier-image">
+                            <TierImage
+                                tierName={ranking.tier.tierName}
+                                grade={ranking.tier.detailTierGrade}
+                                width="50px"
+                                height="50px"
+                                fontSize="32px"
+                                transform="translate(0px, -2px)"
+                            />
+                        </div>
+                    {:else}
+                        <div class="td tier-image">
+                            <TierImage
+                                tierName={ranking.tier.tierName}
+                                grade={ranking.tier.detailTierGrade}
+                                width="50px"
+                                height="50px"
+                                fontSize="34px"
+                                transform="translate(0px, -2px)"
+                            />
+                        </div>
+                    {/if}
                 </div>
                 <div class="td">
                     {ranking.currentRating}

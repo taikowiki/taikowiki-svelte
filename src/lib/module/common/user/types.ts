@@ -38,4 +38,4 @@ export interface UserScoreData {
     [songNo: string]: ScoreData;
 }
 
-export type UserRatingTierName = "omega" | "sapphire" | "ruby" | "gold" | "silver" | "bronze" | "pearl";
+export type UserRatingTierName = "omega" | "grandmaster" | "master" | "sapphire" | "ruby" | "gold" | "silver" | "bronze" | "pearl";

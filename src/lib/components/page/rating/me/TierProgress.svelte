@@ -2,6 +2,7 @@
     import { TIER_BORDER, TIER_COLOR } from "$lib/module/common/user/const";
     import { getNextTier } from "$lib/module/common/user/getTier";
     import type { UserRatingTierName } from "$lib/module/common/user/types";
+    import { pipe } from "$lib/module/common/util";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
@@ -13,10 +14,19 @@
 
     const nextTier = getNextTier(tierName);
 
-    let progress: number =
-        tierName === "omega"
-            ? 100
-            : ((rating - TIER_BORDER[tierName]) / 2255) * 100;
+    let progress: number = pipe(tierName, [(tierName: UserRatingTierName) => {
+        if(tierName === "omega"){
+            return 100;
+        }
+        if(tierName === "master" || tierName === "grandmaster"){
+            return ((rating - TIER_BORDER[tierName]) / 451) * 100;
+        }
+        if(tierName === "sapphire"){
+            return ((rating - TIER_BORDER[tierName]) / 1353) * 100;
+        }
+
+        return ((rating - TIER_BORDER[tierName]) / 2255) * 100;
+    }])
 
     const [theme] = getTheme();
 </script>
@@ -36,7 +46,7 @@
     {#if tierName !== "omega"}
         <span
             class="next"
-            style={tierName === "sapphire"
+            style={tierName === "grandmaster"
                 ? "color:#00d17d;"
                 : `color:${TIER_COLOR[nextTier]};`}
             data-theme={$theme}

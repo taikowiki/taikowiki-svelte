@@ -3,7 +3,7 @@
     import type { UserRatingTierName } from "$lib/module/common/user/types";
     import CssFilterConverter from "css-filter-converter";
 
-    interface Props{
+    interface Props {
         tierName: UserRatingTierName;
         grade: number | null;
         width?: string;
@@ -16,14 +16,17 @@
         tierName,
         grade,
         width = "180px",
-        height = '180px',
-        fontSize = '120px',
-        transform = 'transform: translate(2px, -7px)'
+        height = "180px",
+        fontSize = "120px",
+        transform = "transform: translate(2px, -7px)",
     }: Props = $props();
 </script>
 
 {#if tierName === "omega"}
-    <div class="tier-image omega" style={`width:${width};height:${height};`}></div>
+    <div
+        class="tier-image omega"
+        style={`width:${width};height:${height};`}
+    ></div>
 {:else if tierName === "pearl"}
     <div class="tier-image pearl" style={`width:${width};height:${height};`}>
         <img
@@ -33,6 +36,28 @@
         />
         <span style={`font-size:${fontSize};transform:${transform};`}> P </span>
     </div>
+{:else if tierName === "grandmaster"}
+    <div class="tier-image" style={`width:${width};height:${height};`}>
+        <img
+            src="/assets/icon/rating/tier/plate.avif"
+            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};width:${width};height:${height};`}
+            alt="pearl"
+        />
+        <span style={`font-size:${fontSize};transform:${transform};`}>
+            G
+        </span>
+    </div>
+{:else if tierName === "master"}
+    <div class="tier-image" style={`width:${width};height:${height};`}>
+        <img
+            src="/assets/icon/rating/tier/plate.avif"
+            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};width:${width};height:${height};`}
+            alt="pearl"
+        />
+        <span style={`font-size:${fontSize};transform:${transform};`}>
+            M
+        </span>
+    </div>
 {:else}
     <div class="tier-image" style={`width:${width};height:${height};`}>
         <img
@@ -40,7 +65,9 @@
             style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};width:${width};height:${height};`}
             alt="pearl"
         />
-        <span style={`font-size:${fontSize};transform:${transform};`}> {grade} </span>
+        <span style={`font-size:${fontSize};transform:${transform};`}>
+            {grade}
+        </span>
     </div>
 {/if}
 
@@ -56,10 +83,10 @@
         justify-content: center;
         align-items: center;
 
-        color:white;
+        color: white;
     }
-    .tier-image.pearl{
-        color:black;
+    .tier-image.pearl {
+        color: black;
     }
 
     img {

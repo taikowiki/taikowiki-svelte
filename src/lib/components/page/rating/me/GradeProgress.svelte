@@ -72,16 +72,18 @@
         if (tierName === "pearl") {
             return "Bronze5";
         }
-        if (tierName === "ruby") {
-            return "Sapphire3";
-        } else if (tierName === "master") {
+        if (tierName === "master") {
             return "GrandMaster";
-        } else if (tierName === "grandmaster") {
+        }
+        if (tierName === "grandmaster") {
             return "Omega";
         }
         if (grade === 1) {
             if (tierName === "sapphire") {
                 return "Master";
+            }
+            if (tierName === "ruby") {
+                return "Sapphire3";
             }
             return `${nextTier.charAt(0).toUpperCase() + nextTier.slice(1)}5`;
         }

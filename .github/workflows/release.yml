@@ -34,7 +34,7 @@ jobs:
         run: npm run build
       
       - name: Zip builded application
-        run: zip -r build.zip ./build
+        run: zip -r build.zip ./package.json ./build
 
       - name: Create Release
         id: create_release

@@ -1,4 +1,7 @@
-export async function GET({ locals, getClientAddress }) {
+import { getClientAddress } from '$lib/module/common/util.server.js';
+
+export async function GET(event) {
+    const { locals } = event;
     if (locals.user && locals.userData) {
         return new Response(JSON.stringify({
             logined: true,
@@ -8,7 +11,7 @@ export async function GET({ locals, getClientAddress }) {
     else {
         return new Response(JSON.stringify({
             logined: false,
-            nickname: getClientAddress()
+            nickname: getClientAddress(event)
         }))
     }
 }

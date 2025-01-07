@@ -1,3 +1,4 @@
+import { getClientAddress } from "$lib/module/common/util.server";
 import { error, type Handle } from "@sveltejs/kit";
 import { runQuery } from "@yowza/db-handler"
 
@@ -9,7 +10,7 @@ export default class BanController {
         const banned = await runQuery(async (run) => {
             let clientAddress: string;
             try {
-                clientAddress = event.getClientAddress();
+                clientAddress = getClientAddress(event);
                 const result = await run("SELECT COUNT(*) FROM `ban/ip` WHERE `ip` = ?", [clientAddress]);
                 if (Object.values(result[0]) === undefined) {
                     return false;

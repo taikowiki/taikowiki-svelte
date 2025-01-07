@@ -1,9 +1,12 @@
 import { AMENITY, GAMECENTERREGION } from '$lib/module/common/gamecenter/const.js';
 import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server.js';
 import type { GameCenterDataWithoutOrderAndFavoriteCount, GameCenterRequestData } from '$lib/module/common/gamecenter/types.js';
+import { getClientAddress } from '$lib/module/common/util.server.js';
 import { error } from '@sveltejs/kit';
 
-export async function POST({locals, request, getClientAddress}){
+export async function POST(event){
+    const {locals, request} = event;
+
     if(!locals.userData || locals.userData.grade < 2){
         throw error(401);
     }
@@ -52,7 +55,7 @@ export async function POST({locals, request, getClientAddress}){
     await gamecenterDBController.addReport({
         gamecenterData,
         UUID: locals.userData.UUID,
-        ip: getClientAddress()
+        ip: getClientAddress(event)
     });
 
     return new Response();

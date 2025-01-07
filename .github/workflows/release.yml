@@ -58,7 +58,9 @@ jobs:
           asset_name: build.zip
           asset_content_type: application/zip
       
-      - name: Log test
+      - name: Release Request
         env: 
-          TEST: "asd"
-        run: node ./.github/script/log.js
+          RELEASE_TAG: ${{github.run_id}}
+          REQUEST_DEPLOY_URL: ${{ secrets.REQUEST_DEPLOY_URL }}
+          REQUEST_DEPLOY_KEY: ${{ secrets.REQUEST_DEPLOY_KEY }}
+        run: node ./.github/script/request_deploy.js

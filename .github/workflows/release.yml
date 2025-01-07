@@ -1,0 +1,64 @@
+name: release
+
+on:
+  push:
+    branches:
+      - 'main'
+  issues:
+    types: [opened]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permission:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './package-lock.json'
+
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Install node adapter
+        run: npm install @sveltejs/adapter-node
+      
+      - name: Copy svelte.config.js
+        run: cp -f ./.github/source/svelte.config.js ./svelte.config.js
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Zip builded application
+        run: zip -r build.zip ./build
+
+      - name: Create Release
+        id: create_release
+        uses: comnoco/create-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+        
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build.zip
+          asset_name: build.zip
+          asset_content_type: application/zip
+      
+      - name: Log test
+        env: 
+          TEST: "asd"
+        run: node ./github/script/log.js

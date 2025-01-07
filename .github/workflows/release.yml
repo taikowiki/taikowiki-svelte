@@ -61,4 +61,4 @@ jobs:
       - name: Log test
         env: 
           TEST: "asd"
-        run: node ./github/script/log.js
+        run: node ./.github/script/log.js

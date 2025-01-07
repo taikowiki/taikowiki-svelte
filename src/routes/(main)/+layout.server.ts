@@ -3,11 +3,13 @@ import { songDBController } from "$lib/module/common/song/song.server";
 import { UAParser } from "ua-parser-js";
 import { isbot } from "isbot";
 import pkg from "../../../package.json";
+import { getClientAddress } from "$lib/module/common/util.server";
 
-export async function load({ locals, request, cookies, getClientAddress }) {
+export async function load(event) {
+    const { locals, request, cookies } = event;
     const user = {
         logined: !!locals.userData,
-        nickname: !!locals.userData ? locals.userData.nickname : getClientAddress(),
+        nickname: !!locals.userData ? locals.userData.nickname : getClientAddress(event),
     };
 
     // Use UA to know if the device is mobile.

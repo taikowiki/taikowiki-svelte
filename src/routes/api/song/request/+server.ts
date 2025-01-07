@@ -1,8 +1,11 @@
 import { songRequestDBController } from '$lib/module/common/song/song.server.js';
 import type { SongData } from '$lib/module/common/song/types.js';
+import { getClientAddress } from '$lib/module/common/util.server.js';
 import { error } from '@sveltejs/kit';
 
-export async function POST({ request, locals, getClientAddress }) {
+export async function POST(event) {
+    const { request, locals } = event;
+
     if (!locals.user || !locals.userData) throw error(403);
     if (locals.userData.grade < 2) throw error(401);
 
@@ -20,7 +23,7 @@ export async function POST({ request, locals, getClientAddress }) {
         UUID: locals.userData.UUID,
         songNo,
         data: songData,
-        ip: getClientAddress()
+        ip: getClientAddress(event)
     })
 
     return new Response();

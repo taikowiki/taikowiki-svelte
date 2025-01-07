@@ -88,8 +88,4 @@ Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(async({event, resolve}) => {
-    console.log('header:', event.request.headers.get('x-forwarded-for'), event.request.headers);
-    console.log('ip:', event.getClientAddress());
-    return await resolve(event);
-},cors, authHandle, getUserData, logger, BanController.checkIp, checkPermission, setAssetsCacheControl, dynamicHtmlLang);
+export const handle = sequence(cors, authHandle, getUserData, logger, BanController.checkIp, checkPermission, setAssetsCacheControl, dynamicHtmlLang);

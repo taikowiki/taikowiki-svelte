@@ -1,23 +1,7 @@
 <script lang="ts" module>
-    function getClearedSongScores(
-        scoreData: SongScore[] | null,
-        songs: Song[],
-    ): SongScore[] {
-        return (
-            scoreData?.filter((score) =>
-                songs.find(
-                    (song) =>
-                        song.songNo === score.songNo &&
-                        score.details[uraToOniUra(song.difficulty)]?.crown !==
-                            "none",
-                ),
-            ) ?? []
-        );
-    }
-
     function getPlayedSongScores(
         scoreData: SongScore[] | null,
-        songs: Song[],
+        songs: DiffchartSongData[],
     ): SongScore[] {
         return (
             scoreData?.filter((score) =>
@@ -40,8 +24,9 @@
     import type {
         DifficultyType,
         Section,
-        Song,
+        DiffchartSongData,
         SongScore,
+        CrownType,
     } from "$lib/module/common/diffchart/types";
     import DiffchartSectionName from "./DiffchartSectionName.svelte";
     import DiffchartSong from "./DiffchartSong.svelte";
@@ -66,15 +51,59 @@
 
     let closed = $state(false);
 
-    let clearedSongScores = $derived(getClearedSongScores(userScoreData, section.songs));
     let playedSongScores = $derived(getPlayedSongScores(userScoreData, section.songs));
-    let clearedSongsCount = $derived(userScoreData ? clearedSongScores.length : null);
+    let userCrownCount = $derived(countUserCrown(userScoreData, section.songs));
+
+    /**
+     * 유저 스코어 데이터에서 클리어, 풀콤, 전량 갯수를 가져옵니다.
+     * @param userScoreData
+     * @param diffchartSongDatas
+     */
+    function countUserCrown(userScoreData: SongScore[] | null, diffchartSongDatas: DiffchartSongData[]){
+        if(userScoreData === null){
+            return null;
+        }
+
+        let clearCount = 0;
+        let fcCount = 0;
+        let dfcCount = 0;
+
+        diffchartSongDatas.forEach((diffchartSongData) => {
+            const scoreData = userScoreData.find((score) => 
+                (
+                    score.songNo === diffchartSongData.songNo && 
+                    score.details[uraToOniUra(diffchartSongData.difficulty)]?.crown &&
+                    score.details[uraToOniUra(diffchartSongData.difficulty)]?.crown !== "none"
+                )
+            );
+
+            if(!scoreData) return;
+
+            const crown = scoreData.details[uraToOniUra(diffchartSongData.difficulty)]?.crown as CrownType;
+
+            if(crown === "silver"){
+                clearCount++;
+            }
+            else if(crown === "gold"){
+                fcCount++;
+            }
+            else if(crown === "donderfull"){
+                dfcCount++;
+            }
+        });
+
+        return {
+            clearCount,
+            fcCount,
+            dfcCount
+        }
+    }
 </script>
 
 <div class="section">
     <DiffchartSectionName
         name={section.name}
-        {clearedSongsCount}
+        {userCrownCount}
         color={section.color}
         backgroundColor={section.backgroundColor}
         {closed}

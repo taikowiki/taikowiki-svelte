@@ -2,13 +2,15 @@ import { type Difficulty } from "$lib/module/common/song/types";
 import { type SongData } from "$lib/module/common/song/types"
 
 //diffchart
-export interface Song {
+export interface DiffchartSongData {
     songNo: string;
     order: number;
     title: string;
     difficulty: Difficulty;
     option?: Option;
 }
+
+export type Song = DiffchartSongData;
 
 export interface Option {
     hardFullCombo: boolean;

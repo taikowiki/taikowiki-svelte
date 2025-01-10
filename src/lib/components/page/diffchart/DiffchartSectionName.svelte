@@ -3,7 +3,11 @@
         name: string;
         color?: string;
         backgroundColor?: string;
-        clearedSongsCount: number | null;
+        userCrownCount: {
+            clearCount: number,
+            fcCount: number,
+            dfcCount: number
+        } | null;
         closed: boolean;
         onclick: (event: MouseEvent) => void
     }
@@ -12,7 +16,7 @@
         name,
         color = "white",
         backgroundColor = "#7f7f7f",
-        clearedSongsCount,
+        userCrownCount,
         closed,
         onclick
     }: Props = $props();
@@ -26,7 +30,7 @@
     style={`color:${color};background-color:${backgroundColor};`}
     {onclick}
 >
-    {name}{clearedSongsCount !== null ? ` (${clearedSongsCount})` : ""}
+    {name}{userCrownCount !== null ? ` (${userCrownCount.clearCount}/${userCrownCount.fcCount}/${userCrownCount.dfcCount})` : ""}
 </div>
 
 <style>

@@ -290,7 +290,9 @@ const newJa: RecursiveStringRecord = {
             },
             song: '曲',
             otherSong: 'それ以外の曲',
-            link: 'リンク'
+            link: 'リンク',
+            download: 'ダウンロード',
+            downloadMessage: 'イメージを間もなくダウンロードします.'
         },
         user: {
             showRating: {

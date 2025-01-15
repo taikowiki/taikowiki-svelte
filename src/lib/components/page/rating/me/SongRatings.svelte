@@ -26,9 +26,10 @@
     let i18n = $derived(getI18N("/auth/user/donder", $lang));
     let newI18n = $derived(getI18N($lang).page.donder);
 
-    let downloadReplica: HTMLDivElement;
+    let downloadReplica: HTMLDivElement | null = $state(null);
     function download() {
         queueMicrotask(async () => {
+            if (!downloadReplica) return;
             const canvas = await html2canvas(downloadReplica, {
                 backgroundColor: "rgb(255, 255, 255)",
             });
@@ -76,16 +77,14 @@
         {/each}
     </div>
     <div class="replica" data-theme="light" bind:this={downloadReplica}>
-        <!--
         <div class="replica-head">
-            <DonderData donderData={$page.data.donderData} />
+            <DonderData donderData={$page.data.donderData} isDownload={true} />
             <DonderRating
                 ratings={$page.data.ratings}
                 tier={$page.data.tier}
                 ranking={$page.data.ranking}
             />
         </div>
-        -->
         {#each ratings.songRatingDatas.slice(0, Math.min(50, ratings.songRatingDatas.length)) as songRatingData, index}
             {@const songData = songDatas.find(
                 ({ songNo }) => songNo === songRatingData.songNo.toString(),
@@ -197,19 +196,19 @@
 
     .replica {
         width: 720px;
-        position:absolute;
+        position: absolute;
 
         left: -100vw;
         top: -100vh;
 
         transform: translate(-100%, -100%);
     }
-    /*
     .replica-head {
         width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: space-around;
+        color: black;
+        margin-bottom: 15px;
     }
-    */
 </style>

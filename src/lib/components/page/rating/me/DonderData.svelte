@@ -3,13 +3,19 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DateTime } from "luxon";
+    import { onMount } from "svelte";
 
     interface Props {
         donderData: UserDonderData;
         loaded?: boolean;
+        isDownload?: boolean;
     }
 
-    let { donderData, loaded = $bindable(false) }: Props = $props();
+    let {
+        donderData,
+        loaded = $bindable(false),
+        isDownload = false,
+    }: Props = $props();
 
     const [theme] = getTheme();
     const lang = getLang();
@@ -18,7 +24,9 @@
 
 <div class="container">
     <img
-        src={donderData.donder.myDon}
+        src={isDownload
+            ? `/api/hirobaimg/mydon/${donderData.donder.taikoNumber}`
+            : donderData.donder.myDon}
         alt={i18n.myDon}
         onload={() => {
             loaded = true;
@@ -39,11 +47,13 @@
             </div>
         </div>
     </div>
-    <div class="last-update">
-        {i18n.lastUpdate}: {DateTime.fromJSDate(donderData.lastUpdate).toFormat(
-            "yyyy-MM-dd HH:mm:ss",
-        )}
-    </div>
+    {#if !isDownload}
+        <div class="last-update">
+            {i18n.lastUpdate}: {DateTime.fromJSDate(
+                donderData.lastUpdate,
+            ).toFormat("yyyy-MM-dd HH:mm:ss")}
+        </div>
+    {/if}
 </div>
 
 <style>

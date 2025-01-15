@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import type { Crown } from 'node-hiroba/types';
 
 export async function GET({params, setHeaders, fetch}){
-    if(!["played", "silver", "gold", "donderful"].includes(params.crown)){
+    if(!["played", "silver", "gold", "donderfull"].includes(params.crown)){
         throw error(404);
     }
 

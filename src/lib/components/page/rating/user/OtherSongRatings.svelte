@@ -37,6 +37,7 @@
                     {songDifficultyScoreData}
                     isTop50={true}
                     order={index + 1}
+                    isDownload={false}
                 />
             {/if}
         {/each}

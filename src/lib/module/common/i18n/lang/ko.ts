@@ -345,7 +345,9 @@ const newKo: RecursiveStringRecord = {
             },
             song: '곡',
             otherSong: '이외의 곡',
-            link: '링크'
+            link: '링크',
+            download: '다운로드',
+            downloadMessage: '이미지가 곧 다운로드됩니다.'
         },
         user: {
             showRating: {

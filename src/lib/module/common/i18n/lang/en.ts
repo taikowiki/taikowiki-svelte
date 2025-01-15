@@ -338,7 +338,9 @@ const newEn: RecursiveStringRecord = {
             },
             song: ' Songs',
             otherSong: 'Other Songs',
-            link: 'Link'
+            link: 'Link',
+            download: 'Download',
+            downloadMessage: 'The image will be soon downloaded.'
         },
         user: {
             showRating: {

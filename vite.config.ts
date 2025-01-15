@@ -11,6 +11,14 @@ export default defineConfig({
 		global: {}
 	},
 	server: {
-		https: true
+		https: true,
+		proxy: {
+      "/hiroimg": {
+        target: "https://donderhiroba.jp/",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/hiroimg/, '')
+      },
+		},
 	}
 });

@@ -11,9 +11,12 @@ export async function GET({params, setHeaders, fetch}){
         'cache-control': "max-age=31536000"
     });
 
-    const blob = await (await fetch(getUrl(params.crown as Crown))).blob();
+    const hirobaResponse = await fetch(getUrl(params.crown as Crown));
+    if(!hirobaResponse.body){
+        throw error(404);
+    }
 
-    return new Response(blob);
+    return new Response(hirobaResponse.body);
 }
 
 function getUrl(crown: Crown): string {

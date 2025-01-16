@@ -41,9 +41,11 @@
         const ctx = canvas.getContext('2d');
         if(!ctx) return;
 
-        canvas.width = parseFloat(width.replace('px', ''));
-        canvas.height = parseFloat(height.replace('px', ''));
-        
+        const widthNumber = parseFloat(width.replace('px', ''));
+        const heightNumber = parseFloat(height.replace('px', ''));
+
+        [canvas.width, canvas.height] = [widthNumber, heightNumber];
+
         const img = new Image();
         img.src = "/assets/icon/rating/tier/plate.avif";
 
@@ -56,9 +58,10 @@
         if(filter){
             ctx.filter = filter;
         }
-        ctx.drawImage(img, 0, 0, 180, 180);
+        ctx.drawImage(img, 0, 0, widthNumber, heightNumber);
 
         imgElement.src = canvas.toDataURL();
+        canvas.remove();
     }
     onMount(() => {
         generateFilteredImg();

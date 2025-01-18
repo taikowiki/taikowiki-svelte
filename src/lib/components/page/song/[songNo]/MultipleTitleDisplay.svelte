@@ -28,62 +28,69 @@
     let opened = $state(false);
 </script>
 
+{#snippet translatedTitleI18n()}
+    <div
+        class="title"
+        class:opened
+        onclick={() => {
+            opened = !opened;
+        }}
+        role="presentation"
+        data-theme={$theme}
+    >
+        {i18n.translatedTitle}
+    </div>
+{/snippet}
+{#snippet translatedTitles()}
+    {#if titleKo}
+        <tr>
+            <td> {i18n.ko} </td>
+            <td>
+                {titleKo}
+            </td>
+        </tr>
+    {/if}
+    {#if aliasKo}
+        <tr>
+            <td> {i18n.aliasKo} </td>
+            <td>
+                {aliasKo}
+            </td>
+        </tr>
+    {/if}
+    {#if titleEn}
+        <tr>
+            <td> {i18n.en} </td>
+            <td>
+                {titleEn}
+            </td>
+        </tr>
+    {/if}
+    {#if aliasEn}
+        <tr>
+            <td> {i18n.aliasEn} </td>
+            <td>
+                {aliasEn}
+            </td>
+        </tr>
+    {/if}
+    {#if romaji}
+        <tr>
+            <td> {i18n.romaji} </td>
+            <td>
+                {romaji}
+            </td>
+        </tr>
+    {/if}
+{/snippet}
+
 {#if titleKo || titleEn || aliasKo || aliasEn}
     <div class="container" data-isMobile={$isMobile}>
-        <div
-            class="title"
-            class:opened
-            onclick={() => {
-                opened = !opened;
-            }}
-            role="presentation"
-            data-theme={$theme}
-        >
-            {i18n.translatedTitle}
-        </div>
+        {@render translatedTitleI18n()}
         <div class="table-container" class:opened>
             <table data-theme={$theme}>
                 <tbody>
-                    {#if titleKo}
-                        <tr>
-                            <td> {i18n.ko} </td>
-                            <td>
-                                {titleKo}
-                            </td>
-                        </tr>
-                    {/if}
-                    {#if aliasKo}
-                        <tr>
-                            <td> {i18n.aliasKo} </td>
-                            <td>
-                                {aliasKo}
-                            </td>
-                        </tr>
-                    {/if}
-                    {#if titleEn}
-                        <tr>
-                            <td> {i18n.en} </td>
-                            <td>
-                                {titleEn}
-                            </td>
-                        </tr>
-                    {/if}
-                    {#if aliasEn}
-                        <tr>
-                            <td> {i18n.aliasEn} </td>
-                            <td>
-                                {aliasEn}
-                            </td>
-                        </tr>
-                    {/if}
-                    {#if romaji}
-                        <tr>
-                            <td> {i18n.romaji} </td>
-                            <td>
-                                {romaji}
-                            </td>
-                        </tr>
-                    {/if}
+                    {@render translatedTitles()}
                 </tbody>
             </table>
         </div>

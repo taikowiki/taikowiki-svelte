@@ -47,7 +47,7 @@
     */
 </script>
 
-<a class="container" href={`/song/${song.songNo}`} data-theme={$theme}>
+{#snippet genre()}
     <div class="genre-container">
         {#each song.genre as genre}
             <div
@@ -59,6 +59,8 @@
             </div>
         {/each}
     </div>
+{/snippet}
+{#snippet title()}
     <div class="title-container">
         {#if songLang === "ja"}
             {song.title}
@@ -74,28 +76,39 @@
             {song.romaji || song.title}
         {/if}
     </div>
+{/snippet}
+{#snippet artists()}
+    <div class="artists-container" data-theme={$theme}>
+        {song.artists.join(", ")}
+    </div>
+{/snippet}
+{#snippet levels()}
+    <div class="level-container">
+        {#each diffs as diff}
+            {#if song.courses[diff]}
+                <div class="level-item" data-theme={$theme}>
+                    {song.courses[diff]?.level}
+                    <div
+                        class="level-color"
+                        style={`background-color:${color.difficulty[diff]};`}
+                        data-theme={$theme}
+                    ></div>
+                </div>
+                <!--
+            {:else}
+            <div class="level-item" />
+        -->
+            {/if}
+        {/each}
+    </div>
+{/snippet}
+
+<a class="container" href={`/song/${song.songNo}`} data-theme={$theme}>
+    {@render genre()}
+    {@render title()}
     <div class="third-container">
-        <div class="artists-container" data-theme={$theme}>
-            {song.artists.join(", ")}
-        </div>
-        <div class="level-container">
-            {#each diffs as diff}
-                {#if song.courses[diff]}
-                    <div class="level-item" data-theme={$theme}>
-                        {song.courses[diff]?.level}
-                        <div
-                            class="level-color"
-                            style={`background-color:${color.difficulty[diff]};`}
-                            data-theme={$theme}
-                        ></div>
-                    </div>
-                    <!--
-                    {:else}
-                    <div class="level-item" />
-                -->
-                {/if}
-            {/each}
-        </div>
+        {@render artists()}
+        {@render levels()}
     </div>
 </a>
 

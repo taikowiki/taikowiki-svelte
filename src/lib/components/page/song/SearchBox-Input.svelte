@@ -33,7 +33,7 @@
         option: SongSearchOption;
     }
 
-    let {opened = $bindable(), option = $bindable()}: Props = $props();
+    let { opened = $bindable(), option = $bindable() }: Props = $props();
 
     function open() {
         opened = !opened;
@@ -42,13 +42,15 @@
     const [theme] = getTheme();
 
     const lang = getLang();
-    let i18n = $derived(getI18N($lang)['/song']);
+    let i18n = $derived(getI18N($lang)["/song"]);
 </script>
 
-<div class="search-container" data-theme={$theme}>
+{#snippet openToggler()}
     <button class="search-detail-toggler" onclick={open} class:opened>
         <img src="/assets/icon/arrow.svg" alt="" />
     </button>
+{/snippet}
+{#snippet searchInput()}
     <input
         class="search-input"
         type="text"
@@ -62,6 +64,8 @@
         enterkeyhint="search"
         data-theme={$theme}
     />
+{/snippet}
+{#snippet searchButton()}
     <button
         class="search-button"
         onclick={() => {
@@ -70,6 +74,12 @@
     >
         <img src="/assets/icon/search.svg" alt="" />
     </button>
+{/snippet}
+
+<div class="search-container" data-theme={$theme}>
+    {@render openToggler()}
+    {@render searchInput()}
+    {@render searchButton()}
 </div>
 
 <style>

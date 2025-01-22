@@ -8,6 +8,10 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
+    import {
+        UserDonderData,
+        UserScoreData,
+    } from "$lib/module/common/user/types.js";
 
     let { data } = $props();
 
@@ -31,45 +35,61 @@
     let newI18n = $derived(getI18N($lang).page.donder);
 </script>
 
+{#snippet donder()}
+    {#if data.ratingDataExists}
+        <div class="rating-container" data-isMobile={$isMobile}>
+            <DonderData donderData={data.donderData} bind:loaded />
+            <DonderRating
+                ratings={data.ratings}
+                tier={data.tier}
+                ranking={data.ranking}
+            />
+        </div>
+    {/if}
+{/snippet}
+{#snippet songRatings()}
+    {#if data.ratingDataExists}
+        <DonderSection
+            bind:opened={opened.songRatings}
+            sectionName={newI18n.section.song}
+        >
+            <SongRatings
+                ratings={data.ratings}
+                songDatas={data.songDatas}
+                donderData={data.donderData}
+            />
+        </DonderSection>
+    {/if}
+{/snippet}
+{#snippet measures()}
+    {#if data.ratingDataExists}
+        <DonderSection
+            bind:opened={opened.measureTable}
+            sectionName={newI18n.section.measure}
+        >
+            <MeasureTable measures={data.measures} songDatas={data.songDatas} />
+        </DonderSection>
+    {/if}
+{/snippet}
+{#snippet guide()}
+    <div class="guide" data-theme={$theme}>
+        {@html i18n.uploadGuide}
+    </div>
+{/snippet}
+
 <div class="container">
     {#if data.ratingDataExists}
         <div class="center">
-            <div class="rating-container" data-isMobile={$isMobile}>
-                <DonderData donderData={data.donderData} bind:loaded />
-                <DonderRating
-                    ratings={data.ratings}
-                    tier={data.tier}
-                    ranking={data.ranking}
-                />
-            </div>
+            {@render donder()}
             {#if loaded}
-                <DonderSection
-                    bind:opened={opened.songRatings}
-                    sectionName={newI18n.section.song}
-                >
-                    <SongRatings
-                        ratings={data.ratings}
-                        songDatas={data.songDatas}
-                        donderData={data.donderData}
-                    />
-                </DonderSection>
-                <DonderSection
-                    bind:opened={opened.measureTable}
-                    sectionName={newI18n.section.measure}
-                >
-                    <MeasureTable
-                        measures={data.measures}
-                        songDatas={data.songDatas}
-                    />
-                </DonderSection>
+                {@render songRatings()}
+                {@render measures()}
             {:else}
                 <Loading />
             {/if}
         </div>
     {:else}
-        <div class="guide" data-theme={$theme}>
-            {@html i18n.uploadGuide}
-        </div>
+        {@render guide()}
     {/if}
 </div>
 

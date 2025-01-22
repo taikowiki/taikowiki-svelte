@@ -64,8 +64,39 @@
     const [theme] = getTheme();
 
     const lang = getLang();
-    let i18n = $derived(getI18N($lang)['/song']);
+    let i18n = $derived(getI18N($lang)["/song"]);
 </script>
+
+{#snippet difficultyItems()}
+    {#each ["easy", "normal", "hard", "oni", "ura", "oniura"] as const as diff}
+        <SearchBoxDifficultyItem value={diff} bind:group={option.difficulty}>
+            {i18n[diff]}
+        </SearchBoxDifficultyItem>
+    {/each}
+{/snippet}
+{#snippet levelSelector()}
+    <div class="level-container">
+        <img
+            src="/assets/icon/star-full.svg"
+            alt="level"
+            class="star"
+            style={option.difficulty === undefined ? "opacity:0.4" : ""}
+            data-theme={$theme}
+        />
+        <div class="level-indicator">
+            {option.level || ""}
+        </div>
+        <input
+            type="range"
+            min="1"
+            max="10"
+            step="1"
+            bind:value={option.level}
+            disabled={option.difficulty === undefined ? true : false}
+            style={`accent-color:${color.difficulty[option.difficulty || "oni"]};`}
+        />
+    </div>
+{/snippet}
 
 <TitledContainer
     title={i18n.difficulty}
@@ -74,45 +105,8 @@
     type={`${$isMobile ? "vertical" : "horizontal"}`}
 >
     <div class="wrapper">
-        <SearchBoxDifficultyItem value="easy" bind:group={option.difficulty}>
-            {i18n.easy}
-        </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem value="normal" bind:group={option.difficulty}>
-            {i18n.normal}
-        </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem value="hard" bind:group={option.difficulty}>
-            {i18n.hard}
-        </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem value="oni" bind:group={option.difficulty}>
-            {i18n.omote}
-        </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem value="ura" bind:group={option.difficulty}>
-            {i18n.ura}
-        </SearchBoxDifficultyItem>
-        <SearchBoxDifficultyItem value="oniura" bind:group={option.difficulty}>
-            {i18n.oni}
-        </SearchBoxDifficultyItem>
-        <div class="level-container">
-            <img
-                src="/assets/icon/star-full.svg"
-                alt="level"
-                class="star"
-                style={option.difficulty === undefined ? "opacity:0.4" : ""}
-                data-theme={$theme}
-            />
-            <div class="level-indicator">
-                {option.level || ""}
-            </div>
-            <input
-                type="range"
-                min="1"
-                max="10"
-                step="1"
-                bind:value={option.level}
-                disabled={option.difficulty === undefined ? true : false}
-                style={`accent-color:${color.difficulty[option.difficulty || "oni"]};`}
-            />
-        </div>
+        {@render difficultyItems()}
+        {@render levelSelector()}
     </div>
 </TitledContainer>
 

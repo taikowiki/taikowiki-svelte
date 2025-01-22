@@ -20,19 +20,27 @@
     import type { SongSearchOption } from "$lib/module/common/song/types";
     import SearchBoxGenreItem from "./SearchBox-GenreItem.svelte";
 
-    interface Props{
+    interface Props {
         option: SongSearchOption;
     }
 
-    let {option = $bindable()}: Props = $props();
+    let { option = $bindable() }: Props = $props();
 
     const isMobile = getIsMobile();
 
     const [theme] = getTheme();
 
     const lang = getLang();
-    let i18n = $derived(getI18N($lang)['/song']);
+    let i18n = $derived(getI18N($lang)["/song"]);
 </script>
+
+{#snippet genreItems()}
+    {#each genres as genre}
+        <SearchBoxGenreItem bind:genre={option.genre} value={genre}>
+            {i18n.genres[genre]}
+        </SearchBoxGenreItem>
+    {/each}
+{/snippet}
 
 <TitledContainer
     title={i18n.genre}
@@ -41,11 +49,7 @@
     type={`${$isMobile ? "vertical" : "horizontal"}`}
 >
     <div class="wrapper">
-        {#each genres as genre}
-            <SearchBoxGenreItem bind:genre={option.genre} value={genre}>
-                {i18n.genres[genre]}
-            </SearchBoxGenreItem>
-        {/each}
+        {@render genreItems()}
     </div>
 </TitledContainer>
 

@@ -13,6 +13,7 @@
         titleKo: null,
         aliasEn: null,
         aliasKo: null,
+        romaji: null,
         bpm: {
             min: 0,
             max: 0,

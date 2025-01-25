@@ -7,7 +7,7 @@
 <div class="container">
     {#each new Array(30) as _}
         <div class="item" data-theme={$theme}>
-            <div class="glowing" data-theme={$theme}/>
+            <div class="glowing" data-theme={$theme}></div>
         </div>
     {/each}
 </div>

@@ -11,7 +11,7 @@
         selectedDifficulty: Difficulty;
     }
 
-    let {courses, selectedDifficulty = $bindable()}: Props = $props();
+    let { courses, selectedDifficulty = $bindable() }: Props = $props();
 
     let difficulties: Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
 
@@ -20,26 +20,30 @@
     let course = $derived(courses[selectedDifficulty]);
 </script>
 
+{#snippet diffBtn(difficulty: Difficulty)}
+    {#if courses[difficulty]}
+        <div
+            class="difficulty"
+            class:selected={selectedDifficulty === difficulty}
+            role="presentation"
+            onclick={() => {
+                selectedDifficulty = difficulty;
+                $page.url.searchParams.set("diff", difficulty);
+                replaceState($page.url, $page.state);
+            }}
+            style={`background-color:${color.difficulty[difficulty]};`}
+        >
+            <span data-isMobile={$isMobile}>
+                ★ {courses[difficulty]?.level}
+            </span>
+        </div>
+    {/if}
+{/snippet}
+
 <div class="container" data-isMobile={$isMobile}>
     <div class="difficulty-container" data-isMobile={$isMobile}>
         {#each difficulties as difficulty}
-            {#if courses[difficulty]}
-                <div
-                    class="difficulty"
-                    class:selected={selectedDifficulty === difficulty}
-                    role="presentation"
-                    onclick={() => {
-                        selectedDifficulty = difficulty;
-                        $page.url.searchParams.set("diff", difficulty);
-                        replaceState($page.url, $page.state);
-                    }}
-                    style={`background-color:${color.difficulty[difficulty]};`}
-                >
-                    <span data-isMobile={$isMobile}>
-                        ★ {courses[difficulty]?.level}
-                    </span>
-                </div>
-            {/if}
+            {@render diffBtn(difficulty)}
         {/each}
     </div>
     {#key selectedDifficulty}

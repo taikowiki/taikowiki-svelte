@@ -11,26 +11,29 @@
     const [theme] = getTheme();
 </script>
 
+{#snippet youtube()}
+    <a
+        class="icon-anchor"
+        href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`太鼓の達人 ${title}`)}`}
+        data-theme={$theme}
+        target="_blank"
+    >
+        <img class="icon" src="/assets/icon/youtube.svg" alt="edit" />
+    </a>
+{/snippet}
+{#snippet edit()}
+    <a class="icon-anchor" href={`/song/${songNo}/edit`} data-theme={$theme}>
+        <img class="icon" src="/assets/icon/pen.svg" alt="edit" />
+    </a>
+{/snippet}
+
 <h1 class="container">
     <div class="title">
         {title}
     </div>
     <div class="icon-container">
-        <a
-            class="icon-anchor"
-            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`太鼓の達人 ${title}`)}`}
-            data-theme={$theme}
-            target="_blank"
-        >
-            <img class="icon" src="/assets/icon/youtube.svg" alt="edit" />
-        </a>
-        <a
-            class="icon-anchor"
-            href={`/song/${songNo}/edit`}
-            data-theme={$theme}
-        >
-            <img class="icon" src="/assets/icon/pen.svg" alt="edit" />
-        </a>
+        {@render youtube()}
+        {@render edit()}
     </div>
 </h1>
 

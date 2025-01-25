@@ -1,32 +1,8 @@
-<script lang="ts" module>
-    function getPlayedSongScores(
-        scoreData: SongScore[] | null,
-        songs: DiffchartSongData[],
-    ): SongScore[] {
-        return (
-            scoreData?.filter((score) =>
-                songs.find(
-                    (song) =>
-                        song.songNo === score.songNo &&
-                        score.details[uraToOniUra(song.difficulty)]?.badge !==
-                            null,
-                ),
-            ) ?? []
-        );
-    }
-
-    function uraToOniUra(diff: Difficulty): DifficultyType {
-        return diff === "ura" ? "oni_ura" : diff;
-    }
-</script>
-
 <script lang="ts">
     import type {
         DifficultyType,
         Section,
-        DiffchartSongData,
         SongScore,
-        CrownType,
     } from "$lib/module/common/diffchart/types";
     import DiffchartSectionName from "./DiffchartSectionName.svelte";
     import DiffchartSong from "./DiffchartSong.svelte";
@@ -38,7 +14,12 @@
         songs: SongDataPickedForDiffchart[];
         theme: string;
         useMobile?: boolean;
-        userScoreData: SongScore[] | null;
+        playedSongScores: SongScore[] | null;
+        userCrownCount: {
+            clearCount: number;
+            fcCount: number;
+            dfcCount: number;
+        } | null;
     }
 
     let {
@@ -46,57 +27,21 @@
         songs,
         theme,
         useMobile = true,
-        userScoreData,
+        playedSongScores,
+        userCrownCount
     }: Props = $props();
 
     let closed = $state(false);
 
-    let playedSongScores = $derived(getPlayedSongScores(userScoreData, section.songs));
-    let userCrownCount = $derived(countUserCrown(userScoreData, section.songs));
+    //let playedSongScores = $derived(getPlayedSongScores(userScoreData, section.songs));
+    //let userCrownCount = $derived(countUserCrown(userScoreData, section.songs));
 
     /**
-     * 유저 스코어 데이터에서 클리어, 풀콤, 전량 갯수를 가져옵니다.
-     * @param userScoreData
-     * @param diffchartSongDatas
+     * "ura"를 "oni_ura"로 바꿉니다.
+     * @param diff
      */
-    function countUserCrown(userScoreData: SongScore[] | null, diffchartSongDatas: DiffchartSongData[]){
-        if(userScoreData === null){
-            return null;
-        }
-
-        let clearCount = 0;
-        let fcCount = 0;
-        let dfcCount = 0;
-
-        diffchartSongDatas.forEach((diffchartSongData) => {
-            const scoreData = userScoreData.find((score) => 
-                (
-                    score.songNo === diffchartSongData.songNo && 
-                    score.details[uraToOniUra(diffchartSongData.difficulty)]?.crown &&
-                    score.details[uraToOniUra(diffchartSongData.difficulty)]?.crown !== "none"
-                )
-            );
-
-            if(!scoreData) return;
-
-            const crown = scoreData.details[uraToOniUra(diffchartSongData.difficulty)]?.crown as CrownType;
-
-            if(crown === "silver"){
-                clearCount++;
-            }
-            else if(crown === "gold"){
-                fcCount++;
-            }
-            else if(crown === "donderfull"){
-                dfcCount++;
-            }
-        });
-
-        return {
-            clearCount,
-            fcCount,
-            dfcCount
-        }
+     function uraToOniUra(diff: Difficulty): DifficultyType {
+        return diff === "ura" ? "oni_ura" : diff;
     }
 </script>
 
@@ -117,7 +62,7 @@
                     {songs}
                     {theme}
                     {useMobile}
-                    userScore={playedSongScores.find(
+                    userScore={playedSongScores?.find(
                         (score) => score.songNo === song.songNo,
                     )?.details[uraToOniUra(song.difficulty)] ?? null}
                 />

@@ -8,7 +8,7 @@
 
     interface Props {
         songData: SongData;
-        type: "edit" | "new";
+        type?: "edit" | "new";
         isAdmin?: boolean;
     }
 

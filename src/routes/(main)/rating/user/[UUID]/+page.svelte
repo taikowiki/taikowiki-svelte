@@ -8,7 +8,7 @@
     import { getTier } from "$lib/module/common/user/getTier.js";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
-    let {data} = $props();
+    let { data } = $props();
 
     const donder = {
         nickname: data.otherDonderData.nickname,
@@ -25,29 +25,38 @@
     let i18n = $derived(getI18N($lang).page.rating.user);
 </script>
 
-<div class="container">
+{#snippet donderView()}
     <div class="donder-container" data-isMobile={$isMobile}>
-        <OtherDonderData {donder} bind:loaded/>
+        <OtherDonderData {donder} bind:loaded />
         <OtherDonderRating
             currentRating={data.otherDonderData.currentRating}
             currentExp={data.otherDonderData.currentExp}
             {tier}
         />
     </div>
+{/snippet}
+{#snippet songRatings()}
+    {#if data.otherDonderData.ratingData && data.otherDonderData.scoreData}
+        <DonderSection
+            bind:opened={songOpened}
+            sectionName={newI18n.section.song}
+        >
+            <OtherSongRatings
+                songDatas={data.songDatas}
+                scoreData={data.otherDonderData.scoreData}
+                ratingData={data.otherDonderData.ratingData}
+            />
+        </DonderSection>
+    {/if}
+{/snippet}
+
+<div class="container">
+    {@render donderView()}
     {#if data.otherDonderData.ratingData && data.otherDonderData.scoreData}
         {#if loaded}
-            <DonderSection
-                bind:opened={songOpened}
-                sectionName={newI18n.section.song}
-            >
-                <OtherSongRatings
-                    songDatas={data.songDatas}
-                    scoreData={data.otherDonderData.scoreData}
-                    ratingData={data.otherDonderData.ratingData}
-                />
-            </DonderSection>
+            {@render songRatings()}
         {:else}
-            <Loading/>
+            <Loading />
         {/if}
     {:else}
         <div class="nondisclosure">
@@ -76,8 +85,8 @@
         align-items: center;
         row-gap: 10px;
     }
-    
-    .nondisclosure{
+
+    .nondisclosure {
         margin-top: 10px;
         font-weight: bold;
         font-size: 18px;

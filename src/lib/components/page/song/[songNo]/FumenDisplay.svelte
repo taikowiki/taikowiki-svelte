@@ -5,10 +5,10 @@
     import { getTheme } from "$lib/module/layout/theme";
     import FumenImg from "./FumenImg.svelte";
 
-    interface Props{
+    interface Props {
         images: string[];
     }
-    let {images}:Props = $props();
+    let { images }: Props = $props();
 
     let opened = $state(true);
     if (browser) {
@@ -24,6 +24,13 @@
 
     const lang = getLang();
     let i18n = $derived(getI18N($lang).page.songNo.course);
+
+    function toggleOpen() {
+        opened = !opened;
+        if (typeof window !== undefined) {
+            window.localStorage.setItem("fumenImageOpened", `${opened}`);
+        }
+    }
 </script>
 
 {#if images.length}
@@ -31,15 +38,7 @@
         <div
             class="opener"
             role="presentation"
-            onclick={() => {
-                opened = !opened;
-                if (typeof window !== undefined) {
-                    window.localStorage.setItem(
-                        "fumenImageOpened",
-                        `${opened}`,
-                    );
-                }
-            }}
+            onclick={toggleOpen}
             data-opened={opened}
             data-theme={$theme}
         >
@@ -48,7 +47,7 @@
         {#if opened}
             <div class="img-container">
                 {#each images as src}
-                    <FumenImg {src}/>
+                    <FumenImg {src} />
                 {/each}
             </div>
         {/if}
@@ -69,11 +68,11 @@
         transform: translateY(-34px);
     }*/
 
-    .img-container{
+    .img-container {
         width: 100%;
         max-width: 800px;
 
-        display:flex;
+        display: flex;
         flex-direction: column;
 
         row-gap: 3px;

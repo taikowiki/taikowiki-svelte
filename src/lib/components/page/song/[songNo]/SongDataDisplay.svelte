@@ -52,7 +52,7 @@
         addedDate: number | null;
     }
 
-    let {bpm, bpmShiver, version, artists, addedDate}: Props = $props();
+    let { bpm, bpmShiver, version, artists, addedDate }: Props = $props();
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
@@ -65,13 +65,7 @@
     let i18n = $derived(getI18N($lang).page.songNo.songData);
 </script>
 
-<div
-    class="div-table"
-    data-theme={$theme}
-    data-isMobile={$isMobile}
-    bind:this={table}
-    use:setTdMinWidth={$isMobile}
->
+{#snippet bpmDisplay()}
     <div class="div-tr">
         <div class="div-td">BPM</div>
         <div class="div-td">
@@ -85,6 +79,8 @@
             {/if}
         </div>
     </div>
+{/snippet}
+{#snippet versionsDisplay()}
     {#if version.length}
         <div class="div-tr">
             <div class="div-td">{i18n.version}</div>
@@ -95,6 +91,8 @@
             </div>
         </div>
     {/if}
+{/snippet}
+{#snippet artistsDisplay()}
     {#if artists.length}
         <div class="div-tr">
             <div class="div-td">{i18n.artists}</div>
@@ -105,6 +103,8 @@
             </div>
         </div>
     {/if}
+{/snippet}
+{#snippet addedDateDisplay()}
     {#if addedDate}
         <div class="div-tr">
             <div class="div-td">{i18n.addedDate}</div>
@@ -115,6 +115,19 @@
             </div>
         </div>
     {/if}
+{/snippet}
+
+<div
+    class="div-table"
+    data-theme={$theme}
+    data-isMobile={$isMobile}
+    bind:this={table}
+    use:setTdMinWidth={$isMobile}
+>
+    {@render bpmDisplay()}
+    {@render versionsDisplay()}
+    {@render artistsDisplay()}
+    {@render addedDateDisplay()}
 </div>
 
 <style>

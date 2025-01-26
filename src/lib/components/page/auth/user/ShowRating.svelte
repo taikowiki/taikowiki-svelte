@@ -33,6 +33,24 @@
     }
 </script>
 
+{#snippet showRatingNick()}
+    <label>
+        {i18n.showRatingNick}
+        <input bind:checked={showRating.nickname} type="checkbox" />
+    </label>
+{/snippet}
+{#snippet showRatingTaikoNo()}
+    <label>
+        {i18n.showRatingTaikoNo}
+        <input bind:checked={showRating.taikoNumber} type="checkbox" />
+    </label>{/snippet}
+{#snippet showRatingSongs()}
+    <label>
+        {i18n.showRatingSongs}
+        <input bind:checked={showRating.songs} type="checkbox" />
+    </label>
+{/snippet}
+
 <div class="div-tr">
     <div class="div-td">
         {i18n.name}
@@ -40,21 +58,9 @@
     <div class="div-td">
         <div class="container">
             <div>
-                <label>
-                    {i18n.showRatingNick}
-                    <input bind:checked={showRating.nickname} type="checkbox" />
-                </label>
-                <label>
-                    {i18n.showRatingTaikoNo}
-                    <input
-                        bind:checked={showRating.taikoNumber}
-                        type="checkbox"
-                    />
-                </label>
-                <label>
-                    {i18n.showRatingSongs}
-                    <input bind:checked={showRating.songs} type="checkbox" />
-                </label>
+                {@render showRatingNick()}
+                {@render showRatingTaikoNo()}
+                {@render showRatingSongs()}
             </div>
             <button onclick={submit} data-theme={$theme}>
                 {i18n.submit}

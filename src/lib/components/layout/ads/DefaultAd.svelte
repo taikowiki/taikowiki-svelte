@@ -2,12 +2,18 @@
     import { browser } from "$app/environment";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
+    interface Props{
+        style?: string;
+    }
+
+    let {style = ''}: Props = $props();
+
     const isMobile = getIsMobile();
 </script>
 
 {#if browser}
     {#key $isMobile}
-        <div class="ads-container" data-isMobile={$isMobile}>
+        <div class="ads-container" data-isMobile={$isMobile} {style}>
             <script
                 async
                 src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
@@ -19,7 +25,6 @@
                 style="display:block"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="3643794205"
-                data-ad-format="auto"
                 data-full-width-responsive="true"
             ></ins>
             <script>
@@ -45,6 +50,6 @@
 
     .wide-ad{
         width: 100%;
-        height: 90px;
+        height: 60px;
     }
 </style>

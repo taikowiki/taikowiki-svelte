@@ -45,6 +45,7 @@
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
+    import PcSideAd from "$lib/components/layout/ads/PcSideAd.svelte";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -217,6 +218,7 @@
         </svelte:fragment>
         <Aside slot="aside">
             <div bind:this={$pageAside} class="page-aside"></div>
+            <PcSideAd/>
             {#if data.asideBanners}
                 <AsideBanner banners={data.asideBanners} />
             {/if}

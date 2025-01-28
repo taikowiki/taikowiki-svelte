@@ -8,11 +8,6 @@
 {#if browser && $isMobile}
     {#key $isMobile}
         <div class="ads-container">
-            <script
-                async
-                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
-                crossorigin="anonymous"
-            ></script>
             <!-- taiko.wiki/모바일 메인 -->
             <ins
                 class="adsbygoogle"

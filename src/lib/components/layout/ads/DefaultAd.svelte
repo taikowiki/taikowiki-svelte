@@ -3,46 +3,47 @@
     import { page } from "$app/state";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
-    interface Props{
+    interface Props {
         style?: string;
-        onlyFor?: 'mobile' | 'pc';
+        onlyFor?: "mobile" | "pc";
     }
 
-    let {style = '', onlyFor}: Props = $props();
+    let { style = "", onlyFor }: Props = $props();
 
     let forRerender = $state(true);
     let retried = $state(0);
     let ins = $state<HTMLElement>();
     $effect(() => {
-        if(!ins) return;
-        const adStatus = ins.getAttribute('data-ad-status');
-        if(adStatus !== "unfilled"){
+        if (!ins) {
             retried = 0;
             return;
-        };
+        }
+        const adStatus = ins.getAttribute("data-ad-status");
+        if (adStatus !== "unfilled") {
+            retried = 0;
+            return;
+        }
 
-        if(retried < 5){
+        if (retried < 5) {
             retried++;
             reRender();
-        }
-        else{
+        } else {
             retried = 0;
         }
-    })
+    });
 
     const isMobile = getIsMobile();
 
-    function checkOnlyFor(onlyFor: 'mobile' | 'pc' | undefined){
-        if(!onlyFor) return true;
-        if(onlyFor === "mobile"){
+    function checkOnlyFor(onlyFor: "mobile" | "pc" | undefined) {
+        if (!onlyFor) return true;
+        if (onlyFor === "mobile") {
             return $isMobile === true;
-        }
-        else{
+        } else {
             return $isMobile === false;
         }
     }
 
-    function reRender(){
+    function reRender() {
         forRerender = !forRerender;
     }
 </script>
@@ -85,19 +86,19 @@
         width: min(100%, 700px);
     }
 
-    .ads{
+    .ads {
         display: flex;
         justify-content: center;
         width: min(100%, 700px);
     }
-    .ads[data-isMobile="false"]{
+    .ads[data-isMobile="false"] {
         height: 90px;
     }
-    .ads[data-isMobile="true"]{
+    .ads[data-isMobile="true"] {
         height: 60px;
     }
 
-    .ads-container :global(.ads[data-ad-status="unfilled"]){
-        display:none;
+    .ads-container:has(:global(.ads[data-ad-status="unfilled"])) {
+        display: none;
     }
 </style>

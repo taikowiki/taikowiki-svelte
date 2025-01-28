@@ -51,23 +51,43 @@
 {#if browser && checkOnlyFor(onlyFor) && page.url.pathname !== "/gamecenter"}
     {#key forRerender && $isMobile && page.url}
         <div class="ads-container" data-isMobile={$isMobile} {style}>
-            <script
-                async
-                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
-                crossorigin="anonymous"
-            ></script>
-            <!-- taiko.wiki/기본 -->
-            <ins
-                class="adsbygoogle ads"
-                style="display:block"
-                data-ad-client="ca-pub-1629193017650416"
-                data-ad-slot="3643794205"
-                data-isMobile={$isMobile}
-                bind:this={ins}
-            ></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+            {#if $isMobile}
+                <script
+                    async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
+                    crossorigin="anonymous"
+                ></script>
+                <!-- taiko.wiki/모바일기본 -->
+                <ins
+                    class="adsbygoogle"
+                    style="display:inline-block;width:300px;height:50px"
+                    data-ad-client="ca-pub-1629193017650416"
+                    data-ad-slot="7503982311"
+                    data-isMobile={$isMobile}
+                    bind:this={ins}
+                ></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            {:else}
+                <script
+                    async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
+                    crossorigin="anonymous"
+                ></script>
+                <!-- taiko.wiki/기본 -->
+                <ins
+                    class="adsbygoogle ads"
+                    style="display:block"
+                    data-ad-client="ca-pub-1629193017650416"
+                    data-ad-slot="3643794205"
+                    data-isMobile={$isMobile}
+                    bind:this={ins}
+                ></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            {/if}
         </div>
     {/key}
 {/if}
@@ -95,7 +115,7 @@
         height: 90px;
     }
     .ads[data-isMobile="true"] {
-        max-height: 75px;
+        height: 50px;
     }
 
     .ads-container:has(:global(.ads[data-ad-status="unfilled"])) {

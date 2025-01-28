@@ -16,9 +16,11 @@
             <!-- taiko.wiki/기본 -->
             <ins
                 class="adsbygoogle"
-                style="display:inline-block;width:728px;height:90px;max-width:100%;"
+                style="display:block"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="3643794205"
+                data-ad-format="auto"
+                data-full-width-responsive="true"
             ></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -32,9 +34,12 @@
         width: 100%;
         margin-top: 10px;
         margin-bottom: 10px;
+
+        display: flex;
+        justify-content: center;
     }
 
-    .ads-container[data-isMobile="true"]{
+    .ads-container[data-isMobile="true"] {
         width: min(100%, 700px);
     }
 </style>

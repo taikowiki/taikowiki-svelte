@@ -16,9 +16,11 @@
             <!-- taiko.wiki/모바일 메인 -->
             <ins
                 class="adsbygoogle"
-                style="display:inline-block;width:300px;height:300px;max-width:100%;"
+                style="display:block"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="9128318506"
+                data-ad-format="auto"
+                data-full-width-responsive="true"
             ></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -29,7 +31,7 @@
 
 <style>
     .ads-container {
-        max-width: min(100%, 700px);
+        width: min(100%, 700px);
         margin-top: 10px;
     }
 </style>

@@ -10,6 +10,23 @@
 
     let {style = '', onlyFor}: Props = $props();
 
+    let forRerender = $state(true);
+    let retried = $state(0);
+    let ins = $state<HTMLElement>();
+    $effect(() => {
+        if(!ins) return;
+        const adStatus = ins.getAttribute('data-ad-status');
+        if(adStatus !== "unfilled") return;
+
+        if(retried < 5){
+            retried++;
+            reRender();
+        }
+        else{
+            retried = 0;
+        }
+    })
+
     const isMobile = getIsMobile();
 
     function checkOnlyFor(onlyFor: 'mobile' | 'pc' | undefined){
@@ -21,10 +38,14 @@
             return $isMobile === false;
         }
     }
+
+    function reRender(){
+        forRerender = !forRerender;
+    }
 </script>
 
 {#if browser && checkOnlyFor(onlyFor) && page.url.pathname !== "/gamecenter"}
-    {#key $isMobile && page.url}
+    {#key forRerender && $isMobile && page.url}
         <div class="ads-container" data-isMobile={$isMobile} {style}>
             <script
                 async
@@ -38,6 +59,7 @@
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="3643794205"
                 data-isMobile={$isMobile}
+                bind:this={ins}
             ></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -70,5 +92,9 @@
     }
     .ads[data-isMobile="true"]{
         height: 60px;
+    }
+
+    .ads-container :global(.ads[data-ad-status="unfilled"]){
+        display:none;
     }
 </style>

@@ -13,30 +13,31 @@
     let ins = $state<HTMLElement>();
     let rendered = $state(true);
     $effect(() => {
-        if($isMobile){
+        if ($isMobile) {
             rendered = true;
         }
-    })
+    });
     $effect(() => {
-        if(!ins) return;
-        const adStatus = ins.getAttribute('data-ad-status');
-        if(adStatus === "unfilled"){
+        if (!ins) return;
+        const adStatus = ins.getAttribute("data-ad-status");
+        if (adStatus === "unfilled") {
             rendered = false;
+        } else {
+            rendered = true;
         }
-    })
+    });
     $effect(() => {
-        if(page.url){
-            if(!rendered){
+        if (page.url) {
+            if (!rendered) {
                 rerender();
             }
         }
-    })
+    });
 
     let forRerender = $state(false);
-    function rerender(){
+    function rerender() {
         forRerender = !forRerender;
     }
-
 
     const isMobile = getIsMobile();
 

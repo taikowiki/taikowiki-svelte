@@ -1,12 +1,13 @@
 <script lang="ts">
     import { browser } from "$app/environment";
+    import { navigating } from "$app/state";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
     const isMobile = getIsMobile();
 </script>
 
 {#if browser && !$isMobile}
-    {#key !$isMobile}
+    {#key !$isMobile && navigating}
         <div class="ads-container">
             <script
                 async

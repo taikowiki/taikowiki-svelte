@@ -1,18 +1,30 @@
 <script lang="ts">
     import { browser } from "$app/environment";
+    import { navigating } from "$app/state";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
     interface Props{
         style?: string;
+        onlyFor?: 'mobile' | 'pc';
     }
 
-    let {style = ''}: Props = $props();
+    let {style = '', onlyFor}: Props = $props();
 
     const isMobile = getIsMobile();
+
+    function checkOnlyFor(onlyFor: 'mobile' | 'pc' | undefined){
+        if(!onlyFor) return true;
+        if(onlyFor === "mobile"){
+            return $isMobile === true;
+        }
+        else{
+            return $isMobile === false;
+        }
+    }
 </script>
 
-{#if browser}
-    {#key $isMobile}
+{#if browser && checkOnlyFor(onlyFor)}
+    {#key $isMobile && navigating}
         <div class="ads-container" data-isMobile={$isMobile} {style}>
             <script
                 async

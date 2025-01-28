@@ -211,16 +211,17 @@
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
+                <DefaultAd onlyFor="mobile" style="margin-top: 0px;" />
                 {@render children?.()}
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />
                 {/if}
-                <DefaultAd/>
+                <DefaultAd />
             {/if}
         </svelte:fragment>
         <Aside slot="aside">
             <div bind:this={$pageAside} class="page-aside"></div>
-            <PcSideAd/>
+            <PcSideAd />
             {#if data.asideBanners}
                 <AsideBanner banners={data.asideBanners} />
             {/if}
@@ -230,7 +231,7 @@
     <Footer version={data.version} />
 </div>
 
-<ServiceLayout/>
+<ServiceLayout />
 
 <style>
     .page-aside:empty {

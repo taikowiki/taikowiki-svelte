@@ -73,13 +73,7 @@
     let dialog: HTMLDialogElement | undefined = $state();
 </script>
 
-<div
-    class="head"
-    onclick={() => {
-        if ($isMobile) opened = !opened;
-    }}
-    role="presentation"
->
+{#snippet danAndVersion()}
     <div class="section">
         <DaniPlate dan={dani.dan} />
         <div
@@ -91,66 +85,86 @@
             </span>
         </div>
     </div>
-    <div class="section">
-        <a
-            class="yt-link"
-            {href}
-            target="_blank"
-            onclick={(event) => {event.stopPropagation()}}
+{/snippet}
+{#snippet youtubeLink()}
+    <a
+        class="yt-link"
+        {href}
+        target="_blank"
+        onclick={(event) => {
+            event.stopPropagation();
+        }}
+    >
+        <img
+            src={`/assets/icon/dani/youtube${$theme === "dark" ? "_dark" : "_dark"}_256px.svg`}
+            alt=""
+        />
+    </a>
+{/snippet}
+{#snippet qrModal()}
+    {#if dani.dan === "gaiden" && dani.qr !== undefined}
+        <img
+            src={"/assets/icon/dani/qr_dark.svg"}
+            alt="qr button"
+            onclick={(event) => {
+                event.stopPropagation();
+                if (!dialog) return;
+                dialog.showModal();
+            }}
+            role="presentation"
+            style="cursor:pointer;"
+        />
+        <dialog
+            bind:this={dialog}
+            onclick={(event) => {
+                event.stopPropagation();
+                outsideClickHandler(event);
+            }}
+            role="presentation"
         >
-            <img
-                src={`/assets/icon/dani/youtube${$theme === "dark" ? "_dark" : "_dark"}_256px.svg`}
-                alt=""
-            />
-        </a>
-        {#if dani.dan === "gaiden" && dani.qr !== undefined}
-            <img
-                src={"/assets/icon/dani/qr_dark.svg"}
-                alt="qr button"
-                onclick={(event) => {
-                    event.stopPropagation();
-                    if(!dialog) return;
-                    dialog.showModal();
-                }}
-                role="presentation"
-                style="cursor:pointer;"
-            />
-            <dialog
-                bind:this={dialog}
-                onclick={(event) => {
-                    event.stopPropagation();
-                    outsideClickHandler(event);
-                }}
-                role="presentation"
-            >
-                <div class="dialog-content-wrapper">
-                    <div>
-                        {dani.name[$lang] ?? dani.name.ja}
-                    </div>
-                    <img class="qr" src={dani.qr} alt="qr" />
-                    <button
-                        onclick={(event) => {
-                            try{
-                                event.stopPropagation();
-                            }
-                            catch{}
-                            if(!dialog) return;
-                            dialog.close();
-                        }}
-                    >
-                        닫기
-                    </button>
+            <div class="dialog-content-wrapper">
+                <div>
+                    {dani.name[$lang] ?? dani.name.ja}
                 </div>
-            </dialog>
-        {/if}
-        {#if $isMobile}
-            <img
-                class="fold"
-                src="/assets/icon/dani/unfold_dark.svg"
-                alt=""
-                class:opened
-            />
-        {/if}
+                <img class="qr" src={dani.qr} alt="qr" />
+                <button
+                    onclick={(event) => {
+                        try {
+                            event.stopPropagation();
+                        } catch {}
+                        if (!dialog) return;
+                        dialog.close();
+                    }}
+                >
+                    닫기
+                </button>
+            </div>
+        </dialog>
+    {/if}
+{/snippet}
+{#snippet mobileFold()}
+    {#if $isMobile}
+        <img
+            class="fold"
+            src="/assets/icon/dani/unfold_dark.svg"
+            alt=""
+            class:opened
+        />
+    {/if}
+{/snippet}
+
+<div
+    class="head"
+    onclick={() => {
+        if ($isMobile) opened = !opened;
+    }}
+    role="presentation"
+>
+    {@render danAndVersion()}
+    <div class="section">
+        {@render youtubeLink()}
+        {@render qrModal()}
+        {@render mobileFold()}
     </div>
 </div>
 {#if dani.name}

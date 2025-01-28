@@ -202,31 +202,41 @@
     </div>
 {/if}
 -->
+{#snippet currentPositionBtn()}
+    {#if canUseGeolocation}
+        <button
+            class="map-button current-button"
+            onclick={setCenterToCurrentPosition}
+            aria-label="current position"
+        ></button>
+    {/if}
+{/snippet}
+{#snippet zoomInBtn()}
+    <button
+        class="map-button plus-button"
+        onclick={() => {
+            if (!map) return;
+            map.setLevel(map.getLevel() - 1);
+        }}
+        aria-label="zoom in"
+    ></button>
+{/snippet}
+{#snippet zoomOutBtn()}
+    <button
+        class="map-button minus-button"
+        onclick={() => {
+            if (!map) return;
+            map.setLevel(map.getLevel() + 1);
+        }}
+        aria-label="zoom out"
+    ></button>
+{/snippet}
+
 <div class="map-container" bind:this={mapContainer}>
     <div class="button-container">
-        {#if canUseGeolocation}
-            <button
-                class="map-button current-button"
-                onclick={setCenterToCurrentPosition}
-                aria-label="current position"
-            ></button>
-        {/if}
-        <button
-            class="map-button plus-button"
-            onclick={() => {
-                if (!map) return;
-                map.setLevel(map.getLevel() - 1);
-            }}
-            aria-label="zoom in"
-        ></button>
-        <button
-            class="map-button minus-button"
-            onclick={() => {
-                if (!map) return;
-                map.setLevel(map.getLevel() + 1);
-            }}
-            aria-label="zoom out"
-        ></button>
+        {@render currentPositionBtn()}
+        {@render zoomInBtn()}
+        {@render zoomOutBtn()}
     </div>
 
     {#if markerLoaded && map}

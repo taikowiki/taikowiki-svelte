@@ -42,31 +42,41 @@
     const [theme] = getTheme();
 </script>
 
-<div class="container">
-    <div class="layer" data-theme={$theme}>
-        <div class="type">
+{#snippet type()}
+    <div class="type">
+        <span>
+            {i18n.type[condition.type]}
+        </span>
+    </div>
+{/snippet}
+{#snippet redCriteria()}
+    <div class="item">
+        <div class="red">
             <span>
-                {i18n.type[condition.type]}
+                {condition.criteria.red.length === 0
+                    ? "?"
+                    : `${condition.criteria.red.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
             </span>
         </div>
-        <div class="item">
-            <div class="red">
-                <span>
-                    {condition.criteria.red.length === 0
-                        ? "?"
-                        : `${condition.criteria.red.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
-                </span>
-            </div>
+    </div>
+{/snippet}
+{#snippet goldCriteria()}
+    <div class="item">
+        <div class="gold">
+            <span>
+                {condition.criteria.gold.length === 0
+                    ? "?"
+                    : `${condition.criteria.gold.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
+            </span>
         </div>
-        <div class="item">
-            <div class="gold">
-                <span>
-                    {condition.criteria.gold.length === 0
-                        ? "?"
-                        : `${condition.criteria.gold.join(", ")}${i18n.suffix1[suffix1]} ${i18n.suffix2[suffix2]}`}
-                </span>
-            </div>
-        </div>
+    </div>
+{/snippet}
+
+<div class="container">
+    <div class="layer" data-theme={$theme}>
+        {@render type()}
+        {@render redCriteria()}
+        {@render goldCriteria()}
     </div>
 </div>
 

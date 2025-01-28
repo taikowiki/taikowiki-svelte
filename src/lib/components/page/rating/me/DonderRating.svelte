@@ -11,16 +11,16 @@
         ratings: ReturnType<typeof getRating>;
         tier: ReturnType<typeof getTier>;
         ranking: { count: number; ranking: number };
+        isDownload?: boolean;
     }
 
-    let { ratings, tier, ranking }: Props = $props();
+    let { ratings, tier, ranking, isDownload = false }: Props = $props();
 
     const lang = getLang();
     let i18n = $derived(getI18N($lang).page.donder.rating);
 </script>
 
-<div class="container">
-    <TierImage tierName={tier.tierName} grade={tier.detailTierGrade} />
+{#snippet expAndRating()}
     <div class="exp-rating-container">
         <div class="exp">
             <span> exp </span>
@@ -39,18 +39,29 @@
             </span>
         </div>
     </div>
+{/snippet}
+{#snippet tierProgress()}
+    {#if tier.tierName !== "omega" && tier.tierName !== "grandmaster" && tier.tierName !== "master"}
+        <TierProgress rating={ratings.rating} tierName={tier.tierName} />
+    {/if}
+{/snippet}
+{#snippet rankingView()}
+    <div class="ranking">
+        {i18n.top}
+        {Math.round((ranking.ranking / ranking.count) * 10000) / 100}%
+    </div>
+{/snippet}
+
+<div class="container">
+    <TierImage tierName={tier.tierName} grade={tier.detailTierGrade} {isDownload}/>
+    {@render expAndRating()}
     <GradeProgress
         rating={ratings.rating}
         tierName={tier.tierName}
         grade={tier.detailTierGrade}
     />
-    {#if tier.tierName !== "omega" && tier.tierName !== "grandmaster" && tier.tierName !== "master"}
-        <TierProgress rating={ratings.rating} tierName={tier.tierName} />
-    {/if}
-    <div class="ranking">
-        {i18n.top}
-        {Math.round((ranking.ranking / ranking.count) * 10000) / 100}%
-    </div>
+    {@render tierProgress()}
+    {@render rankingView()}
 </div>
 
 <style>

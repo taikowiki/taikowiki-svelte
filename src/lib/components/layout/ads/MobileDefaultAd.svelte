@@ -7,7 +7,7 @@
 
         return notAllowedPaths.every((notAllowedPath) => {
             return !path.startsWith(notAllowedPath);
-        }) && path !== "/'";
+        }) && path !== "/";
     }
 </script>
 

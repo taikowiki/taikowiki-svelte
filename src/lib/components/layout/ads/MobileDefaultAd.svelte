@@ -3,11 +3,11 @@
     import DefaultAd from "./DefaultAd.svelte";
 
     function checkPath(path: string){
-        const notAllowedPaths:string[] = ['/', '/gamecenter', '/auth'];
+        const notAllowedPaths:string[] = ['/gamecenter', '/auth'];
 
         return notAllowedPaths.every((notAllowedPath) => {
             return !path.startsWith(notAllowedPath);
-        });
+        }) && path !== "/'";
     }
 </script>
 

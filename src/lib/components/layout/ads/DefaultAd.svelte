@@ -1,6 +1,6 @@
 <script lang="ts">
     import { browser } from "$app/environment";
-    import { navigating } from "$app/state";
+    import { page } from "$app/state";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
     interface Props{
@@ -23,8 +23,8 @@
     }
 </script>
 
-{#if browser && checkOnlyFor(onlyFor)}
-    {#key $isMobile && navigating}
+{#if browser && checkOnlyFor(onlyFor) && page.url.pathname !== "/gamecenter"}
+    {#key $isMobile && page.url}
         <div class="ads-container" data-isMobile={$isMobile} {style}>
             <script
                 async

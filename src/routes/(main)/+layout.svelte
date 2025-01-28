@@ -211,9 +211,6 @@
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
-                {#if $page.url.pathname !== "/"}
-                    <DefaultAd onlyFor="mobile" style="margin-top: 0px;" />
-                {/if}
                 {@render children?.()}
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />

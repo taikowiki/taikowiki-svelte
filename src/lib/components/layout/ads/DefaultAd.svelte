@@ -16,7 +16,10 @@
     $effect(() => {
         if(!ins) return;
         const adStatus = ins.getAttribute('data-ad-status');
-        if(adStatus !== "unfilled") return;
+        if(adStatus !== "unfilled"){
+            retried = 0;
+            return;
+        };
 
         if(retried < 5){
             retried++;

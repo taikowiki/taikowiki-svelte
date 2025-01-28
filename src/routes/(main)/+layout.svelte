@@ -217,8 +217,8 @@
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />
                 {/if}
-                <DefaultAd />
             {/if}
+            <DefaultAd />
         </svelte:fragment>
         <Aside slot="aside">
             <div bind:this={$pageAside} class="page-aside"></div>

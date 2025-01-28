@@ -10,35 +10,6 @@
 
     let { style = "", onlyFor }: Props = $props();
 
-    let ins = $state<HTMLElement>();
-    let rendered = $state(true);
-    $effect(() => {
-        if ($isMobile) {
-            rendered = true;
-        }
-    });
-    $effect(() => {
-        if (!ins) return;
-        const adStatus = ins.getAttribute("data-ad-status");
-        if (adStatus === "unfilled") {
-            rendered = false;
-        } else {
-            rendered = true;
-        }
-    });
-    $effect(() => {
-        if (page.url) {
-            if (!rendered) {
-                rerender();
-            }
-        }
-    });
-
-    let forRerender = $state(false);
-    function rerender() {
-        forRerender = !forRerender;
-    }
-
     const isMobile = getIsMobile();
 
     function checkOnlyFor(onlyFor: "mobile" | "pc" | undefined) {
@@ -52,7 +23,7 @@
 </script>
 
 {#if browser && checkOnlyFor(onlyFor) && page.url.pathname !== "/gamecenter"}
-    {#key $isMobile && forRerender}
+    {#key $isMobile}
         <div class="ads-container" data-isMobile={$isMobile} {style}>
             <script
                 async
@@ -66,7 +37,6 @@
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="3643794205"
                 data-isMobile={$isMobile}
-                bind:this={ins}
             ></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -92,13 +62,13 @@
     .ads {
         display: flex;
         justify-content: center;
-        max-width: min(100%, 700px);
+        width: min(100%, 700px);
     }
     .ads[data-isMobile="false"] {
         height: 90px;
     }
     .ads[data-isMobile="true"] {
-        height: 50px;
+        max-height: 75px;
     }
 
     .ads-container:has(:global(.ads[data-ad-status="unfilled"])) {

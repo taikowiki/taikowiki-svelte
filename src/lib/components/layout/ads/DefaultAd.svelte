@@ -10,6 +10,34 @@
 
     let { style = "", onlyFor }: Props = $props();
 
+    let ins = $state<HTMLElement>();
+    let rendered = $state(true);
+    $effect(() => {
+        if($isMobile){
+            rendered = true;
+        }
+    })
+    $effect(() => {
+        if(!ins) return;
+        const adStatus = ins.getAttribute('data-ad-status');
+        if(adStatus === "unfilled"){
+            rendered = false;
+        }
+    })
+    $effect(() => {
+        if(page.url){
+            if(!rendered){
+                rerender();
+            }
+        }
+    })
+
+    let forRerender = $state(false);
+    function rerender(){
+        forRerender = !forRerender;
+    }
+
+
     const isMobile = getIsMobile();
 
     function checkOnlyFor(onlyFor: "mobile" | "pc" | undefined) {
@@ -23,43 +51,25 @@
 </script>
 
 {#if browser && checkOnlyFor(onlyFor) && page.url.pathname !== "/gamecenter"}
-    {#key $isMobile && page.url}
+    {#key $isMobile && forRerender}
         <div class="ads-container" data-isMobile={$isMobile} {style}>
-            {#if $isMobile}
-                <script
-                    async
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
-                    crossorigin="anonymous"
-                ></script>
-                <!-- taiko.wiki/모바일기본 -->
-                <ins
-                    class="adsbygoogle"
-                    style="display:inline-block;width:300px;height:50px"
-                    data-ad-client="ca-pub-1629193017650416"
-                    data-ad-slot="7503982311"
-                    data-isMobile={$isMobile}
-                ></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            {:else}
-                <script
-                    async
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
-                    crossorigin="anonymous"
-                ></script>
-                <!-- taiko.wiki/기본 -->
-                <ins
-                    class="adsbygoogle ads"
-                    style="display:block"
-                    data-ad-client="ca-pub-1629193017650416"
-                    data-ad-slot="3643794205"
-                    data-isMobile={$isMobile}
-                ></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            {/if}
+            <script
+                async
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
+                crossorigin="anonymous"
+            ></script>
+            <!-- taiko.wiki/기본 -->
+            <ins
+                class="adsbygoogle ads"
+                style="display:block"
+                data-ad-client="ca-pub-1629193017650416"
+                data-ad-slot="3643794205"
+                data-isMobile={$isMobile}
+                bind:this={ins}
+            ></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
     {/key}
 {/if}
@@ -81,7 +91,7 @@
     .ads {
         display: flex;
         justify-content: center;
-        width: min(100%, 700px);
+        max-width: min(100%, 700px);
     }
     .ads[data-isMobile="false"] {
         height: 90px;

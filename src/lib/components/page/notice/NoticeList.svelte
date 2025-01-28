@@ -27,7 +27,7 @@
     let i18n = $derived(getI18N("/notice", $lang));
 </script>
 
-<table data-theme={$theme} data-isMobile={$isMobile}>
+{#snippet head()}
     <thead>
         <tr>
             <th> 번호 </th>
@@ -35,21 +35,28 @@
             <th> 작성일 </th>
         </tr>
     </thead>
+{/snippet}
+{#snippet noticeItem(notice: Props['notices'][number])}
+    <tr>
+        <td class="td-order" width="40px">
+            {notice.order}
+        </td>
+        <td class="td-title">
+            <a href={`/notice/${notice.order}`}>
+                {`[${i18n.type[notice.type]}]`}{notice.title}
+            </a>
+        </td>
+        <td class="td-date">
+            {getTime(notice.officialDate ?? notice.writtenDate)}
+        </td>
+    </tr>
+{/snippet}
+
+<table data-theme={$theme} data-isMobile={$isMobile}>
+    {@render head()}
     <tbody>
         {#each notices.toSorted((a, b) => b.order - a.order) as notice}
-            <tr>
-                <td class="td-order" width="40px">
-                    {notice.order}
-                </td>
-                <td class="td-title">
-                    <a href={`/notice/${notice.order}`}>
-                        {`[${i18n.type[notice.type]}]`}{notice.title}
-                    </a>
-                </td>
-                <td class="td-date">
-                    {getTime(notice.officialDate ?? notice.writtenDate)}
-                </td>
-            </tr>
+            {@render noticeItem(notice)}
         {/each}
     </tbody>
 </table>

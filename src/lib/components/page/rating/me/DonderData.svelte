@@ -22,7 +22,7 @@
     let i18n = $derived(getI18N("/auth/user/donder", $lang));
 </script>
 
-<div class="container">
+{#snippet donderImg()}
     <img
         src={isDownload
             ? `/api/hirobaimg/mydon/${donderData.donder.taikoNumber}`
@@ -35,6 +35,8 @@
             loaded = true;
         }}
     />
+{/snippet}
+{#snippet donderProfile()}
     <div class="div-table" data-theme={$theme}>
         <div class="div-tr">
             <div class="div-td taikonumber">
@@ -47,6 +49,8 @@
             </div>
         </div>
     </div>
+{/snippet}
+{#snippet lastUpdate()}
     {#if !isDownload}
         <div class="last-update">
             {i18n.lastUpdate}: {DateTime.fromJSDate(
@@ -54,6 +58,12 @@
             ).toFormat("yyyy-MM-dd HH:mm:ss")}
         </div>
     {/if}
+{/snippet}
+
+<div class="container">
+    {@render donderImg()}
+    {@render donderProfile()}
+    {@render lastUpdate()}
 </div>
 
 <style>

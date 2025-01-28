@@ -70,7 +70,9 @@
             });
 
             if (region !== "null") {
-                filteredTemp = filteredTemp.filter((data) => data.region === region);
+                filteredTemp = filteredTemp.filter(
+                    (data) => data.region === region,
+                );
             }
 
             if (amenities.length > 0) {
@@ -98,46 +100,56 @@
     ) as Writable<boolean>;
 </script>
 
+{#snippet searchInput()}
+    <input
+        class="keyword-input"
+        type="text"
+        bind:this={input}
+        bind:value={searchKeyword}
+        placeholder={i18n.keyword}
+        data-theme={$theme}
+    />
+{/snippet}
+{#snippet searchRegionOption()}
+    <div class="option-container">
+        <div class="option-name" data-theme={$theme}>{i18n.region}</div>
+        <select bind:value={region} style="height: 20px;">
+            <option value="null">{i18n.all}</option>
+            {#each GAMECENTERREGION as region}
+                <option value={region}>{region}</option>
+            {/each}
+        </select>
+    </div>
+{/snippet}
+{#snippet searchAmenityOption()}
+    <div class="option-container">
+        <div class="option-name" data-theme={$theme}>
+            {i18n.amenityText}
+        </div>
+        <div class="amenity-container">
+            {#each AMENITY as amenity}
+                <label
+                    class="amenity"
+                    class:selected={amenities.includes(amenity)}
+                >
+                    <input
+                        type="checkbox"
+                        bind:group={amenities}
+                        value={amenity}
+                    />
+                    <span>{i18n.amenity[amenity]}</span>
+                </label>
+            {/each}
+        </div>
+    </div>
+{/snippet}
+
 <div class="container">
     <div class="search-container" data-theme={$theme}>
-        <input
-            class="keyword-input"
-            type="text"
-            bind:this={input}
-            bind:value={searchKeyword}
-            placeholder={i18n.keyword}
-            data-theme={$theme}
-        />
+        {@render searchInput()}
         <!--옵션-->
-        <div class="option-container">
-            <div class="option-name" data-theme={$theme}>{i18n.region}</div>
-            <select bind:value={region} style="height: 20px;">
-                <option value="null">{i18n.all}</option>
-                {#each GAMECENTERREGION as region}
-                    <option value={region}>{region}</option>
-                {/each}
-            </select>
-        </div>
-        <div class="option-container">
-            <div class="option-name" data-theme={$theme}>
-                {i18n.amenityText}
-            </div>
-            <div class="amenity-container">
-                {#each AMENITY as amenity}
-                    <label
-                        class="amenity"
-                        class:selected={amenities.includes(amenity)}
-                    >
-                        <input
-                            type="checkbox"
-                            bind:group={amenities}
-                            value={amenity}
-                        />
-                        <span>{i18n.amenity[amenity]}</span>
-                    </label>
-                {/each}
-            </div>
-        </div>
+        {@render searchRegionOption()}
+        {@render searchAmenityOption()}
     </div>
     <!--오락실 정보-->
     <div class="info-container">

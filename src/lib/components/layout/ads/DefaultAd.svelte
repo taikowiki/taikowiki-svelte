@@ -15,7 +15,7 @@
             ></script>
             <!-- taiko.wiki/기본 -->
             <ins
-                class="adsbygoogle"
+                class="adsbygoogle wide-ad"
                 style="display:block"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="3643794205"
@@ -41,5 +41,10 @@
 
     .ads-container[data-isMobile="true"] {
         width: min(100%, 700px);
+    }
+
+    .wide-ad{
+        width: 100%;
+        height: 90px;
     }
 </style>

@@ -42,87 +42,103 @@
     const isMobile = getIsMobile();
 </script>
 
+{#snippet goStart()}
+    {#if displayPages[0] !== 1}
+        <div
+            class="btn"
+            role="presentation"
+            onclick={() => {
+                movePage(1);
+            }}
+        >
+            <img src="/assets/icon/page_arrow2.svg" alt="" class=" scale" />
+        </div>
+    {/if}
+{/snippet}
+{#snippet goPrevious()}
+    {#if displayPages[0] !== 1}
+        <div
+            class="btn"
+            role="presentation"
+            onclick={() => {
+                movePage(displayPages[0] - 10);
+            }}
+        >
+            <img src="/assets/icon/page_arrow1.svg" alt="" />
+        </div>
+    {/if}
+{/snippet}
+{#snippet pcPageNumbersView()}
+    {#if !$isMobile}
+        {#each displayPages as pNum}
+            <div
+                class="btn"
+                onclick={() => {
+                    movePage(pNum);
+                }}
+                role="presentation"
+                class:selected={pNum === pageNum}
+            >
+                <span>{pNum}</span>
+            </div>
+        {/each}
+    {/if}
+{/snippet}
+{#snippet mobilePageNumbersView()}
+    {#if $isMobile}
+        <select
+            bind:value={pageNum}
+            onchange={() => {
+                movePage(pageNum);
+            }}
+        >
+            {#each [...Array(maxPage).keys()] as pNum}
+                <option value={pNum + 1}>
+                    {pNum + 1}
+                </option>
+            {/each}
+        </select>
+    {/if}
+{/snippet}
+{#snippet goNext()}
+    {#if displayPages[displayPages.length - 1] !== maxPage}
+        <div
+            class="btn"
+            role="presentation"
+            onclick={() => {
+                movePage(displayPages[displayPages.length - 1] + 1);
+            }}
+        >
+            <img src="/assets/icon/page_arrow1.svg" alt="" class="rotated" />
+        </div>
+    {/if}
+{/snippet}
+{#snippet goLast()}
+    {#if displayPages[displayPages.length - 1] !== maxPage}
+        <div
+            class="btn"
+            role="presentation"
+            onclick={() => {
+                movePage(maxPage);
+            }}
+        >
+            <img
+                src="/assets/icon/page_arrow2.svg"
+                alt=""
+                class="rotated scale"
+            />
+        </div>
+    {/if}
+{/snippet}
+
 {#if length !== 0}
     <div class="wrapper" data-isMobile={$isMobile}>
-        {#if displayPages[0] !== 1}
-            <div
-                class="btn"
-                role="presentation"
-                onclick={() => {
-                    movePage(1);
-                }}
-            >
-                <img src="/assets/icon/page_arrow2.svg" alt="" class=" scale" />
-            </div>
-        {/if}
-        {#if displayPages[0] !== 1}
-            <div
-                class="btn"
-                role="presentation"
-                onclick={() => {
-                    movePage(displayPages[0] - 10);
-                }}
-            >
-                <img src="/assets/icon/page_arrow1.svg" alt="" />
-            </div>
-        {/if}
-        {#if $isMobile}
-            <select
-                bind:value={pageNum}
-                onchange={() => {
-                    movePage(pageNum);
-                }}
-            >
-                {#each [...Array(maxPage).keys()] as pNum}
-                    <option value={pNum + 1}>
-                        {pNum + 1}
-                    </option>
-                {/each}
-            </select>
-        {:else}
-            {#each displayPages as pNum}
-                <div
-                    class="btn"
-                    onclick={() => {
-                        movePage(pNum);
-                    }}
-                    role="presentation"
-                    class:selected={pNum === pageNum}
-                >
-                    <span>{pNum}</span>
-                </div>
-            {/each}
-        {/if}
-        {#if displayPages[displayPages.length - 1] !== maxPage}
-            <div
-                class="btn"
-                role="presentation"
-                onclick={() => {
-                    movePage(displayPages[displayPages.length - 1] + 1);
-                }}
-            >
-                <img
-                    src="/assets/icon/page_arrow1.svg"
-                    alt=""
-                    class="rotated"
-                />
-            </div>
-        {/if}
-        {#if displayPages[displayPages.length - 1] !== maxPage}
-            <div
-                class="btn"
-                role="presentation"
-                onclick={() => {
-                    movePage(maxPage);
-                }}
-            >
-                <img
-                    src="/assets/icon/page_arrow2.svg"
-                    alt=""
-                    class="rotated scale"
-                />
-            </div>
-        {/if}
+        {@render goStart()}
+        {@render goPrevious()}
+        {@render mobilePageNumbersView()}
+        {@render pcPageNumbersView()}
+        {@render goNext()}
+        {@render goLast()}
     </div>
 {/if}
 

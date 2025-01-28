@@ -45,7 +45,7 @@
     }
 </script>
 
-<div class="center">
+{#snippet title()}
     <div class="song-container-title">
         <h3 class="song-top50">{newI18n.rating.top} 50{newI18n.song}</h3>
         <button
@@ -55,57 +55,51 @@
             <span data-theme={$theme}>{newI18n.download}</span>
         </button>
     </div>
-    <div class="song-container" data-theme={$theme}>
-        {#each ratings.songRatingDatas.slice(0, Math.min(50, ratings.songRatingDatas.length)) as songRatingData, index}
-            {@const songData = songDatas.find(
-                ({ songNo }) => songNo === songRatingData.songNo.toString(),
-            )}
-            {@const songDifficultyScoreData =
-                donderData.scoreData?.[songRatingData.songNo]?.difficulty?.[
-                    songRatingData.difficulty
-                ]}
-            {#if songData && songDifficultyScoreData}
-                <SongRatingItem
-                    {songRatingData}
-                    {songData}
-                    {songDifficultyScoreData}
-                    isTop50={true}
-                    order={index + 1}
-                    isDownload={false}
-                />
-            {/if}
-        {/each}
-    </div>
-    <div class="replica" data-theme="light" bind:this={downloadReplica}>
+{/snippet}
+{#snippet ratingSongItemView(
+    songRatingData: Props["ratings"]["songRatingDatas"][number],
+    index: number,
+    isDownload: boolean,
+)}
+    {@const songData = songDatas.find(
+        ({ songNo }) => songNo === songRatingData.songNo.toString(),
+    )}
+    {@const songDifficultyScoreData =
+        donderData.scoreData?.[songRatingData.songNo]?.difficulty?.[
+            songRatingData.difficulty
+        ]}
+    {#if songData && songDifficultyScoreData}
+        <SongRatingItem
+            {songRatingData}
+            {songData}
+            {songDifficultyScoreData}
+            isTop50={true}
+            order={index + 1}
+            {isDownload}
+        />
+    {/if}
+{/snippet}
+{#snippet replica()}
+    {#snippet replicaHead()}
         <div class="replica-head">
             <DonderData donderData={$page.data.donderData} isDownload={true} />
             <DonderRating
                 ratings={$page.data.ratings}
                 tier={$page.data.tier}
                 ranking={$page.data.ranking}
+                isDownload={true}
             />
         </div>
+    {/snippet}
+    <div class="replica" data-theme="light" bind:this={downloadReplica}>
+        {@render replicaHead()}
         {#each ratings.songRatingDatas.slice(0, Math.min(50, ratings.songRatingDatas.length)) as songRatingData, index}
-            {@const songData = songDatas.find(
-                ({ songNo }) => songNo === songRatingData.songNo.toString(),
-            )}
-            {@const songDifficultyScoreData =
-                donderData.scoreData?.[songRatingData.songNo]?.difficulty?.[
-                    songRatingData.difficulty
-                ]}
-            {#if songData && songDifficultyScoreData}
-                <SongRatingItem
-                    {songRatingData}
-                    {songData}
-                    {songDifficultyScoreData}
-                    isTop50={true}
-                    order={index + 1}
-                    isDownload={true}
-                />
-            {/if}
+            {@render ratingSongItemView(songRatingData, index, true)}
         {/each}
     </div>
-    {#if !only50}
+{/snippet}
+{#snippet notOnly50()}
+    {#snippet otherTitle()}
         <h3
             class="other"
             class:subOpened
@@ -116,30 +110,28 @@
         >
             {newI18n.otherSong}
         </h3>
+    {/snippet}
+    {#if !only50}
+        {@render otherTitle()}
         {#if subOpened}
             <div class="song-container" data-theme={$theme}>
                 {#each ratings.songRatingDatas.slice(Math.min(50, ratings.songRatingDatas.length), ratings.songRatingDatas.length) as songRatingData, index}
-                    {@const songData = songDatas.find(
-                        ({ songNo }) =>
-                            songNo === songRatingData.songNo.toString(),
-                    )}
-                    {@const songDifficultyScoreData =
-                        donderData.scoreData?.[songRatingData.songNo]
-                            ?.difficulty?.[songRatingData.difficulty]}
-                    {#if songData && songDifficultyScoreData}
-                        <SongRatingItem
-                            {songRatingData}
-                            {songData}
-                            {songDifficultyScoreData}
-                            isTop50={false}
-                            order={index + 51}
-                            isDownload={false}
-                        />
-                    {/if}
+                    {@render ratingSongItemView(songRatingData, index, false)}
                 {/each}
             </div>
         {/if}
     {/if}
+{/snippet}
+
+<div class="center">
+    {@render title()}
+    <div class="song-container" data-theme={$theme}>
+        {#each ratings.songRatingDatas.slice(0, Math.min(50, ratings.songRatingDatas.length)) as songRatingData, index}
+            {@render ratingSongItemView(songRatingData, index, false)}
+        {/each}
+    </div>
+    {@render replica()}
+    {@render notOnly50()}
 </div>
 
 <style>

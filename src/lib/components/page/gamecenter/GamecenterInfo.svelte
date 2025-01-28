@@ -13,7 +13,12 @@
         favorites: Writable<number[]>;
     }
 
-    let { gamecenterData = $bindable(), clickHandle, distance, favorites }: Props = $props();
+    let {
+        gamecenterData = $bindable(),
+        clickHandle,
+        distance,
+        favorites,
+    }: Props = $props();
 
     const lang = getLang();
     let i18n = $derived(getI18N("/gamecenter", $lang));
@@ -24,7 +29,8 @@
     const naverLink = `https://map.naver.com/p/search/${encodeURIComponent(gamecenterData.address)}`;
     const kakaoLink = `https://map.kakao.com/link/search/${gamecenterData.address}`;
 
-    const user: Writable<{ logined: boolean; nickname: string }> = getContext("user");
+    const user: Writable<{ logined: boolean; nickname: string }> =
+        getContext("user");
 
     const today = new Date().getDay();
 
@@ -32,13 +38,17 @@
     let showMachines = $state(false);
 </script>
 
-<div class="container" onclick={clickHandle} role="presentation">
+{#snippet name()}
     <div class="name">
         {gamecenterData.name}
     </div>
+{/snippet}
+{#snippet address()}
     <div class="address">
         {gamecenterData.address}
     </div>
+{/snippet}
+{#snippet amenity()}
     <div class="amenity-container">
         {#each Object.entries(gamecenterData.amenity).filter(([_, value]) => value) as [amenity]}
             <div class="amenity" data-theme={$theme}>
@@ -48,6 +58,8 @@
             </div>
         {/each}
     </div>
+{/snippet}
+{#snippet machines()}
     <div class="machines-container">
         <div
             class="machines-opener"
@@ -81,6 +93,8 @@
             {/each}
         </div>
     </div>
+{/snippet}
+{#snippet businessHours()}
     <div class="hours-container">
         <div
             class="today"
@@ -103,32 +117,49 @@
             {/each}
         </div>
     </div>
-    <div class="distance-container">
-        <div class="distance">
-            {#if distance}
-                <span class="text">
-                    {Math.round(distance / 10) / 100}km
-                </span>
-            {/if}
+{/snippet}
+{#snippet distanceView()}
+    <div class="distance">
+        {#if distance}
+            <span class="text">
+                {Math.round(distance / 10) / 100}km
+            </span>
+        {/if}
+    </div>
+{/snippet}
+{#snippet mapLink()}
+    <a class="maplink kakao" href={kakaoLink} target="_blank">
+        <span class="text"> K </span>
+    </a>
+    <a class="maplink naver" href={naverLink} target="_blank">
+        <span class="text"> N </span>
+    </a>
+{/snippet}
+{#snippet favorite()}
+    {#if $user.logined}
+        <FavoriteButton
+            {favorites}
+            gamecenterOrder={gamecenterData.order}
+            bind:favoriteCount={gamecenterData.favoriteCount}
+        />
+    {:else}
+        <div class="favorite-count">
+            {gamecenterData.favoriteCount}
         </div>
+    {/if}
+{/snippet}
+
+<div class="container" onclick={clickHandle} role="presentation">
+    {@render name()}
+    {@render address()}
+    {@render amenity()}
+    {@render machines()}
+    {@render businessHours()}
+    <div class="distance-container">
+        {@render distanceView()}
         <div class="maplink-container">
-            <a class="maplink kakao" href={kakaoLink} target="_blank">
-                <span class="text"> K </span>
-            </a>
-            <a class="maplink naver" href={naverLink} target="_blank">
-                <span class="text"> N </span>
-            </a>
-            {#if $user.logined}
-                <FavoriteButton
-                    {favorites}
-                    gamecenterOrder={gamecenterData.order}
-                    bind:favoriteCount={gamecenterData.favoriteCount}
-                />
-            {:else}
-                <div class="favorite-count">
-                    {gamecenterData.favoriteCount}
-                </div>
-            {/if}
+            {@render mapLink()}
+            {@render favorite()}
         </div>
     </div>
 </div>

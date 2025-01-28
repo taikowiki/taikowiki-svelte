@@ -38,23 +38,33 @@
         songData?.courses?.[song.difficulty]?.maxCombo?.toString() ?? "-";
 </script>
 
+{#snippet titleView()}
+    <div class="title">
+        {title}
+    </div>
+{/snippet}
+{#snippet levelView()}
+    <DifficultyColor difficulty={song.difficulty}>
+        ★{level}
+    </DifficultyColor>
+{/snippet}
+{#snippet comboView()}
+    <div class="combo">
+        <span>
+            {combo}
+        </span>
+    </div>
+{/snippet}
+
 <a
     class="container"
     style={`background:${getGenreColors(genre)};`}
     href={`/song/${song.songNo}?diff=${song.difficulty}`}
 >
     <div class="container2" data-theme={$theme}>
-        <div class="title">
-            {title}
-        </div>
-        <DifficultyColor difficulty={song.difficulty}>
-            ★{level}
-        </DifficultyColor>
-        <div class="combo">
-            <span>
-                {combo}
-            </span>
-        </div>
+        {@render titleView()}
+        {@render levelView()}
+        {@render comboView()}
     </div>
 </a>
 

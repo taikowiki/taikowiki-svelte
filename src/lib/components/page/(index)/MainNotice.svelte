@@ -10,7 +10,7 @@
         };
     }
 
-    let {notices}: Props = $props();
+    let { notices }: Props = $props();
 
     const [theme] = getTheme();
     const lang = getLang();
@@ -18,49 +18,45 @@
     let indexNoticeI18n = $derived(getI18N($lang).page.index.notice);
 </script>
 
+{#snippet noticeHead(type: "wiki" | "official")}
+    <a
+        class="sub-container-title"
+        data-theme={$theme}
+        href={`/notice?type=${type}`}
+    >
+        <span>
+            {noticeI18n.type[type]}
+            {indexNoticeI18n}
+        </span>
+    </a>
+{/snippet}
+{#snippet recentNotices(type: "wiki" | "official")}
+    {#each notices[type] as notice}
+        <a
+            class="notice-title"
+            data-theme={$theme}
+            href={`/notice/${notice.order}`}
+        >
+            {notice.title}
+        </a>
+    {/each}
+{/snippet}
+{#snippet wikiNotices()}
+    <div class="sub-container" data-theme={$theme}>
+        {@render noticeHead("wiki")}
+        {@render recentNotices("wiki")}
+    </div>
+{/snippet}
+{#snippet officialNotices()}
+    <div class="sub-container" data-theme={$theme}>
+        {@render noticeHead("official")}
+        {@render recentNotices("official")}
+    </div>
+{/snippet}
+
 <div class="container">
-    <div class="sub-container" data-theme={$theme}>
-        <a
-            class="sub-container-title"
-            data-theme={$theme}
-            href="/notice?type=wiki"
-        >
-            <span>
-                {noticeI18n.type.wiki}
-                {indexNoticeI18n}
-            </span>
-        </a>
-        {#each notices.wiki as notice}
-            <a
-                class="notice-title"
-                data-theme={$theme}
-                href={`/notice/${notice.order}`}
-            >
-                {notice.title}
-            </a>
-        {/each}
-    </div>
-    <div class="sub-container" data-theme={$theme}>
-        <a
-            class="sub-container-title"
-            data-theme={$theme}
-            href="/notice?type=official"
-        >
-            <span>
-                {noticeI18n.type.official}
-                {indexNoticeI18n}
-            </span>
-        </a>
-        {#each notices.official as notice}
-            <a
-                class="notice-title"
-                data-theme={$theme}
-                href={`/notice/${notice.order}`}
-            >
-                {notice.title}
-            </a>
-        {/each}
-    </div>
+    {@render wikiNotices()}
+    {@render officialNotices()}
 </div>
 
 <style>

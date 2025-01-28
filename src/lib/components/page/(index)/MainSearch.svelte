@@ -9,10 +9,10 @@
     import MainSearchResult from "./MainSearchResult.svelte";
     import { goto } from "$app/navigation";
 
-    let keyword: string = "";
-    let searchType: "all" | "song" | "docs" = "song";
+    let keyword: string = $state("");
+    let searchType: "all" | "song" | "docs" = $state("song");
 
-    let selectorOpened: boolean = false;
+    let selectorOpened: boolean = $state(false);
 
     const Container = styled<{
         theme: "light" | "dark";
@@ -32,10 +32,12 @@
     /**
      * @todo 문서 기능 개발 후 삭제
      */
-    $: if (searchType !== "song") {
-        searchType = "song";
-        alert("공사중입니다.");
-    }
+    $effect(() => {
+        if (searchType !== "song") {
+            searchType = "song";
+            alert("공사중입니다.");
+        }
+    });
 
     //빠른 검색 관련
     let searchInterval: ReturnType<typeof setInterval>;
@@ -56,7 +58,7 @@
             clearInterval(searchInterval);
         }
     });
-    let searchResults: SearchResult[] = [];
+    let searchResults: SearchResult[] = $state([]);
     async function quickSearch(keyword: string) {
         searchResults = [];
         switch (searchType) {
@@ -69,10 +71,15 @@
             }
         }
     }
-    let searchResultOpened: boolean = false;
-    let inputContianer: HTMLDivElement;
+    let searchResultOpened: boolean = $state(false);
+    let inputContianer = $state<HTMLDivElement>();
 
-    //검색
+    const [theme] = getTheme();
+
+    /**
+     * 검색 페이지로 이동동
+     * 엔터키 / 검색 버튼 눌렀을 때 실행
+     */
     function search() {
         switch (searchType) {
             case "song": {
@@ -84,8 +91,47 @@
         }
     }
 
-    const [theme] = getTheme();
+    /**
+     * input에서 focus가 벗어났을 때 실행
+     * @param event
+     */
+    function inputFocusOut(event: FocusEvent) {
+        if (
+            event.relatedTarget instanceof Node &&
+            inputContianer?.contains(event.relatedTarget)
+        )
+            return;
+        searchResultOpened = false;
+    }
 </script>
+
+{#snippet searchInput()}
+    <input
+        type="search"
+        enterkeyhint="search"
+        bind:value={keyword}
+        data-theme={$theme}
+        oninput={() => {
+            searchDelay = 1;
+        }}
+        onclick={() => {
+            searchResultOpened = true;
+        }}
+        onkeypress={(event) => {
+            if (event.key === "Enter") {
+                search();
+            }
+        }}
+    />
+{/snippet}
+{#snippet searchBtn()}
+    <button
+        class="search-btn"
+        data-theme={$theme}
+        onclick={search}
+        aria-label="search"
+    ></button>
+{/snippet}
 
 <Container theme={$theme} {selectorOpened}>
     <MainSearchTypeSelector bind:searchType bind:opened={selectorOpened} />
@@ -93,35 +139,12 @@
         class="input-container"
         data-theme={$theme}
         bind:this={inputContianer}
-        on:focusout={(event) => {
-            if (
-                event.relatedTarget instanceof Node &&
-                inputContianer?.contains(event.relatedTarget)
-            )
-                return;
-            searchResultOpened = false;
-        }}
+        onfocusout={inputFocusOut}
     >
-        <input
-            type="search"
-            enterkeyhint="search"
-            bind:value={keyword}
-            data-theme={$theme}
-            on:input={() => {
-                searchDelay = 1;
-            }}
-            on:click={() => {
-                searchResultOpened = true;
-            }}
-            on:keypress={(event) => {
-                if (event.key === "Enter") {
-                    search();
-                }
-            }}
-        />
+        {@render searchInput()}
         <MainSearchResult {searchResults} bind:opened={searchResultOpened} />
     </div>
-    <button class="search-btn" data-theme={$theme} on:click={search} aria-label="search"></button>
+    {@render searchBtn()}
 </Container>
 
 <style>

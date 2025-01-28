@@ -8,10 +8,6 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
-    import {
-        UserDonderData,
-        UserScoreData,
-    } from "$lib/module/common/user/types.js";
 
     let { data } = $props();
 

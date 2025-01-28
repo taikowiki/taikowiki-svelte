@@ -70,75 +70,60 @@
     }
 </script>
 
-<div
-    class="song"
-    class:top50={isTop50}
-    data-theme={isDownload ? "light" : $theme}
->
+{#snippet orderView()}
     <div class="order" data-isDownload={isDownload}>
         {order}
     </div>
-    <div class="detail">
-        <div class="detail-content">
-            <div class="detail-head">
-                <div
-                    class="detail-preview"
-                    data-isMobile={isDownload ? false : $isMobile}
-                >
-                    <div class="detail-layer1">
-                        <a
-                            class="song-title"
-                            style={`color:${color.difficulty[songRatingData.difficulty]};`}
-                            href={`/song/${songRatingData.songNo}?diff=${songRatingData.difficulty}`}
-                        >
-                            {songData.title}
-                        </a>
-                    </div>
-                    <div class="detail-layer2">
-                        <div class="crown-wrapper" title={i18n.crown}>
-                            <img
-                                class="crown"
-                                src={getCrownImage(
-                                    songDifficultyScoreData.crown,
-                                )}
-                                alt={`${songDifficultyScoreData.crown} crown`}
-                            />
-                        </div>
-                        <div
-                            class="accuracy"
-                            title={i18n.accuracy}
-                            data-isDownload={isDownload}
-                        >
-                            {songRatingData.songRating.accuracy.toFixed(2)}%
-                        </div>
-                        <div
-                            class="measure"
-                            title={i18n.measureValue}
-                            data-isDownload={isDownload}
-                        >
-                            {songRatingData.songRating.measureValue.toFixed(1)}
-                        </div>
-                        <div
-                            class="rating-value"
-                            title={i18n.rating}
-                            data-isDownload={isDownload}
-                        >
-                            {songRatingData.songRating.value}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {#if opened}
-                <div class="detail-body">
-                    <div class="body-row">
-                        <div class="body-row-name">량</div>
-                        <div class="body-row-value">
-                            {songDifficultyScoreData.good}
-                        </div>
-                    </div>
-                </div>
-            {/if}
+{/snippet}
+{#snippet detailView()}
+    {#snippet title()}
+        <div class="detail-layer1">
+            <a
+                class="song-title"
+                style={`color:${color.difficulty[songRatingData.difficulty]};`}
+                href={`/song/${songRatingData.songNo}?diff=${songRatingData.difficulty}`}
+            >
+                {songData.title}
+            </a>
         </div>
+    {/snippet}
+    {#snippet crown()}
+        <div class="crown-wrapper" title={i18n.crown}>
+            <img
+                class="crown"
+                src={getCrownImage(songDifficultyScoreData.crown)}
+                alt={`${songDifficultyScoreData.crown} crown`}
+            />
+        </div>
+    {/snippet}
+    {#snippet accuracy()}
+        <div
+            class="accuracy"
+            title={i18n.accuracy}
+            data-isDownload={isDownload}
+        >
+            {songRatingData.songRating.accuracy.toFixed(2)}%
+        </div>
+    {/snippet}
+    {#snippet measure()}
+        <div
+            class="measure"
+            title={i18n.measureValue}
+            data-isDownload={isDownload}
+        >
+            {songRatingData.songRating.measureValue.toFixed(1)}
+        </div>
+    {/snippet}
+    {#snippet rating()}
+        <div
+            class="rating-value"
+            title={i18n.rating}
+            data-isDownload={isDownload}
+        >
+            {songRatingData.songRating.value}
+        </div>
+    {/snippet}
+    {#snippet hirobaLink()}
         {#if !isDownload}
             <a
                 class="hiroba"
@@ -148,17 +133,58 @@
                 {i18n.hiroba}
             </a>
         {/if}
+    {/snippet}
+    <div class="detail">
+        <div class="detail-content">
+            <div class="detail-head">
+                <div
+                    class="detail-preview"
+                    data-isMobile={isDownload ? false : $isMobile}
+                >
+                    {@render title()}
+                    <div class="detail-layer2">
+                        {@render crown()}
+                        {@render accuracy()}
+                        {@render measure()}
+                        {@render rating()}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {@render hirobaLink()}
         <!--
-        <button class="detail-opener" on:click={toggle}>
-            {#if opened}
-                ▲
-            {:else}
-                ▼
-            {/if}
-        </button>
-        -->
+    <button class="detail-opener" on:click={toggle}>
+        {#if opened}
+            ▲
+        {:else}
+            ▼
+        {/if}
+    </button>
+    -->
     </div>
+{/snippet}
+
+<div
+    class="song"
+    class:top50={isTop50}
+    data-theme={isDownload ? "light" : $theme}
+>
+    {@render orderView()}
+    {@render detailView()}
 </div>
+
+{#snippet detailBody()}
+    {#if opened}
+        <div class="detail-body">
+            <div class="body-row">
+                <div class="body-row-name">량</div>
+                <div class="body-row-value">
+                    {songDifficultyScoreData.good}
+                </div>
+            </div>
+        </div>
+    {/if}
+{/snippet}
 
 <!--
 <td class="song-title">

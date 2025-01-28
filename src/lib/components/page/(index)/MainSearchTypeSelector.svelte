@@ -1,12 +1,13 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
 
-    interface Props{
+    interface Props {
         searchType: "all" | "song" | "docs";
         opened: boolean;
     }
 
-    let {searchType = $bindable(), opened = $bindable(false)} = $props();
+    let { searchType = $bindable(), opened = $bindable(false) }: Props =
+        $props();
 
     const types = ["all", "song", "docs"] as const;
 
@@ -27,16 +28,7 @@
     }
 </script>
 
-<div
-    class="container"
-    class:opened
-    onfocusout={() => {
-        opened = false;
-    }}
-    role="button"
-    tabindex="0"
-    data-theme={$theme}
->
+{#snippet selectedView()}
     <div
         class="display"
         onclick={() => {
@@ -54,25 +46,41 @@
             data-theme={$theme}
         />
     </div>
+{/snippet}
+{#snippet selectOptionView(type: "all" | "song" | "docs")}
+    <div
+        class="option"
+        role="presentation"
+        onclick={() => {
+            searchType = type;
+            opened = false;
+        }}
+        data-theme={$theme}
+    >
+        <img
+            class="type-img option-img"
+            src={getSelectImgSrc(type)}
+            alt=""
+            data-type={type}
+            data-theme={$theme}
+        />
+    </div>
+{/snippet}
+
+<div
+    class="container"
+    class:opened
+    onfocusout={() => {
+        opened = false;
+    }}
+    role="button"
+    tabindex="0"
+    data-theme={$theme}
+>
+    {@render selectedView()}
     <div class="select" class:opened>
         {#each types as type}
-            <div
-                class="option"
-                role="presentation"
-                onclick={() => {
-                    searchType = type;
-                    opened = false;
-                }}
-                data-theme={$theme}
-            >
-                <img
-                    class="type-img option-img"
-                    src={getSelectImgSrc(type)}
-                    alt=""
-                    data-type={type}
-                    data-theme={$theme}
-                />
-            </div>
+            {@render selectOptionView(type)}
         {/each}
     </div>
 </div>
@@ -152,7 +160,7 @@
     .option:hover {
         background-color: #ffe4e4;
     }
-    .option[data-theme="dark"]:hover{
+    .option[data-theme="dark"]:hover {
         background-color: rgb(83, 83, 83);
     }
 
@@ -168,7 +176,7 @@
         filter: brightness(0) saturate(100%) invert(34%) sepia(22%)
             saturate(4162%) hue-rotate(332deg) brightness(87%) contrast(83%);
     }
-    img.type-img:not([data-type="all"])[data-theme="dark"]{
+    img.type-img:not([data-type="all"])[data-theme="dark"] {
         filter: invert(100%);
     }
 

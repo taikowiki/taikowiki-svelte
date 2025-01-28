@@ -2,12 +2,12 @@
     import type { SearchResult } from "$lib/module/common/search/types";
     import { getTheme } from "$lib/module/layout/theme";
 
-    interface Props{
+    interface Props {
         searchResults: SearchResult[];
         opened?: boolean;
     }
 
-    let {searchResults, opened = $bindable(false)}: Props = $props();
+    let { searchResults, opened = $bindable(false) }: Props = $props();
 
     function getTypeImgSrc(searchType: "song" | "docs") {
         switch (searchType) {
@@ -34,25 +34,25 @@
     const [theme] = getTheme();
 </script>
 
+{#snippet searchResultView(searchResult: SearchResult)}
+    {@const { type, title } = searchResult}
+    <a class="searchresult" data-theme={$theme} href={getHref(searchResult)}>
+        <img
+            class="type-img"
+            alt={type}
+            src={getTypeImgSrc(type)}
+            data-theme={$theme}
+        />
+        <span class="title">
+            {title}
+        </span>
+    </a>
+{/snippet}
+
 {#if opened && searchResults.length > 0}
     <div class="searchresult-container" data-theme={$theme}>
         {#each searchResults.slice(0, 10) as searchResult}
-            {@const { type, title } = searchResult}
-            <a
-                class="searchresult"
-                data-theme={$theme}
-                href={getHref(searchResult)}
-            >
-                <img
-                    class="type-img"
-                    alt={type}
-                    src={getTypeImgSrc(type)}
-                    data-theme={$theme}
-                />
-                <span class="title">
-                    {title}
-                </span>
-            </a>
+            {@render searchResultView(searchResult)}
         {/each}
     </div>
 {/if}

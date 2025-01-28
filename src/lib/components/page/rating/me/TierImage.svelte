@@ -11,6 +11,7 @@
         height?: string;
         fontSize?: string;
         transform?: string;
+        isDownload?: boolean;
     }
 
     let {
@@ -19,15 +20,16 @@
         width = "180px",
         height = "180px",
         fontSize = "120px",
-        transform
+        transform,
+        isDownload = false,
     }: Props = $props();
 
-    if(!transform){
+    if (!transform) {
         transform = getDefaultTransform(tierName);
     }
 
-    function getDefaultTransform(tierName: UserRatingTierName){
-        if(tierName === "grandmaster"){
+    function getDefaultTransform(tierName: UserRatingTierName) {
+        if (tierName === "grandmaster") {
             return "translate(0px, -7px)";
         }
 
@@ -35,14 +37,14 @@
     }
 
     let imgElement: HTMLImageElement | null = $state(null);
-    async function generateFilteredImg(){
-        if(!imgElement) return;
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if(!ctx) return;
+    async function generateFilteredImg() {
+        if (!imgElement) return;
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
 
-        const widthNumber = parseFloat(width.replace('px', ''));
-        const heightNumber = parseFloat(height.replace('px', ''));
+        const widthNumber = parseFloat(width.replace("px", ""));
+        const heightNumber = parseFloat(height.replace("px", ""));
 
         [canvas.width, canvas.height] = [widthNumber, heightNumber];
 
@@ -52,20 +54,24 @@
         await new Promise((res, rej) => {
             img.onload = res;
             img.onerror = rej;
-        })
+        });
 
-        const filter = CssFilterConverter.hexToFilter(TIER_COLOR[tierName as Exclude<UserRatingTierName, "omega">]).color;
-        if(filter){
+        const filter = CssFilterConverter.hexToFilter(
+            TIER_COLOR[tierName as Exclude<UserRatingTierName, "omega">],
+        ).color;
+        if (filter) {
             ctx.filter = filter;
         }
         ctx.drawImage(img, 0, 0, widthNumber, heightNumber);
 
-        imgElement.src = canvas.toDataURL();
+        if (isDownload) {
+            imgElement.src = canvas.toDataURL();
+        }
         canvas.remove();
     }
     onMount(() => {
         generateFilteredImg();
-    })
+    });
 </script>
 
 {#if tierName === "omega"}
@@ -91,9 +97,7 @@
             alt="grandmaster"
             bind:this={imgElement}
         />
-        <span style={`font-size:${fontSize};transform:${transform};`}>
-            G
-        </span>
+        <span style={`font-size:${fontSize};transform:${transform};`}> G </span>
     </div>
 {:else if tierName === "master"}
     <div class="tier-image" style={`width:${width};height:${height};`}>
@@ -103,9 +107,7 @@
             alt="master"
             bind:this={imgElement}
         />
-        <span style={`font-size:${fontSize};transform:${transform};`}>
-            M
-        </span>
+        <span style={`font-size:${fontSize};transform:${transform};`}> M </span>
     </div>
 {:else}
     <div class="tier-image" style={`width:${width};height:${height};`}>

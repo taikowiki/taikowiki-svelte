@@ -5,6 +5,7 @@
     import PageSelector from "$lib/components/page/song/PageSelector.svelte";
     import AddSongButton from "$lib/components/page/song/AddSongButton.svelte";
     import SearchBox from "$lib/components/page/song/SearchBox.svelte";
+    import { navigating } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";

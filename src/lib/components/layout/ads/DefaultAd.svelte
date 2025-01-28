@@ -37,7 +37,6 @@
                 style="display:block"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="3643794205"
-                data-full-width-responsive="true"
                 data-isMobile={$isMobile}
             ></ins>
             <script>

@@ -24,7 +24,7 @@
             return;
         }
 
-        if (retried < 5) {
+        if (retried < 3) {
             retried++;
             reRender();
         } else {
@@ -95,7 +95,7 @@
         height: 90px;
     }
     .ads[data-isMobile="true"] {
-        height: 60px;
+        height: 75px;
     }
 
     .ads-container:has(:global(.ads[data-ad-status="unfilled"])) {

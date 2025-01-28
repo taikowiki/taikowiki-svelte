@@ -21,11 +21,12 @@
             ></script>
             <!-- taiko.wiki/기본 -->
             <ins
-                class="adsbygoogle wide-ad"
+                class="adsbygoogle ads"
                 style="display:block"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="3643794205"
                 data-full-width-responsive="true"
+                data-isMobile={$isMobile}
             ></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -48,8 +49,15 @@
         width: min(100%, 700px);
     }
 
-    .wide-ad{
-        width: 100%;
+    .ads{
+        display: flex;
+        justify-content: center;
+        width: min(100%, 700px);
+    }
+    .ads[data-isMobile="false"]{
+        height: 90px;
+    }
+    .ads[data-isMobile="true"]{
         height: 60px;
     }
 </style>

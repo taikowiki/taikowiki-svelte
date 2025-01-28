@@ -68,7 +68,7 @@
         height: 90px;
     }
     .ads[data-isMobile="true"] {
-        max-height: 75px;
+        height: 50px;
     }
 
     .ads-container:has(:global(.ads[data-ad-status="unfilled"])) {

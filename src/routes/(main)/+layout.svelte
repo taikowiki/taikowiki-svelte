@@ -46,6 +46,7 @@
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import PcSideAd from "$lib/components/layout/ads/PcSideAd.svelte";
+    import DefaultAd from "$lib/components/layout/ads/DefaultAd.svelte";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -214,6 +215,7 @@
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />
                 {/if}
+                <DefaultAd/>
             {/if}
         </svelte:fragment>
         <Aside slot="aside">

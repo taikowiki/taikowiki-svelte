@@ -5,20 +5,20 @@
     const isMobile = getIsMobile();
 </script>
 
-{#if browser && $isMobile}
+{#if browser}
     {#key $isMobile}
-        <div class="ads-container">
+        <div class="ads-container" data-isMobile={$isMobile}>
             <script
                 async
                 src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
                 crossorigin="anonymous"
             ></script>
-            <!-- taiko.wiki/모바일 메인 -->
+            <!-- taiko.wiki/기본 -->
             <ins
                 class="adsbygoogle"
-                style="display:inline-block;width:300px;height:300px;max-width:100%;"
+                style="display:inline-block;width:728px;height:90px;max-width:100%;"
                 data-ad-client="ca-pub-1629193017650416"
-                data-ad-slot="9128318506"
+                data-ad-slot="3643794205"
             ></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -29,7 +29,12 @@
 
 <style>
     .ads-container {
-        max-width: min(100%, 700px);
+        width: 100%;
         margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .ads-container[data-isMobile="true"]{
+        width: min(100%, 700px);
     }
 </style>

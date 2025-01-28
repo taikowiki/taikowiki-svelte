@@ -14,7 +14,7 @@
 <Center>
     <MainSearch />
     <MainShortcut />
-    <MobileMainAd/>
     <MainBanner banners={data.mainBanners} />
+    <MobileMainAd/>
     <MainNotice notices={data.recentNotices} />
 </Center>

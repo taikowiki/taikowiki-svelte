@@ -209,10 +209,10 @@
     </Header>
     <Main>
         <svelte:fragment slot="main">
+            <MobileDefaultAd />
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
-                <MobileDefaultAd />
                 {@render children?.()}
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />

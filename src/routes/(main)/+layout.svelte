@@ -47,6 +47,7 @@
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import PcSideAd from "$lib/components/layout/ads/PcSideAd.svelte";
     import DefaultAd from "$lib/components/layout/ads/DefaultAd.svelte";
+    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -211,6 +212,7 @@
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
+                <MobileDefaultAd />
                 {@render children?.()}
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />

@@ -1,14 +1,35 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
+    import { onMount, type Snippet } from "svelte";
 
+    interface Props{
+        aside?: Snippet;
+        main?: Snippet;
+    }
+
+    let {aside, main}: Props = $props();
+
+    let mainElement = $state<HTMLElement>();
+    let observer = $state<MutationObserver>();
+    onMount(() => {
+        if(!mainElement) return;
+        observer = new MutationObserver((mutations) => {
+            mutations.forEach(mutation => {
+                if(mutation.type === "attributes"){
+                    (mutation.target as HTMLElement).removeAttribute('style');
+                }
+            })
+        });
+        observer.observe(mainElement, {attributes: true});
+    })
     const [theme] = getTheme();
 </script>
 
 <div class="container-container">
     <div class="container" data-theme={$theme}>
-        <slot name="aside" />
-        <main data-theme={$theme}>
-            <slot name="main" />
+        {@render aside?.()}
+        <main data-theme={$theme} style="">
+            {@render main?.()}
         </main>
     </div>
 </div>

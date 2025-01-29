@@ -48,6 +48,7 @@
     import PcSideAd from "$lib/components/layout/ads/PcSideAd.svelte";
     import DefaultAd from "$lib/components/layout/ads/DefaultAd.svelte";
     import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
+    import BottomAd from "$lib/components/layout/ads/BottomAd.svelte";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -209,7 +210,6 @@
     </Header>
     <Main>
         {#snippet main()}
-            <MobileDefaultAd />
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
@@ -218,7 +218,7 @@
                     <ScrollSetter />
                 {/if}
             {/if}
-            <DefaultAd />
+            <BottomAd />
         {/snippet}
         {#snippet aside()}
             <Aside>

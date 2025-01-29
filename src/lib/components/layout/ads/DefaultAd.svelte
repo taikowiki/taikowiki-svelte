@@ -6,9 +6,10 @@
     interface Props {
         style?: string;
         onlyFor?: "mobile" | "pc";
+        useHide?: boolean;
     }
 
-    let { style = "", onlyFor }: Props = $props();
+    let { style = "", onlyFor, useHide = true }: Props = $props();
 
     const isMobile = getIsMobile();
 
@@ -24,7 +25,7 @@
 
 {#if browser && checkOnlyFor(onlyFor) && page.url.pathname !== "/gamecenter"}
     {#key $isMobile}
-        <div class="ads-container" data-isMobile={$isMobile} {style}>
+        <div class="ads-container" data-isMobile={$isMobile} {style} data-useHide={useHide}>
             <script
                 async
                 src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1629193017650416"
@@ -71,7 +72,7 @@
         height: 50px;
     }
 
-    .ads-container:has(:global(.ads[data-ad-status="unfilled"])) {
+    .ads-container[data-useHide="true"]:has(:global(.ads[data-ad-status="unfilled"])) {
         display: none;
     }
 </style>

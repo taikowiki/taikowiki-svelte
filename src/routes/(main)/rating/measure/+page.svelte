@@ -1,5 +1,6 @@
 <script lang="ts">
     import PageTitle from "$lib/components/common/PageTitle.svelte";
+    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
     import MeasureTable from "$lib/components/page/measures/MeasureTable.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
 
@@ -15,4 +16,5 @@
 <h2>
     {i18n.heading}
 </h2>
+<MobileDefaultAd />
 <MeasureTable measures={data.measures} songDatas={data.songDatas} />

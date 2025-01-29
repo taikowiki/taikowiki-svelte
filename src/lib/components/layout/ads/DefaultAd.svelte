@@ -49,9 +49,8 @@
 <style>
     .ads-container {
         width: 100%;
-        margin-top: 10px;
-        margin-bottom: 10px;
 
+        margin: 0;
         height: 0px;
         overflow: hidden;
     }
@@ -77,5 +76,7 @@
     }
     .ads-container:has(:global(.ads[data-ad-status="filled"])){
         height: auto;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 </style>

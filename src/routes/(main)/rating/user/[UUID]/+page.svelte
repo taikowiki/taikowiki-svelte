@@ -1,5 +1,6 @@
 <script lang="ts">
     import Loading from "$lib/components/common/Loading.svelte";
+    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
     import DonderSection from "$lib/components/page/rating/me/DonderSection.svelte";
     import OtherDonderData from "$lib/components/page/rating/user/OtherDonderData.svelte";
     import OtherDonderRating from "$lib/components/page/rating/user/OtherDonderRating.svelte";
@@ -50,6 +51,7 @@
     {/if}
 {/snippet}
 
+<MobileDefaultAd />
 <div class="container">
     {@render donderView()}
     {#if data.otherDonderData.ratingData && data.otherDonderData.scoreData}

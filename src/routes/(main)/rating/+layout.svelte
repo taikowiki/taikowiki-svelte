@@ -32,11 +32,6 @@
     </div>
 {/if}
 
-{#key navigating}
-    {#if !navigating.to}
-        <MobileDefaultAd />
-    {/if}
-{/key}
 {@render children?.()}
 
 <style>

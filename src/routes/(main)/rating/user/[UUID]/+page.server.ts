@@ -43,7 +43,7 @@ interface RefinedData{
     currentRating: number,
     currentExp: number | null,
     nickname: string | null,
-    taikoNumber: number | null,
+    taikoNumber: string | null,
     ratingData: UserDonderData['ratingData'],
     scoreData: UserScoreData | null
 }

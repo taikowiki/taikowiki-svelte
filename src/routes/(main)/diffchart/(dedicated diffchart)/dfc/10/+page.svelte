@@ -1,22 +1,22 @@
 <script lang="ts" module>
     const sectionColor: Record<string, string> = {
-        'SS': "#B93FEA",
-        'pS+': "#f00eac",
-        'iS': "#ff0000",
-        'pS': "#ff0000",
-        'iA+': '#EF3059',
-        'pA+': '#EF3059',
-        'iA': "#ef3030",
-        'pA': "#ef3030",
-        'iB': "#EB7535",
-        'pB': "#EB7535",
-        'iC': '#60CE37',
-        'pC': '#60CE37',
-        'iD': '#37B0CB',
-        'pD': '#37B0CB',
-        'iE': '#4161D8',
-        'pE': '#4161D8',
-        'iF': '#adadad'
+        SS: "#B93FEA",
+        "pS+": "#f00eac",
+        iS: "#ff0000",
+        pS: "#ff0000",
+        "iA+": "#EF3059",
+        "pA+": "#EF3059",
+        iA: "#ef3030",
+        pA: "#ef3030",
+        iB: "#EB7535",
+        pB: "#EB7535",
+        iC: "#60CE37",
+        pC: "#60CE37",
+        iD: "#37B0CB",
+        pD: "#37B0CB",
+        iE: "#4161D8",
+        pE: "#4161D8",
+        iF: "#adadad",
     };
 
     function getCustomedDiffchart(diffChart: DiffChart, i18n: any) {
@@ -41,6 +41,7 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
     import type { DiffChart } from "$lib/module/common/diffchart/types";
+    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
 
     let { data } = $props();
     const { songs, diffChartData } = data;
@@ -57,14 +58,16 @@
     const lang = getLang();
     let i18n = $derived(getI18N($lang).page.diffchart.dfc);
     let titleI18n = $derived(getI18N($lang).title["/diffchart/dfc"]);
-    let customedDiffchart = $derived(getCustomedDiffchart(diffChartData.data, i18n));
-
+    let customedDiffchart = $derived(
+        getCustomedDiffchart(diffChartData.data, i18n),
+    );
 
     const donderData = data.donderData;
 </script>
 
 <PageTitle title={`★${$page.url.pathname.split("/")[3]} ${titleI18n}`} />
 
+<MobileDefaultAd />
 <Diffchart
     diffChart={customedDiffchart}
     {songs}

@@ -40,7 +40,9 @@
     .ads{
         margin-left: auto !important;
         margin-right: auto !important;
+    }
 
-        height: 300px;
+    .ads-container:has(:global(.ads[data-ad-status="unfilled"])) {
+        display: none;
     }
 </style>

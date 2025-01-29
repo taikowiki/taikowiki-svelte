@@ -27,7 +27,7 @@
 <PageTitle title={titleI18n} />
 
 <SearchBox option={$state.snapshot(option)} />
-<MobileDefaultAd />
+<MobileDefaultAd style="margin-top:0;"/>
 {#if $navigating}
     <Loading />
 {:else}

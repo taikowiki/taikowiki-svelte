@@ -52,8 +52,8 @@
         margin-top: 10px;
         margin-bottom: 10px;
 
-        display: flex;
-        justify-content: center;
+        position:absolute;
+        top: -100vh;
     }
 
     .ads-container[data-isMobile="true"] {
@@ -74,5 +74,8 @@
 
     .ads-container[data-useHide="true"]:has(:global(.ads[data-ad-status="unfilled"])) {
         display: none;
+    }
+    .ads-container:has(:global(.ads[data-ad-status="filled"])){
+        position: static;
     }
 </style>

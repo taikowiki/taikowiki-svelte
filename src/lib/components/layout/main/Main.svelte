@@ -15,12 +15,12 @@
         if(!mainElement) return;
         observer = new MutationObserver((mutations) => {
             mutations.forEach(mutation => {
-                if(mutation.type === "attributes"){
+                if(mutation.attributeName === "style"){
                     (mutation.target as HTMLElement).removeAttribute('style');
                 }
             })
         });
-        observer.observe(mainElement, {attributes: true});
+        observer.observe(mainElement, {attributes: true, attributeOldValue: true});
     })
     const [theme] = getTheme();
 </script>
@@ -28,7 +28,7 @@
 <div class="container-container">
     <div class="container" data-theme={$theme}>
         {@render aside?.()}
-        <main data-theme={$theme} style="">
+        <main data-theme={$theme} style="" bind:this={mainElement}>
             {@render main?.()}
         </main>
     </div>

@@ -9,8 +9,9 @@
     import Loading from "$lib/components/common/Loading.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
+    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
 
-    let {data} = $props();
+    let { data } = $props();
 
     let songLang: SongLang = $state("ja");
 
@@ -26,6 +27,7 @@
 <PageTitle title={titleI18n} />
 
 <SearchBox option={$state.snapshot(option)} />
+<MobileDefaultAd />
 {#if $navigating}
     <Loading />
 {:else}

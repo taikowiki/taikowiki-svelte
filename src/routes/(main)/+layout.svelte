@@ -17,6 +17,7 @@
 </script>
 
 <script lang="ts">
+    import ServiceLayout from "$lib/components/layout/ServiceLayout.svelte";
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
@@ -44,6 +45,9 @@
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
+    import PcSideAd from "$lib/components/layout/ads/PcSideAd.svelte";
+    import DefaultAd from "$lib/components/layout/ads/DefaultAd.svelte";
+    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -196,10 +200,16 @@
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />
+            <HeaderItem
+                icon="/assets/icon/donate.svg"
+                href="/donate"
+                mobileHideSlot
+            />
         </svelte:fragment>
     </Header>
     <Main>
         {#snippet main()}
+            <MobileDefaultAd />
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
@@ -208,10 +218,12 @@
                     <ScrollSetter />
                 {/if}
             {/if}
+            <DefaultAd />
         {/snippet}
         {#snippet aside()}
             <Aside>
                 <div bind:this={$pageAside} class="page-aside"></div>
+                <PcSideAd />
                 {#if data.asideBanners}
                     <AsideBanner banners={data.asideBanners} />
                 {/if}
@@ -221,6 +233,8 @@
     </Main>
     <Footer version={data.version} />
 </div>
+
+<ServiceLayout />
 
 <style>
     .page-aside:empty {

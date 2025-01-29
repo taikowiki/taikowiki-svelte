@@ -15,7 +15,7 @@
             ></script>
             <!-- taiko.wiki/모바일 메인 -->
             <ins
-                class="adsbygoogle"
+                class="adsbygoogle ads"
                 style="display:block"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="9128318506"
@@ -33,5 +33,14 @@
     .ads-container {
         width: min(100%, 700px);
         margin-top: 10px;
+
+        display:flex;
+        justify-content: center;
+    }
+    .ads{
+        margin-left: auto !important;
+        margin-right: auto !important;
+
+        height: 300px;
     }
 </style>

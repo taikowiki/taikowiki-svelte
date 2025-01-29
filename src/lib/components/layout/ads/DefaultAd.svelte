@@ -34,7 +34,7 @@
             <!-- taiko.wiki/기본 -->
             <ins
                 class="adsbygoogle ads"
-                style="display:block"
+                style="display:inline-block"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="3643794205"
                 data-isMobile={$isMobile}
@@ -54,8 +54,7 @@
         height: 0px;
         overflow: hidden;
 
-        display:flex;
-        justify-content: center;
+        text-align: center;
     }
 
     .ads-container[data-isMobile="true"] {

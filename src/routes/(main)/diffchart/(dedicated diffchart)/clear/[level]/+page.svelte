@@ -50,14 +50,18 @@
     const lang = getLang();
     let i18n = $derived(getI18N("/diffchart/clear/[level]", $lang));
     let titleI18n = $derived(getI18N("other", $lang).title["/diffchart/clear"]);
-    let customedDiffchart = $derived(getCustomedDiffchart(diffChartData.data, i18n));
+    let customedDiffchart = $derived(
+        getCustomedDiffchart(diffChartData.data, i18n),
+    );
 
     const donderData = data.donderData;
 </script>
 
 <PageTitle title={`★${$page.url.pathname.split("/")[3]} ${titleI18n}`} />
 
-<MobileDefaultAd/>
+{#key $page}
+    <MobileDefaultAd />
+{/key}
 <Diffchart
     diffChart={customedDiffchart}
     {songs}

@@ -68,7 +68,9 @@
 
 <PageTitle title={`★${$page.url.pathname.split("/")[3]} ${titleI18n}`} />
 
-<MobileDefaultAd />
+{#key $page}
+    <MobileDefaultAd />
+{/key}
 <Diffchart
     diffChart={customedDiffchart}
     {songs}

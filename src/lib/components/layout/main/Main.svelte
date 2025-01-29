@@ -21,6 +21,7 @@
             })
         });
         observer.observe(mainElement, {attributes: true, attributeOldValue: true});
+        mainElement.removeAttribute('style');
     })
     const [theme] = getTheme();
 </script>

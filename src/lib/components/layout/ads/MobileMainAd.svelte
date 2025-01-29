@@ -37,12 +37,4 @@
         display:flex;
         justify-content: center;
     }
-    .ads{
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
-
-    .ads-container:has(:global(.ads[data-ad-status="unfilled"])) {
-        display: none;
-    }
 </style>

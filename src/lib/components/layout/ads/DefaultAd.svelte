@@ -53,6 +53,9 @@
         margin: 0;
         height: 0px;
         overflow: hidden;
+
+        display:flex;
+        justify-content: center;
     }
 
     .ads-container[data-isMobile="true"] {
@@ -68,7 +71,7 @@
         height: 90px;
     }
     .ads[data-isMobile="true"] {
-        height: 50px;
+        height: 60px;
     }
 
     .ads-container[data-useHide="true"]:has(:global(.ads[data-ad-status="unfilled"])) {

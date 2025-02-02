@@ -116,7 +116,7 @@
         {#if subOpened}
             <div class="song-container" data-theme={$theme}>
                 {#each ratings.songRatingDatas.slice(Math.min(50, ratings.songRatingDatas.length), ratings.songRatingDatas.length) as songRatingData, index}
-                    {@render ratingSongItemView(songRatingData, index, false)}
+                    {@render ratingSongItemView(songRatingData, index + 50, false)}
                 {/each}
             </div>
         {/if}

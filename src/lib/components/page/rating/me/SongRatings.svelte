@@ -60,6 +60,7 @@
     songRatingData: Props["ratings"]["songRatingDatas"][number],
     index: number,
     isDownload: boolean,
+    isTop50: boolean = true
 )}
     {@const songData = songDatas.find(
         ({ songNo }) => songNo === songRatingData.songNo.toString(),
@@ -73,7 +74,7 @@
             {songRatingData}
             {songData}
             {songDifficultyScoreData}
-            isTop50={true}
+            {isTop50}
             order={index + 1}
             {isDownload}
         />
@@ -116,7 +117,7 @@
         {#if subOpened}
             <div class="song-container" data-theme={$theme}>
                 {#each ratings.songRatingDatas.slice(Math.min(50, ratings.songRatingDatas.length), ratings.songRatingDatas.length) as songRatingData, index}
-                    {@render ratingSongItemView(songRatingData, index, false)}
+                    {@render ratingSongItemView(songRatingData, index + 50, false, false)}
                 {/each}
             </div>
         {/if}

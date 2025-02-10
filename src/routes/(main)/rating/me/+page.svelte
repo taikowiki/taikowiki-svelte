@@ -8,7 +8,6 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
-    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
 
     let { data } = $props();
 
@@ -74,7 +73,6 @@
     </div>
 {/snippet}
 
-<MobileDefaultAd />
 <div class="container">
     {#if data.ratingDataExists}
         <div class="center">

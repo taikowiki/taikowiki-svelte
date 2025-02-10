@@ -1,7 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
     import RatingRanking from "$lib/components/page/rating/ranking/RatingRanking.svelte";
     import RatingRankingPageSelector from "$lib/components/page/rating/ranking/RatingRankingPageSelector.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
@@ -19,7 +18,6 @@
 <h2>
     {i18n.heading}
 </h2>
-<MobileDefaultAd />
 {#if data.rankings.length !== 0}
     <RatingRanking rankings={data.rankings} page={pageNum} />
     <RatingRankingPageSelector {pageNum} length={data.count} />

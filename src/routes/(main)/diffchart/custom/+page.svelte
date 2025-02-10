@@ -1,7 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import DiffchartEditor from "$lib/components/common/diffchart/DIffchart-Editor.svelte";
-    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
     import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
     import { decodeDiffchart } from "$lib/module/common/diffchart/diffchart.js";
     import type { DiffChart } from "$lib/module/common/diffchart/types";
@@ -63,7 +62,6 @@
     }
 </script>
 
-<MobileDefaultAd/>
 <Diffchart {diffChart} {donderData} {songs} bind:downloadImage />
 
 {#if !$isMobile}

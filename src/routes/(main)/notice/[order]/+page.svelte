@@ -3,7 +3,6 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { DateTime } from "luxon";
-    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
 
     let { data } = $props();
     const { notice } = data;
@@ -25,7 +24,6 @@
 <div class="tiny">
     {getTime(notice.officialDate ?? notice.writtenDate)}
 </div>
-<MobileDefaultAd />
 <div class="notice-content">
     {@html convertNoticeMd(notice.content)}
 </div>

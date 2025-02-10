@@ -12,7 +12,6 @@
     import { page } from "$app/stores";
     import type { Difficulty } from "$lib/module/common/song/types.js";
     import { DIFFICULTY } from "$lib/module/common/song/const.js";
-    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
 
     let { data } = $props();
     const song = data.song;
@@ -41,7 +40,6 @@
     />
     <GenreDisplay genres={song.genre} />
     <TitleDisplay title={song.title} songNo={song.songNo} />
-    <MobileDefaultAd />
     <div class="wrapper" data-isMobile={$isMobile}>
         <MultipleTitleDisplay
             titleKo={song.titleKo}

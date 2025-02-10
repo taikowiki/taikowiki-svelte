@@ -45,10 +45,6 @@
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
-    import PcSideAd from "$lib/components/layout/ads/PcSideAd.svelte";
-    import DefaultAd from "$lib/components/layout/ads/DefaultAd.svelte";
-    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
-    import BottomAd from "$lib/components/layout/ads/BottomAd.svelte";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -218,12 +214,10 @@
                     <ScrollSetter />
                 {/if}
             {/if}
-            <BottomAd />
         {/snippet}
         {#snippet aside()}
             <Aside>
                 <div bind:this={$pageAside} class="page-aside"></div>
-                <PcSideAd />
                 {#if data.asideBanners}
                     <AsideBanner banners={data.asideBanners} />
                 {/if}

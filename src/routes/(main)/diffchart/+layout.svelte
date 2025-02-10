@@ -8,7 +8,6 @@
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
     import { navigating } from "$app/state";
-    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
 
     let { children } = $props();
 

@@ -33,7 +33,6 @@
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
     import type { DiffChart } from "$lib/module/common/diffchart/types";
-    import MobileDefaultAd from "$lib/components/layout/ads/MobileDefaultAd.svelte";
 
     let { data } = $props();
     const { songs, diffChartData } = data;
@@ -59,9 +58,6 @@
 
 <PageTitle title={`★${$page.url.pathname.split("/")[3]} ${titleI18n}`} />
 
-{#key $page}
-    <MobileDefaultAd />
-{/key}
 <Diffchart
     diffChart={customedDiffchart}
     {songs}

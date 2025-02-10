@@ -1,6 +1,5 @@
 <script lang="ts">
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import MobileMainAd from "$lib/components/layout/ads/MobileMainAd.svelte";
     import MainBanner from "$lib/components/page/(index)/MainBanner.svelte";
     import MainNotice from "$lib/components/page/(index)/MainNotice.svelte";
     import MainSearch from "$lib/components/page/(index)/MainSearch.svelte";
@@ -15,6 +14,5 @@
     <MainSearch />
     <MainShortcut />
     <MainBanner banners={data.mainBanners} />
-    <MobileMainAd/>
     <MainNotice notices={data.recentNotices} />
 </Center>

@@ -12,7 +12,7 @@ import Cookies from 'js-cookie';
 const i18nProxyTarget: I18N = {
     ko,
     en,
-    ja
+    ja,
 }
 
 function getI18nProxy(target: I18N | any) {
@@ -95,13 +95,13 @@ export default i18n;
 function getNavigatorLang() {
     //@ts-expect-error
     let navigatorLang = window.navigator.language ?? window.navigator.userLanguage;
-
-    if (navigatorLang.length > 2) {
-        navigatorLang = navigatorLang.slice(0, 2);
-    }
+    navigatorLang = navigatorLang.toLowerCase();
 
     if (navigatorLang in i18nProxyTarget) {
         return navigatorLang;
+    }
+    else if(navigatorLang.slice(0, 2) in i18nProxyTarget){
+        return navigatorLang.slice(0, 2);
     }
     else {
         return 'ko';

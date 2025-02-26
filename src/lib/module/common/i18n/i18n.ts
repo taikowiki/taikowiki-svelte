@@ -5,6 +5,7 @@ import { browser } from "$app/environment";
 import ko from "./lang/ko";
 import en from './lang/en';
 import ja from './lang/ja';
+import zh-tw from './lang/zh-tw';
 import axios, { type AxiosResponse } from "axios";
 import { page } from "$app/stores";
 import Cookies from 'js-cookie';
@@ -12,7 +13,8 @@ import Cookies from 'js-cookie';
 const i18nProxyTarget: I18N = {
     ko,
     en,
-    ja
+    ja,
+    zh-tw,
 }
 
 function getI18nProxy(target: I18N | any) {

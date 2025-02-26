@@ -20,7 +20,7 @@
     let length = $derived(data.count);
 
     const lang = getLang();
-    let titleI18n = $derived(getI18N("other", $lang).title["/song"]);
+    let titleI18n = $derived(getI18N($lang).title["/song"]);
 </script>
 
 <PageTitle title={titleI18n} />

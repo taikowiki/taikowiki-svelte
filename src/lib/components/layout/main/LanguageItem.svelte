@@ -22,6 +22,7 @@
             <option value="ko"> 한국어 </option>
             <option value="ja"> 日本語 </option>
             <option value="en"> English </option>
+            <option value="zh-tw"> 中文(繁体) </option>
         </select>
     {/snippet}
 </UserItem>

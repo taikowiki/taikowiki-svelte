@@ -37,7 +37,7 @@ const newZhtw: RecursiveStringRecord = {
             myData: '我的資料',
             donderData: '評級'
         },
-        rating:{
+        rating: {
             title: '評級',
             me: '我的評級',
             ranking: '排位',
@@ -280,10 +280,10 @@ const newZhtw: RecursiveStringRecord = {
             machineInfo: '機台資訊'
         },
         donder: {
-            rating:{
+            rating: {
                 top: '上位'
             },
-            section:{
+            section: {
                 song: '曲目評級',
                 measure: '評分表',
                 explanation: '評分說明'
@@ -313,10 +313,10 @@ const newZhtw: RecursiveStringRecord = {
                 rating: '評分',
                 nickname: '暱稱'
             },
-            measures:{
+            measures: {
                 heading: '評分表'
             },
-            user:{
+            user: {
                 nondisclosure: '曲目評分未公開'
             }
         }
@@ -327,20 +327,24 @@ const zhtw: LangFile = {
     other: {
         //페이지 제목
         title: {
-            base: '太鼓の達人 ウィキ',
-            '/auth/login': 'ログイン',
-            '/auth/user': 'マイページ',
-            '/auth/user/donder': 'ドンだーデータ',
+            base: '太鼓達人維基',
+            '/auth/login': '登入',
+            '/auth/user': '我的資料',
+            '/auth/user/donder': '鼓眾資料',
             '/dani': '段位道場',
-            '/diffchart/clear': 'クリアー難易度表',
+            '/diffchart/clear': '通過難易度表',
             '/diffchart/fc': '全連段難易度表',
-            '/gamecenter': 'ゲームセンター地図',
-            '/gamecenter/report': 'ゲームセンター報告',
-            '/measures': '譜面レーティング表',
-            '/song': '曲サーチ',
-            '/song/[songNo]': '曲なし',
-            '/song/[songNo]/edit': '曲修正',
-            '/song/add': '曲追加'
+            '/diffchart/dfc': '全良難易度表',
+            '/gamecenter': '街機分佈地圖',
+            '/gamecenter/report': '街機回報',
+            '/measures': '譜面評級表',
+            '/song': '曲目',
+            '/song/[songNo]': '查無結果',
+            '/song/[songNo]/edit': '提交編輯',
+            '/song/add': '新增曲目',
+            '/rating/me': '我的評級',
+            '/rating/ranking': '排位',
+            '/rating/measure': '評分表',
         },
         dani: {
             dan: {
@@ -377,16 +381,16 @@ const zhtw: LangFile = {
                 'gaiden': '外傳'
             },
             version: {
-                'katsudon': 'KATSU-DON',
-                'sorairo': 'ソライロ',
-                'momoiro': 'モモイロ',
-                'kimidori': 'キミドリ',
-                'murasaki': 'ムラサキ',
-                'white': 'ホワイト',
-                'red': 'レッド',
-                'yellow': 'イエロー',
-                'blue': 'ブルー',
-                'green': 'グリーン',
+                'katsudon': 'K-D',
+                'sorairo': '天藍色',
+                'momoiro': '桃色',
+                'kimidori': '黃綠色',
+                'murasaki': '紫版',
+                'white': '白版',
+                'red': '紅版',
+                'yellow': '黃版',
+                'blue': '藍版',
+                'green': '綠版',
                 'nijiiro_gaiden': '虹色 外傳',
                 '20': '虹色 2020',
                 '21': '虹色 2021',
@@ -402,11 +406,11 @@ const zhtw: LangFile = {
             }
         },
         difficulty: {
-            easy: 'かんたん',
-            normal: 'ふつう',
-            hard: 'むずかしい',
-            oni: 'おに(表)',
-            ura: 'おに(裏)'
+            easy: '簡單',
+            normal: '普通',
+            hard: '困難',
+            oni: '魔鬼(表)',
+            ura: '魔鬼(裏)'
         }
     },
     //path
@@ -442,12 +446,12 @@ const zhtw: LangFile = {
     '/song': {
         placeholder: 'キーワード',
         difficulty: '難易度',
-        easy: 'かんたん',
-        normal: 'ふつう',
-        hard: 'むずかしい',
-        oni: 'おに',
-        omote: 'おに(表)',
-        ura: 'おに(裏)',
+        easy: '簡單',
+        normal: '普通',
+        hard: '困難',
+        oni: '魔鬼',
+        omote: '魔鬼(表)',
+        ura: '魔鬼(裏)',
         genre: 'ジャンル',
         genres: {
             pops: 'ポップス',
@@ -496,7 +500,7 @@ const zhtw: LangFile = {
     //서열표
     '/diffchart': {
         type: {
-            clear: 'クリア',
+            clear: '通過',
             fc: '全連段',
             dfc: '全良'
         },
@@ -505,11 +509,11 @@ const zhtw: LangFile = {
         custom: 'カスタム'
     },
     '/diffchart/clear/[level]': {
-        '10 level clear': '★10 クリア難易度表',
-        '9 level clear': '★9 クリア難易度表',
-        '8 level clear': '★8 クリア難易度表',
-        '7 level clear': '★7 クリア難易度表',
-        '6 level clear': '★6 クリア難易度表',
+        '10 level clear': '★10 通過難易度表',
+        '9 level clear': '★9 通過難易度表',
+        '8 level clear': '★8 通過難易度表',
+        '7 level clear': '★7 通過難易度表',
+        '6 level clear': '★6 通過難易度表',
         sections: {
             'SSS': 'SSS',
             'SS': 'SS',

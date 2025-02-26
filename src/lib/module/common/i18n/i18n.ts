@@ -13,6 +13,7 @@ const i18nProxyTarget: I18N = {
     ko,
     en,
     ja,
+    zh-tw,
 }
 
 function getI18nProxy(target: I18N | any) {

@@ -5,6 +5,7 @@ import { browser } from "$app/environment";
 import ko from "./lang/ko";
 import en from './lang/en';
 import ja from './lang/ja';
+import zh-tw from './lang/zh-tw';
 import axios, { type AxiosResponse } from "axios";
 import { page } from "$app/stores";
 import Cookies from 'js-cookie';

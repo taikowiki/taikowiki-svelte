@@ -5,6 +5,7 @@ import { browser } from "$app/environment";
 import ko from "./lang/ko";
 import en from './lang/en';
 import ja from './lang/ja';
+import zhtw from './lang/zh-tw';
 import axios, { type AxiosResponse } from "axios";
 import { page } from "$app/stores";
 import Cookies from 'js-cookie';
@@ -12,7 +13,8 @@ import Cookies from 'js-cookie';
 const i18nProxyTarget: I18N = {
     ko,
     en,
-    ja
+    ja,
+    'zh-tw': zhtw,
 }
 
 function getI18nProxy(target: I18N | any) {
@@ -95,13 +97,13 @@ export default i18n;
 function getNavigatorLang() {
     //@ts-expect-error
     let navigatorLang = window.navigator.language ?? window.navigator.userLanguage;
-
-    if (navigatorLang.length > 2) {
-        navigatorLang = navigatorLang.slice(0, 2);
-    }
+    navigatorLang = navigatorLang.toLowerCase();
 
     if (navigatorLang in i18nProxyTarget) {
         return navigatorLang;
+    }
+    else if(navigatorLang.slice(0, 2) in i18nProxyTarget){
+        return navigatorLang.slice(0, 2);
     }
     else {
         return 'ko';

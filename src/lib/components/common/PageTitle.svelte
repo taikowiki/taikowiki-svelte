@@ -8,7 +8,7 @@
     import {getLang, getI18N} from '$lib/module/common/i18n/i18n';
 
     const lang = getLang();
-    let i18n = $derived(getI18N('other', $lang).title);
+    let i18n = $derived(getI18N($lang).title);
 </script>
 
 <svelte:head>

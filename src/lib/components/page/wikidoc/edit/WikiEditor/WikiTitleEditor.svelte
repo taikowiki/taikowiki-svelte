@@ -6,6 +6,9 @@
     let {title = $bindable()}: Props = $props();
 </script>
 
+<!-- svelte-ignore ownership_invalid_mutation -->
+<!-- svelte-ignore ownership_invalid_binding -->
+
 <div class="row-center">
     <input
         type="text"

@@ -4,17 +4,26 @@ export interface WikiDocDBDataBase {
     id: number;
     title: string;
     type: 'normal' | 'song' | 'frame' | 'redirect';
+    editableGrade: number;
+    editorUUID: string; 
+    comment: string;
+    memo: string;
+    contentTree: WikiContentTree | null; // JSON
+    renderedContentTree: WikiContentTree | null; // JSON
+    songNo: string | null;
+    redirectTo: number | null;
     createdTime: Date;
     editedTime: Date;
-    editableGrade: number;
-    editorUUID: string;
     isDeleted: boolean;
+    version: number;
 }
 
 export interface WikiNormalDocDBData extends WikiDocDBDataBase {
     type: 'normal';
     contentTree: WikiContentTree;
     renderedContentTree: WikiContentTree;
+    songNo: null;
+    redirectTo: null;
     //annotations: string[];
     //renderedAnnotations: string[];
 }
@@ -26,11 +35,15 @@ export interface WikiSongDocDBData extends WikiDocDBDataBase {
     //annotations: string[];
     //renderedAnnotations: string[];
     songNo: string;
+    redirectTo: null;
 }
 
 export interface WikiRedirectDocDBData extends WikiDocDBDataBase {
     type: 'redirect';
-    redirectTo: string;
+    contentTree: null;
+    renderedContentTree: null;
+    songNo: null;
+    redirectTo: number;
 }
 
 export type WikiDocDBData = WikiNormalDocDBData | WikiSongDocDBData | WikiRedirectDocDBData;
@@ -52,3 +65,6 @@ export interface WikiFrameDBData {
     editableGrade: number;
     editorUUID: string;
 }
+
+// log
+

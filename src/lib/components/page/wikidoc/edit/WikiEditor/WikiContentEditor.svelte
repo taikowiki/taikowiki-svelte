@@ -1,20 +1,20 @@
 <script lang="ts">
     import ToastEditor from "./Toast/ToastEditor.svelte";
-    import WikiDocPreview from '../Preview/WikiDocPreview.svelte';
+    import WikiDocPreview from "../Preview/WikiDocPreview.svelte";
     import { getTheme } from "$lib/module/layout/theme";
 
-    interface Props{
+    interface Props {
         content: string;
     }
 
-    let {content = $bindable()}: Props = $props();
+    let { content = $bindable() }: Props = $props();
 
     let editorType: "raw" | "toast" | "preview" = $state("raw");
 
     const [theme] = getTheme();
 </script>
 
-<div class="container">
+{#snippet editorTypeSelector()}
     <div class="row-left">
         <label class:selected={editorType === "raw"} data-theme={$theme}>
             Raw
@@ -29,6 +29,10 @@
             <input type="radio" value="preview" bind:group={editorType} />
         </label>
     </div>
+{/snippet}
+
+<div class="container">
+    {@render editorTypeSelector()}
     <div class="editor-container">
         {#if editorType === "raw"}
             <textarea
@@ -72,7 +76,7 @@
     }
     label[data-theme="dark"] {
         background-color: rgb(67, 67, 67);
-        color:white;
+        color: white;
     }
     label.selected[data-theme="dark"] {
         background-color: rgb(99, 99, 99);

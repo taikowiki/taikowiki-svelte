@@ -1,0 +1,7 @@
+# DB
+
+```ts
+interface {
+    
+}
+```

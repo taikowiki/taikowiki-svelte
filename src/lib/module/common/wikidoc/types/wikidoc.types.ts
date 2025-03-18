@@ -14,6 +14,7 @@ export interface WikiPrerenderedContentTree{
 export interface WikiDocDataBase {
     title: string;
     type: 'normal' | 'song' | 'frame' | 'redirect';
+    comment: string;
 }
 
 export interface WikiDocParagraph {
@@ -46,6 +47,8 @@ export interface WikiRedirectDocData extends WikiDocDataBase {
 
 export type WikiDocData = WikiNormalDocData | WikiRedirectDocData | WikiSongDocData;
 
+// frame
+
 export interface WikiFrameData {
     title: string;
     type: 'frame';
@@ -58,39 +61,6 @@ export type DocType = 'normal' | 'song' | 'frame' | 'redirect';
 
 // allowed tags
 export type AllowedTag = string | { tagName: string, attributes: string[] };
-
-// view data
-export interface WikiDocViewDataBase {
-    title: string;
-    type: 'normal' | 'song' | 'frame' | 'redirect';
-    editedTime: Date;
-    editableGrade: number;
-}
-
-export interface WikiNormalDocViewData extends WikiDocViewDataBase {
-    type: 'normal';
-    renderedContentTree: WikiContentTree;
-    renderedAnnotations: string[];
-}
-
-export interface WikiSongDocViewData extends WikiDocViewDataBase {
-    type: 'song';
-    renderedContentTree: WikiContentTree;
-    renderedAnnotations: string[];
-    songNo: string;
-}
-
-export type WikiDocViewData = WikiNormalDocViewData | WikiSongDocViewData;
-
-export interface WikiFrameViewData {
-    title: string;
-    type: 'frame';
-    renderedContentTree: {
-        content: string;
-    }
-    editedTime: Date;
-    editableGrade: number;
-}
 
 // endpoint response
 export interface WikiFrameResponse {

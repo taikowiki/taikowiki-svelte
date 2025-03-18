@@ -2,7 +2,7 @@
     import { renderer } from "$lib/module/common/wikidoc/renderer";
     import { defineWikiElements } from "$lib/module/common/wikidoc/wikiElements.client";
     import { getTheme } from "$lib/module/layout/theme";
-    import { resetWikiDocAnnotations } from "$lib/module/common/wikidoc/util.client";
+    import { resetWikiDocAnnotations } from "$lib/module/common/wikidoc/util";
 
     /*
     import { getWindowContext } from "$lib/module/common/util.client";

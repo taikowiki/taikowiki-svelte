@@ -44,6 +44,7 @@
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
+    import { getWindowContext } from "$lib/module/common/wikidoc/util.js";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -109,6 +110,8 @@
             pageScrolls = new Map();
         }
     });
+
+    getWindowContext();
 </script>
 
 <svelte:head>

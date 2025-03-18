@@ -65,7 +65,7 @@
         },
     });
 
-    // wikilink popup
+    // wiki-link popup
     const wikiLinkPopupContainer = document.createElement("div");
     let wikiLinkPopupProps = $state({
         eventEmitter: null

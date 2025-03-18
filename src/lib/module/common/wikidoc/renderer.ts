@@ -1,4 +1,5 @@
 import { Marked } from 'marked';
+import * as MARKED from 'marked';
 import { HTMLElement, parse as parseHTML } from 'node-html-parser';
 import type { WikiContentTree, WikiDocParagraph, WikiDocPrerenderedParagraph, WikiPrerenderedContentTree } from './types/wikidoc.types'
 import { page } from '$app/state';
@@ -17,9 +18,55 @@ const marked = new Marked({
         lheading() {
             return undefined;
         },
+        escape(src) {
+            if(src.startsWith("\\#")){
+                return undefined;
+            }
+            return false;
+        }
     },
-    async: false
+    async: false,
 })
+
+export const sharpConverter = {
+    /**
+    * #을 \\#으로 변환
+    */
+    escapeSharp(src: string) {
+        let escaped = '';
+        let index = 0;
+        while (index < src.length) {
+            const char = src[index];
+            if (char === '#') {
+                escaped += '\\#';
+            }
+            else {
+                escaped += char;
+            }
+            index++;
+        }
+        return escaped;
+    },
+    /**
+     * \\#를 #으로 변환
+     */
+    unescapeSharp(src: string) {
+        let unescaped = '';
+        let index = 0;
+        while (index < src.length) {
+            const char = src[index];
+            if (char === '/' && src[index + 1] === '#') {
+                unescaped += '#';
+                index += 2;
+            }
+            else {
+                unescaped += char;
+                index++;
+            }
+        }
+        return unescaped;
+    }
+}
 
 /**
  * `[* 주석]` 또는 `[*key 주석]`을 HTML로 변환합니다.
@@ -184,6 +231,7 @@ function purifyHTML(dom: HTMLElement): void {
 function makePreviewLinkAvailable(dom: HTMLElement) {
     dom.querySelectorAll('wiki-link').forEach((element) => {
         element.setAttribute('available', 'true');
+        element.setAttribute('test', 'true');
     })
 }
 
@@ -205,6 +253,11 @@ export const renderer = {
         }
         return dom.innerHTML;
     },
+    /**
+     * DB에 데이터를 넣기 전 prerender
+     * @param contentTree 
+     * @returns 
+     */
     async prerenderContentTree(contentTree: WikiContentTree) {
         const scope: Record<string, any> = {};
 
@@ -220,21 +273,21 @@ export const renderer = {
 
         async function prerenderParagraph(paragraph: WikiDocParagraph): Promise<WikiDocPrerenderedParagraph> {
             const subParagraphs: WikiDocPrerenderedParagraph['subParagraphs'] = [];
-            for(const subParagraph of paragraph.subParagraphs){
+            for (const subParagraph of paragraph.subParagraphs) {
                 subParagraphs.push(await prerenderParagraph(subParagraph));
             }
 
             const rendered: WikiDocPrerenderedParagraph = {
                 title: paragraph.title,
                 content: await prerenderContent(paragraph.content),
-                subParagraphs 
+                subParagraphs
             };
 
             return rendered;
         }
 
         const subParagraphs: WikiDocPrerenderedParagraph['subParagraphs'] = [];
-        for(const subParagraph of contentTree.subParagraphs){
+        for (const subParagraph of contentTree.subParagraphs) {
             subParagraphs.push(await prerenderParagraph(subParagraph));
         };
         const rendered: WikiPrerenderedContentTree = {
@@ -244,7 +297,7 @@ export const renderer = {
 
         return rendered;
     },
-    async prepareView(html: string, finishCallback?: (dom: HTMLElement) => Promise<any> | any) {
+    async prepareView(html: string, finishCallback?: (dom: HTMLElement) => (Promise<any> | any)) {
         const dom = parseHTML(html);
 
         if (finishCallback) {

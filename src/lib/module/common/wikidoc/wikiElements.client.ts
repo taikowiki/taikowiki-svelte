@@ -3,7 +3,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { property } from 'lit/decorators.js';
 import { Task } from '@lit/task';
 import { get, type Unsubscriber, type Writable } from 'svelte/store';
-import { getWindowContext } from './util.client.js';
+import { getWindowContext } from './util.js';
 import { defineRequestHandler } from '@yowza/rrequestor';
 import type { WikiDocData, WikiFrameData, WikiFrameResponse } from './types/wikidoc.types.js'
 
@@ -203,8 +203,6 @@ export class WikiAnnotationElement extends LitElement {
         if (!annotationContent?.trim()) {
             annotationsMap.set(this.key, this.innerHTML);
         }
-
-        console.log(this.innerHTML);
     }
     /**
      * 생성시 실행되는 함수.
@@ -397,19 +395,27 @@ export class WikiAnnotationElement extends LitElement {
 
 export class WikiLink extends LitElement {
     @property({ attribute: 'doctitle', type: String })
-    titleName?: string;
+    docTitle?: string;
 
     // 사용 가능/불가능 여부는 미리보기 렌더링과 문서 열람 전처리 때 결정합니다.
     // 문서를 작성/수정할 때는 available을 사용하지 않습니다.
-    @property({ attribute: 'available', type: Boolean })
-    available: boolean = false;
+    @property({ attribute: 'available', type: String })
+    available: string = "false";
+
+    @property({attribute: 'test', type: String})
+    forTest: string = "false";
 
     unsubscriber?: Unsubscriber;
+
+    @property({ attribute: false })
     theme?: "light" | "dark";
 
     static get styles() {
         return css`
-            .not-available{
+            .not-available[data-theme="light"]{
+                color: darkred;
+            }
+            .not-available[data-theme="dark"]{
                 color: red;
             }
             .available[data-theme="light"]{
@@ -420,6 +426,9 @@ export class WikiLink extends LitElement {
             }
             a{
                 text-decoration: none;
+            }
+            a:hover{
+                text-decoration: underline;
             }
         `
     }
@@ -447,33 +456,33 @@ export class WikiLink extends LitElement {
      * 문서 제목에 해당하는 문서의 주소를 반환합니다.
      */
     getDocUrl() {
-        if (typeof (this.titleName) === "undefined") {
+        if (typeof (this.docTitle) === "undefined") {
             return '';
         }
 
         // window context의 `urlBase`
         const urlBaseString = getWindowContext().get('wikiDocURLBase');
         if (!urlBaseString) {
-            return `/${encodeURIComponent(this.titleName)}`;
+            return `/${encodeURIComponent(this.docTitle)}`;
         }
 
         const urlBase = new URL(urlBaseString);
-        const path = urlBase.pathname + `/${encodeURIComponent(this.titleName)}`;
+        const path = urlBase.pathname + `/${encodeURIComponent(this.docTitle)}`;
         return path;
     }
 
     render() {
-        if (this.available) {
+        if (this.available === "true") {
             return html`
-                <a href="${this.getDocUrl()}" class="available" data-theme="${this.theme}">
-                    ${this.innerHTML?.trim() || this.titleName}
+                <a href="${this.getDocUrl()}" class="available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : "_self"}">
+                    ${this.innerHTML?.trim() || this.docTitle}
                 </a>
             `
         }
         else {
             return html`
-                <a href="${this.getDocUrl()}" class="not-available">
-                    ${this.innerHTML?.trim() || this.titleName}
+                <a href="${this.getDocUrl()}" class="not-available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : "_self"}">
+                    ${this.innerHTML?.trim() || this.docTitle}
                 </a>
             `
         }
@@ -483,7 +492,7 @@ export class WikiLink extends LitElement {
 export class WikiRoot extends HTMLDivElement { };
 
 // requestor
-export const wikiDocRequestor = {
+const wikiDocRequestor = {
     getFrame,
     upload: defineRequestHandler<WikiDocData, void>({
         url: '/api/doc/upload',

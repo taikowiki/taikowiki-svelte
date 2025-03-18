@@ -1,3 +1,5 @@
+import { getIsMobile } from "$lib/module/layout/isMobile.js";
+import { getTheme } from "$lib/module/layout/theme.js";
 import type { WikiDocData, WikiDocParagraph } from "./types/wikidoc.types.js";
 
 /**
@@ -82,5 +84,58 @@ export function createDefaultDocData(): WikiDocData {
             content: "",
             subParagraphs: [],
         },
+        comment: ''
     }
+}
+
+/**
+ * windowContext 반환
+ * 
+ * ssr이 켜져 있을 때에는 호출 후 `isMobile`과 `theme`을 직접 설정해야함.
+ */
+export function getWindowContext() {
+    if(typeof(window) === "undefined"){
+        return new Map();
+    }
+    
+    let windowContext = window.__wiki__window__context__;
+    if (!windowContext) {
+        windowContext = new Map<string & any, any>();
+        window.__wiki__window__context__ = windowContext;
+    }
+
+    try {
+        if (!windowContext.has('isMobile')) {
+            windowContext.set('isMobile', getIsMobile());
+        }
+        if (!windowContext.has('theme')) {
+            windowContext.set('theme', getTheme()[0]);
+        }
+    }
+    catch { }
+
+    return windowContext;
+}
+
+/**
+ * windowContext의 'wikiDocAnnotations' 데이터를 초기화
+ */
+export function resetWikiDocAnnotations() {
+    const windowContext = getWindowContext();
+
+    let annotationsMap = windowContext.get('wikiDocAnnotations');
+    if (annotationsMap) {
+        annotationsMap.clear();
+    }
+    else {
+        annotationsMap = new Map<string, string>();
+        windowContext.set('wikiDocAnnotations', annotationsMap);
+    }
+}
+
+/**
+ * windowContext에 'wikiDocURLBase'를 설정
+ */
+export function defineWikiDocURLBase(base: URL) {
+    getWindowContext().set('wikiDocURLBase', base);
 }

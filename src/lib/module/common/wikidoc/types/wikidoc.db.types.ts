@@ -6,6 +6,7 @@ export interface WikiDocDBDataBase {
     type: 'normal' | 'song' | 'frame' | 'redirect';
     editableGrade: number;
     editorUUID: string; 
+    editorIp: string;
     comment: string;
     memo: string;
     contentTree: WikiContentTree | null; // JSON

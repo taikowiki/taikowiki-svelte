@@ -6,15 +6,19 @@
 
     interface Props {
         wikiDoc: WikiDocData;
+        type?: 'create' | 'update';
     }
 
-    let { wikiDoc }: Props = $props();
+    let { wikiDoc, type = "create" }: Props = $props();
 
     const [theme] = getTheme();
 
     let submitAgree = $state(false);
-    async function submit() {
+    let submit = $derived(type === "create" ? create : update);
+
+    async function create() {
         if (!submitAgree) {
+            alert("")
             return;
         }
         const response = await wikiDocRequestor.uploadNew({ docData: wikiDoc });
@@ -56,13 +60,17 @@
             alert(errorMsg);
         }
     }
+
+    async function update(){
+
+    }
 </script>
 
 <div class="submit-container">
     <label class="submit-agree">
         <input type="checkbox" bind:checked={submitAgree} />
         제출 시 당신은 기여한 내용을 CC-BY-NC-SA 라이센스로 배포하는 것에 동의한
-        것으로 간주하며, 이 동의는 철회할 수 없습니다.
+        것으로 간주하며, 당신의 IP주소와 UUID가 영구히 기록됩니다. 이 동의는 철회할 수 없습니다.
     </label>
     <button class="submit-btn" onclick={submit} data-theme={$theme}>
         제출

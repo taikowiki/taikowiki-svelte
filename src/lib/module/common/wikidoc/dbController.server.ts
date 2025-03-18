@@ -43,7 +43,7 @@ export const docDBController = {
      * @throws `REDIRECT_DOC_NOT_EXISTS` 리다이렉트 할 문서가 존재하지 않음.
      * @throws `SONG_NOT_EXISTS` 연결할 곡이 존재하지 않음.
      */
-    uploadNewDoc: defineDBHandler<[UUID: string, docData: WikiDocData]>((UUID, docData) => {
+    create: defineDBHandler<[UUID: string, ip: string, docData: WikiDocData]>((UUID, ip, docData) => {
         return async (run) => {
             // 제목 비어있는지 검사
             if (!docData.title) {
@@ -71,7 +71,6 @@ export const docDBController = {
                     throw new WikiError("DUPLICATED_SONG_NO");
                 }
                 const songExists = await songDBController.songExistsBySongNo.getCallback(docData.songNo)(run);
-                console.log(songExists);
                 if(!songExists){
                     throw new WikiError("SONG_NOT_EXISTS");
                 }
@@ -87,11 +86,12 @@ export const docDBController = {
                 redirectTo = redirectId
             }
 
-            await run("INSERT INTO `docs` (`title`, `type`, `editorUUID`, `comment`, `contentTree`, `renderedContentTree`, `songNo`, `redirectTo`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            await run("INSERT INTO `docs` (`title`, `type`, `editorUUID`, `editorIp`, `comment`, `contentTree`, `renderedContentTree`, `songNo`, `redirectTo`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
                     docData.title,
                     docData.type,
                     UUID,
+                    ip,
                     docData.comment,
                     (docData as WikiNormalDocData).contentTree ? JSON.stringify((docData as WikiNormalDocData).contentTree) : null,
                     (docData as WikiNormalDocData).contentTree ? JSON.stringify(await renderer.prerenderContentTree((docData as WikiNormalDocData).contentTree)) : null,
@@ -128,6 +128,16 @@ export const docDBController = {
             }
 
             return true;
+        }
+    }),
+    getDocDataById: defineDBHandler<[id: number], WikiDocDBData | null>((id) => {
+        return async(run) => {
+            const result = await run("SELECT * FROM `docs` WHERE `id` = ?", [id]);
+            if(result.length === 0){
+                return null;
+            }
+
+            return parseDBData(result[0]) as WikiDocDBData;
         }
     }),
     /**

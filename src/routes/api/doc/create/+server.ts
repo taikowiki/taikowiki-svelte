@@ -1,8 +1,11 @@
 import { docDBController } from '$lib/module/common/wikidoc/dbController.server.js';
 import { WikiError } from '$lib/module/common/wikidoc/wikiError.js';
 import { error } from '@sveltejs/kit';
+import { getClientAddress } from "$lib/module/common/util.server";
 
-export async function POST({ request, locals }) {
+export async function POST(event) {
+    const { request, locals } = event;
+
     if (!locals.userData) {
         throw error(401, JSON.stringify({
             reason: 'NOT_LOGINED'
@@ -12,7 +15,7 @@ export async function POST({ request, locals }) {
     const requestData = await request.json();
 
     try{
-        await docDBController.uploadNewDoc(locals.userData.UUID, requestData.docData);
+        await docDBController.create(locals.userData.UUID, getClientAddress(event), requestData.docData);
     }
     catch(err){
         console.log(err);

@@ -11,7 +11,7 @@
 
     let { paragraph, index, depth = 1 }: Props = $props();
 
-    let opened = $state(false);
+    let opened = $state(true);
 
     const [theme] = getTheme();
 </script>

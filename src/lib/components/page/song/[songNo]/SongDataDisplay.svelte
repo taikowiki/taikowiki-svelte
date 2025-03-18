@@ -13,11 +13,12 @@
                     (td as HTMLElement).style.width = `${max}px`;
                 });
 
-                node.querySelectorAll(
-                    ".div-tr:not(:nth-last-child(1)) .div-td:nth-child(2)",
-                ).forEach((td) => {
+                node.querySelectorAll(".div-td:nth-child(2)").forEach((td) => {
                     (td as HTMLElement).style.borderBottom = `0`;
                 });
+                console.log(node);
+                node.style.borderBottom = "1px solid #1c1c1c";
+
             } else {
                 node.querySelectorAll(".div-td:nth-child(1)").forEach((e) => {
                     (e as HTMLElement).style.width = "";
@@ -135,6 +136,7 @@
         border-collapse: collapse;
         width: 100%;
         display: table;
+        padding: -1px;
     }
     .div-table[data-isMobile="false"] {
         width: auto;

@@ -48,6 +48,10 @@
                     errorMsg = "리다이렉트할 문서가 없습니다.";
                     break;
                 }
+                case "SONG_NOT_EXISTS": {
+                    errorMsg = "연결할 곡 번호를 가진 곡이 존재하지 않습니다.";
+                    break;
+                }
             }
             alert(errorMsg);
         }

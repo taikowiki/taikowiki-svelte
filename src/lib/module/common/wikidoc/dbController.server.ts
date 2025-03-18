@@ -5,6 +5,7 @@ import { renderer } from "./renderer.js";
 import { validateDocData } from "./util.js";
 import type { WikiDocDBData } from "./types/wikidoc.db.types.js";
 import type { WikiDocDBViewData, WikiDocDBViewDataKey } from "./types/wikidoc.view.types.js";
+import { songDBController } from "../song/song.server.js";
 
 function parseDBData<T extends keyof WikiDocDBData = keyof WikiDocDBData>(dataFromDB: any): Pick<WikiDocDBData, T> {
     const docData: any = {};
@@ -40,6 +41,7 @@ export const docDBController = {
      * @throws `INVALID_DOC_DATA_TYPE` 올바르지 않은 문서 데이터 타입.
      * @throws `DOC_DATA_ERR` 문서 데이터가 올바르지 않음.
      * @throws `REDIRECT_DOC_NOT_EXISTS` 리다이렉트 할 문서가 존재하지 않음.
+     * @throws `SONG_NOT_EXISTS` 연결할 곡이 존재하지 않음.
      */
     uploadNewDoc: defineDBHandler<[UUID: string, docData: WikiDocData]>((UUID, docData) => {
         return async (run) => {
@@ -67,6 +69,11 @@ export const docDBController = {
                 const alreadyExists = await docDBController.docExistsBySongNo.getCallback(docData.songNo)(run);
                 if(alreadyExists){
                     throw new WikiError("DUPLICATED_SONG_NO");
+                }
+                const songExists = await songDBController.songExistsBySongNo.getCallback(docData.songNo)(run);
+                console.log(songExists);
+                if(!songExists){
+                    throw new WikiError("SONG_NOT_EXISTS");
                 }
             }
 

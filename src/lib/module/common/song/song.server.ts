@@ -306,6 +306,19 @@ export const songDBController = {
 
             await run("INSERT INTO `song/log` (`songNo`, `before`, `after`, `updatedTime`) VALUES (?, ?, ?, ?)", [songData.songNo, song ? JSON.stringify(song) : null, JSON.stringify(songData), Date.now()]);
         }
+    }),
+
+    /**
+     * 해당 songNo를 가진 곡이 존재하는지 여부 반환
+     */
+    songExistsBySongNo: defineDBHandler<[songNo: string]>((songNo) => {
+        return async(run) => {
+            const result = await run("SELECT COUNT(*) AS COUNT FROM `song` WHERE `songNo` = ?", [songNo]);
+            if(result[0].COUNT === 0){
+                return false;
+            }
+            return true;
+        }
     })
 }
 

@@ -1,0 +1,117 @@
+<script lang="ts">
+    import { getTheme } from "$lib/module/layout/theme";
+    import { DateTime } from "luxon";
+
+    interface Props {
+        docViewData: any;
+    }
+    let { docViewData }: Props = $props();
+
+    const [theme] = getTheme();
+</script>
+
+<h1 class="container">
+    <div class="title">
+        {docViewData.title}
+    </div>
+    <div class="title-others">
+        <div class="icon-container">
+            {#if !docViewData.isDeleted}
+                <a
+                    class="icon-anchor"
+                    href={`/doc/e/${docViewData.id}?title=${encodeURIComponent(docViewData.title)}`}
+                    data-theme={$theme}
+                >
+                    <img
+                        class="icon"
+                        src="/assets/icon/doc-edit.svg"
+                        alt="edit"
+                    />
+                </a>
+            {/if}
+            <a
+                class="icon-anchor"
+                href={`/doc/log/${docViewData.id}?title=${encodeURIComponent(docViewData.title)}`}
+                data-theme={$theme}
+            >
+                <img
+                    class="icon"
+                    src="/assets/icon/log.svg"
+                    alt="log"
+                />
+            </a>
+        </div>
+        <div class="title-date">
+            최근 수정 시각:
+            {DateTime.fromJSDate(docViewData.editedTime, {
+                zone: "Asia/Seoul",
+            }).toFormat("yyyy-MM-dd")}
+        </div>
+    </div>
+</h1>
+
+<style>
+    h1 {
+        margin: 0;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+
+        row-gap: 15px;
+
+        margin-bottom: 15px;
+    }
+    .title {
+        flex: 1 1 auto;
+        max-width: calc(100% - 30px);
+
+        font-weight: bold;
+        font-size: 35px;
+
+        word-break: break-all;
+    }
+
+    .icon-container {
+        display: flex;
+        flex-direction: row;
+        margin-top: 13px;
+
+        column-gap: 4px;
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px;
+
+        filter: invert(100%);
+    }
+    .icon-anchor {
+        width: 30px;
+        height: 30px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background-color: #cf4844;
+
+        border-radius: 5px;
+    }
+    .icon-anchor[data-theme="dark"] {
+        background-color: #1c1c1c;
+    }
+
+    .title-others {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    .title-date {
+        color: gray;
+        font-weight: normal;
+        font-size: 13px;
+    }
+</style>

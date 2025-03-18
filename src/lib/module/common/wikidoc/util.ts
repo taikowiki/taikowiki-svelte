@@ -15,7 +15,7 @@ export function validateDocData(docData: WikiDocData) {
     }
 
     if (!docData.title) return false;
-
+    if (docData.type === "song" && !docData.songNo) false;
     if (docData.type === "redirect") return true;
 
     return docData.contentTree.subParagraphs.every(validateParagraph) && true;

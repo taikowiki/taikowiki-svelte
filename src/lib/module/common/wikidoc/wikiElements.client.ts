@@ -474,14 +474,14 @@ export class WikiLink extends LitElement {
     render() {
         if (this.available === "true") {
             return html`
-                <a href="${this.getDocUrl()}" class="available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : "_self"}">
+                <a href="${this.getDocUrl()}" class="available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : ""}">
                     ${this.innerHTML?.trim() || this.docTitle}
                 </a>
             `
         }
         else {
             return html`
-                <a href="${this.getDocUrl()}" class="not-available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : "_self"}">
+                <a href="${this.getDocUrl()}" class="not-available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : ""}">
                     ${this.innerHTML?.trim() || this.docTitle}
                 </a>
             `

@@ -35,9 +35,10 @@ function parseDBData<T extends keyof WikiDocDBData = keyof WikiDocDBData>(dataFr
 export const docDBController = {
     /**
      * @throws `DUPLICATED_TITLE` 제목이 중복됨.
+     * @throws `DUPLICATED_SONG_NO` 곡 번호가 중복됨.
      * @throws `EMPTY_TITLE` 제목이 비어있음.
      * @throws `INVALID_DOC_DATA_TYPE` 올바르지 않은 문서 데이터 타입.
-     * @throws `EMPTY_PARAGRAPH_TITLE` 문단 제목이 비어있음.
+     * @throws `DOC_DATA_ERR` 문서 데이터가 올바르지 않음.
      * @throws `REDIRECT_DOC_NOT_EXISTS` 리다이렉트 할 문서가 존재하지 않음.
      */
     uploadNewDoc: defineDBHandler<[UUID: string, docData: WikiDocData]>((UUID, docData) => {
@@ -59,7 +60,14 @@ export const docDBController = {
             }
 
             if (!validateDocData(docData)) {
-                throw new WikiError("EMPTY_PARAGRAPH_TITLE");
+                throw new WikiError("DOC_DATA_ERR");
+            }
+
+            if(docData.type === "song"){
+                const alreadyExists = await docDBController.docExistsBySongNo.getCallback(docData.songNo)(run);
+                if(alreadyExists){
+                    throw new WikiError("DUPLICATED_SONG_NO");
+                }
             }
 
             //const rendered = (docData as WikiNormalDocData).contentTree ? await renderer.prerenderContentTree((docData as WikiNormalDocData).contentTree) : null;
@@ -89,10 +97,23 @@ export const docDBController = {
     /**
      * 해당 제목의 문서 존재 여부 반환
      */
-    docTitleExists: defineDBHandler<[titls: string]>((title) => {
+    docTitleExists: defineDBHandler<[title: string]>((title) => {
         return async (run) => {
             const result = await run("SELECT COUNT(*) AS COUNT FROM `docs` WHERE `title` = ?",
                 [title]
+            );
+
+            if (result[0].COUNT === 0) {
+                return false;
+            }
+
+            return true;
+        }
+    }),
+    docExistsBySongNo: defineDBHandler<[songNo: string]>((songNo) => {
+        return async(run) => {
+            const result = await run("SELECT COUNT(*) AS COUNT FROM `docs` WHERE `songNo` = ?",
+                [songNo]
             );
 
             if (result[0].COUNT === 0) {

@@ -3,11 +3,8 @@
     import { page } from "$app/state";
     import Loading from "$lib/components/common/Loading.svelte";
     import type { WikiDocPageViewData } from "$lib/module/common/wikidoc/types/wikidoc.view.types";
-    import {
-        defineWikiDocURLBase,
-        getWindowContext,
-    } from "$lib/module/common/wikidoc/util";
-    import { onMount } from "svelte";
+    import { defineWikiDocURLBase } from "$lib/module/common/wikidoc/util";
+    import WikiParagraphView from "./WikiParagraphView.svelte";
 
     interface Props {
         docViewData: WikiDocPageViewData;
@@ -43,5 +40,8 @@
         <Loading />
     {:then}
         {@html docViewData.preparedContent.content}
+        {#each docViewData.preparedContent.subParagraphs as subParagraph, index}
+            <WikiParagraphView paragraph={subParagraph} index={`${index + 1}`} />
+        {/each}
     {/await}
 {/key}

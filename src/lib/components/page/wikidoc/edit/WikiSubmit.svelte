@@ -28,6 +28,10 @@
                     errorMsg = "해당 제목의 문서가 이미 존재합니다.";
                     break;
                 }
+                case "DUPLICATED_SONG_NO": {
+                    errorMsg = "해당 곡 번호에 연결된 문서가 이미 존재합니다.";
+                    break;
+                }
                 case "EMPTY_TITLE": {
                     errorMsg = "제목이 비어있습니다.";
                     break;
@@ -36,8 +40,8 @@
                     errorMsg = "문서 형식이 올바르지 않습니다.";
                     break;
                 }
-                case "EMPTY_PARAGRAPH_TITLE": {
-                    errorMsg = "문단 제목이 비어있습니다.";
+                case "DOC_DATA_ERR": {
+                    errorMsg = "문서 데이터가 잘못되었습니다.";
                     break;
                 }
                 case "REDIRECT_DOC_NOT_EXISTS": {

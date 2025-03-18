@@ -42,7 +42,9 @@ export async function load({ params }) {
             return {
                 status: 3,
                 data: {
-                    title: docViewData.title
+                    title: docViewData.title,
+                    editedTime: docViewData.editedTime,
+                    id: docViewData.id
                 }
             } as const
         }
@@ -115,7 +117,7 @@ export async function load({ params }) {
         case (3): {
             return {
                 docViewData: {
-                    title: data.title,
+                    ...data,
                     isDeleted: true
                 } as const
             }

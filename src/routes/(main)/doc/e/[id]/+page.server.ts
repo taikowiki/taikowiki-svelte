@@ -2,7 +2,11 @@ import { docDBController } from '$lib/module/common/wikidoc/dbController.server.
 import type { WikiDocData } from '$lib/module/common/wikidoc/types/wikidoc.types.js';
 import { error } from '@sveltejs/kit';
 
-export async function load({params}){
+export async function load({params, locals}){
+    if(!locals.userData){
+        throw error(401);
+    }
+
     const id = Number(params.id);
     if(Number.isNaN(id)){
         throw error(404);
@@ -11,6 +15,10 @@ export async function load({params}){
     const docDBData = await docDBController.getDocDataById(id);
     if(!docDBData){
         throw error(404);
+    }
+
+    if(locals.userData.grade < 2 || locals.userData.grade < docDBData.editableGrade){
+        throw error(403);
     }
 
     const docData: WikiDocData = {

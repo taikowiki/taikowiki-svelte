@@ -19,7 +19,7 @@
     let disabled = $state(false);
 
     async function create() {
-        if (!submitAgree) {
+        if (!submitAgree || disabled) {
             return;
         }
         disabled = true;
@@ -113,7 +113,12 @@
         대한 모든 책임은 본인에게 있음에 동의합니다. 기여한 내용과 당신의 IP주소,
         UUID가 영구히 기록됩니다.이 동의는 철회할 수 없습니다.
     </label>
-    <button class="submit-btn" onclick={submit} data-theme={$theme} {disabled}>
+    <button
+        class="submit-btn"
+        onclick={submit}
+        data-theme={$theme}
+        disabled={disabled || !submitAgree}
+    >
         제출
     </button>
 </div>
@@ -129,6 +134,10 @@
     }
     .submit-btn[data-theme="dark"] {
         background-color: #1c1c1c;
+    }
+    .submit-btn:disabled {
+        cursor: default;
+        opacity: 0.7;
     }
 
     .submit-container {

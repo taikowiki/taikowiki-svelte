@@ -124,7 +124,7 @@ export const docDBController = {
                 throw new WikiError("EMPTY_TITLE");
             }
 
-            // 이미 해당 제목의 문서가 존재하는지 검사
+            // ID가 다른 해당 제목의 문서가 존재하는지 검사
             const docTitleExists = await run("SELECT COUNT(*) AS COUNT FROM `docs` WHERE `id` != ? AND `title` = ?", [id, docData.title]);
             if (docTitleExists[0].COUNT > 0) {
                 throw new WikiError("DUPLICATED_TITLE");
@@ -138,7 +138,8 @@ export const docDBController = {
                 throw new WikiError("DOC_DATA_ERR");
             }
             if (docData.type === "song") {
-                const alreadyExists = await docDBController.docExistsBySongNo.getCallback(docData.songNo)(run);
+                const r = await run("SELECT COUNT(*) AS COUNT FROM `docs` WHERE `id` != ? AND `songNo` = ?", [id, docData.songNo]);
+                const alreadyExists = r[0].COUNT > 0;
                 if (alreadyExists) {
                     throw new WikiError("DUPLICATED_SONG_NO");
                 }

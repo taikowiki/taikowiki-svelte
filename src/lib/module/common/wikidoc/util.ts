@@ -1,14 +1,14 @@
 import { getIsMobile } from "$lib/module/layout/isMobile.js";
 import { getTheme } from "$lib/module/layout/theme.js";
-import type { WikiDocData, WikiDocParagraph } from "./types/wikidoc.types.js";
+import type {Doc} from '$lib/module/common/wikidoc/types';
 
 /**
  * 올바른 `docData` 인지 검사 
  * @param docData 
  * @returns 
  */
-export function validateDocData(docData: WikiDocData) {
-    function validateParagraph(paragraph: WikiDocParagraph) {
+export function validateDocData(docData: Doc.Data.WikiDocData) {
+    function validateParagraph(paragraph: Doc.Data.WikiDocParagraph) {
         if (!paragraph.title) return false;
 
         return paragraph.subParagraphs.every(validateParagraph) && true;
@@ -76,7 +76,7 @@ export function escapeHtml(string: string) {
 /**
  * 기본 doc data 생성
  */
-export function createDefaultDocData(): WikiDocData {
+export function createDefaultDocData(): Doc.Data.WikiDocData {
     return {
         title: "",
         type: "normal",
@@ -84,7 +84,9 @@ export function createDefaultDocData(): WikiDocData {
             content: "",
             subParagraphs: [],
         },
-        comment: ''
+        comment: '',
+        songNo: null,
+        redirectTo: null
     }
 }
 
@@ -93,7 +95,7 @@ export function createDefaultDocData(): WikiDocData {
  * 
  * ssr이 켜져 있을 때에는 호출 후 `isMobile`과 `theme`을 직접 설정해야함.
  */
-export function getWindowContext() {
+export function getWikiWindowContext() {
     if(typeof(window) === "undefined"){
         return new Map();
     }
@@ -121,7 +123,7 @@ export function getWindowContext() {
  * windowContext의 'wikiDocAnnotations' 데이터를 초기화
  */
 export function resetWikiDocAnnotations() {
-    const windowContext = getWindowContext();
+    const windowContext = getWikiWindowContext();
 
     let annotationsMap = windowContext.get('wikiDocAnnotations');
     if (annotationsMap) {
@@ -137,5 +139,5 @@ export function resetWikiDocAnnotations() {
  * windowContext에 'wikiDocURLBase'를 설정
  */
 export function defineWikiDocURLBase(base: URL) {
-    getWindowContext().set('wikiDocURLBase', base);
+    getWikiWindowContext().set('wikiDocURLBase', base);
 }

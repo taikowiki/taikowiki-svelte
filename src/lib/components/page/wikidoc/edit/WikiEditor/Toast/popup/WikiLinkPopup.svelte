@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
-    import type { WikiLinkPluginFunctionOption } from "$lib/module/common/wikidoc/types/toast.types.js";
+    import type { Doc } from "$lib/module/common/wikidoc/types";
 
     interface Props {
         eventEmitter: any;
@@ -18,7 +18,7 @@
     }
     function insert() {
         if (!eventEmitter) return;
-        const option: WikiLinkPluginFunctionOption = {
+        const option: Doc.Toast.WikiLinkPluginFunctionOption = {
             docTitle,
             content
         }

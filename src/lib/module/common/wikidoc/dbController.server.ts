@@ -1,13 +1,11 @@
 import { defineDBHandler } from "@yowza/db-handler";
-import type { WikiDocData, WikiNormalDocData, WikiSongDocData } from "./types/wikidoc.types.js";
+import type {Doc} from '$lib/module/common/wikidoc/types';
 import { WikiError } from "./wikiError.js";
 import { normalizeContentTree, renderer } from "./renderer.js";
 import { validateDocData } from "./util.js";
-import type { WikiDocDBData } from "./types/wikidoc.db.types.js";
-import type { WikiDocDBViewData, WikiDocDBViewDataKey } from "./types/wikidoc.view.types.js";
 import { songDBController } from "../song/song.server.js";
 
-function parseDBData<T extends keyof WikiDocDBData = keyof WikiDocDBData>(dataFromDB: any): Pick<WikiDocDBData, T> {
+function parseDBData<T extends keyof Doc.DB.WikiDocDBData = keyof Doc.DB.WikiDocDBData>(dataFromDB: any): Pick<Doc.DB.WikiDocDBData, T> {
     const docData: any = {};
     Object.keys(dataFromDB).forEach((key) => {
         if (key === "contentTree" || key === "renderedContentTree") {
@@ -43,7 +41,7 @@ export const docDBController = {
      * @throws `REDIRECT_DOC_NOT_EXISTS` 리다이렉트 할 문서가 존재하지 않음.
      * @throws `SONG_NOT_EXISTS` 연결할 곡이 존재하지 않음.
      */
-    create: defineDBHandler<[UUID: string, ip: string, docData: WikiDocData]>((UUID, ip, docData) => {
+    create: defineDBHandler<[UUID: string, ip: string, docData: Doc.Data.WikiDocData]>((UUID, ip, docData) => {
         return async (run) => {
             // 제목 비어있는지 검사
             if (!docData.title) {
@@ -92,10 +90,10 @@ export const docDBController = {
                     UUID,
                     ip,
                     docData.comment,
-                    docData.type !== "redirect" ? JSON.stringify((docData as WikiNormalDocData).contentTree) : null,
-                    docData.type !== "redirect" ? JSON.stringify(await renderer.prerenderContentTree((docData as WikiNormalDocData).contentTree)) : null,
-                    docData.type !== "redirect" ? normalizeContentTree((docData as WikiNormalDocData).contentTree) : null,
-                    (docData as WikiSongDocData).songNo ?? null,
+                    docData.type !== "redirect" ? JSON.stringify(docData.contentTree) : null,
+                    docData.type !== "redirect" ? JSON.stringify(await renderer.prerenderContentTree(docData.contentTree)) : null,
+                    docData.type !== "redirect" ? normalizeContentTree(docData.contentTree) : null,
+                    docData.songNo ?? null,
                     redirectTo
                 ]
             );
@@ -111,7 +109,7 @@ export const docDBController = {
      * @throws `SONG_NOT_EXISTS` 연결할 곡이 존재하지 않음.
      * @throws `ID_NOT_EXISTS` 해당 ID의 문서가 존재하지 않음.
      */
-    update: defineDBHandler<[id: number, UUID: string, ip: string, docData: WikiDocData]>((id, UUID, ip, docData) => {
+    update: defineDBHandler<[id: number, UUID: string, ip: string, docData: Doc.Data.WikiDocData]>((id, UUID, ip, docData) => {
         return async (run) => {
             const result = await run("SELECT `version` FROM `docs` WHERE `id` = ?", [id]);
             if (result.length === 0) {
@@ -169,10 +167,10 @@ export const docDBController = {
                     UUID,
                     ip,
                     docData.comment,
-                    docData.type !== "redirect" ? JSON.stringify((docData as WikiNormalDocData).contentTree) : null,
-                    docData.type !== "redirect" ? JSON.stringify(await renderer.prerenderContentTree((docData as WikiNormalDocData).contentTree)) : null,
-                    docData.type !== "redirect" ? normalizeContentTree((docData as WikiNormalDocData).contentTree) : null,
-                    (docData as WikiSongDocData).songNo ?? null,
+                    docData.type !== "redirect" ? JSON.stringify(docData.contentTree) : null,
+                    docData.type !== "redirect" ? JSON.stringify(await renderer.prerenderContentTree(docData.contentTree)) : null,
+                    docData.type !== "redirect" ? normalizeContentTree(docData.contentTree) : null,
+                    docData.songNo ?? null,
                     redirectTo,
                     version + 1,
                     id
@@ -180,6 +178,19 @@ export const docDBController = {
             )
         }
     }),
+    /**
+     * 문서의 로그를 가져옴
+     * 페이지 당 50개
+     */
+    getLogs: defineDBHandler<[id: number, page: number]>((id, page) => {
+        if(id === 1){
+            const logs = [];
+        }
+        else{
+
+        }
+    })
+    ,
     /**
      * 해당 제목의 문서 존재 여부 반환
      */
@@ -231,14 +242,14 @@ export const docDBController = {
     /**
      * 특정 id를 가진 문서를 반환
      */
-    getDocDataById: defineDBHandler<[id: number], WikiDocDBData | null>((id) => {
+    getDocDataById: defineDBHandler<[id: number], Doc.DB.WikiDocDBData | null>((id) => {
         return async (run) => {
             const result = await run("SELECT * FROM `docs` WHERE `id` = ?", [id]);
             if (result.length === 0) {
                 return null;
             }
 
-            return parseDBData(result[0]) as WikiDocDBData;
+            return parseDBData(result[0]) as Doc.DB.WikiDocDBData;
         }
     }),
     /**
@@ -258,7 +269,7 @@ export const docDBController = {
     /**
      * 특정 제목을 가진 문서의 view data를 반환
      */
-    getDocViewDataByTitle: defineDBHandler<[title: string], WikiDocDBViewData | null>((title) => {
+    getDocViewDataByTitle: defineDBHandler<[title: string], Doc.View.DB.ViewData | null>((title) => {
         return async (run) => {
             const result = await run("SELECT `id`, `title`, `type`, `editorUUID`, `renderedContentTree`, `songNo`, `redirectTo`, `editedTime`, `isDeleted`, `version` FROM `docs` WHERE `title` = ?", [title]);
 
@@ -266,10 +277,10 @@ export const docDBController = {
                 return null;
             }
 
-            return parseDBData<WikiDocDBViewDataKey>(result[0]);
+            return parseDBData<Doc.View.DB.ViewDataKey>(result[0]);
         }
     }),
-    getDocViewDataBySongNo: defineDBHandler<[songNo: string], WikiDocDBViewData | null>((songNo) => {
+    getDocViewDataBySongNo: defineDBHandler<[songNo: string], Doc.View.DB.ViewData | null>((songNo) => {
         return async(run) => {
             const result = await run("SELECT `id`, `title`, `type`, `editorUUID`, `renderedContentTree`, `songNo`, `redirectTo`, `editedTime`, `isDeleted`, `version` FROM `docs` WHERE `songNo` = ?", [songNo]);
 
@@ -277,7 +288,7 @@ export const docDBController = {
                 return null;
             }
 
-            return parseDBData<WikiDocDBViewDataKey>(result[0]);
+            return parseDBData<Doc.View.DB.ViewDataKey>(result[0]);
         }
     }),
     /**

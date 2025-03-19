@@ -2,8 +2,7 @@ import { songDBController } from '$lib/module/common/song/song.server.js';
 import { userDBController } from '$lib/module/common/user/user.server.js';
 import { docDBController } from '$lib/module/common/wikidoc/dbController.server';
 import { renderer } from '$lib/module/common/wikidoc/renderer.js';
-import type { WikiContentTree, WikiDocParagraph } from '$lib/module/common/wikidoc/types/wikidoc.types.js';
-import type { WikiDocPageViewData } from '$lib/module/common/wikidoc/types/wikidoc.view.types.js';
+import type {Doc} from '$lib/module/common/wikidoc/types';
 import { error, redirect } from '@sveltejs/kit';
 import { runQuery } from '@yowza/db-handler';
 import type { HTMLElement } from 'node-html-parser';
@@ -51,9 +50,9 @@ export async function load({ params }) {
             }
         }
 
-        const preparedContent: WikiContentTree = {
+        const preparedContent: Doc.Data.WikiContentTree = {
             content: await renderer.prepareView(docViewData.renderedContentTree?.content as string, setWikiLinkAvailable),
-            subParagraphs: await prepareSubParagraphs(docViewData.renderedContentTree?.subParagraphs as WikiDocParagraph[])
+            subParagraphs: await prepareSubParagraphs(docViewData.renderedContentTree?.subParagraphs as Doc.Data.WikiDocParagraph[])
         };
 
         const editor = (await userDBController.getNickname.getCallback(docViewData.editorUUID)(run)) ?? docViewData.editorUUID;
@@ -64,11 +63,11 @@ export async function load({ params }) {
                 ...docViewData,
                 editor,
                 preparedContent
-            } as WikiDocPageViewData & { isDeleted: false }
+            } as Doc.View.Page.ViewData & { isDeleted: false }
         } as const;
 
-        async function prepareSubParagraphs(subParagraphs: WikiDocParagraph[]) {
-            const prepared: WikiDocParagraph[] = [];
+        async function prepareSubParagraphs(subParagraphs: Doc.Data.WikiDocParagraph[]) {
+            const prepared: Doc.Data.WikiDocParagraph[] = [];
             for (const subParagraph of subParagraphs) {
                 prepared.push({
                     title: subParagraph.title,

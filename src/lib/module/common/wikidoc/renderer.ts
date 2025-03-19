@@ -1,7 +1,6 @@
 import { Marked } from 'marked';
-import * as MARKED from 'marked';
 import { HTMLElement, parse as parseHTML } from 'node-html-parser';
-import type { WikiContentTree, WikiDocParagraph, WikiDocPrerenderedParagraph, WikiPrerenderedContentTree } from './types/wikidoc.types'
+import type {Doc} from '$lib/module/common/wikidoc/types';
 import { page } from '$app/state';
 import markdownEscape from 'markdown-escape';
 
@@ -74,7 +73,7 @@ export const sharpConverter = {
  * @param contentTree 
  * @returns 
  */
-export function normalizeContentTree(contentTree: WikiContentTree) {
+export function normalizeContentTree(contentTree: Doc.Data.WikiContentTree) {
     let normalized = '';
 
     normalized += sharpConverter.escapeSharp(contentTree.content);
@@ -84,7 +83,7 @@ export function normalizeContentTree(contentTree: WikiContentTree) {
     })
     return normalized;
 
-    function normalizeParagraph(paragraph: WikiDocParagraph, depth: number) {
+    function normalizeParagraph(paragraph: Doc.Data.WikiDocParagraph, depth: number) {
         let normalized = '';
 
         // 제목 추가
@@ -297,7 +296,7 @@ export const renderer = {
      * @param contentTree 
      * @returns 
      */
-    async prerenderContentTree(contentTree: WikiContentTree) {
+    async prerenderContentTree(contentTree: Doc.Data.WikiContentTree) {
         const scope: Record<string, any> = {};
 
         async function prerenderContent(src: string) {
@@ -310,13 +309,13 @@ export const renderer = {
             return dom.innerHTML;
         }
 
-        async function prerenderParagraph(paragraph: WikiDocParagraph): Promise<WikiDocPrerenderedParagraph> {
-            const subParagraphs: WikiDocPrerenderedParagraph['subParagraphs'] = [];
+        async function prerenderParagraph(paragraph: Doc.Data.WikiDocParagraph): Promise<Doc.Data.WikiDocParagraph> {
+            const subParagraphs: Doc.Data.WikiDocParagraph['subParagraphs'] = [];
             for (const subParagraph of paragraph.subParagraphs) {
                 subParagraphs.push(await prerenderParagraph(subParagraph));
             }
 
-            const rendered: WikiDocPrerenderedParagraph = {
+            const rendered: Doc.Data.WikiDocParagraph = {
                 title: paragraph.title,
                 content: await prerenderContent(paragraph.content),
                 subParagraphs
@@ -325,11 +324,11 @@ export const renderer = {
             return rendered;
         }
 
-        const subParagraphs: WikiDocPrerenderedParagraph['subParagraphs'] = [];
+        const subParagraphs: Doc.Data.WikiDocParagraph['subParagraphs'] = [];
         for (const subParagraph of contentTree.subParagraphs) {
             subParagraphs.push(await prerenderParagraph(subParagraph));
         };
-        const rendered: WikiPrerenderedContentTree = {
+        const rendered: Doc.Data.WikiContentTree = {
             content: await prerenderContent(contentTree.content),
             subParagraphs
         };

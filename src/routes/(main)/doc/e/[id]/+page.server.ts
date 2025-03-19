@@ -1,5 +1,5 @@
 import { docDBController } from '$lib/module/common/wikidoc/dbController.server.js';
-import type { WikiDocData } from '$lib/module/common/wikidoc/types/wikidoc.types.js';
+import type {Doc} from '$lib/module/common/wikidoc/types';
 import { error } from '@sveltejs/kit';
 
 export async function load({params, locals}){
@@ -21,7 +21,7 @@ export async function load({params, locals}){
         throw error(403);
     }
 
-    const docData: WikiDocData = {
+    const docData: Doc.Data.WikiDocData = {
         title: docDBData.title,
         type: docDBData.type as any,
         contentTree: docDBData.contentTree as any,

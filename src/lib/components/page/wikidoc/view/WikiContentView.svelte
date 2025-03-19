@@ -2,12 +2,12 @@
     import { browser } from "$app/environment";
     import { page } from "$app/state";
     import Loading from "$lib/components/common/Loading.svelte";
-    import type { WikiDocPageViewData } from "$lib/module/common/wikidoc/types/wikidoc.view.types";
+    import type { Doc } from "$lib/module/common/wikidoc/types";
     import { defineWikiDocURLBase } from "$lib/module/common/wikidoc/util";
     import WikiParagraphView from "./WikiParagraphView.svelte";
 
     interface Props {
-        docViewData: WikiDocPageViewData;
+        docViewData: Doc.View.Page.ViewData;
     }
 
     let { docViewData }: Props = $props();

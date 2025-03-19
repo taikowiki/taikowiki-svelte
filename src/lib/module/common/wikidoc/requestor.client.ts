@@ -1,5 +1,5 @@
 import { defineRequestHandler } from "@yowza/rrequestor";
-import type { WikiDocData } from "./types/wikidoc.types"
+import type {Doc} from '$lib/module/common/wikidoc/types';
 
 export const wikiDocRequestor = {
     /**
@@ -13,7 +13,7 @@ export const wikiDocRequestor = {
      * @throws `NOT_LOGINED` 로그인 되어있지 않음.
      * @throws `LOW_GRADE` 권한 등급이 낮음.
      */
-    uploadNew: defineRequestHandler<{ docData: WikiDocData }, void>({
+    uploadNew: defineRequestHandler<{ docData: Doc.Data.WikiDocData }, void>({
         url: '/api/doc/create',
         method: 'post'
     }),
@@ -29,7 +29,7 @@ export const wikiDocRequestor = {
      * @throws `NOT_LOGINED` 로그인 되어있지 않음.
      * @throws `LOW_GRADE` 권한 등급이 낮음.
      */
-    update: defineRequestHandler<{id: number, docData: WikiDocData}, void>({
+    update: defineRequestHandler<{id: number, docData: Doc.Data.WikiDocData}, void>({
         url: '/api/doc/update',
         method: 'post'
     })

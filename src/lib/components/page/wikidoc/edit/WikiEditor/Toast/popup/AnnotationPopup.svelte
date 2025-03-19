@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { AnnotPluginFunctionOption } from "$lib/module/common/wikidoc/types/toast.types.js";
+    import type { Doc } from "$lib/module/common/wikidoc/types";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
@@ -18,10 +18,10 @@
     }
     function insert() {
         if (!eventEmitter) return;
-        const option: AnnotPluginFunctionOption = {
+        const option: Doc.Toast.AnnotPluginFunctionOption = {
             key,
-            content
-        }
+            content,
+        };
         eventEmitter.emit("command", "insertAnnotation", option);
         eventEmitter.emit("closePopup");
         key = null;
@@ -38,19 +38,11 @@
 <div class="container" data-theme={$theme}>
     <div class="section">
         <span> Key </span>
-        <input
-            type="text"
-            bind:value={key}
-            class:warn
-            onfocus={removeWarn}
-        />
+        <input type="text" bind:value={key} class:warn onfocus={removeWarn} />
     </div>
     <div class="section">
         <span> Content </span>
-        <textarea
-            bind:value={content}
-            class:warn
-            onfocus={removeWarn}
+        <textarea bind:value={content} class:warn onfocus={removeWarn}
         ></textarea>
     </div>
 
@@ -107,7 +99,7 @@
         color: white;
     }
 
-    textarea{
+    textarea {
         padding: 3px 12px;
         resize: vertical;
     }

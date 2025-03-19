@@ -3,7 +3,7 @@ import type { Difficulty } from '$lib/module/common/song/types.js';
 import { userDBController } from '$lib/module/common/user/user.server.js';
 import { docDBController } from '$lib/module/common/wikidoc/dbController.server.js';
 import { renderer } from '$lib/module/common/wikidoc/renderer.js';
-import type { WikiContentTree, WikiDocParagraph } from '$lib/module/common/wikidoc/types/wikidoc.types';
+import type {Doc} from '$lib/module/common/wikidoc/types';
 import { redirect } from '@sveltejs/kit';
 import { runQuery } from '@yowza/db-handler';
 import type { HTMLElement } from 'node-html-parser';
@@ -35,9 +35,9 @@ export async function load({ params, url }) {
         }
 
         const editor = (await userDBController.getNickname.getCallback(docViewData.editorUUID)(run)) ?? docViewData.editorUUID;
-        const preparedContent: WikiContentTree = {
+        const preparedContent: Doc.Data.WikiContentTree = {
             content: await renderer.prepareView(docViewData.renderedContentTree?.content as string, setWikiLinkAvailable),
-            subParagraphs: await prepareSubParagraphs(docViewData.renderedContentTree?.subParagraphs as WikiDocParagraph[])
+            subParagraphs: await prepareSubParagraphs(docViewData.renderedContentTree?.subParagraphs as Doc.Data.WikiDocParagraph[])
         };
         const docPageViewData = {
             ...docViewData,
@@ -50,8 +50,8 @@ export async function load({ params, url }) {
             docViewData: docPageViewData
         }
 
-        async function prepareSubParagraphs(subParagraphs: WikiDocParagraph[]) {
-            const prepared: WikiDocParagraph[] = [];
+        async function prepareSubParagraphs(subParagraphs: Doc.Data.WikiDocParagraph[]) {
+            const prepared: Doc.Data.WikiDocParagraph[] = [];
             for (const subParagraph of subParagraphs) {
                 prepared.push({
                     title: subParagraph.title,

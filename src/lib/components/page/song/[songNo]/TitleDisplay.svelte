@@ -1,8 +1,5 @@
 <script lang="ts">
-    import type {
-        WikiDocDBViewData,
-        WikiDocPageViewData,
-    } from "$lib/module/common/wikidoc/types/wikidoc.view.types";
+    import type { Doc } from "$lib/module/common/wikidoc/types";
     import { getTheme } from "$lib/module/layout/theme";
     import WikiDocEditBtn from "../../wikidoc/view/WikiView/WikiDocEditBtn.svelte";
     import WikiDocLogBtn from "../../wikidoc/view/WikiView/WikiDocLogBtn.svelte";
@@ -10,7 +7,7 @@
     interface Props {
         title: string;
         songNo: string;
-        docViewData: WikiDocPageViewData | null;
+        docViewData: Doc.View.Page.ViewData | null;
     }
 
     let { title, songNo, docViewData }: Props = $props();

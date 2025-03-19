@@ -1,15 +1,13 @@
 <script lang="ts">
-    import type { WikiDocData } from "$lib/module/common/wikidoc/types/wikidoc.types";
     import WikiTypeSelector from "./WikiEditor/WikiTypeSelector.svelte";
     import WikiTitleEditor from "./WikiEditor/WikiTitleEditor.svelte";
     import WikiContentEditor from "./WikiEditor/WikiContentEditor.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import WikiSubParagraphEditor from "./WikiEditor/WikiSubParagraphEditor.svelte";
-    import { wikiDocRequestor } from "$lib/module/common/wikidoc/requestor.client";
-    import { goto } from "$app/navigation";
+    import type {Doc} from '$lib/module/common/wikidoc/types';
 
     interface Props {
-        wikiDoc: WikiDocData;
+        wikiDoc: Doc.Data.WikiDocData;
     }
 
     let { wikiDoc = $bindable() }: Props = $props();

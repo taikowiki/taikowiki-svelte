@@ -2,11 +2,11 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { wikiDocRequestor } from "$lib/module/common/wikidoc/requestor.client";
-    import type { WikiDocData } from "$lib/module/common/wikidoc/types/wikidoc.types";
     import { getTheme } from "$lib/module/layout/theme";
+    import type {Doc} from '$lib/module/common/wikidoc/types';
 
     interface Props {
-        wikiDoc: WikiDocData;
+        wikiDoc: Doc.Data.WikiDocData;
         type?: "create" | "update";
     }
 

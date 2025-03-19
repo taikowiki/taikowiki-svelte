@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { ImagePluginFunctionOption } from "$lib/module/common/wikidoc/types/toast.types.js";
+    import type { Doc } from "$lib/module/common/wikidoc/types";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
@@ -25,7 +25,7 @@
             warn = true;
             return;
         }
-        const option: ImagePluginFunctionOption = {
+        const option: Doc.Toast.ImagePluginFunctionOption = {
             url,
             description,
             size: {

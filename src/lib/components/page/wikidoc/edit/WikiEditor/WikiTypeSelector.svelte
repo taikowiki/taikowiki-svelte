@@ -1,69 +1,66 @@
 <script lang="ts">
-    import type {
-        WikiDocData,
-        WikiNormalDocData,
-        WikiRedirectDocData,
-        WikiSongDocData,
-    } from "$lib/module/common/wikidoc/types/wikidoc.types";
+    import type {Doc} from '$lib/module/common/wikidoc/types';
+
+    
 
     interface Props {
-        wikiDoc: WikiDocData;
+        wikiDoc: Doc.Data.WikiDocData;
     }
 
     let { wikiDoc = $bindable() }: Props = $props();
 
-    let type: WikiDocData["type"] = $state(wikiDoc.type);
+    let type: Doc.Data.WikiDocData["type"] = $state(wikiDoc.type);
 
-    let songNo: string = $state((wikiDoc as WikiSongDocData)?.songNo ?? "");
+    let songNo: string = $state((wikiDoc as Doc.Data.WikiSongDocData)?.songNo ?? "");
     $effect.pre(() => {
         if (type === "song") {
-            (wikiDoc as WikiSongDocData).songNo = songNo;
+            (wikiDoc as Doc.Data.WikiSongDocData).songNo = songNo;
         }
         else{
             (wikiDoc as any).songNo = null;
         }
     });
     let redirectTo: string = $state(
-        (wikiDoc as WikiRedirectDocData).redirectTo || "",
+        (wikiDoc as Doc.Data.WikiRedirectDocData).redirectTo || "",
     );
     $effect.pre(() => {
         if (type === "redirect") {
-            (wikiDoc as WikiRedirectDocData).redirectTo = redirectTo;
+            (wikiDoc as Doc.Data.WikiRedirectDocData).redirectTo = redirectTo;
         }
         else{
             (wikiDoc as any).redirectTo = null;
         }
     });
 
-    function changeType(type: WikiDocData["type"]) {
+    function changeType(type: Doc.Data.WikiDocData["type"]) {
         switch (type) {
             case "normal": {
                 wikiDoc.type = "normal";
-                (wikiDoc as WikiNormalDocData).contentTree = {
+                (wikiDoc as Doc.Data.WikiNormalDocData).contentTree = {
                     content:
-                        (wikiDoc as WikiNormalDocData).contentTree?.content ??
+                        (wikiDoc as Doc.Data.WikiNormalDocData).contentTree?.content ??
                         "",
                     subParagraphs:
-                        (wikiDoc as WikiNormalDocData).contentTree
+                        (wikiDoc as Doc.Data.WikiNormalDocData).contentTree
                             ?.subParagraphs ?? [],
                 };
                 return;
             }
             case "song": {
                 wikiDoc.type = "song";
-                (wikiDoc as WikiSongDocData).contentTree = {
+                (wikiDoc as Doc.Data.WikiSongDocData).contentTree = {
                     content:
-                        (wikiDoc as WikiSongDocData).contentTree?.content ?? "",
+                        (wikiDoc as Doc.Data.WikiSongDocData).contentTree?.content ?? "",
                     subParagraphs:
-                        (wikiDoc as WikiSongDocData).contentTree
+                        (wikiDoc as Doc.Data.WikiSongDocData).contentTree
                             ?.subParagraphs ?? [],
                 };
-                (wikiDoc as WikiSongDocData).songNo = songNo;
+                (wikiDoc as Doc.Data.WikiSongDocData).songNo = songNo;
                 return;
             }
             case "redirect": {
                 wikiDoc.type = "redirect";
-                (wikiDoc as WikiRedirectDocData).redirectTo = redirectTo;
+                (wikiDoc as Doc.Data.WikiRedirectDocData).redirectTo = redirectTo;
                 return;
             }
         }

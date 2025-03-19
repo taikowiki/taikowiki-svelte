@@ -1,4 +1,4 @@
-import type { AnnotPluginFunctionOption, ImagePluginFunctionOption, WikiLinkPluginFunctionOption } from "../types/toast.types.js";
+import type { Doc } from "$lib/module/common/wikidoc/types";
 import type { Transaction } from "prosemirror-state";
 import { escapeHtml } from "../util.js";
 
@@ -12,7 +12,7 @@ import { escapeHtml } from "../util.js";
  * @param view 
  * @returns 
  */
-export function insertImage(option: ImagePluginFunctionOption, state: any, dispatch: any, view: any,) {
+export function insertImage(option: Doc.Toast.ImagePluginFunctionOption, state: any, dispatch: any, view: any,) {
     const transcation: Transaction = state.tr;
     if (option.size.x || option.size.y) {
         const width = option.size.x
@@ -45,7 +45,7 @@ export function insertImage(option: ImagePluginFunctionOption, state: any, dispa
  * @param view 
  * @returns 
  */
-export function insertAnnotation(option: AnnotPluginFunctionOption, state: any, dispatch: any, view: any,) {
+export function insertAnnotation(option: Doc.Toast.AnnotPluginFunctionOption, state: any, dispatch: any, view: any,) {
     const transcation: Transaction = state.tr;
     if (option.content) {
         const content = escapeBrace(escapeBackSlash(option.content));
@@ -70,7 +70,7 @@ export function insertAnnotation(option: AnnotPluginFunctionOption, state: any, 
  * @param view 
  * @returns 
  */
-export function insertWikiLink(option: WikiLinkPluginFunctionOption, state: any, dispatch: any, view: any) {
+export function insertWikiLink(option: Doc.Toast.WikiLinkPluginFunctionOption, state: any, dispatch: any, view: any) {
     const transcation: Transaction = state.tr;
     if (option.content) {
         transcation.insertText(`<wiki-link doctitle="${escapeHtml(option.docTitle ?? '')}">${escapeHtml(option.content)}</wiki-link>`);

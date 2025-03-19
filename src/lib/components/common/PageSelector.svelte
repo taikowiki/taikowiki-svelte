@@ -1,18 +1,4 @@
 <script lang="ts" module>
-    import { goto } from "$app/navigation";
-
-    function movePage(p: number) {
-        const searchParam = new URLSearchParams(location.search);
-
-        searchParam.set("page", p.toString());
-
-        goto(`/notice?${searchParam}`);
-
-        window.scrollTo({
-            top: 0,
-        });
-    }
-
     function getDisplayPages(pageNum: number, maxPage: number) {
         let p: number[] = [];
         for (
@@ -32,11 +18,18 @@
     interface Props {
         pageNum: number;
         length: number;
+        movePage: (p: number) => any;
+        countPerPage?: number;
     }
 
-    let { pageNum = $bindable(), length }: Props = $props();
+    let {
+        pageNum = $bindable(),
+        length,
+        movePage,
+        countPerPage = 30,
+    }: Props = $props();
 
-    let maxPage = Math.ceil(length / 30);
+    let maxPage = Math.ceil(length / countPerPage);
     let displayPages = getDisplayPages(pageNum, maxPage);
 
     const isMobile = getIsMobile();
@@ -132,11 +125,11 @@
 {/snippet}
 
 {#if length !== 0}
-    <div class="wrapper" data-isMobile={$isMobile}>
+    <div class="wrapper">
         {@render goStart()}
         {@render goPrevious()}
-        {@render mobilePageNumbersView()}
         {@render pcPageNumbersView()}
+        {@render mobilePageNumbersView()}
         {@render goNext()}
         {@render goLast()}
     </div>
@@ -154,12 +147,6 @@
         column-gap: 8px;
 
         margin-top: 15px;
-
-        box-sizing: border-box;
-    }
-    .wrapper[data-isMobile="false"] {
-        padding-left: 40px;
-        padding-right: 100px;
     }
 
     .btn {

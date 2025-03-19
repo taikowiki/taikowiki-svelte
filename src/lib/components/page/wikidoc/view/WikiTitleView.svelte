@@ -1,13 +1,12 @@
 <script lang="ts">
-    import { getTheme } from "$lib/module/layout/theme";
     import { DateTime } from "luxon";
+    import WikiDocEditBtn from "./WikiView/WikiDocEditBtn.svelte";
+    import WikiDocLogBtn from "./WikiView/WikiDocLogBtn.svelte";
 
     interface Props {
         docViewData: any;
     }
     let { docViewData }: Props = $props();
-
-    const [theme] = getTheme();
 </script>
 
 <h1 class="container">
@@ -16,20 +15,8 @@
     </div>
     <div class="title-others">
         <div class="icon-container">
-            <a
-                class="icon-anchor"
-                href={`/doc/e/${docViewData.id}?title=${encodeURIComponent(docViewData.title)}`}
-                data-theme={$theme}
-            >
-                <img class="icon" src="/assets/icon/doc-edit.svg" alt="edit" />
-            </a>
-            <a
-                class="icon-anchor"
-                href={`/doc/log/${docViewData.id}`}
-                data-theme={$theme}
-            >
-                <img class="icon" src="/assets/icon/log.svg" alt="log" />
-            </a>
+            <WikiDocEditBtn id={docViewData.id} title={docViewData.title} />
+            <WikiDocLogBtn id={docViewData.id} />
         </div>
         <div class="title-date">
             최근 수정 시각:
@@ -70,28 +57,6 @@
         margin-top: 13px;
 
         column-gap: 4px;
-    }
-
-    .icon {
-        width: 20px;
-        height: 20px;
-
-        filter: invert(100%);
-    }
-    .icon-anchor {
-        width: 30px;
-        height: 30px;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        background-color: #cf4844;
-
-        border-radius: 5px;
-    }
-    .icon-anchor[data-theme="dark"] {
-        background-color: #1c1c1c;
     }
 
     .title-others {

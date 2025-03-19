@@ -4,6 +4,8 @@
         WikiDocPageViewData,
     } from "$lib/module/common/wikidoc/types/wikidoc.view.types";
     import { getTheme } from "$lib/module/layout/theme";
+    import WikiDocEditBtn from "../../wikidoc/view/WikiView/WikiDocEditBtn.svelte";
+    import WikiDocLogBtn from "../../wikidoc/view/WikiView/WikiDocLogBtn.svelte";
 
     interface Props {
         title: string;
@@ -18,20 +20,8 @@
 
 {#snippet docEdit()}
     {#if docViewData}
-        <a
-            class="icon-anchor"
-            href={`/doc/e/${docViewData.id}?title=${encodeURIComponent(docViewData.title)}`}
-            data-theme={$theme}
-        >
-            <img class="icon" src="/assets/icon/doc-edit.svg" alt="edit" />
-        </a>
-        <a
-            class="icon-anchor"
-            href={`/doc/log/${docViewData.id}`}
-            data-theme={$theme}
-        >
-            <img class="icon" src="/assets/icon/log.svg" alt="log" />
-        </a>
+        <WikiDocEditBtn id={docViewData.id} title={docViewData.title} />
+        <WikiDocLogBtn id={docViewData.id} />
     {/if}
 {/snippet}
 {#snippet youtube()}

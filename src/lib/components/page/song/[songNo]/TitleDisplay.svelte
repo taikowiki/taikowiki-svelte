@@ -1,16 +1,39 @@
 <script lang="ts">
+    import type {
+        WikiDocDBViewData,
+        WikiDocPageViewData,
+    } from "$lib/module/common/wikidoc/types/wikidoc.view.types";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
         title: string;
         songNo: string;
+        docViewData: WikiDocPageViewData | null;
     }
 
-    let { title, songNo }: Props = $props();
+    let { title, songNo, docViewData }: Props = $props();
 
     const [theme] = getTheme();
 </script>
 
+{#snippet docEdit()}
+    {#if docViewData}
+        <a
+            class="icon-anchor"
+            href={`/doc/e/${docViewData.id}?title=${encodeURIComponent(docViewData.title)}`}
+            data-theme={$theme}
+        >
+            <img class="icon" src="/assets/icon/doc-edit.svg" alt="edit" />
+        </a>
+        <a
+            class="icon-anchor"
+            href={`/doc/log/${docViewData.id}`}
+            data-theme={$theme}
+        >
+            <img class="icon" src="/assets/icon/log.svg" alt="log" />
+        </a>
+    {/if}
+{/snippet}
 {#snippet youtube()}
     <a
         class="icon-anchor"
@@ -34,6 +57,7 @@
     <div class="icon-container">
         {@render youtube()}
         {@render edit()}
+        {@render docEdit()}
     </div>
 </h1>
 

@@ -12,16 +12,23 @@ export async function POST(event) {
         }))
     }
 
-    if(locals.userData.grade < 2){
+    const requestData = await request.json();
+
+    //권한 검사
+    const editableGrade = await docDBController.getEditableGradeById(requestData.id);
+    if(editableGrade === null){
+        throw error(404, JSON.stringify({
+            reason: 'ID_NOT_EXISTS'
+        }));
+    }
+    if(locals.userData.grade < editableGrade){
         throw error(403, JSON.stringify({
             reason: 'LOW_GRADE'
         }))
     }
 
-    const requestData = await request.json();
-
     try{
-        await docDBController.create(locals.userData.UUID, getClientAddress(event), requestData.docData);
+        await docDBController.update(requestData.id, locals.userData.UUID, getClientAddress(event), requestData.docData);
     }
     catch(err){
         console.log(err);

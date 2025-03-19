@@ -70,7 +70,7 @@
                 </button>
             </div>
             <div class="subparagraph-editor-container">
-                {#each paragraph.subParagraphs as _, i}
+                {#each paragraph.subParagraphs as _, i (i)}
                     {@const deleteParagraph = () => {
                         deleteSubParagraphByIndex(i);
                     }}

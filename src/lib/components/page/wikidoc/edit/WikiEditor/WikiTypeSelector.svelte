@@ -19,6 +19,9 @@
         if (type === "song") {
             (wikiDoc as WikiSongDocData).songNo = songNo;
         }
+        else{
+            (wikiDoc as any).songNo = null;
+        }
     });
     let redirectTo: string = $state(
         (wikiDoc as WikiRedirectDocData).redirectTo || "",
@@ -26,6 +29,9 @@
     $effect.pre(() => {
         if (type === "redirect") {
             (wikiDoc as WikiRedirectDocData).redirectTo = redirectTo;
+        }
+        else{
+            (wikiDoc as any).redirectTo = null;
         }
     });
 

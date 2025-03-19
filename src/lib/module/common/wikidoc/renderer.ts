@@ -3,6 +3,7 @@ import * as MARKED from 'marked';
 import { HTMLElement, parse as parseHTML } from 'node-html-parser';
 import type { WikiContentTree, WikiDocParagraph, WikiDocPrerenderedParagraph, WikiPrerenderedContentTree } from './types/wikidoc.types'
 import { page } from '$app/state';
+import markdownEscape from 'markdown-escape';
 
 const marked = new Marked({
     tokenizer: {
@@ -19,7 +20,7 @@ const marked = new Marked({
             return undefined;
         },
         escape(src) {
-            if(src.startsWith("\\#")){
+            if (src.startsWith("\\#")) {
                 return undefined;
             }
             return false;
@@ -65,6 +66,44 @@ export const sharpConverter = {
             }
         }
         return unescaped;
+    }
+}
+
+/**
+ * contentTree를 하나의 string으로 변환
+ * @param contentTree 
+ * @returns 
+ */
+export function normalizeContentTree(contentTree: WikiContentTree) {
+    let normalized = '';
+
+    normalized += sharpConverter.escapeSharp(contentTree.content);
+    contentTree.subParagraphs.forEach((subParagraph) => {
+        normalized += '\n';
+        normalized += normalizeParagraph(subParagraph, 1);
+    })
+    return normalized;
+
+    function normalizeParagraph(paragraph: WikiDocParagraph, depth: number) {
+        let normalized = '';
+
+        // 제목 추가
+        for (let i = 0; i < depth; i++) {
+            normalized += '#';
+        }
+        normalized += ' ';
+        normalized += markdownEscape(paragraph.title);
+        normalized += '\n';
+
+        // 본문 추가
+        normalized += paragraph.content;
+
+        // 하위 문단 추가
+        paragraph.subParagraphs.forEach((subParagraph) => {
+            normalized += '\n';
+            normalized += normalizeParagraph(subParagraph, depth + 1);
+        })
+        return normalized;
     }
 }
 
@@ -297,6 +336,12 @@ export const renderer = {
 
         return rendered;
     },
+    /**
+     * +page.server.ts에서 사용됨.
+     * @param html 
+     * @param finishCallback 
+     * @returns 
+     */
     async prepareView(html: string, finishCallback?: (dom: HTMLElement) => (Promise<any> | any)) {
         const dom = parseHTML(html);
 

@@ -28,7 +28,7 @@
         data-theme={$theme}
     >
         <span>
-            {`${index}.${paragraph.title}`}
+            {`${index}. ${paragraph.title}`}
         </span>
     </div>
     {#if opened}
@@ -39,7 +39,7 @@
             {#each paragraph.subParagraphs as subParagraph, i}
                 <WikiSubParagraphView
                     paragraph={subParagraph}
-                    index={`${index + 1}.${i}`}
+                    index={`${index}.${i+1}`}
                     depth={depth + 1}
                 />
             {/each}

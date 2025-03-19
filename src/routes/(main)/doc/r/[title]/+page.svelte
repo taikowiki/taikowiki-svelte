@@ -10,14 +10,12 @@
     let { data } = $props();
     let docViewData = $derived(data.docViewData);
 
-    const [theme] = getTheme();
-
-    $inspect(data.docViewData);
+    //$inspect(data.docViewData);
 </script>
 
 <WikiTitleView {docViewData}/>
 {#if docViewData.isDeleted}
-    곡 삭제됨 ㅗ
+    이 문서는 삭제되었습니다.
 {:else}
     <WikiContentView docViewData={data.docViewData as WikiDocPageViewData} />
 {/if}

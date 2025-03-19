@@ -5,7 +5,7 @@
     import { defineWikiDocURLBase } from "$lib/module/common/wikidoc/util";
 
     let { data } = $props();
-    let wikiDoc = $derived(data.docData);
+    let wikiDoc = $state(data.docData);
 
     defineWikiDocURLBase(
         (() => {

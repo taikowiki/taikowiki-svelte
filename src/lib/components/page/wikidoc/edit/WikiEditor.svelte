@@ -56,7 +56,7 @@
                 </button>
             </div>
             <div class="subparagraph-editor-container">
-                {#each wikiDoc.contentTree.subParagraphs as _, index}
+                {#each wikiDoc.contentTree.subParagraphs as _, index (index)}
                     {@const deleteParagraph = () => {
                         deleteSubParagraphByIndex(index);
                     }}

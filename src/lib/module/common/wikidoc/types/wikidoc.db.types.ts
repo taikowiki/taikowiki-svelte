@@ -5,12 +5,12 @@ export interface WikiDocDBDataBase {
     title: string;
     type: 'normal' | 'song' | 'frame' | 'redirect';
     editableGrade: number;
-    editorUUID: string; 
+    editorUUID: string;
     editorIp: string;
     comment: string;
-    memo: string;
     contentTree: WikiContentTree | null; // JSON
     renderedContentTree: WikiContentTree | null; // JSON
+    normalizedContentTree: string | null;
     songNo: string | null;
     redirectTo: number | null;
     createdTime: Date;
@@ -68,4 +68,4 @@ export interface WikiFrameDBData {
 }
 
 // log
-
+export type WikiDocLogDBData = WikiDocDBData;

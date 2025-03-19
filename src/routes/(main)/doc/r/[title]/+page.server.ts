@@ -1,3 +1,4 @@
+import { songDBController } from '$lib/module/common/song/song.server.js';
 import { userDBController } from '$lib/module/common/user/user.server.js';
 import { docDBController } from '$lib/module/common/wikidoc/dbController.server';
 import { renderer } from '$lib/module/common/wikidoc/renderer.js';
@@ -19,6 +20,15 @@ export async function load({ params }) {
             } as const;
         }
 
+        // 삭제되었으면 삭제되었다고 표기
+        if(docViewData.isDeleted){
+            return {
+                status: 3,
+                data: docViewData
+            }
+        }
+
+        // 리다이렉트면 리다이렉트 시키기
         if (docViewData.type === "redirect") {
             const redirectTo = await docDBController.getDocTitleById(docViewData.redirectTo as number);
             return {
@@ -30,23 +40,15 @@ export async function load({ params }) {
         }
 
         if (docViewData.type === "song") {
-            return {
-                status: 2,
-                data: {
-                    songNo: docViewData.songNo
-                }
-            } as const
-        }
-
-        if (docViewData.isDeleted) {
-            return {
-                status: 3,
-                data: {
-                    title: docViewData.title,
-                    editedTime: docViewData.editedTime,
-                    id: docViewData.id
-                }
-            } as const
+            // 곡 문서이고 해당 곡 번호를 가진 곡이 존재함
+            if(docViewData.songNo && await songDBController.songExistsBySongNo(docViewData.songNo)){
+                return {
+                    status: 2,
+                    data: {
+                        songNo: docViewData.songNo
+                    }
+                } as const
+            }
         }
 
         const preparedContent: WikiContentTree = {
@@ -57,12 +59,11 @@ export async function load({ params }) {
         const editor = (await userDBController.getNickname.getCallback(docViewData.editorUUID)(run)) ?? docViewData.editorUUID;
 
         return {
-            status: 4,
+            status: 3,
             data: {
                 ...docViewData,
                 editor,
-                preparedContent,
-                isDeleted: false
+                preparedContent
             } as WikiDocPageViewData & { isDeleted: false }
         } as const;
 
@@ -105,7 +106,7 @@ export async function load({ params }) {
                 throw error(404);
             }
             else {
-                throw redirect(302, `/doc/r/${data.redirectTo}`)
+                throw redirect(302, `/doc/r/${encodeURIComponent(data.redirectTo)}`)
             }
         }
         case (2): {
@@ -117,14 +118,8 @@ export async function load({ params }) {
         case (3): {
             return {
                 docViewData: {
-                    ...data,
-                    isDeleted: true
+                    ...data
                 } as const
-            }
-        }
-        case (4): {
-            return {
-                docViewData: data
             }
         }
         default: {

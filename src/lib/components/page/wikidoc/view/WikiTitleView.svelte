@@ -16,29 +16,19 @@
     </div>
     <div class="title-others">
         <div class="icon-container">
-            {#if !docViewData.isDeleted}
-                <a
-                    class="icon-anchor"
-                    href={`/doc/e/${docViewData.id}?title=${encodeURIComponent(docViewData.title)}`}
-                    data-theme={$theme}
-                >
-                    <img
-                        class="icon"
-                        src="/assets/icon/doc-edit.svg"
-                        alt="edit"
-                    />
-                </a>
-            {/if}
             <a
                 class="icon-anchor"
-                href={`/doc/log/${docViewData.id}?title=${encodeURIComponent(docViewData.title)}`}
+                href={`/doc/e/${docViewData.id}?title=${encodeURIComponent(docViewData.title)}`}
                 data-theme={$theme}
             >
-                <img
-                    class="icon"
-                    src="/assets/icon/log.svg"
-                    alt="log"
-                />
+                <img class="icon" src="/assets/icon/doc-edit.svg" alt="edit" />
+            </a>
+            <a
+                class="icon-anchor"
+                href={`/doc/log/${docViewData.id}`}
+                data-theme={$theme}
+            >
+                <img class="icon" src="/assets/icon/log.svg" alt="log" />
             </a>
         </div>
         <div class="title-date">

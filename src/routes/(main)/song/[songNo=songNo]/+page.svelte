@@ -12,6 +12,7 @@
     import { page } from "$app/stores";
     import type { Difficulty } from "$lib/module/common/song/types.js";
     import { DIFFICULTY } from "$lib/module/common/song/const.js";
+    import WikiContentView from "$lib/components/page/wikidoc/view/WikiContentView.svelte";
 
     let { data } = $props();
     const song = data.song;
@@ -39,7 +40,7 @@
         isDeleted={song.isDeleted}
     />
     <GenreDisplay genres={song.genre} />
-    <TitleDisplay title={song.title} songNo={song.songNo} />
+    <TitleDisplay title={song.title} songNo={song.songNo} docViewData={data.docViewData}/>
     <div class="wrapper" data-isMobile={$isMobile}>
         <MultipleTitleDisplay
             titleKo={song.titleKo}
@@ -57,6 +58,9 @@
         />
     </div>
     <CourseContainer courses={song.courses} selectedDifficulty={diff} />
+    {#if data.docViewData}
+        <WikiContentView docViewData={data.docViewData}/>
+    {/if}
 {:else}
     <PageTitle title={titleI18n} />
     {i18n.noSong}

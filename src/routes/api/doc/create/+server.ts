@@ -1,5 +1,5 @@
-import { docDBController } from '$lib/module/common/wikidoc/dbController.server.js';
-import { WikiError } from '$lib/module/common/wikidoc/wikiError.js';
+import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
+import { WikiError } from '$lib/module/common/wikidoc/util.js';
 import { error } from '@sveltejs/kit';
 import { getClientAddress } from "$lib/module/common/util.server";
 

@@ -15,12 +15,8 @@
     import WikiContentView from "$lib/components/page/wikidoc/view/WikiContentView.svelte";
 
     let { data } = $props();
-    const song = data.song;
-    const isMobile = getIsMobile();
-
-    const lang = getLang();
-    let i18n = $derived(getI18N("/song/[songNo]", $lang));
-    let titleI18n = $derived(getI18N("other", $lang).title["/song/[songNo]"]);
+    let song = $derived(data.song);
+    let docData = $derived(data.docData);
 
     let diff: Difficulty = $derived.by(() => {
         let diffParam = $page.url.searchParams.get("diff") as Difficulty | null;
@@ -30,6 +26,11 @@
             return "oni";
         }
     });
+
+    const isMobile = getIsMobile();
+    const lang = getLang();
+    let i18n = $derived(getI18N("/song/[songNo]", $lang));
+    let titleI18n = $derived(getI18N("other", $lang).title["/song/[songNo]"]);
 </script>
 
 {#if song}
@@ -40,7 +41,7 @@
         isDeleted={song.isDeleted}
     />
     <GenreDisplay genres={song.genre} />
-    <TitleDisplay title={song.title} songNo={song.songNo} docViewData={data.docViewData}/>
+    <TitleDisplay title={song.title} songNo={song.songNo} {docData}/>
     <div class="wrapper" data-isMobile={$isMobile}>
         <MultipleTitleDisplay
             titleKo={song.titleKo}
@@ -58,8 +59,8 @@
         />
     </div>
     <CourseContainer courses={song.courses} selectedDifficulty={diff} />
-    {#if data.docViewData}
-        <WikiContentView docViewData={data.docViewData}/>
+    {#if data.docData}
+        <WikiContentView contentTree={docData.contentTree}/>
     {/if}
 {:else}
     <PageTitle title={titleI18n} />

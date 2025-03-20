@@ -161,18 +161,6 @@ export namespace Doc {
             renderedContentTree: DB.WikiFrameDBData['renderedContentTree']
         }
     }
-    /**
-     * 페이지에 보여주기 위해 사용하는 타입
-     */
-    export namespace View{
-        export namespace DB{
-            export type ViewDataKey = 'id' | 'title' | 'type' | 'editorUUID' | 'renderedContentTree' | 'songNo' | 'redirectTo' | 'editedTime' | 'isDeleted' | 'version';
-            export type ViewData = Pick<Doc.DB.WikiDocDBData, ViewDataKey>
-        }
-        export namespace Page{
-            export type ViewData = DB.ViewData & { preparedContent: Data.WikiContentTree } & { editor: string };
-        }
-    }
 }
 
 // 윈도우 컨텍스트

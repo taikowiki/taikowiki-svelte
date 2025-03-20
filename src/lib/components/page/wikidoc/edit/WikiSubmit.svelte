@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
-    import { wikiDocRequestor } from "$lib/module/common/wikidoc/requestor.client";
+    import { wikiDocRequestor } from "$lib/module/common/wikidoc/server/requestor.client";
     import { getTheme } from "$lib/module/layout/theme";
     import type {Doc} from '$lib/module/common/wikidoc/types';
 
@@ -111,7 +111,7 @@
         <input type="checkbox" bind:checked={submitAgree} />
         제출 시 당신은 기여한 내용을 CC-BY-NC-SA 라이센스로 배포하고, 기여한 내용에
         대한 모든 책임은 본인에게 있음에 동의합니다. 기여한 내용과 당신의 IP주소,
-        UUID가 영구히 기록됩니다.이 동의는 철회할 수 없습니다.
+        UUID가 영구히 기록됩니다. 이 동의는 철회할 수 없습니다.
     </label>
     <button
         class="submit-btn"

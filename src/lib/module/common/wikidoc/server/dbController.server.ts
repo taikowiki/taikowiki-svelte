@@ -1,9 +1,9 @@
 import { defineDBHandler } from "@yowza/db-handler";
-import type {Doc} from '$lib/module/common/wikidoc/types';
-import { WikiError } from "./wikiError.js";
-import { normalizeContentTree, renderer } from "./renderer.js";
-import { validateDocData } from "./util.js";
-import { songDBController } from "../song/song.server.js";
+import type { Doc } from '$lib/module/common/wikidoc/types';
+import { WikiError, validateDocData } from "../util.js";
+import { renderer } from "../util.js";
+import { songDBController } from "../../song/song.server.js";
+import { sqlEscapeString } from "../../util.js";
 
 function parseDBData<T extends keyof Doc.DB.WikiDocDBData = keyof Doc.DB.WikiDocDBData>(dataFromDB: any): Pick<Doc.DB.WikiDocDBData, T> {
     const docData: any = {};
@@ -92,7 +92,7 @@ export const docDBController = {
                     docData.comment,
                     docData.type !== "redirect" ? JSON.stringify(docData.contentTree) : null,
                     docData.type !== "redirect" ? JSON.stringify(await renderer.prerenderContentTree(docData.contentTree)) : null,
-                    docData.type !== "redirect" ? normalizeContentTree(docData.contentTree) : null,
+                    docData.type !== "redirect" ? renderer.normalizeContentTree(docData.contentTree) : null,
                     docData.songNo ?? null,
                     redirectTo
                 ]
@@ -169,7 +169,7 @@ export const docDBController = {
                     docData.comment,
                     docData.type !== "redirect" ? JSON.stringify(docData.contentTree) : null,
                     docData.type !== "redirect" ? JSON.stringify(await renderer.prerenderContentTree(docData.contentTree)) : null,
-                    docData.type !== "redirect" ? normalizeContentTree(docData.contentTree) : null,
+                    docData.type !== "redirect" ? renderer.normalizeContentTree(docData.contentTree) : null,
                     docData.songNo ?? null,
                     redirectTo,
                     version + 1,
@@ -183,14 +183,47 @@ export const docDBController = {
      * 페이지 당 50개
      */
     getLogs: defineDBHandler<[id: number, page: number]>((id, page) => {
-        if(id === 1){
-            const logs = [];
-        }
-        else{
+        return async (run) => {
+            if (id === 1) {
+                const logs = [];
+            }
+            else {
 
+            }
+            return 0;
         }
-    })
-    ,
+    }),
+    /**
+     * 특정 컬럼만 조건에 따라 가져옴
+     * @param id 
+     * @param columns 
+     * @param where 
+     * @returns 
+     */
+    getColumnsWhere: defineDBHandler<[columns: (keyof Doc.DB.WikiDocDBData)[], where?: [column: keyof Doc.DB.WikiDocDBData, value: any][]], Partial<Doc.DB.WikiDocDBData>[]>((columns, where) => {
+        const columnsQuery = columns.map(e => `\`${sqlEscapeString(e)}\``).join(', ');
+        const whereQuery = where ? 'WHERE ' + where.map(e => `\`${sqlEscapeString(e[0])}\` = ?`).join(' AND ') : '';
+        return async (run) => {
+            const result = await run(`SELECT ${columnsQuery} FROM \`docs\` ${whereQuery}`,
+                where ?
+                    where.map((e) => e[1]) :
+                    []
+            )
+
+            return (result as any[]).map(parseDBData) as Partial<Doc.DB.WikiDocDBData>[];
+        }
+    }),
+    getCountWhere: defineDBHandler<[where?: [column: keyof Doc.DB.WikiDocDBData, value: any][]], number>((where) => {
+        const whereQuery = where ? 'WHERE ' + where.map(e => `\`${sqlEscapeString(e[0])}\` = ?`).join(' AND ') : '';
+        return async (run) => {
+            const result = await run(`SELECT COUNT(*) AS COUNT FROM \`docs\` ${whereQuery}`,
+                where ?
+                    where.map((e) => e[1]) :
+                    []
+            );
+            return result[0].COUNT;
+        }
+    }),
     /**
      * 해당 제목의 문서 존재 여부 반환
      */
@@ -267,31 +300,6 @@ export const docDBController = {
         }
     }),
     /**
-     * 특정 제목을 가진 문서의 view data를 반환
-     */
-    getDocViewDataByTitle: defineDBHandler<[title: string], Doc.View.DB.ViewData | null>((title) => {
-        return async (run) => {
-            const result = await run("SELECT `id`, `title`, `type`, `editorUUID`, `renderedContentTree`, `songNo`, `redirectTo`, `editedTime`, `isDeleted`, `version` FROM `docs` WHERE `title` = ?", [title]);
-
-            if (result.length === 0) {
-                return null;
-            }
-
-            return parseDBData<Doc.View.DB.ViewDataKey>(result[0]);
-        }
-    }),
-    getDocViewDataBySongNo: defineDBHandler<[songNo: string], Doc.View.DB.ViewData | null>((songNo) => {
-        return async(run) => {
-            const result = await run("SELECT `id`, `title`, `type`, `editorUUID`, `renderedContentTree`, `songNo`, `redirectTo`, `editedTime`, `isDeleted`, `version` FROM `docs` WHERE `songNo` = ?", [songNo]);
-
-            if (result.length === 0) {
-                return null;
-            }
-
-            return parseDBData<Doc.View.DB.ViewDataKey>(result[0]);
-        }
-    }),
-    /**
      * 특정 id를 가진 문서의 제목 반환
      */
     getDocTitleById: defineDBHandler<[id: number], string | null>((id) => {
@@ -306,10 +314,10 @@ export const docDBController = {
         }
     }),
     getEditableGradeById: defineDBHandler<[id: number], number | null>((id) => {
-        return async(run) => {
+        return async (run) => {
             const result = await run("SELECT `editableGrade` FROM `docs` WHERE `id` = ?", [id]);
 
-            if(result.length === 0){
+            if (result.length === 0) {
                 return null;
             }
 

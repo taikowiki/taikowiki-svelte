@@ -1,128 +1,113 @@
 import { songDBController } from '$lib/module/common/song/song.server.js';
 import { userDBController } from '$lib/module/common/user/user.server.js';
-import { docDBController } from '$lib/module/common/wikidoc/dbController.server';
-import { renderer } from '$lib/module/common/wikidoc/renderer.js';
-import type {Doc} from '$lib/module/common/wikidoc/types';
+import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server';
+import { renderer } from '$lib/module/common/wikidoc/util.js';
+import type { Doc } from '$lib/module/common/wikidoc/types';
 import { error, redirect } from '@sveltejs/kit';
 import { runQuery } from '@yowza/db-handler';
 import type { HTMLElement } from 'node-html-parser';
 
-export async function load({ params }) {
-    const {
-        status,
-        data
-    } = await runQuery(async (run) => {
-        const docViewData = await docDBController.getDocViewDataByTitle(params.title);
-        if (!docViewData) {
-            return {
-                status: 0
-            } as const;
-        }
+export async function load({ params, locals }) {
+    const columns: (keyof Doc.DB.WikiDocDBData)[] = ['id', 'contentTree', 'editedTime', 'editableGrade', 'editorUUID', 'id', 'isDeleted', 'renderedContentTree', 'songNo', 'title', 'redirectTo', 'type'] as const;
+    type DocData = Pick<Doc.DB.WikiDocDBData, (typeof columns)[number]> & { editor: string } & { contentTree: Doc.Data.WikiContentTree };
 
-        // 삭제되었으면 삭제되었다고 표기
-        if(docViewData.isDeleted){
-            return {
-                status: 3,
-                data: docViewData
+    try {
+        const docData = await runQuery<DocData>(async (run) => {            
+            // db View Data 가져오기
+            const docData = (await docDBController.getColumnsWhere(columns, [['title', params.title]]))[0] as DocData ?? null;
+            if (!docData) {
+                throw error(404);
             }
-        }
+            const editor = (await userDBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID;
 
-        // 리다이렉트면 리다이렉트 시키기
-        if (docViewData.type === "redirect") {
-            const redirectTo = await docDBController.getDocTitleById(docViewData.redirectTo as number);
-            return {
-                status: 1,
-                data: {
-                    redirectTo
-                }
-            } as const
-        }
+            // 삭제되었으면 삭제되었다고 표기하기
+            if (docData.isDeleted) {
+                return { ...docData, editor };
+            }
 
-        if (docViewData.type === "song") {
-            // 곡 문서이고 해당 곡 번호를 가진 곡이 존재함
-            if(docViewData.songNo && await songDBController.songExistsBySongNo(docViewData.songNo)){
-                return {
-                    status: 2,
-                    data: {
-                        songNo: docViewData.songNo
+            // 리다이렉트면 리다이렉트 시키기
+            if (docData.type === "redirect") {
+                if (!docData.redirectTo) {
+                    return {
+                        ...docData,
+                        isDeleted: true,
+                        editor
                     }
-                } as const
-            }
-        }
-
-        const preparedContent: Doc.Data.WikiContentTree = {
-            content: await renderer.prepareView(docViewData.renderedContentTree?.content as string, setWikiLinkAvailable),
-            subParagraphs: await prepareSubParagraphs(docViewData.renderedContentTree?.subParagraphs as Doc.Data.WikiDocParagraph[])
-        };
-
-        const editor = (await userDBController.getNickname.getCallback(docViewData.editorUUID)(run)) ?? docViewData.editorUUID;
-
-        return {
-            status: 3,
-            data: {
-                ...docViewData,
-                editor,
-                preparedContent
-            } as Doc.View.Page.ViewData & { isDeleted: false }
-        } as const;
-
-        async function prepareSubParagraphs(subParagraphs: Doc.Data.WikiDocParagraph[]) {
-            const prepared: Doc.Data.WikiDocParagraph[] = [];
-            for (const subParagraph of subParagraphs) {
-                prepared.push({
-                    title: subParagraph.title,
-                    content: await renderer.prepareView(subParagraph.content, setWikiLinkAvailable),
-                    subParagraphs: await prepareSubParagraphs(subParagraph.subParagraphs)
-                })
-            }
-            return prepared;
-        }
-        async function setWikiLinkAvailable(dom: HTMLElement) {
-            for (const wikiLinkElement of dom.querySelectorAll('wiki-link')) {
-                const docTitle = wikiLinkElement.getAttribute('doctitle');
-                if (!docTitle) {
-                    wikiLinkElement.setAttribute('available', 'false');
-                    continue;
                 }
-
-                const exists = await docDBController.docTitleExists.getCallback(docTitle)(run);
-                if (exists) {
-                    wikiLinkElement.setAttribute('available', 'true');
+                const redirectDocTitle = await docDBController.getDocTitleById.getCallback(docData.redirectTo)(run);
+                if (redirectDocTitle) {
+                    throw redirect(302, `/doc/r/${encodeURIComponent(redirectDocTitle)}?from=${encodeURIComponent(docData.title)}`)
                 }
                 else {
-                    wikiLinkElement.setAttribute('available', 'false');
+                    return {
+                        ...docData,
+                        isDeleted: true,
+                        editor
+                    }
                 }
             }
-        }
-    })
 
-    switch (status) {
-        case (0): {
-            throw error(404);
-        }
-        case (1): {
-            if (data.redirectTo === null) {
-                throw error(404);
+            if (docData.type === "song") {
+                // 곡 문서이고 해당 곡 번호를 가진 곡이 존재함
+                if (docData.songNo && await songDBController.songExistsBySongNo.getCallback(docData.songNo)(run)) {
+                    throw redirect(302, `/song/${docData.songNo}`)
+                }
             }
-            else {
-                throw redirect(302, `/doc/r/${encodeURIComponent(data.redirectTo)}`)
-            }
-        }
-        case (2): {
-            if (data.songNo === null) {
-                throw error(404);
-            }
-            throw redirect(302, `/song/${data.songNo}`)
-        }
-        case (3): {
+
+            const preparedContent: Doc.Data.WikiContentTree = {
+                content: await renderer.prepareView(docData.renderedContentTree?.content as string, setWikiLinkAvailable),
+                subParagraphs: await prepareParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.WikiDocParagraph[])
+            };
             return {
-                docViewData: {
-                    ...data
-                } as const
+                ...docData,
+                editor,
+                contentTree: preparedContent
             }
+
+            /**
+             * 하위 문단 준비
+             * @param subParagraphs 
+             * @returns 
+             */
+            async function prepareParagraphs(subParagraphs: Doc.Data.WikiDocParagraph[]) {
+                const prepared: Doc.Data.WikiDocParagraph[] = [];
+                for (const subParagraph of subParagraphs) {
+                    prepared.push({
+                        title: subParagraph.title,
+                        content: await renderer.prepareView(subParagraph.content, setWikiLinkAvailable),
+                        subParagraphs: await prepareParagraphs(subParagraph.subParagraphs)
+                    })
+                }
+                return prepared;
+            }
+            /**
+             * wiki-link가 사용가능한지 확인하고 속성 추가
+             */
+            async function setWikiLinkAvailable(dom: HTMLElement) {
+                for (const wikiLinkElement of dom.querySelectorAll('wiki-link')) {
+                    const docTitle = wikiLinkElement.getAttribute('doctitle');
+                    if (!docTitle) {
+                        wikiLinkElement.setAttribute('available', 'false');
+                        continue;
+                    }
+
+                    const exists = await docDBController.docTitleExists.getCallback(docTitle)(run);
+                    if (exists) {
+                        wikiLinkElement.setAttribute('available', 'true');
+                    }
+                    else {
+                        wikiLinkElement.setAttribute('available', 'false');
+                    }
+                }
+            }
+        });
+
+        return {
+            docData,
+            canEditable: locals.userData ? locals.userData.grade >= docData.editableGrade : false
         }
-        default: {
-            throw error(404);
-        }
+    }
+    catch (err) {
+        throw err;
     }
 }

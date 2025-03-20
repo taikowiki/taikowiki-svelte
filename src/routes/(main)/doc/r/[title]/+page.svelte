@@ -1,19 +1,24 @@
 <script lang="ts">
+    import DocRedirectFrom from "$lib/components/page/wikidoc/view/DocRedirectFrom.svelte";
     import WikiContentView from "$lib/components/page/wikidoc/view/WikiContentView.svelte";
     import WikiTitleView from "$lib/components/page/wikidoc/view/WikiTitleView.svelte";
-    import type { Doc } from "$lib/module/common/wikidoc/types";
-
-    interface Props {}
 
     let { data } = $props();
-    let docViewData = $derived(data.docViewData);
+    let docData = $state(data.docData);
+    let { canEditable } = data;
 
     //$inspect(data.docViewData);
 </script>
 
-<WikiTitleView {docViewData} />
-{#if docViewData.isDeleted}
+<DocRedirectFrom />
+<WikiTitleView
+    id={docData.id}
+    title={docData.title}
+    editedTime={docData.editedTime}
+    {canEditable}
+/>
+{#if docData.isDeleted}
     이 문서는 삭제되었습니다.
 {:else}
-    <WikiContentView docViewData={data.docViewData as Doc.View.Page.ViewData} />
+    <WikiContentView contentTree={docData.contentTree} />
 {/if}

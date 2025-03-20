@@ -1,4 +1,4 @@
-import { docDBController } from '$lib/module/common/wikidoc/dbController.server.js';
+import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function load({params, url}){

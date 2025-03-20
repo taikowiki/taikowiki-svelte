@@ -9,7 +9,7 @@
         insertAnnotation,
         insertImage,
         insertWikiLink,
-    } from "$lib/module/common/wikidoc/toast/markdownCommands";
+    } from "$lib/module/common/wikidoc/client/markdownCommands.client";
     import AnnotationPopup from "./popup/AnnotationPopup.svelte";
     import WikiLinkPopup from "./popup/WikiLinkPopup.svelte";
     import { getTheme } from "$lib/module/layout/theme";

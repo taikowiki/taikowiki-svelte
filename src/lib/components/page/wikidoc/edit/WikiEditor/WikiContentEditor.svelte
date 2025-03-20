@@ -1,6 +1,6 @@
 <script lang="ts">
     import ToastEditor from "./Toast/ToastEditor.svelte";
-    import WikiDocPreview from "../Preview/WikiDocPreview.svelte";
+    import WikiDocPreview from "../Preview/DocPreview.svelte";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {

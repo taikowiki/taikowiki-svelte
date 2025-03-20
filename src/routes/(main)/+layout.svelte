@@ -44,7 +44,7 @@
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
-    import { getWikiWindowContext } from "$lib/module/common/wikidoc/util.js";
+    import { wikiContext } from "$lib/module/common/wikidoc/util.js";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -111,7 +111,7 @@
         }
     });
 
-    getWikiWindowContext();
+    wikiContext.getWikiWindowContext();
 </script>
 
 <svelte:head>

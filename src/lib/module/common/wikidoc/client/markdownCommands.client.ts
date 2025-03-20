@@ -1,6 +1,6 @@
 import type { Doc } from "$lib/module/common/wikidoc/types";
 import type { Transaction } from "prosemirror-state";
-import { escapeHtml } from "../util.js";
+import { renderer } from "../util.js";
 
 /**
  * 이미지를 삽입하는 함수.
@@ -73,10 +73,10 @@ export function insertAnnotation(option: Doc.Toast.AnnotPluginFunctionOption, st
 export function insertWikiLink(option: Doc.Toast.WikiLinkPluginFunctionOption, state: any, dispatch: any, view: any) {
     const transcation: Transaction = state.tr;
     if (option.content) {
-        transcation.insertText(`<wiki-link doctitle="${escapeHtml(option.docTitle ?? '')}">${escapeHtml(option.content)}</wiki-link>`);
+        transcation.insertText(`<wiki-link doctitle="${renderer.escapeHtml(option.docTitle ?? '')}">${renderer.escapeHtml(option.content)}</wiki-link>`);
     }
     else {
-        transcation.insertText(`<wiki-link doctitle="${escapeHtml(option.docTitle ?? '')}"/>`);
+        transcation.insertText(`<wiki-link doctitle="${renderer.escapeHtml(option.docTitle ?? '')}"/>`);
     }
 
     dispatch(transcation);

@@ -7,18 +7,24 @@
     interface Props {
         title: string;
         songNo: string;
-        docViewData: Doc.View.Page.ViewData | null;
+        docData: {
+            id: number;
+            title: string;
+            canEditable: boolean;
+        } | null;
     }
 
-    let { title, songNo, docViewData }: Props = $props();
+    let { title, songNo, docData }: Props = $props();
 
     const [theme] = getTheme();
 </script>
 
 {#snippet docEdit()}
-    {#if docViewData}
-        <WikiDocEditBtn id={docViewData.id} title={docViewData.title} />
-        <WikiDocLogBtn id={docViewData.id} />
+    {#if docData}
+        {#if docData.canEditable}
+            <WikiDocEditBtn id={docData.id} title={docData.title} />
+        {/if}
+        <WikiDocLogBtn id={docData.id} />
     {/if}
 {/snippet}
 {#snippet youtube()}

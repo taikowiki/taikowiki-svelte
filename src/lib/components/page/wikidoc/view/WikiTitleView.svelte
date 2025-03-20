@@ -4,23 +4,28 @@
     import WikiDocLogBtn from "./WikiView/WikiDocLogBtn.svelte";
 
     interface Props {
-        docViewData: any;
+        id: number;
+        title: string;
+        editedTime: Date;
+        canEditable: boolean;
     }
-    let { docViewData }: Props = $props();
+    let { id, title, editedTime, canEditable }: Props = $props();
 </script>
 
 <h1 class="container">
     <div class="title">
-        {docViewData.title}
+        {title}
     </div>
     <div class="title-others">
         <div class="icon-container">
-            <WikiDocEditBtn id={docViewData.id} title={docViewData.title} />
-            <WikiDocLogBtn id={docViewData.id} />
+            {#if canEditable}
+                <WikiDocEditBtn {id} {title} />
+            {/if}
+            <WikiDocLogBtn {id} />
         </div>
         <div class="title-date">
             최근 수정 시각:
-            {DateTime.fromJSDate(docViewData.editedTime, {
+            {DateTime.fromJSDate(editedTime, {
                 zone: "Asia/Seoul",
             }).toFormat("yyyy-MM-dd")}
         </div>

@@ -3,7 +3,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { property } from 'lit/decorators.js';
 import { Task } from '@lit/task';
 import { get, type Unsubscriber, type Writable } from 'svelte/store';
-import { getWikiWindowContext } from './util.js';
+import { wikiContext } from '../util.js';
 import { defineRequestHandler } from '@yowza/rrequestor';
 import type {Doc} from '$lib/module/common/wikidoc/types';
 
@@ -24,6 +24,10 @@ export function defineWikiElements() {
     defineElement(WikiLink, 'wiki-link');
 }
 
+export function isDefined(){
+    return customElements.get('wiki-link') ? true : false;
+}
+
 /**
  * `<wiki-frame-view>`
  * 
@@ -36,7 +40,7 @@ export class WikiFrameViewElement extends LitElement {
         task: async ([frameTitle]) => {
             if (!frameTitle) return null;
 
-            const frameFromWindowContext = getWikiWindowContext().get('wikiDocFrames')?.get(frameTitle);
+            const frameFromWindowContext = wikiContext.getWikiWindowContext().get('wikiDocFrames')?.get(frameTitle);
             if (frameFromWindowContext) {
                 return frameFromWindowContext;
             }
@@ -189,7 +193,7 @@ export class WikiAnnotationElement extends LitElement {
      * `__window__context__.wikiDocAnnotations`에 해당 주석의 내용을 저장하는 함수.
      */
     assignAnnotationContent() {
-        const windowContext = getWikiWindowContext();
+        const windowContext = wikiContext.getWikiWindowContext();
         if (!windowContext) return;
         if (typeof (this.key) === "undefined") return;
 
@@ -210,7 +214,7 @@ export class WikiAnnotationElement extends LitElement {
     connectedCallback(): void {
         super.connectedCallback();
 
-        const windowContext = getWikiWindowContext();
+        const windowContext = wikiContext.getWikiWindowContext();
         if (!windowContext) return;
 
         //`theme` property를 theme 스토어와 동기화.
@@ -314,7 +318,7 @@ export class WikiAnnotationElement extends LitElement {
      * - 모바일 아님 -> 하단 주석으로 이동.
      */
     clickHandler() {
-        const isMobile = getWikiWindowContext().get('isMobile');
+        const isMobile = wikiContext.getWikiWindowContext().get('isMobile');
         if (!isMobile) return;
         const isMobileValue = get(isMobile);
         if (isMobileValue) {
@@ -360,7 +364,7 @@ export class WikiAnnotationElement extends LitElement {
             return html``;
         }
 
-        const annotationContent: string | undefined = getWikiWindowContext().get('wikiDocAnnotations')?.get(this.key);
+        const annotationContent: string | undefined = wikiContext.getWikiWindowContext().get('wikiDocAnnotations')?.get(this.key);
         if (!annotationContent) {
             return html``;
         }
@@ -436,7 +440,7 @@ export class WikiLink extends LitElement {
     connectedCallback(): void {
         super.connectedCallback();
 
-        const windowContext = getWikiWindowContext();
+        const windowContext = wikiContext.getWikiWindowContext();
         if (!windowContext) return;
 
         //`theme` property를 theme 스토어와 동기화.
@@ -461,7 +465,7 @@ export class WikiLink extends LitElement {
         }
 
         // window context의 `urlBase`
-        const urlBaseString = getWikiWindowContext().get('wikiDocURLBase');
+        const urlBaseString = wikiContext.getWikiWindowContext().get('wikiDocURLBase');
         if (!urlBaseString) {
             return `/${encodeURIComponent(this.docTitle)}`;
         }

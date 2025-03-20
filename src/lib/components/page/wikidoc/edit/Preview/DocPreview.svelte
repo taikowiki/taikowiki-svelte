@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { renderer } from "$lib/module/common/wikidoc/renderer";
-    import { defineWikiElements } from "$lib/module/common/wikidoc/wikiElements.client";
+    import { renderer } from "$lib/module/common/wikidoc/util";
+    import { defineWikiElements, isDefined } from "$lib/module/common/wikidoc/client/wikiElements.client";
     import { getTheme } from "$lib/module/layout/theme";
-    import { resetWikiDocAnnotations } from "$lib/module/common/wikidoc/util";
+    import { wikiContext } from "$lib/module/common/wikidoc/util";
 
     /*
     import { getWindowContext } from "$lib/module/common/util.client";
@@ -16,9 +16,10 @@
 
     let { content }: Props = $props();
 
-    defineWikiElements();
-
-    resetWikiDocAnnotations();
+    if(!isDefined()){
+        defineWikiElements();
+    }
+    wikiContext.resetWikiDocAnnotations();
     let convertedContentPromise = $derived(renderer.renderPreviewHTML(content));
 
     const [theme] = getTheme();

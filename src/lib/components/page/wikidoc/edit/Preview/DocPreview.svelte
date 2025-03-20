@@ -2,7 +2,7 @@
     import { renderer } from "$lib/module/common/wikidoc/util";
     import { defineWikiElements, isDefined } from "$lib/module/common/wikidoc/client/wikiElements.client";
     import { getTheme } from "$lib/module/layout/theme";
-    import { wikiContext } from "$lib/module/common/wikidoc/util";
+    import { docContext } from "$lib/module/common/wikidoc/util";
 
     /*
     import { getWindowContext } from "$lib/module/common/util.client";
@@ -19,7 +19,7 @@
     if(!isDefined()){
         defineWikiElements();
     }
-    wikiContext.resetWikiDocAnnotations();
+    docContext.resetWikiDocAnnotations();
     let convertedContentPromise = $derived(renderer.renderPreviewHTML(content));
 
     const [theme] = getTheme();

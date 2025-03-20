@@ -1,11 +1,11 @@
 <script lang="ts">
     import type {Doc} from '$lib/module/common/wikidoc/types';
     import { getTheme } from "$lib/module/layout/theme";
-    import WikiContentEditor from "./WikiContentEditor.svelte";
-    import WikiSubSubParagraphEditor from "./WikiSubSubParagraphEditor.svelte";
+    import WikiContentEditor from "./DocContentEditor.svelte";
+    import DocSubParagraphEditor from './DocSubParagraphEditor_.svelte';
 
     interface Props {
-        paragraph: Doc.Data.WikiDocParagraph;
+        paragraph: Doc.Data.DocParagraph;
         deleteParagraph: () => void;
         index: number[];
     }
@@ -74,7 +74,7 @@
                     {@const deleteParagraph = () => {
                         deleteSubParagraphByIndex(i);
                     }}
-                    <WikiSubSubParagraphEditor
+                    <DocSubParagraphEditor
                         bind:paragraph={paragraph.subParagraphs[i]}
                         {deleteParagraph}
                         index={[...index, i + 1]}

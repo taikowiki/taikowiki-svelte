@@ -5,7 +5,7 @@ import { renderer } from "../util.js";
 import { songDBController } from "../../song/song.server.js";
 import { sqlEscapeString } from "../../util.js";
 
-function parseDBData<T extends keyof Doc.DB.WikiDocDBData = keyof Doc.DB.WikiDocDBData>(dataFromDB: any): Pick<Doc.DB.WikiDocDBData, T> {
+function parseDBData<T extends keyof Doc.DB.DocDBData = keyof Doc.DB.DocDBData>(dataFromDB: any): Pick<Doc.DB.DocDBData, T> {
     const docData: any = {};
     Object.keys(dataFromDB).forEach((key) => {
         if (key === "contentTree" || key === "renderedContentTree") {
@@ -41,7 +41,7 @@ export const docDBController = {
      * @throws `REDIRECT_DOC_NOT_EXISTS` 리다이렉트 할 문서가 존재하지 않음.
      * @throws `SONG_NOT_EXISTS` 연결할 곡이 존재하지 않음.
      */
-    create: defineDBHandler<[UUID: string, ip: string, docData: Doc.Data.WikiDocData]>((UUID, ip, docData) => {
+    create: defineDBHandler<[UUID: string, ip: string, docData: Doc.Data.DocData]>((UUID, ip, docData) => {
         return async (run) => {
             // 제목 비어있는지 검사
             if (!docData.title) {
@@ -109,7 +109,7 @@ export const docDBController = {
      * @throws `SONG_NOT_EXISTS` 연결할 곡이 존재하지 않음.
      * @throws `ID_NOT_EXISTS` 해당 ID의 문서가 존재하지 않음.
      */
-    update: defineDBHandler<[id: number, UUID: string, ip: string, docData: Doc.Data.WikiDocData]>((id, UUID, ip, docData) => {
+    update: defineDBHandler<[id: number, UUID: string, ip: string, docData: Doc.Data.DocData]>((id, UUID, ip, docData) => {
         return async (run) => {
             const result = await run("SELECT `version` FROM `docs` WHERE `id` = ?", [id]);
             if (result.length === 0) {
@@ -200,7 +200,7 @@ export const docDBController = {
      * @param where 
      * @returns 
      */
-    getColumnsWhere: defineDBHandler<[columns: (keyof Doc.DB.WikiDocDBData)[], where?: [column: keyof Doc.DB.WikiDocDBData, value: any][]], Partial<Doc.DB.WikiDocDBData>[]>((columns, where) => {
+    getColumnsWhere: defineDBHandler<[columns: (keyof Doc.DB.DocDBData)[], where?: [column: keyof Doc.DB.DocDBData, value: any][]], Partial<Doc.DB.DocDBData>[]>((columns, where) => {
         const columnsQuery = columns.map(e => `\`${sqlEscapeString(e)}\``).join(', ');
         const whereQuery = where ? 'WHERE ' + where.map(e => `\`${sqlEscapeString(e[0])}\` = ?`).join(' AND ') : '';
         return async (run) => {
@@ -210,10 +210,10 @@ export const docDBController = {
                     []
             )
 
-            return (result as any[]).map(parseDBData) as Partial<Doc.DB.WikiDocDBData>[];
+            return (result as any[]).map(parseDBData) as Partial<Doc.DB.DocDBData>[];
         }
     }),
-    getCountWhere: defineDBHandler<[where?: [column: keyof Doc.DB.WikiDocDBData, value: any][]], number>((where) => {
+    getCountWhere: defineDBHandler<[where?: [column: keyof Doc.DB.DocDBData, value: any][]], number>((where) => {
         const whereQuery = where ? 'WHERE ' + where.map(e => `\`${sqlEscapeString(e[0])}\` = ?`).join(' AND ') : '';
         return async (run) => {
             const result = await run(`SELECT COUNT(*) AS COUNT FROM \`docs\` ${whereQuery}`,
@@ -275,14 +275,14 @@ export const docDBController = {
     /**
      * 특정 id를 가진 문서를 반환
      */
-    getDocDataById: defineDBHandler<[id: number], Doc.DB.WikiDocDBData | null>((id) => {
+    getDocDataById: defineDBHandler<[id: number], Doc.DB.DocDBData | null>((id) => {
         return async (run) => {
             const result = await run("SELECT * FROM `docs` WHERE `id` = ?", [id]);
             if (result.length === 0) {
                 return null;
             }
 
-            return parseDBData(result[0]) as Doc.DB.WikiDocDBData;
+            return parseDBData(result[0]) as Doc.DB.DocDBData;
         }
     }),
     /**

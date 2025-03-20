@@ -8,8 +8,8 @@ import { redirect } from '@sveltejs/kit';
 import { runQuery } from '@yowza/db-handler';
 import type { HTMLElement } from 'node-html-parser';
 
-const docDataColumns: (keyof Doc.DB.WikiDocDBData)[] = ['id', 'contentTree', 'editedTime', 'editableGrade', 'editorUUID', 'id', 'isDeleted', 'renderedContentTree', 'songNo', 'title', 'redirectTo', 'type'] as const;
-type DocData = Pick<Doc.DB.WikiDocDBData, (typeof docDataColumns)[number]> & { editor: string } & { contentTree: Doc.Data.WikiContentTree };
+const docDataColumns: (keyof Doc.DB.DocDBData)[] = ['id', 'contentTree', 'editedTime', 'editableGrade', 'editorUUID', 'id', 'isDeleted', 'renderedContentTree', 'songNo', 'title', 'redirectTo', 'type'] as const;
+type DocData = Pick<Doc.DB.DocDBData, (typeof docDataColumns)[number]> & { editor: string } & { contentTree: Doc.Data.ContentTree };
 
 export async function load({ params, url, locals }) {
     const diff = (url.searchParams.get('diff') ?? 'oni') as Difficulty;
@@ -36,9 +36,9 @@ export async function load({ params, url, locals }) {
         }
 
         const editor = (await userDBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID;
-        const preparedContent: Doc.Data.WikiContentTree = {
+        const preparedContent: Doc.Data.ContentTree = {
             content: await renderer.prepareView(docData.renderedContentTree?.content as string, setWikiLinkAvailable),
-            subParagraphs: await prepareSubParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.WikiDocParagraph[])
+            subParagraphs: await prepareSubParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[])
         };
         
         return {
@@ -50,8 +50,8 @@ export async function load({ params, url, locals }) {
             }
         }
 
-        async function prepareSubParagraphs(subParagraphs: Doc.Data.WikiDocParagraph[]) {
-            const prepared: Doc.Data.WikiDocParagraph[] = [];
+        async function prepareSubParagraphs(subParagraphs: Doc.Data.DocParagraph[]) {
+            const prepared: Doc.Data.DocParagraph[] = [];
             for (const subParagraph of subParagraphs) {
                 prepared.push({
                     title: subParagraph.title,

@@ -16,7 +16,7 @@ export async function load({ params, locals }) {
     const { docDBData, redirectTo } = await runQuery(async (run) => {
         const docDBData = await docDBController.getDocDataById(id);
         const redirectTo = docDBData?.redirectTo ?
-            (await docDBController.getColumnsWhere(['title'], [['id', docDBData.redirectTo]]))[0]?.title ?? null : null;
+            (await docDBController.getColumnsWhere.getCallback(['title'], [['id', docDBData.redirectTo]])(run))[0]?.title ?? null : null;
         return { docDBData, redirectTo }
     })
     if (!docDBData) {
@@ -26,7 +26,7 @@ export async function load({ params, locals }) {
         throw error(403);
     }
 
-    const docData: Doc.Data.WikiDocData = {
+    const docData: Doc.Data.DocData = {
         title: docDBData.title,
         type: docDBData.type as any,
         contentTree: docDBData.contentTree as any,
@@ -34,7 +34,7 @@ export async function load({ params, locals }) {
         comment: docDBData.comment,
         redirectTo
     };
-    
+
     return {
         docData
     }

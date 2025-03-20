@@ -1,7 +1,7 @@
 <script lang="ts">
     import DocRedirectFrom from "$lib/components/page/wikidoc/view/DocRedirectFrom.svelte";
-    import WikiContentView from "$lib/components/page/wikidoc/view/WikiContentView.svelte";
-    import WikiTitleView from "$lib/components/page/wikidoc/view/WikiTitleView.svelte";
+    import DocContentView from "$lib/components/page/wikidoc/view/DocContentView.svelte";
+    import DocTitleView from "$lib/components/page/wikidoc/view/DocTitleView.svelte";
 
     let { data } = $props();
     let docData = $state(data.docData);
@@ -11,7 +11,7 @@
 </script>
 
 <DocRedirectFrom />
-<WikiTitleView
+<DocTitleView
     id={docData.id}
     title={docData.title}
     editedTime={docData.editedTime}
@@ -20,5 +20,5 @@
 {#if docData.isDeleted}
     이 문서는 삭제되었습니다.
 {:else}
-    <WikiContentView contentTree={docData.contentTree} />
+    <DocContentView contentTree={docData.contentTree} />
 {/if}

@@ -6,7 +6,7 @@
     import type {Doc} from '$lib/module/common/wikidoc/types';
 
     interface Props {
-        wikiDoc: Doc.Data.WikiDocData;
+        wikiDoc: Doc.Data.DocData;
         type?: "create" | "update";
     }
 

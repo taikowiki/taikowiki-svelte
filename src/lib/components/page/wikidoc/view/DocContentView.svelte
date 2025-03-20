@@ -3,11 +3,11 @@
     import { page } from "$app/state";
     import Loading from "$lib/components/common/Loading.svelte";
     import type { Doc } from "$lib/module/common/wikidoc/types";
-    import { wikiContext } from "$lib/module/common/wikidoc/util";
-    import WikiParagraphView from "./WikiParagraphView.svelte";
+    import { docContext } from "$lib/module/common/wikidoc/util";
+    import DocParagraphView from "./DocParagraphView.svelte";
 
     interface Props {
-        contentTree: Doc.Data.WikiContentTree
+        contentTree: Doc.Data.ContentTree
     }
 
     let { contentTree }: Props = $props();
@@ -26,7 +26,7 @@
         }
     });
 
-    wikiContext.defineWikiDocURLBase(
+    docContext.defineWikiDocURLBase(
         (() => {
             const base = new URL(page.url);
             base.pathname = "/doc/r";
@@ -41,7 +41,7 @@
     {:then}
         {@html contentTree.content}
         {#each contentTree.subParagraphs as subParagraph, index}
-            <WikiParagraphView paragraph={subParagraph} index={`${index + 1}`} />
+            <DocParagraphView paragraph={subParagraph} index={`${index + 1}`} />
         {/each}
     {/await}
 {/key}

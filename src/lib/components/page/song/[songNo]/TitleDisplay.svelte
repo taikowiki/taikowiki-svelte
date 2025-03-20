@@ -1,8 +1,7 @@
 <script lang="ts">
-    import type { Doc } from "$lib/module/common/wikidoc/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import WikiDocEditBtn from "../../wikidoc/view/WikiView/WikiDocEditBtn.svelte";
-    import WikiDocLogBtn from "../../wikidoc/view/WikiView/WikiDocLogBtn.svelte";
+    import DocEditBtn from "../../wikidoc/view/DocView/DocEditBtn.svelte";
+    import DocLogBtn from "../../wikidoc/view/DocView/DocLogBtn.svelte";
 
     interface Props {
         title: string;
@@ -22,9 +21,9 @@
 {#snippet docEdit()}
     {#if docData}
         {#if docData.canEditable}
-            <WikiDocEditBtn id={docData.id} title={docData.title} />
+            <DocEditBtn id={docData.id} title={docData.title} />
         {/if}
-        <WikiDocLogBtn id={docData.id} />
+        <DocLogBtn id={docData.id} />
     {/if}
 {/snippet}
 {#snippet youtube()}

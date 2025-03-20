@@ -1,13 +1,13 @@
 <script lang="ts">
-    import WikiTypeSelector from "./WikiEditor/WikiTypeSelector.svelte";
-    import WikiTitleEditor from "./WikiEditor/WikiTitleEditor.svelte";
-    import WikiContentEditor from "./WikiEditor/WikiContentEditor.svelte";
+    import DocTypeSelector from "./DocEditor/DocTypeSelector.svelte";
+    import DocTitleEditor from "./DocEditor/DocTitleEditor.svelte";
+    import DocContentEditor from "./DocEditor/DocContentEditor.svelte";
     import { getTheme } from "$lib/module/layout/theme";
-    import WikiSubParagraphEditor from "./WikiEditor/WikiSubParagraphEditor.svelte";
+    import DocParagraphEditor from "./DocEditor/DocParagraphEditor.svelte";
     import type {Doc} from '$lib/module/common/wikidoc/types';
 
     interface Props {
-        wikiDoc: Doc.Data.WikiDocData;
+        wikiDoc: Doc.Data.DocData;
     }
 
     let { wikiDoc = $bindable() }: Props = $props();
@@ -22,7 +22,7 @@
 
 {#snippet contentEditor()}
     {#if wikiDoc.type === "normal" || wikiDoc.type === "song"}
-        <WikiContentEditor bind:content={wikiDoc.contentTree.content} />
+        <DocContentEditor bind:content={wikiDoc.contentTree.content} />
     {/if}
 {/snippet}
 {#snippet subParagraphEditor()}
@@ -58,7 +58,7 @@
                     {@const deleteParagraph = () => {
                         deleteSubParagraphByIndex(index);
                     }}
-                    <WikiSubParagraphEditor
+                    <DocParagraphEditor
                         bind:paragraph={
                             wikiDoc.contentTree.subParagraphs[index]
                         }
@@ -72,8 +72,8 @@
 {/snippet}
 
 <div class="container">
-    <WikiTitleEditor bind:title={wikiDoc.title} />
-    <WikiTypeSelector bind:wikiDoc />
+    <DocTitleEditor bind:title={wikiDoc.title} />
+    <DocTypeSelector bind:wikiDoc />
     {@render contentEditor()}
     {@render subParagraphEditor()}
 </div>

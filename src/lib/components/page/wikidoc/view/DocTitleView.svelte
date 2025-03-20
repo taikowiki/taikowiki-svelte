@@ -1,7 +1,7 @@
 <script lang="ts">
     import { DateTime } from "luxon";
-    import WikiDocEditBtn from "./WikiView/WikiDocEditBtn.svelte";
-    import WikiDocLogBtn from "./WikiView/WikiDocLogBtn.svelte";
+    import DocEditBtn from "./DocView/DocEditBtn.svelte";
+    import DocLogBtn from "./DocView/DocLogbtn.svelte";
 
     interface Props {
         id: number;
@@ -19,9 +19,9 @@
     <div class="title-others">
         <div class="icon-container">
             {#if canEditable}
-                <WikiDocEditBtn {id} {title} />
+                <DocEditBtn {id} {title} />
             {/if}
-            <WikiDocLogBtn {id} />
+            <DocLogBtn {id} />
         </div>
         <div class="title-date">
             최근 수정 시각:

@@ -7,8 +7,8 @@ import type { Doc } from '$lib/module/common/wikidoc/types';
  * @param docData 
  * @returns 
  */
-export function validateDocData(docData: Doc.Data.WikiDocData) {
-    function validateParagraph(paragraph: Doc.Data.WikiDocParagraph) {
+export function validateDocData(docData: Doc.Data.DocData) {
+    function validateParagraph(paragraph: Doc.Data.DocParagraph) {
         if (!paragraph.title) return false;
 
         return paragraph.subParagraphs.every(validateParagraph) && true;
@@ -24,7 +24,7 @@ export function validateDocData(docData: Doc.Data.WikiDocData) {
 /**
  * 기본 doc data 생성
  */
-export function createDefaultDocData(): Doc.Data.WikiDocData {
+export function createDefaultDocData(): Doc.Data.DocData {
     return {
         title: "",
         type: "normal",
@@ -38,21 +38,21 @@ export function createDefaultDocData(): Doc.Data.WikiDocData {
     }
 }
 
-export const wikiContext = {
+export const docContext = {
     /**
      * windowContext 반환
      * 
      * ssr이 켜져 있을 때에는 호출 후 `isMobile`과 `theme`을 직접 설정해야함.
      */
-    getWikiWindowContext() {
+    getContext() {
         if (typeof (window) === "undefined") {
             return new Map();
         }
 
-        let windowContext = window.__wiki__window__context__;
+        let windowContext = window.__doc__window__context__;
         if (!windowContext) {
             windowContext = new Map<string & any, any>();
-            window.__wiki__window__context__ = windowContext;
+            window.__doc__window__context__ = windowContext;
         }
 
         try {
@@ -71,7 +71,7 @@ export const wikiContext = {
      * windowContext의 'wikiDocAnnotations' 데이터를 초기화
      */
     resetWikiDocAnnotations() {
-        const windowContext = this.getWikiWindowContext();
+        const windowContext = this.getContext();
 
         let annotationsMap = windowContext.get('wikiDocAnnotations');
         if (annotationsMap) {
@@ -86,7 +86,7 @@ export const wikiContext = {
      * windowContext에 'wikiDocURLBase'를 설정
      */
     defineWikiDocURLBase(base: URL) {
-        this.getWikiWindowContext().set('wikiDocURLBase', base);
+        this.getContext().set('wikiDocURLBase', base);
     },
 }
 
@@ -130,7 +130,7 @@ export const renderer = {
      * @param contentTree 
      * @returns 
      */
-    async prerenderContentTree(contentTree: Doc.Data.WikiContentTree) {
+    async prerenderContentTree(contentTree: Doc.Data.ContentTree) {
         const scope: Record<string, any> = {};
 
         const prerenderContent = async (src: string) => {
@@ -143,13 +143,13 @@ export const renderer = {
             return dom.innerHTML;
         }
 
-        async function prerenderParagraph(paragraph: Doc.Data.WikiDocParagraph): Promise<Doc.Data.WikiDocParagraph> {
-            const subParagraphs: Doc.Data.WikiDocParagraph['subParagraphs'] = [];
+        async function prerenderParagraph(paragraph: Doc.Data.DocParagraph): Promise<Doc.Data.DocParagraph> {
+            const subParagraphs: Doc.Data.DocParagraph['subParagraphs'] = [];
             for (const subParagraph of paragraph.subParagraphs) {
                 subParagraphs.push(await prerenderParagraph(subParagraph));
             }
 
-            const rendered: Doc.Data.WikiDocParagraph = {
+            const rendered: Doc.Data.DocParagraph = {
                 title: paragraph.title,
                 content: await prerenderContent(paragraph.content),
                 subParagraphs
@@ -158,11 +158,11 @@ export const renderer = {
             return rendered;
         }
 
-        const subParagraphs: Doc.Data.WikiDocParagraph['subParagraphs'] = [];
+        const subParagraphs: Doc.Data.DocParagraph['subParagraphs'] = [];
         for (const subParagraph of contentTree.subParagraphs) {
             subParagraphs.push(await prerenderParagraph(subParagraph));
         };
-        const rendered: Doc.Data.WikiContentTree = {
+        const rendered: Doc.Data.ContentTree = {
             content: await prerenderContent(contentTree.content),
             subParagraphs
         };
@@ -227,7 +227,7 @@ export const renderer = {
      * @param contentTree 
      * @returns 
      */
-    normalizeContentTree(contentTree: Doc.Data.WikiContentTree): string {
+    normalizeContentTree(contentTree: Doc.Data.ContentTree): string {
         let normalized = '';
 
         normalized += this.sharpConverter.escapeSharp(contentTree.content);
@@ -237,7 +237,7 @@ export const renderer = {
         })
         return normalized;
 
-        function normalizeParagraph(paragraph: Doc.Data.WikiDocParagraph, depth: number) {
+        function normalizeParagraph(paragraph: Doc.Data.DocParagraph, depth: number) {
             let normalized = '';
 
             // 제목 추가

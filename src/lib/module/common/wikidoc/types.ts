@@ -27,7 +27,7 @@ export namespace Doc {
      */
     export namespace DB {
         // doc
-        export interface WikiDocDBDataBase {
+        export interface DocDBDataBase {
             id: number;
             title: string;
             type: 'normal' | 'song' | 'frame' | 'redirect';
@@ -35,8 +35,8 @@ export namespace Doc {
             editorUUID: string;
             editorIp: string;
             comment: string;
-            contentTree: Data.WikiContentTree | null; // JSON
-            renderedContentTree: Data.WikiContentTree | null; // JSON
+            contentTree: Data.ContentTree | null; // JSON
+            renderedContentTree: Data.ContentTree | null; // JSON
             normalizedContentTree: string | null;
             songNo: string | null;
             redirectTo: number | null;
@@ -45,35 +45,35 @@ export namespace Doc {
             isDeleted: boolean;
             version: number;
         }
-        export interface WikiNormalDocDBData extends WikiDocDBDataBase {
+        export interface NormalDocDBData extends DocDBDataBase {
             type: 'normal';
-            contentTree: Data.WikiContentTree;
-            renderedContentTree: Data.WikiContentTree;
+            contentTree: Data.ContentTree;
+            renderedContentTree: Data.ContentTree;
             songNo: null;
             redirectTo: null;
             //annotations: string[];
             //renderedAnnotations: string[];
         }
-        export interface WikiSongDocDBData extends WikiDocDBDataBase {
+        export interface SongDocDBData extends DocDBDataBase {
             type: 'song';
-            contentTree: Data.WikiContentTree;
-            renderedContentTree: Data.WikiContentTree;
+            contentTree: Data.ContentTree;
+            renderedContentTree: Data.ContentTree;
             //annotations: string[];
             //renderedAnnotations: string[];
             songNo: string;
             redirectTo: null;
         }
-        export interface WikiRedirectDocDBData extends WikiDocDBDataBase {
+        export interface RedirectDocData extends DocDBDataBase {
             type: 'redirect';
             contentTree: null;
             renderedContentTree: null;
             songNo: null;
             redirectTo: number;
         }
-        export type WikiDocDBData = WikiNormalDocDBData | WikiSongDocDBData | WikiRedirectDocDBData;
+        export type DocDBData = NormalDocDBData | SongDocDBData | RedirectDocData;
 
         // frame
-        export interface WikiFrameDBData {
+        export interface FrameDBData {
             id: number;
             title: string;
             type: 'frame';
@@ -93,46 +93,46 @@ export namespace Doc {
      * 문서 데이터에 관련한 타입
      */
     export namespace Data {
-        export interface WikiContentTree {
+        export interface ContentTree {
             content: string;
-            subParagraphs: WikiDocParagraph[];
+            subParagraphs: DocParagraph[];
         }
-        export interface WikiDocParagraph {
+        export interface DocParagraph {
             title: string;
             content: string;
-            subParagraphs: WikiDocParagraph[];
+            subParagraphs: DocParagraph[];
         }
-        export type WikiPrerenderedContentTree = WikiContentTree;
+        export type PrerenderedContentTree = ContentTree;
 
-        export interface WikiDocDataBase {
+        export interface DocDataBase {
             title: string;
             type: 'normal' | 'song' | 'frame' | 'redirect';
             comment: string;
-            contentTree: WikiContentTree | null;
+            contentTree: ContentTree | null;
             songNo: string | null;
             redirectTo: string | null;
         }
-        export interface WikiNormalDocData extends WikiDocDataBase {
+        export interface NormalDocData extends DocDataBase {
             type: 'normal';
-            contentTree: WikiContentTree;
+            contentTree: ContentTree;
             songNo: null;
             redirectTo: null;
         }
-        export interface WikiSongDocData extends WikiDocDataBase {
+        export interface SongDocData extends DocDataBase {
             type: 'song';
-            contentTree: WikiContentTree;
+            contentTree: ContentTree;
             songNo: string;
             redirectTo: null;
         }
-        export interface WikiRedirectDocData extends WikiDocDataBase {
+        export interface RedirectDocData extends DocDataBase {
             type: 'redirect';
             contentTree: null;
             songNo: null;
             redirectTo: string;
         }
-        export type WikiDocData = WikiNormalDocData | WikiRedirectDocData | WikiSongDocData;
+        export type DocData = NormalDocData | RedirectDocData | SongDocData;
 
-        export interface WikiFrameData {
+        export interface FrameData {
             title: string;
             type: 'frame';
             contentTree: {
@@ -156,9 +156,9 @@ export namespace Doc {
      * API에서 사용하는 타입
      */
     export namespace Rest {
-        export interface WikiFrameResponse {
+        export interface FrameResponse {
             title: string;
-            renderedContentTree: DB.WikiFrameDBData['renderedContentTree']
+            renderedContentTree: DB.FrameDBData['renderedContentTree']
         }
     }
 }
@@ -167,10 +167,10 @@ export namespace Doc {
 import type { Writable } from "svelte/store";
 declare global{
 	interface Window {
-		__wiki__window__context__: WikiWindowContext;
+		__doc__window__context__: DocWindowContext;
 	}
 }
-export type WikiWindowContext = 
+export type DocWindowContext = 
 	Map<'theme', Writable<'light' | 'dark'>> &
 	Map<'isMobile', Writable<boolean>> &
 	Map<'wikiDocAnnotations', Map<string, string>> &

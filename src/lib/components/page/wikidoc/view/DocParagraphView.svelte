@@ -1,10 +1,10 @@
 <script lang="ts">
     import type {Doc} from '$lib/module/common/wikidoc/types';
     import { getTheme } from "$lib/module/layout/theme";
-    import WikiSubParagraphView from "./WikiView/WikiSubParagraphView.svelte";
+    import DocSubParagraphView from "./DocView/DocSubParagraphView.svelte";
 
     interface Props {
-        paragraph: Doc.Data.WikiDocParagraph;
+        paragraph: Doc.Data.DocParagraph;
         index: string;
         depth?: number;
     }
@@ -37,7 +37,7 @@
         </div>
         <div class="paragraph-subparagraphs">
             {#each paragraph.subParagraphs as subParagraph, i}
-                <WikiSubParagraphView
+                <DocSubParagraphView
                     paragraph={subParagraph}
                     index={`${index}.${i+1}`}
                     depth={depth + 1}

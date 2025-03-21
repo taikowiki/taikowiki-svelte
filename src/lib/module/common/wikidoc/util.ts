@@ -388,10 +388,10 @@ export const renderer = {
             'wiki-link': ['doctitle'],
             'wiki-yt': ['v'],
             'wiki-float': ['float'],
-            'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float'],
-            'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight'],
-            'style-row': ['bgcolor', 'textcolor', 'height', 'minheight', 'maxheight'],
-            'style-col': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight'],
+            'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float', 'align'],
+            'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align'],
+            'style-row': ['bgcolor', 'textcolor', 'height', 'minheight', 'maxheight', 'align'],
+            'style-col': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align'],
         };
         dom.querySelectorAll('*').forEach((element) => {
             const tag = element.tagName.toLowerCase();
@@ -469,6 +469,7 @@ export const renderer = {
                 const minHeight = styleTableElement.getAttribute('minheight');
                 const maxHeight = styleTableElement.getAttribute('maxheight');
                 const float = styleTableElement.getAttribute('float');
+                const align = styleTableElement.getAttribute('align');
 
                 const style = new CSSStyleDeclaration();
                 borderColor && style.setProperty('border-color', borderColor);;
@@ -481,6 +482,7 @@ export const renderer = {
                 minHeight && style.setProperty('min-height', minHeight);
                 maxHeight && style.setProperty('max-height', maxHeight);
                 float && style.setProperty('float', float);
+                align && style.setProperty('text-align', align);
                 table.setAttribute('style', style.cssText);
             }
 
@@ -538,6 +540,7 @@ export const renderer = {
                             const height = styleCol.getAttribute('height');
                             const minHeight = styleCol.getAttribute('minheight');
                             const maxHeight = styleCol.getAttribute('maxheight');
+                            const align = styleCol.getAttribute('align');
 
                             borderColor && (columnStyle['border-color'] = borderColor);;
                             bgColor && (columnStyle['background-color'] = bgColor);
@@ -548,6 +551,7 @@ export const renderer = {
                             height && (columnStyle['height'] = height);
                             minHeight && (columnStyle['min-height'] = minHeight);
                             maxHeight && (columnStyle['max-height'] = maxHeight);
+                            align && (columnStyle['text-align'] = align);
 
                             const colSpan = Number(th.getAttribute('colspan')) || 1;
                             for(let i = 0; i < colSpan; i++){
@@ -571,6 +575,7 @@ export const renderer = {
                         const height = styleCell.getAttribute('height');
                         const minHeight = styleCell.getAttribute('minheight');
                         const maxHeight = styleCell.getAttribute('maxheight');
+                        const align = styleCell.getAttribute('align');
 
                         borderColor && style.setProperty('border-color', borderColor);;
                         bgColor && style.setProperty('background-color', bgColor);
@@ -581,6 +586,7 @@ export const renderer = {
                         height && style.setProperty('height', height);
                         minHeight && style.setProperty('min-height', minHeight);
                         maxHeight && style.setProperty('max-height', maxHeight);
+                        align && style.setProperty('text-align', align);
                     }
 
                     th.setAttribute('style', style.cssText);
@@ -604,6 +610,7 @@ export const renderer = {
                     const height = styleRow.getAttribute('height');
                     const minHeight = styleRow.getAttribute('minheight');
                     const maxHeight = styleRow.getAttribute('maxheight');
+                    const align = styleRow.getAttribute('align');
 
                     borderColor && style.setProperty('border-color', borderColor);;
                     bgColor && style.setProperty('background-color', bgColor);
@@ -611,6 +618,7 @@ export const renderer = {
                     height && style.setProperty('height', height);
                     minHeight && style.setProperty('min-height', minHeight);
                     maxHeight && style.setProperty('max-height', maxHeight);
+                    align && style.setProperty('text-align', align);
 
                     tr.setAttribute('style', style.cssText);
                 }
@@ -655,6 +663,7 @@ export const renderer = {
                             const height = styleCell.getAttribute('height');
                             const minHeight = styleCell.getAttribute('minheight');
                             const maxHeight = styleCell.getAttribute('maxheight');
+                            const align = styleCell.getAttribute('align');
 
                             borderColor && style.setProperty('border-color', borderColor);;
                             bgColor && style.setProperty('background-color', bgColor);
@@ -665,6 +674,7 @@ export const renderer = {
                             height && style.setProperty('height', height);
                             minHeight && style.setProperty('min-height', minHeight);
                             maxHeight && style.setProperty('max-height', maxHeight);
+                            align && style.setProperty('text-align', align);
                         }
 
                         td.setAttribute('style', style.cssText);
@@ -689,6 +699,7 @@ export const renderer = {
                         const height = styleRow.getAttribute('height');
                         const minHeight = styleRow.getAttribute('minheight');
                         const maxHeight = styleRow.getAttribute('maxheight');
+                        const align = styleRow.getAttribute('align');
 
                         borderColor && style.setProperty('border-color', borderColor);;
                         bgColor && style.setProperty('background-color', bgColor);
@@ -696,6 +707,7 @@ export const renderer = {
                         height && style.setProperty('height', height);
                         minHeight && style.setProperty('min-height', minHeight);
                         maxHeight && style.setProperty('max-height', maxHeight);
+                        align && style.setProperty('text-align', align);
 
                         tr.setAttribute('style', style.cssText);
                     }

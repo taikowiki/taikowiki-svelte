@@ -389,7 +389,7 @@ export const renderer = {
             'wiki-yt': ['v'],
             'wiki-float': ['float'],
             'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float', 'align'],
-            'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align'],
+            'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align', 'colspan', 'rowspan', 'disable'],
             'style-row': ['bgcolor', 'textcolor', 'height', 'minheight', 'maxheight', 'align'],
             'style-col': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align'],
         };
@@ -520,8 +520,25 @@ export const renderer = {
                     };
                 })
 
+                // th에 대해 disable, rowspan, colspan 지정
+                tr.querySelectorAll(':scope > th').forEach((th) => {
+                    const styleCell = th.querySelector('style-cell');
+                    if(!styleCell) return;
+
+                    const disable = styleCell.getAttribute('disable');
+                    if(typeof(disable) !== "undefined"){
+                        return th.remove();
+                    }
+
+                    const rowspan = styleCell.getAttribute('rowspan');
+                    const colspan = styleCell.getAttribute('colspan');
+
+                    rowspan && th.setAttribute('rowspan', rowspan);
+                    colspan && th.setAttribute('colspan', colspan);
+                })
+
+                // th에 대해 스타일 지정
                 let index = 0;
-                // style-cell, styleCol 확인
                 tr.querySelectorAll(':scope > th').forEach((th) => {
                     const style = new CSSStyleDeclaration();
 
@@ -641,6 +658,24 @@ export const renderer = {
                         }
                     });
 
+                    // td에 대해 disable, rowspan, colspan 지정
+                    tr.querySelectorAll(':scope > td').forEach((td) => {
+                        const styleCell = td.querySelector('style-cell');
+                        if(!styleCell) return;
+
+                        const disable = styleCell.getAttribute('disable');
+                        if(typeof(disable) !== "undefined"){
+                            return td.remove();
+                        }
+
+                        const rowspan = styleCell.getAttribute('rowspan');
+                        const colspan = styleCell.getAttribute('colspan');
+
+                        rowspan && td.setAttribute('rowspan', rowspan);
+                        colspan && td.setAttribute('colspan', colspan);
+                    })
+
+                    // td에 대해 스타일 지정
                     let index = 0;
                     tr.querySelectorAll(':scope > td').forEach((td) => {
                         const style = new CSSStyleDeclaration();

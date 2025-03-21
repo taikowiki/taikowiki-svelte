@@ -3,6 +3,7 @@
     import { defineWikiElements, isDefined } from "$lib/module/common/wikidoc/client/wikiElements.client";
     import { getTheme } from "$lib/module/layout/theme";
     import { docContext } from "$lib/module/common/wikidoc/util";
+    import '$lib/module/common/wikidoc/assets/docview.scss';
 
     /*
     import { getWindowContext } from "$lib/module/common/util.client";
@@ -25,7 +26,7 @@
     const [theme] = getTheme();
 </script>
 
-<div class="container" data-theme={$theme}>
+<div class="doc-view-container" data-theme={$theme}>
     {#await convertedContentPromise then convertedContent}
         {#key $theme}
             {@html convertedContent}
@@ -34,17 +35,9 @@
 </div>
 
 <style>
-    .container {
+    .doc-view-container {
         width: 100%;
         min-height: 500px;
         border: 2px solid black;
-    }
-    .container[data-theme="dark"] {
-        background-color: black;
-        color: white;
-    }
-
-    .container :global(wiki-annot) {
-        display: inline-block;
     }
 </style>

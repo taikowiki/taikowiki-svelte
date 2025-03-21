@@ -4,10 +4,12 @@
     import Loading from "$lib/components/common/Loading.svelte";
     import type { Doc } from "$lib/module/common/wikidoc/types";
     import { docContext } from "$lib/module/common/wikidoc/util";
+    import { getTheme } from "$lib/module/layout/theme";
     import DocParagraphView from "./DocParagraphView.svelte";
+    import '$lib/module/common/wikidoc/assets/docview.scss';
 
     interface Props {
-        contentTree: Doc.Data.ContentTree
+        contentTree: Doc.Data.ContentTree;
     }
 
     let { contentTree }: Props = $props();
@@ -33,15 +35,22 @@
             return base;
         })(),
     );
+
+    const [theme] = getTheme();
 </script>
 
 {#key browser}
     {#await wikiElementsDefined}
         <Loading />
     {:then}
-        {@html contentTree.content}
-        {#each contentTree.subParagraphs as subParagraph, index}
-            <DocParagraphView paragraph={subParagraph} index={`${index + 1}`} />
-        {/each}
+        <div class="doc-view-container" data-theme={$theme}>
+            {@html contentTree.content}
+            {#each contentTree.subParagraphs as subParagraph, index}
+                <DocParagraphView
+                    paragraph={subParagraph}
+                    index={`${index + 1}`}
+                />
+            {/each}
+        </div>
     {/await}
 {/key}

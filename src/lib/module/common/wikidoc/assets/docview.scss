@@ -1,0 +1,41 @@
+.doc-view-container {
+    del {
+        color: gray;
+    }
+    del:hover {
+        text-decoration: none;
+    }
+
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+
+        th,
+        td {
+            border: 1px solid black;
+        }
+    }
+
+    wiki-annot {
+        width: 16px;
+        display: inline-block;
+        text-align: center;
+    }
+    wiki-float[float="left"]{
+        float: left;
+    }
+    wiki-float[float="right"]{
+        float: right;
+    }
+}
+
+.doc-view-container[data-theme="dark"] {
+    table {
+        border-color: gray;
+
+        th,
+        td {
+            border-color: gray;
+        }
+    }
+}

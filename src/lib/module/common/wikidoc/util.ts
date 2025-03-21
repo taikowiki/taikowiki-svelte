@@ -1,6 +1,7 @@
 import { getIsMobile } from "$lib/module/layout/isMobile.js";
 import { getTheme } from "$lib/module/layout/theme.js";
 import type { Doc } from '$lib/module/common/wikidoc/types';
+import { CSSStyleDeclaration } from 'cssom';
 
 /**
  * 올바른 `docData` 인지 검사 
@@ -103,9 +104,17 @@ export class WikiError extends Error {
 }
 
 import { Marked } from 'marked';
-import { HTMLElement, parse as parseHTML } from 'node-html-parser';
+import { HTMLElement, parse as parseHTML_ } from 'node-html-parser';
 import { page } from '$app/state';
 import markdownEscape from 'markdown-escape';
+
+function parseHTML(src: string){
+    return parseHTML_(src, {
+        voidTag: {
+            tags: ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr', 'style-table', 'style-cell', 'style-row', 'style-col']
+        }
+    })
+}
 
 export const renderer = {
     /**
@@ -119,6 +128,7 @@ export const renderer = {
         this.purifyHTML(dom);
         this.fillPreviewAnnotationKeys(dom);
         this.makePreviewLinkAvailable(dom);
+        this.sanitizeTable(dom);
 
         if (finishCallback) {
             await finishCallback(dom);
@@ -139,6 +149,7 @@ export const renderer = {
             const dom = parseHTML(src);
             this.purifyHTML(dom);
             this.fillAnnotationKeys(dom, scope);
+            this.sanitizeTable(dom);
 
             return dom.innerHTML;
         }
@@ -182,6 +193,10 @@ export const renderer = {
             await finishCallback(dom);
         }
         return dom.innerHTML;
+
+        async function v() {
+
+        }
     },
     sharpConverter: {
         /**
@@ -360,26 +375,33 @@ export const renderer = {
      */
     purifyHTML(dom: HTMLElement): void {
         //허용되지 않은 태그 제거
-        const allowedTags: string[] = ['p', 'a', 'img', 'wiki-annot', 'strong', 'em', 'del', 'wiki-link'];
+        const allowedTags: string[] = ['p', 'a', 'img', 'strong', 'em', 'del', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'wiki-annot', 'wiki-link', 'wiki-yt', 'wiki-float', 'style-table', 'style-cell', 'style-row', 'style-col'];
         dom.querySelectorAll(`:not(${allowedTags.join(', ')})`).forEach(e => e.remove());
 
         //허용되지 않은 속성 제거
         const allowedAttributes = {
             'a': ['href'],
             'img': ['src', 'alt'],
+            'th': ['align', 'colspan', 'rowspan'],
+            'td': ['colspan', 'rowspan'],
             'wiki-annot': ['key'],
-            'wiki-link': ['doctitle']
+            'wiki-link': ['doctitle'],
+            'wiki-yt': ['v'],
+            'wiki-float': ['float'],
+            'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float'],
+            'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight'],
+            'style-row': ['bgcolor', 'textcolor', 'height', 'minheight', 'maxheight'],
+            'style-col': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight'],
         };
-        (Object.keys(allowedAttributes) as (keyof typeof allowedAttributes)[]).forEach((tag) => {
-            dom.querySelectorAll(tag).forEach((e) => {
-                const attributeKeys = Object.keys(e.attributes);
-                attributeKeys.forEach((key) => {
-                    if (!allowedAttributes[tag].includes(key)) {
-                        e.removeAttribute(key);
-                    }
-                })
+        dom.querySelectorAll('*').forEach((element) => {
+            const tag = element.tagName.toLowerCase();
+            const allowed = allowedAttributes[tag as keyof typeof allowedAttributes] ?? [];
+            Object.keys(element.attributes).forEach((attr) => {
+                if (!allowed.includes(attr)) {
+                    element.removeAttribute(attr);
+                }
             })
-        })
+        });
 
         //a 태그의 href 속성 수정
         dom.querySelectorAll('a').forEach((e) => {
@@ -409,6 +431,282 @@ export const renderer = {
                     e.setAttribute('href', url.href);
                 }
             }
+        })
+    },
+    /**
+     * `<style-table>`과 `<style-cell>` 태그로 테이블의 스타일 적용
+     */
+    sanitizeTable(dom: HTMLElement) {
+        dom.querySelectorAll('table').forEach((table: HTMLElement) => {
+            // 자식 요소 중 thead와 tbody가 아닌 것 제와
+            let [theadExists, tbodyExists] = [false, false];
+            table.childNodes.forEach((child) => {
+                const tag = child.rawTagName.toLowerCase();
+                if (tag === "thead" && !theadExists) {
+                    theadExists = true;
+                    return;
+                }
+                if (tag === "tbody" && !tbodyExists) {
+                    tbodyExists = true;
+                    return;
+                }
+                if (tag === "style-table") {
+                    return;
+                }
+                child.remove();
+            })
+
+            // style-table 확인
+            const styleTableElement = table.querySelector('style-table');
+            if (styleTableElement) {
+                const borderColor = styleTableElement.getAttribute('bordercolor');
+                const bgColor = styleTableElement.getAttribute('bgcolor');
+                const textColor = styleTableElement.getAttribute('textcolor');
+                const width = styleTableElement.getAttribute('width');
+                const minWidth = styleTableElement.getAttribute('minwidth');
+                const maxWidth = styleTableElement.getAttribute('maxwidth');
+                const height = styleTableElement.getAttribute('height');
+                const minHeight = styleTableElement.getAttribute('minheight');
+                const maxHeight = styleTableElement.getAttribute('maxheight');
+                const float = styleTableElement.getAttribute('float');
+
+                const style = new CSSStyleDeclaration();
+                borderColor && style.setProperty('border-color', borderColor);;
+                bgColor && style.setProperty('background-color', bgColor);
+                textColor && style.setProperty('color', textColor);
+                width && style.setProperty('width', width);
+                minWidth && style.setProperty('min-width', minWidth);
+                maxWidth && style.setProperty('max-width', maxWidth);
+                height && style.setProperty('height', height);
+                minHeight && style.setProperty('min-height', minHeight);
+                maxHeight && style.setProperty('max-height', maxHeight);
+                float && style.setProperty('float', float);
+                table.setAttribute('style', style.cssText);
+            }
+
+            // 열 style 맵
+            const columnStyleMap = new Map<number, Record<string, string>>();
+
+            // thead 정상화
+            const thead = table.querySelector(':scope > thead');
+            if (thead) {
+                let trExists = false;
+                thead.childNodes.forEach((child) => {
+                    // tr, style-table이 아닌 자식요소 제거, tr 하나만 남겨놓기
+                    const tag = child.rawTagName.toLowerCase()
+                    if (tag !== "tr" && tag !== "style-table") {
+                        return child.remove();
+                    }
+                    if (tag === "tr" && trExists) {
+                        return child.remove();
+                    }
+
+                    trExists = true;
+                });
+
+                // tr 찾기
+                const tr = thead.querySelector('tr');
+                if (!tr) {
+                    return;
+                }
+
+                // th나 style-row가 아닌 자식요소 제거
+                tr.childNodes.forEach((child) => {
+                    const tag = child.rawTagName.toLowerCase();
+                    if (tag !== "th" && tag !== "style-row" && tag !== "style-table") {
+                        return child.remove();
+                    };
+                })
+
+                let index = 0;
+                // style-cell, styleCol 확인
+                tr.querySelectorAll(':scope > th').forEach((th) => {
+                    const style = new CSSStyleDeclaration();
+
+                    // columnStyle 확인
+                    let columnStyle = columnStyleMap.get(index)
+                    if (columnStyle === undefined) {
+                        const styleCol = th.querySelector('style-col');
+                        columnStyle = {};
+                        if (styleCol) {
+                            const borderColor = styleCol.getAttribute('bordercolor');
+                            const bgColor = styleCol.getAttribute('bgcolor');
+                            const textColor = styleCol.getAttribute('textcolor');
+                            const width = styleCol.getAttribute('width');
+                            const minWidth = styleCol.getAttribute('minwidth');
+                            const maxWidth = styleCol.getAttribute('maxwidth');
+                            const height = styleCol.getAttribute('height');
+                            const minHeight = styleCol.getAttribute('minheight');
+                            const maxHeight = styleCol.getAttribute('maxheight');
+
+                            borderColor && (columnStyle['border-color'] = borderColor);;
+                            bgColor && (columnStyle['background-color'] = bgColor);
+                            textColor && (columnStyle['color'] = textColor);
+                            width && (columnStyle['width'] = width);
+                            minWidth && (columnStyle['min-width'] = minWidth);
+                            maxWidth && (columnStyle['max-width'] = maxWidth);
+                            height && (columnStyle['height'] = height);
+                            minHeight && (columnStyle['min-height'] = minHeight);
+                            maxHeight && (columnStyle['max-height'] = maxHeight);
+
+                            const colSpan = Number(th.getAttribute('colspan')) || 1;
+                            for(let i = 0; i < colSpan; i++){
+                                columnStyleMap.set(index + i, columnStyle);
+                            }
+                        }
+                    }
+                    Object.entries(columnStyle as Record<string, string>).forEach(([key, value]) => {
+                        style.setProperty(key, value);
+                    })
+
+                    // style-cell 태그확인
+                    const styleCell = th.querySelector('style-cell');
+                    if (styleCell) {
+                        const borderColor = styleCell.getAttribute('bordercolor');
+                        const bgColor = styleCell.getAttribute('bgcolor');
+                        const textColor = styleCell.getAttribute('textcolor');
+                        const width = styleCell.getAttribute('width');
+                        const minWidth = styleCell.getAttribute('minwidth');
+                        const maxWidth = styleCell.getAttribute('maxwidth');
+                        const height = styleCell.getAttribute('height');
+                        const minHeight = styleCell.getAttribute('minheight');
+                        const maxHeight = styleCell.getAttribute('maxheight');
+
+                        borderColor && style.setProperty('border-color', borderColor);;
+                        bgColor && style.setProperty('background-color', bgColor);
+                        textColor && style.setProperty('color', textColor);
+                        width && style.setProperty('width', width);
+                        minWidth && style.setProperty('min-width', minWidth);
+                        maxWidth && style.setProperty('max-width', maxWidth);
+                        height && style.setProperty('height', height);
+                        minHeight && style.setProperty('min-height', minHeight);
+                        maxHeight && style.setProperty('max-height', maxHeight);
+                    }
+
+                    th.setAttribute('style', style.cssText);
+
+                    const colSpan = Number(th.getAttribute('colspan'));
+                    if (!Number.isNaN(colSpan)) {
+                        index += colSpan;
+                    }
+                    else {
+                        index++;
+                    }
+                });
+
+                const styleRow = tr.querySelector('style-row');
+                if (styleRow) {
+                    const style = new CSSStyleDeclaration();
+
+                    const borderColor = styleRow.getAttribute('bordercolor');
+                    const bgColor = styleRow.getAttribute('bgcolor');
+                    const textColor = styleRow.getAttribute('textcolor');
+                    const height = styleRow.getAttribute('height');
+                    const minHeight = styleRow.getAttribute('minheight');
+                    const maxHeight = styleRow.getAttribute('maxheight');
+
+                    borderColor && style.setProperty('border-color', borderColor);;
+                    bgColor && style.setProperty('background-color', bgColor);
+                    textColor && style.setProperty('color', textColor);
+                    height && style.setProperty('height', height);
+                    minHeight && style.setProperty('min-height', minHeight);
+                    maxHeight && style.setProperty('max-height', maxHeight);
+
+                    tr.setAttribute('style', style.cssText);
+                }
+            }
+
+            // tbody 정상화
+            const tbody = table.querySelector(':scope > tbody');
+            if (tbody) {
+                tbody.childNodes.forEach((e) => {
+                    const tag = e.rawTagName.toLowerCase();
+                    if (tag !== "tr") {
+                        return e.remove();
+                    }
+                })
+                tbody.querySelectorAll(':scope > tr').forEach((tr) => {
+                    tr.childNodes.forEach((e) => {
+                        const tag = e.rawTagName.toLowerCase();
+                        if (tag !== "td" && tag !== "style-row") {
+                            return e.remove();
+                        }
+                    });
+
+                    let index = 0;
+                    tr.querySelectorAll(':scope > td').forEach((td) => {
+                        const style = new CSSStyleDeclaration();
+
+                        // columnStyle 확인
+                        let columnStyle = columnStyleMap.get(index) ?? {};
+                        Object.entries(columnStyle as Record<string, string>).forEach(([key, value]) => {
+                            style.setProperty(key, value);
+                        })
+
+                        // style-cell 태그확인
+                        const styleCell = td.querySelector('style-cell');
+                        if (styleCell) {
+                            const borderColor = styleCell.getAttribute('bordercolor');
+                            const bgColor = styleCell.getAttribute('bgcolor');
+                            const textColor = styleCell.getAttribute('textcolor');
+                            const width = styleCell.getAttribute('width');
+                            const minWidth = styleCell.getAttribute('minwidth');
+                            const maxWidth = styleCell.getAttribute('maxwidth');
+                            const height = styleCell.getAttribute('height');
+                            const minHeight = styleCell.getAttribute('minheight');
+                            const maxHeight = styleCell.getAttribute('maxheight');
+
+                            borderColor && style.setProperty('border-color', borderColor);;
+                            bgColor && style.setProperty('background-color', bgColor);
+                            textColor && style.setProperty('color', textColor);
+                            width && style.setProperty('width', width);
+                            minWidth && style.setProperty('min-width', minWidth);
+                            maxWidth && style.setProperty('max-width', maxWidth);
+                            height && style.setProperty('height', height);
+                            minHeight && style.setProperty('min-height', minHeight);
+                            maxHeight && style.setProperty('max-height', maxHeight);
+                        }
+
+                        td.setAttribute('style', style.cssText);
+
+                        const colSpan = Number(td.getAttribute('colspan'));
+                        if (!Number.isNaN(colSpan)) {
+                            index += colSpan;
+                        }
+                        else {
+                            index++;
+                        }
+                    })
+
+                    // style-row
+                    const styleRow = tr.querySelector('style-row');
+                    if (styleRow) {
+                        const style = new CSSStyleDeclaration();
+
+                        const borderColor = styleRow.getAttribute('bordercolor');
+                        const bgColor = styleRow.getAttribute('bgcolor');
+                        const textColor = styleRow.getAttribute('textcolor');
+                        const height = styleRow.getAttribute('height');
+                        const minHeight = styleRow.getAttribute('minheight');
+                        const maxHeight = styleRow.getAttribute('maxheight');
+
+                        borderColor && style.setProperty('border-color', borderColor);;
+                        bgColor && style.setProperty('background-color', bgColor);
+                        textColor && style.setProperty('color', textColor);
+                        height && style.setProperty('height', height);
+                        minHeight && style.setProperty('min-height', minHeight);
+                        maxHeight && style.setProperty('max-height', maxHeight);
+
+                        tr.setAttribute('style', style.cssText);
+                    }
+                })
+            }
+
+            // container에 씌우기
+            const container = parseHTML('<div class="table-container"></div>').querySelector('div') as HTMLElement;
+            table.querySelectorAll('style-table, style-row, style-col, style-cell').forEach(e => e.remove())
+            table.replaceWith(container);
+            container.appendChild(table);
         })
     },
     /**

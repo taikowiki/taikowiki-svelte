@@ -5,7 +5,7 @@ import { Task } from '@lit/task';
 import { get, type Unsubscriber, type Writable } from 'svelte/store';
 import { docContext } from '../util.js';
 import { defineRequestHandler } from '@yowza/rrequestor';
-import type {Doc} from '$lib/module/common/wikidoc/types';
+import type { Doc } from '$lib/module/common/wikidoc/types';
 
 // custom elements
 function defineElement(litElement: any, tagName: string, option?: ElementDefinitionOptions) {
@@ -22,9 +22,10 @@ export function defineWikiElements() {
     defineElement(WikiAnnotationElement, 'wiki-annot');
     defineElement(WikiRoot, 'wiki-root', { extends: 'div' });
     defineElement(WikiLink, 'wiki-link');
+    defineElement(WikiFloat, 'wiki-float', { extends: 'div' });
 }
 
-export function isDefined(){
+export function isDefined() {
     return customElements.get('wiki-link') ? true : false;
 }
 
@@ -65,7 +66,7 @@ export class WikiFrameViewElement extends LitElement {
                 if (frame === null) return html``;
                 return html`
                 <div class="wiki-frame-view-container">
-                    ${unsafeHTML(typeof(frame) === "string" ? frame : frame.renderedContentTree.content)}
+                    ${unsafeHTML(typeof (frame) === "string" ? frame : frame.renderedContentTree.content)}
                 </div>`;
             },
             error: () => {
@@ -370,8 +371,8 @@ export class WikiAnnotationElement extends LitElement {
         }
 
         return html`
-            <div class="container" id="container" @mouseover="${this.show}" @mouseout="${this.hide}" @click="${this.clickHandler}">
-                <div class="flag" data-theme="${this.theme}">
+            <div class="container" id="container">
+                <div class="flag" data-theme="${this.theme}" @mouseover="${this.show}" @mouseout="${this.hide}" @click="${this.clickHandler}">
                     [${this.key}]
                 </div>
                 <div class="content-container" id="contentContainer" data-display="${this.display}" data-theme="${this.theme}">
@@ -406,7 +407,7 @@ export class WikiLink extends LitElement {
     @property({ attribute: 'available', type: String })
     available: string = "false";
 
-    @property({attribute: 'test', type: String})
+    @property({ attribute: 'test', type: String })
     forTest: string = "false";
 
     unsubscriber?: Unsubscriber;
@@ -494,6 +495,7 @@ export class WikiLink extends LitElement {
 }
 
 export class WikiRoot extends HTMLDivElement { };
+export class WikiFloat extends HTMLDivElement { };
 
 // requestor
 const wikiDocRequestor = {

@@ -108,7 +108,7 @@ import { HTMLElement, parse as parseHTML_ } from 'node-html-parser';
 import { page } from '$app/state';
 import markdownEscape from 'markdown-escape';
 
-function parseHTML(src: string){
+function parseHTML(src: string) {
     return parseHTML_(src, {
         voidTag: {
             tags: ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr', 'style-table', 'style-cell', 'style-row', 'style-col']
@@ -523,10 +523,10 @@ export const renderer = {
                 // th에 대해 disable, rowspan, colspan 지정
                 tr.querySelectorAll(':scope > th').forEach((th) => {
                     const styleCell = th.querySelector('style-cell');
-                    if(!styleCell) return;
+                    if (!styleCell) return;
 
                     const disable = styleCell.getAttribute('disable');
-                    if(typeof(disable) !== "undefined"){
+                    if (typeof (disable) !== "undefined") {
                         return th.remove();
                     }
 
@@ -543,37 +543,36 @@ export const renderer = {
                     const style = new CSSStyleDeclaration();
 
                     // columnStyle 확인
-                    let columnStyle = columnStyleMap.get(index)
-                    if (columnStyle === undefined) {
-                        const styleCol = th.querySelector('style-col');
-                        columnStyle = {};
-                        if (styleCol) {
-                            const borderColor = styleCol.getAttribute('bordercolor');
-                            const bgColor = styleCol.getAttribute('bgcolor');
-                            const textColor = styleCol.getAttribute('textcolor');
-                            const width = styleCol.getAttribute('width');
-                            const minWidth = styleCol.getAttribute('minwidth');
-                            const maxWidth = styleCol.getAttribute('maxwidth');
-                            const height = styleCol.getAttribute('height');
-                            const minHeight = styleCol.getAttribute('minheight');
-                            const maxHeight = styleCol.getAttribute('maxheight');
-                            const align = styleCol.getAttribute('align');
+                    const styleCol = th.querySelector('style-col');
+                    const columnStyle: Record<string, string> = {};
+                    let align = th.getAttribute('align');
+                    if (styleCol) {
+                        const borderColor = styleCol.getAttribute('bordercolor');
+                        const bgColor = styleCol.getAttribute('bgcolor');
+                        const textColor = styleCol.getAttribute('textcolor');
+                        const width = styleCol.getAttribute('width');
+                        const minWidth = styleCol.getAttribute('minwidth');
+                        const maxWidth = styleCol.getAttribute('maxwidth');
+                        const height = styleCol.getAttribute('height');
+                        const minHeight = styleCol.getAttribute('minheight');
+                        const maxHeight = styleCol.getAttribute('maxheight');
+                        align = styleCol.getAttribute('align');
 
-                            borderColor && (columnStyle['border-color'] = borderColor);;
-                            bgColor && (columnStyle['background-color'] = bgColor);
-                            textColor && (columnStyle['color'] = textColor);
-                            width && (columnStyle['width'] = width);
-                            minWidth && (columnStyle['min-width'] = minWidth);
-                            maxWidth && (columnStyle['max-width'] = maxWidth);
-                            height && (columnStyle['height'] = height);
-                            minHeight && (columnStyle['min-height'] = minHeight);
-                            maxHeight && (columnStyle['max-height'] = maxHeight);
-                            align && (columnStyle['text-align'] = align);
-
-                            const colSpan = Number(th.getAttribute('colspan')) || 1;
-                            for(let i = 0; i < colSpan; i++){
-                                columnStyleMap.set(index + i, columnStyle);
-                            }
+                        borderColor && (columnStyle['border-color'] = borderColor);;
+                        bgColor && (columnStyle['background-color'] = bgColor);
+                        textColor && (columnStyle['color'] = textColor);
+                        width && (columnStyle['width'] = width);
+                        minWidth && (columnStyle['min-width'] = minWidth);
+                        maxWidth && (columnStyle['max-width'] = maxWidth);
+                        height && (columnStyle['height'] = height);
+                        minHeight && (columnStyle['min-height'] = minHeight);
+                        maxHeight && (columnStyle['max-height'] = maxHeight);
+                    }
+                    {
+                        align && (columnStyle['text-align'] = align);
+                        const colSpan = Number(th.getAttribute('colspan')) || 1;
+                        for (let i = 0; i < colSpan; i++) {
+                            columnStyleMap.set(index + i, columnStyle);
                         }
                     }
                     Object.entries(columnStyle as Record<string, string>).forEach(([key, value]) => {
@@ -661,10 +660,10 @@ export const renderer = {
                     // td에 대해 disable, rowspan, colspan 지정
                     tr.querySelectorAll(':scope > td').forEach((td) => {
                         const styleCell = td.querySelector('style-cell');
-                        if(!styleCell) return;
+                        if (!styleCell) return;
 
                         const disable = styleCell.getAttribute('disable');
-                        if(typeof(disable) !== "undefined"){
+                        if (typeof (disable) !== "undefined") {
                             return td.remove();
                         }
 

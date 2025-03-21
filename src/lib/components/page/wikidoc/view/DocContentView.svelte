@@ -44,7 +44,9 @@
         <Loading />
     {:then}
         <div class="doc-view-container" data-theme={$theme}>
-            {@html contentTree.content}
+            <div class="doc-view-content">
+                {@html contentTree.content}
+            </div>
             {#each contentTree.subParagraphs as subParagraph, index}
                 <DocParagraphView
                     paragraph={subParagraph}

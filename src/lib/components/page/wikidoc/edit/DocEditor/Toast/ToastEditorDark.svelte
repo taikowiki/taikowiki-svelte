@@ -40,6 +40,12 @@
         background-position: calc(50% + 1px) calc(50% - 1px);
         background-repeat: no-repeat;
     }
+    .toastui-editor-dark .doc-editor-wiki-yt{
+        background-image: url("/assets/icon/youtube-invert.svg");
+        background-size: 60%;
+        background-position: calc(50% + 1px) calc(50% - 1px);
+        background-repeat: no-repeat;
+    }
     `}
 </svelte:element>
 

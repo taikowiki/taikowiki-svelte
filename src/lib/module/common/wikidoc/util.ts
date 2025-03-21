@@ -386,7 +386,7 @@ export const renderer = {
             'td': ['colspan', 'rowspan'],
             'wiki-annot': ['key'],
             'wiki-link': ['doctitle'],
-            'wiki-yt': ['v'],
+            'wiki-yt': ['v', 'width', 'height'],
             'wiki-float': ['float'],
             'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float', 'align'],
             'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align', 'colspan', 'rowspan', 'disable'],

@@ -85,6 +85,17 @@ export function insertWikiLink(option: Doc.Toast.WikiLinkPluginFunctionOption, s
     return true;
 }
 
+export function insertYoutube(option: Doc.Toast.WikiYoutubePluginFunctionOption, state: any, dispatch: any, view: any){
+    const transaction: Transaction = state.tr;
+    
+    transaction.insertText(`<wiki-yt v="${renderer.escapeHtml(option.v)}" width="${renderer.escapeHtml(option.width ?? "")}" height="${renderer.escapeHtml(option.height ?? "")}"/>`);
+
+    dispatch(transaction);
+    view.focus();
+
+    return true;
+}
+
 function escapeBackSlash(content: string) {
     const part = content.split('\\');
     return part.join('\\\\');

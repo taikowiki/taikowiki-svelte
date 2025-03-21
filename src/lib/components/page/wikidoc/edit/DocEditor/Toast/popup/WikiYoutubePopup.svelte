@@ -1,6 +1,7 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
     import type { Doc } from "$lib/module/common/wikidoc/types";
+    import Error from "../../../../../../../../routes/(main)/+error.svelte";
 
     interface Props {
         eventEmitter: any;
@@ -8,8 +9,9 @@
 
     let { eventEmitter }: Props = $props();
 
-    let docTitle: string | null = $state(null);
-    let content: string = $state("");
+    let link: string | null = $state(null);
+    let width: string | null = $state(null);
+    let height: string | null = $state(null);
 
     let warn = $state(false);
     function cancel() {
@@ -18,18 +20,50 @@
     }
     function insert() {
         if (!eventEmitter) return;
-        if(!docTitle){
+        if (!link) {
             warn = true;
             return;
         }
-        const option: Doc.Toast.WikiLinkPluginFunctionOption = {
-            docTitle,
-            content
+
+        try {
+            let link_ = link.trim();
+            if (link_.startsWith("youtube.com") || link_.startsWith("www.youtube.com")) {
+                link_ = "https://" + link_;
+            }
+
+            const url = new URL(link_);
+            let v: string | undefined | null = null;
+
+            if(url.host !== "youtube.com" && url.host !== "www.youtube.com" && url.host !== "m.youtube.com"){
+                warn = true;
+                return;
+            }
+
+            if (url.pathname.startsWith("/embed")) {
+                v = url.pathname.split("/")[2];
+            } else if (url.pathname === "/watch") {
+                v = url.searchParams.get("v");
+            }
+
+            if (!v) {
+                warn = true;
+                return;
+            }
+
+            const option: Doc.Toast.WikiYoutubePluginFunctionOption = {
+                v,
+                width,
+                height,
+            };
+            eventEmitter.emit("command", "insertYoutube", option);
+            eventEmitter.emit("closePopup");
+
+            link = null;
+            width = null;
+            height = null;
+        } catch {
+            warn = true;
         }
-        eventEmitter.emit("command", "insertWikiLink", option);
-        eventEmitter.emit("closePopup");
-        docTitle = null;
-        content = "";
     }
     function removeWarn() {
         warn = false;
@@ -41,21 +75,16 @@
 
 <div class="container" data-theme={$theme}>
     <div class="section">
-        <span> Doc Title </span>
-        <input
-            type="text"
-            bind:value={docTitle}
-            class:warn
-            onfocus={removeWarn}
-        />
+        <span> Link </span>
+        <input type="text" bind:value={link} class:warn onfocus={removeWarn} />
     </div>
     <div class="section">
-        <span> Content </span>
-        <textarea
-            bind:value={content}
-            class:warn
-            onfocus={removeWarn}
-        ></textarea>
+        <span> Width </span>
+        <input type="text" bind:value={width} onfocus={removeWarn} />
+    </div>
+    <div class="section">
+        <span> Height </span>
+        <input type="text" bind:value={height} onfocus={removeWarn} />
     </div>
 
     <div class="btn-section">
@@ -106,16 +135,6 @@
     }
 
     .container[data-theme="dark"] input {
-        border-color: #303238;
-        background-color: transparent;
-        color: white;
-    }
-
-    textarea{
-        padding: 3px 12px;
-        resize: vertical;
-    }
-    .container[data-theme="dark"] textarea {
         border-color: #303238;
         background-color: transparent;
         color: white;

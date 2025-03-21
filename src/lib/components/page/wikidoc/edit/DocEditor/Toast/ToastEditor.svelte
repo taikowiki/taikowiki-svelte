@@ -9,10 +9,12 @@
         insertAnnotation,
         insertImage,
         insertWikiLink,
+        insertYoutube
     } from "$lib/module/common/wikidoc/client/markdownCommands.client";
     import AnnotationPopup from "./popup/AnnotationPopup.svelte";
     import WikiLinkPopup from "./popup/WikiLinkPopup.svelte";
     import { getTheme } from "$lib/module/layout/theme";
+    import WikiYoutubePopup from "./popup/WikiYoutubePopup.svelte";
 
     interface Props {
         mdContent: string;
@@ -84,6 +86,25 @@
         },
     });
 
+    // wiki-yt popup
+    const wikiYoutubePopupContainer = document.createElement("div");
+    let wikiYoutubePopupProps = $state({
+        eventEmitter: null
+    });
+    mount(WikiYoutubePopup, {
+        target: wikiYoutubePopupContainer,
+        props: wikiYoutubePopupProps,
+        context
+    });
+    const wikiYoutubeToolbarItem = $state({
+        name: "Youtube",
+        tooltip: "Insert Youtube",
+        className: `toastui-editor-toolbar-icons doc-editor-wiki-yt`,
+        popup: {
+            body: wikiYoutubePopupContainer,
+        },
+    });
+
     const editorOption = {
         height: "500px",
         hideModeSwitch: true,
@@ -95,7 +116,7 @@
             ["ul", "ol"],
             ["table", imageToolbarItem, "link"],
             ["code", "codeblock"],
-            [annotationToolbarItem, wikiLinkToolbarItem],
+            [annotationToolbarItem, wikiLinkToolbarItem, wikiYoutubeToolbarItem],
         ],
         plugins: [
             (context: any) => {
@@ -103,11 +124,13 @@
                 imagePopupProps.eventEmitter = eventEmitter;
                 annotationPopupProps.eventEmitter = eventEmitter;
                 wikiLinkPopupProps.eventEmitter = eventEmitter;
+                wikiYoutubePopupProps.eventEmitter = eventEmitter;
                 return {
                     markdownCommands: {
                         insertImage,
                         insertAnnotation,
-                        insertWikiLink
+                        insertWikiLink,
+                        insertYoutube
                     },
                 };
             },

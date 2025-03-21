@@ -21,6 +21,12 @@ export namespace Doc {
             docTitle: string | null;
             content: string | null;
         }
+
+        export interface WikiYoutubePluginFunctionOption{
+            v: string;
+            width: string | null;
+            height: string | null;
+        }
     }
     /**
      * DB에서 가져오는 데이터

@@ -32,10 +32,10 @@
         </span>
     </div>
     {#if opened}
-        <div class="paragraph-content">
+        <div class="dov-view-content">
             {@html paragraph.content}
         </div>
-        <div class="paragraph-subparagraphs">
+        <div class="doc-view-paragraphs">
             {#each paragraph.subParagraphs as subParagraph, i}
                 <DocSubParagraphView
                     paragraph={subParagraph}
@@ -85,7 +85,7 @@
         }
     }
 
-    .paragraph-subparagraphs {
+    .doc-view-paragraphs {
         width: 100%;
         padding-left: 5px;
         box-sizing: border-box;

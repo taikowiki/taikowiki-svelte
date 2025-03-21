@@ -6,6 +6,7 @@ import { get, type Unsubscriber, type Writable } from 'svelte/store';
 import { docContext } from '../util.js';
 import { defineRequestHandler } from '@yowza/rrequestor';
 import type { Doc } from '$lib/module/common/wikidoc/types';
+import { CSSStyleDeclaration } from 'cssom';
 
 // custom elements
 function defineElement(litElement: any, tagName: string, option?: ElementDefinitionOptions) {
@@ -23,6 +24,7 @@ export function defineWikiElements() {
     defineElement(WikiRoot, 'wiki-root', { extends: 'div' });
     defineElement(WikiLink, 'wiki-link');
     defineElement(WikiFloat, 'wiki-float', { extends: 'div' });
+    defineElement(WikiYoutube, 'wiki-yt');
 }
 
 export function isDefined() {
@@ -490,6 +492,59 @@ export class WikiLink extends LitElement {
                     ${this.innerHTML?.trim() || this.docTitle}
                 </a>
             `
+        }
+    }
+}
+
+export class WikiYoutube extends LitElement {
+    @property()
+    v?: string;
+    @property()
+    width?: string;
+    @property()
+    height?: string;
+
+    static get styles() {
+        return css`
+        .doc-yt-container{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            width: 560px;
+            height: 315px;
+            max-width: 100%;
+        }
+        iframe{
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+        `
+    }
+
+    render() {
+        const style = new CSSStyleDeclaration();
+        this.width && style.setProperty('width', this.width);
+        this.height && style.setProperty('height', this.height);
+
+        if (this.v) {
+            const src = new URL("https://www.youtube.com");
+            src.pathname = `/embed/${encodeURIComponent(this.v)}`;
+            return html`
+            <div class="doc-yt-container" style=${style.cssText}>
+                <iframe 
+                    src=${src.href} 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            `
+        }
+        else{
+            return html``;
         }
     }
 }

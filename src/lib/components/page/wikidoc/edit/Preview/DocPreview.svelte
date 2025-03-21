@@ -29,7 +29,9 @@
 <div class="doc-view-container" data-theme={$theme}>
     {#await convertedContentPromise then convertedContent}
         {#key $theme}
-            {@html convertedContent}
+            <div class="doc-view-content">
+                {@html convertedContent}
+            </div>
         {/key}
     {/await}
 </div>

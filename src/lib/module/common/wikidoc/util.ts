@@ -381,7 +381,7 @@ export const renderer = {
         //허용되지 않은 속성 제거
         const allowedAttributes = {
             'a': ['href'],
-            'img': ['src', 'alt'],
+            'img': ['src', 'alt', 'width', 'height'],
             'th': ['align', 'colspan', 'rowspan'],
             'td': ['colspan', 'rowspan'],
             'wiki-annot': ['key'],

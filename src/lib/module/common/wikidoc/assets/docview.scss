@@ -16,6 +16,12 @@
         }
     }
 
+    .doc-view-content::after{
+        content:"";
+        display:block;
+        clear:both;
+    }
+
     wiki-annot {
         width: 16px;
         display: inline-block;

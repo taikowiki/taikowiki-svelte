@@ -26,7 +26,7 @@
                 return `/song/${searchResult.songNo}`;
             }
             case "docs": {
-                return "";
+                return `/doc/r/${encodeURIComponent(searchResult.title)}`;
             }
         }
     }

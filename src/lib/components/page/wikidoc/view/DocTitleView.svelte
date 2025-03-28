@@ -1,7 +1,7 @@
 <script lang="ts">
     import { DateTime } from "luxon";
     import DocEditBtn from "./DocView/DocEditBtn.svelte";
-    import DocLogBtn from "./DocView/DocLogbtn.svelte";
+    import DocLogBtn from "../../wikidoc/view/DocView/DocLogBtn.svelte";
 
     interface Props {
         id: number;

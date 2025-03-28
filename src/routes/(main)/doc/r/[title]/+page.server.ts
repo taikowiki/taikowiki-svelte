@@ -12,13 +12,13 @@ export async function load({ params, locals }) {
     type DocData = Pick<Doc.DB.DocDBData, (typeof columns)[number]> & { editor: string } & { contentTree: Doc.Data.ContentTree };
 
     try {
-        const docData = await runQuery<DocData>(async (run) => {            
+        const docData = await runQuery(async (run) => {            
             // db View Data 가져오기
             const docData = (await docDBController.getColumnsWhere(columns, [['title', params.title]]))[0] as DocData ?? null;
             if (!docData) {
                 throw error(404);
             }
-            const editor = (await userDBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID;
+            const editor = docData.editorUUID ? (await userDBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID : docData.editorIp;
 
             // 삭제되었으면 삭제되었다고 표기하기
             if (docData.isDeleted) {
@@ -48,9 +48,9 @@ export async function load({ params, locals }) {
             }
 
             if (docData.type === "song") {
-                // 곡 문서이고 해당 곡 번호를 가진 곡이 존재함
+                // 곡 문서이고 해당 곡 번호를 가진 곡이 존재하면 리다이렉트
                 if (docData.songNo && await songDBController.songExistsBySongNo.getCallback(docData.songNo)(run)) {
-                    throw redirect(302, `/song/${docData.songNo}`)
+                    throw redirect(302, `/song/${docData.songNo}?from=${encodeURIComponent(docData.title)}`)
                 }
             }
 

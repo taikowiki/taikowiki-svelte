@@ -6,12 +6,14 @@
 
 {#if redirectFrom}
     <div class="redirect-from">
-        {redirectFrom}에서 리다이렉트 됨
+        <b>{redirectFrom}</b>에서 리다이렉트 됨
     </div>
 {/if}
 
 <style>
     .redirect-from {
         color: gray;
+        font-size: 13px;
+        margin-bottom: 5px;
     }
 </style>

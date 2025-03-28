@@ -4,13 +4,13 @@
     import MainSearchTypeSelector from "./MainSearchTypeSelector.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { onDestroy, onMount } from "svelte";
-    import { mainpageSongSearch } from "$lib/module/common/search/search.client";
+    import { mainpageAllSearch, mainpageDocSearch, mainpageSongSearch } from "$lib/module/common/search/search.client";
     import type { SearchResult } from "$lib/module/common/search/types";
     import MainSearchResult from "./MainSearchResult.svelte";
     import { goto } from "$app/navigation";
 
     let keyword: string = $state("");
-    let searchType: "all" | "song" | "docs" = $state("song");
+    let searchType: "all" | "song" | "docs" = $state("all");
 
     let selectorOpened: boolean = $state(false);
 
@@ -28,16 +28,6 @@
         ${selectorOpened ? "border-radius: 5px 5px 5px 0px;" : "border-radius: 5px;"}
         `,
     );
-
-    /**
-     * @todo 문서 기능 개발 후 삭제
-     */
-    $effect(() => {
-        if (searchType !== "song") {
-            searchType = "song";
-            alert("공사중입니다.");
-        }
-    });
 
     //빠른 검색 관련
     let searchInterval: ReturnType<typeof setInterval>;
@@ -67,6 +57,18 @@
                 if (response.status === "success") {
                     searchResults = response.data;
                 }
+                break;
+            }
+            case "docs":{
+                const response = await mainpageDocSearch(keyword);
+                if (response.status === "success") {
+                    searchResults = response.data;
+                }
+                break;
+            }
+            case "all":{
+                const results = await mainpageAllSearch(keyword);
+                searchResults = results;
                 break;
             }
         }

@@ -17,4 +17,13 @@
 </script>
 
 <DocEditor {wikiDoc} />
+<div class="comment-container">
+    <input type="text" bind:value={wikiDoc.comment} placeholder="수정 사항을 간략하게 써주세요."/>
+</div>
 <DocSubmit {wikiDoc} type="update" />
+
+<style>
+    .comment-container input{
+        width: 100%;
+    }
+</style>

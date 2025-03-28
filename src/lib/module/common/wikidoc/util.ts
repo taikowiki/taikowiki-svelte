@@ -242,36 +242,36 @@ export const renderer = {
      * @param contentTree 
      * @returns 
      */
-    normalizeContentTree(contentTree: Doc.Data.ContentTree): string {
-        let normalized = '';
+    flattenContentTree(contentTree: Doc.Data.ContentTree): string {
+        let flattened = '';
 
-        normalized += this.sharpConverter.escapeSharp(contentTree.content);
+        flattened += this.sharpConverter.escapeSharp(contentTree.content);
         contentTree.subParagraphs.forEach((subParagraph) => {
-            normalized += '\n';
-            normalized += normalizeParagraph(subParagraph, 1);
+            flattened += '\n';
+            flattened += flattenParagraph(subParagraph, 1);
         })
-        return normalized;
+        return flattened;
 
-        function normalizeParagraph(paragraph: Doc.Data.DocParagraph, depth: number) {
-            let normalized = '';
+        function flattenParagraph(paragraph: Doc.Data.DocParagraph, depth: number) {
+            let flattened = '';
 
             // 제목 추가
             for (let i = 0; i < depth; i++) {
-                normalized += '#';
+                flattened += '#';
             }
-            normalized += ' ';
-            normalized += markdownEscape(paragraph.title);
-            normalized += '\n';
+            flattened += ' ';
+            flattened += markdownEscape(paragraph.title);
+            flattened += '\n';
 
             // 본문 추가
-            normalized += paragraph.content;
+            flattened += paragraph.content;
 
             // 하위 문단 추가
             paragraph.subParagraphs.forEach((subParagraph) => {
-                normalized += '\n';
-                normalized += normalizeParagraph(subParagraph, depth + 1);
+                flattened += '\n';
+                flattened += flattenParagraph(subParagraph, depth + 1);
             })
-            return normalized;
+            return flattened;
         }
     },
     /**

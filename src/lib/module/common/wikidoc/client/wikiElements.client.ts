@@ -373,8 +373,8 @@ export class WikiAnnotationElement extends LitElement {
         }
 
         return html`
-            <div class="container" id="container">
-                <div class="flag" data-theme="${this.theme}" @mouseover="${this.show}" @mouseout="${this.hide}" @click="${this.clickHandler}">
+            <div class="container" id="container" @mouseover="${this.show}" @mouseout="${this.hide}" @click="${this.clickHandler}">
+                <div class="flag" data-theme="${this.theme}">
                     [${this.key}]
                 </div>
                 <div class="content-container" id="contentContainer" data-display="${this.display}" data-theme="${this.theme}">

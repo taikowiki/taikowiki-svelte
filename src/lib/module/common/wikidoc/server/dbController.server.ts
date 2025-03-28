@@ -4,6 +4,7 @@ import { WikiError, validateDocData } from "../util.js";
 import { renderer } from "../util.js";
 import { songDBController } from "../../song/song.server.js";
 import { sqlEscapeString } from "../../util.js";
+import * as Diff from 'diff';
 
 function parseDBData<T extends keyof Doc.DB.DocDBData = keyof Doc.DB.DocDBData>(dataFromDB: any): Pick<Doc.DB.DocDBData, T> {
     const docData: any = {};
@@ -41,7 +42,7 @@ export const docDBController = {
      * @throws `REDIRECT_DOC_NOT_EXISTS` 리다이렉트 할 문서가 존재하지 않음.
      * @throws `SONG_NOT_EXISTS` 연결할 곡이 존재하지 않음.
      */
-    create: defineDBHandler<[UUID: string, ip: string, docData: Doc.Data.DocData]>((UUID, ip, docData) => {
+    create: defineDBHandler<[UUID: string | null, ip: string, docData: Doc.Data.DocData]>((UUID, ip, docData) => {
         return async (run) => {
             // 제목 비어있는지 검사
             if (!docData.title) {
@@ -83,7 +84,7 @@ export const docDBController = {
                 redirectTo = redirectId
             }
 
-            await run("INSERT INTO `docs` (`title`, `type`, `editorUUID`, `editorIp`, `comment`, `contentTree`, `renderedContentTree`, `normalizedContentTree`, `songNo`, `redirectTo`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            await run("INSERT INTO `docs` (`title`, `type`, `editorUUID`, `editorIp`, `comment`, `contentTree`, `renderedContentTree`, `flattenedContent`, `songNo`, `redirectTo`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
                     docData.title,
                     docData.type,
@@ -92,7 +93,7 @@ export const docDBController = {
                     docData.comment,
                     docData.type !== "redirect" ? JSON.stringify(docData.contentTree) : null,
                     docData.type !== "redirect" ? JSON.stringify(await renderer.prerenderContentTree(docData.contentTree)) : null,
-                    docData.type !== "redirect" ? renderer.normalizeContentTree(docData.contentTree) : null,
+                    docData.type !== "redirect" ? renderer.flattenContentTree(docData.contentTree) : null,
                     docData.songNo ?? null,
                     redirectTo
                 ]
@@ -109,13 +110,14 @@ export const docDBController = {
      * @throws `SONG_NOT_EXISTS` 연결할 곡이 존재하지 않음.
      * @throws `ID_NOT_EXISTS` 해당 ID의 문서가 존재하지 않음.
      */
-    update: defineDBHandler<[id: number, UUID: string, ip: string, docData: Doc.Data.DocData]>((id, UUID, ip, docData) => {
+    update: defineDBHandler<[id: number, UUID: string | null, ip: string, docData: Doc.Data.DocData]>((id, UUID, ip, docData) => {
         return async (run) => {
-            const result = await run("SELECT `version` FROM `docs` WHERE `id` = ?", [id]);
+            const result = await run("SELECT `version`, `flattenedContent` FROM `docs` WHERE `id` = ?", [id]);
             if (result.length === 0) {
                 throw new WikiError("ID_NOT_EXISTS");
             }
-            const version = result[0].version;
+            const oldVersion = result[0].version as number;
+            const oldFlattenedContent = result[0].flattenedContent as string;
 
             // 제목 비어있는지 검사
             if (!docData.title) {
@@ -157,10 +159,24 @@ export const docDBController = {
                 redirectTo = redirectId
             }
 
+            // diff 확인
+            const flattenedContent = docData.contentTree ? renderer.flattenContentTree(docData.contentTree) : '';
+            const diff = Diff.diffChars(oldFlattenedContent, flattenedContent);
+            let increase = 0;
+            let decrease = 0;
+            diff.forEach((change) => {
+                if (change.added) {
+                    increase += change.value.length;
+                }
+                else if (change.removed) {
+                    decrease += change.value.length;
+                }
+            })
+
             // `docs/log`로 이동
-            await run('INSERT INTO `docs/log` SELECT * FROM `docs` WHERE `id` = ?', [id]);
+            await run('INSERT INTO `docs/log` (`id`, `title`, `type`, `editableGrade`, `editorUUID`, `editorIp`, `comment`, `contentTree`, `renderedContentTree`, `flattenedContent`, `songNo`, `redirectTo`, `createdTime`, `editedTime`, `isDeleted`, `version`, `diffIncrease`, `diffDecrease`) SELECT * FROM `docs` WHERE `id` = ?', [id]);
             // `docs` 수정
-            await run("UPDATE `docs` SET `title` = ?, `type` = ?, `editorUUID` = ?, `editorIp` = ?, `comment` = ?, `contentTree` = ?, `renderedContentTree` = ?, `normalizedContentTree` = ?, `songNo` = ?, `redirectTo` = ?, `editedTime` = CURRENT_TIMESTAMP, `version` = ?, `isDeleted` = 0 WHERE `id` = ?",
+            await run("UPDATE `docs` SET `title` = ?, `type` = ?, `editorUUID` = ?, `editorIp` = ?, `comment` = ?, `contentTree` = ?, `renderedContentTree` = ?, `flattenedContent` = ?, `songNo` = ?, `redirectTo` = ?, `editedTime` = CURRENT_TIMESTAMP, `version` = ?, `isDeleted` = 0, `diffIncrease` = ?, `diffDecrease` = ? WHERE `id` = ?",
                 [
                     docData.title,
                     docData.type,
@@ -169,10 +185,12 @@ export const docDBController = {
                     docData.comment,
                     docData.type !== "redirect" ? JSON.stringify(docData.contentTree) : null,
                     docData.type !== "redirect" ? JSON.stringify(await renderer.prerenderContentTree(docData.contentTree)) : null,
-                    docData.type !== "redirect" ? renderer.normalizeContentTree(docData.contentTree) : null,
+                    docData.type !== "redirect" ? (flattenedContent || null) : null,
                     docData.songNo ?? null,
                     redirectTo,
-                    version + 1,
+                    oldVersion + 1,
+                    increase,
+                    decrease,
                     id
                 ]
             )
@@ -180,17 +198,89 @@ export const docDBController = {
     }),
     /**
      * 문서의 로그를 가져옴
-     * 페이지 당 50개
+     * 페이지 당 100개
      */
-    getLogs: defineDBHandler<[id: number, page: number]>((id, page) => {
+    getLogData: defineDBHandler<[id: number, page: number], Doc.DB.ControllerReturnTypes.getLogData>((id, page) => {
         return async (run) => {
-            if (id === 1) {
-                const logs = [];
-            }
-            else {
+            const current = await (async () => {
+                const r = await run("SELECT `title`, `version`, `editedTime`, `comment`, `diffDecrease`, `diffIncrease`, `editorUUID`, `editorIp` FROM `docs` WHERE `id` = ?", [id]);
+                if (r.length === 0) {
+                    return null;
+                }
+                return parseDBData<'title' | 'version' | 'editedTime' | 'comment' | 'diffDecrease' | 'diffIncrease' | 'editorUUID' | 'editorIp'>(r[0]);
+            })();
 
+            if (current === null) {
+                return {
+                    logs: [],
+                    current: null
+                }
             }
-            return 0;
+
+            let _logs = await (async () => {
+                const r = await run("SELECT `title`, `version`, `editedTime`, `comment`, `diffDecrease`, `diffIncrease`, `editorUUID`, `editorIp` FROM `docs/log` WHERE `id` = ? ORDER BY `version` DESC LIMIT ?, ?", [id, page === 1 ? 0 : (page - 1) * 100 - 1, page === 1 ? 99 : 100]);
+                return (r as any[]).map(e => parseDBData<'title' | 'version' | 'editedTime' | 'comment' | 'diffDecrease' | 'diffIncrease' | 'editorUUID' | 'editorIp'>(e))
+            })();
+
+            if (page === 1) {
+                _logs = [current, ..._logs];
+            }
+
+            const editorUUIDSet = new Set<string>();
+            [current, ..._logs].forEach((log) => {
+                if (log.editorUUID) {
+                    editorUUIDSet.add(log.editorUUID);
+                }
+            });
+
+            const uuidRecord = await (async () => {
+                if (editorUUIDSet.size === 0) {
+                    return {} as Record<string, string>;
+                }
+                const whereConditionStatement = Array.from(editorUUIDSet).map((v) => `\`UUID\` = '${sqlEscapeString(v)}'`).join(" OR ");
+                const r = await run(`SELECT \`nickname\`, \`UUID\` FROM \`user/data\` WHERE ${whereConditionStatement}`);
+
+                const s: Record<string, string> = {};
+                r.forEach((v: any) => {
+                    s[v.UUID] = v.nickname;
+                });
+                return s;
+            })();
+
+            const logs = _logs.map((log) => {
+                return {
+                    title: log.title,
+                    version: log.version,
+                    editedTime: log.editedTime,
+                    comment: log.comment,
+                    diffDecrease: log.diffDecrease,
+                    diffIncrease: log.diffIncrease,
+                    editor: log.editorUUID ? (uuidRecord[log.editorUUID] ?? log.editorUUID) : log.editorIp
+                }
+            });
+
+            return {
+                logs,
+                current: {
+                    title: current.title,
+                    version: current.version,
+                    editedTime: current.editedTime,
+                    comment: current.comment,
+                    diffDecrease: current.diffDecrease,
+                    diffIncrease: current.diffIncrease,
+                    editor: current.editorUUID ? (uuidRecord[current.editorUUID] ?? current.editorUUID) : current.editorIp
+                }
+            }
+        }
+    }),
+    getPast: defineDBHandler<[id: number, version: number], Pick<Doc.DB.DocDBData, 'id' | 'contentTree' | 'editedTime' | 'editableGrade' | 'editorUUID' | 'id' | 'isDeleted' | 'renderedContentTree' | 'songNo' | 'title' | 'redirectTo' | 'type' | 'version'> | null>((id, version) => {
+        return async (run) => {
+            const r = await run("SELECT `id`, `contentTree`, `editedTime`, `editableGrade`, `editorUUID`, `id`, `isDeleted`, `renderedContentTree`, `songNo`, `title`, `redirectTo`, `type`, `version` FROM `docs/log` WHERE `id` = ? AND `version` = ? LIMIT 0, 1", [id, version]);
+            if (r.length === 0) {
+                return null;
+            }
+
+            return parseDBData(r[0]);
         }
     }),
     /**
@@ -200,14 +290,13 @@ export const docDBController = {
      * @param where 
      * @returns 
      */
-    getColumnsWhere: defineDBHandler<[columns: (keyof Doc.DB.DocDBData)[], where?: [column: keyof Doc.DB.DocDBData, value: any][]], Partial<Doc.DB.DocDBData>[]>((columns, where) => {
+    getColumnsWhere: defineDBHandler<[columns: (keyof Doc.DB.DocDBData)[], where?: [column: keyof Doc.DB.DocDBData, value: any][], limit?: number], Partial<Doc.DB.DocDBData>[]>((columns, where, limit) => {
         const columnsQuery = columns.map(e => `\`${sqlEscapeString(e)}\``).join(', ');
-        const whereQuery = where ? 'WHERE ' + where.map(e => `\`${sqlEscapeString(e[0])}\` = ?`).join(' AND ') : '';
+        const whereQuery = where && where.length > 0 ? 'WHERE ' + where.map(e => typeof(e[1]) === "string" ? `\`${sqlEscapeString(e[0])}\` LIKE ?` : `\`${sqlEscapeString(e[0])}\` = ?`).join(' AND ') : '';
+        const limitQuery = limit ? `LIMIT 0, ${limit}` : '';
         return async (run) => {
-            const result = await run(`SELECT ${columnsQuery} FROM \`docs\` ${whereQuery}`,
-                where ?
-                    where.map((e) => e[1]) :
-                    []
+            const result = await run(`SELECT ${columnsQuery} FROM \`docs\` ${whereQuery} ${limitQuery}`,
+                where ? where.map((e) => e[1]) : []
             )
 
             return (result as any[]).map(parseDBData) as Partial<Doc.DB.DocDBData>[];

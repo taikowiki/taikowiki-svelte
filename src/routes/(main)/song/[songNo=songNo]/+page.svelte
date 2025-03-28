@@ -13,6 +13,7 @@
     import { DIFFICULTY } from "$lib/module/common/song/const.js";
     import DocContentView from "$lib/components/page/wikidoc/view/DocContentView.svelte";
     import { page } from "$app/state";
+    import DocRedirectFrom from "$lib/components/page/wikidoc/view/DocRedirectFrom.svelte";
 
     let { data } = $props();
     let song = $derived(data.song);
@@ -35,6 +36,7 @@
 
 {#if song}
     <PageTitle title={song.title} />
+    <DocRedirectFrom/>
     <AlertDisplay
         isAsiaBanned={song.isAsiaBanned}
         isKrBanned={song.isKrBanned}

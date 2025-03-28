@@ -38,18 +38,20 @@ export namespace Doc {
             title: string;
             type: 'normal' | 'song' | 'frame' | 'redirect';
             editableGrade: number;
-            editorUUID: string;
+            editorUUID: string | null;
             editorIp: string;
             comment: string;
             contentTree: Data.ContentTree | null; // JSON
             renderedContentTree: Data.ContentTree | null; // JSON
-            normalizedContentTree: string | null;
+            flattenedContent: string | null;
             songNo: string | null;
             redirectTo: number | null;
             createdTime: Date;
             editedTime: Date;
             isDeleted: boolean;
             version: number;
+            diffIncrease: number | null;
+            diffDecrease: number | null;
         }
         export interface NormalDocDBData extends DocDBDataBase {
             type: 'normal';
@@ -93,6 +95,19 @@ export namespace Doc {
             editedTime: Date;
             editableGrade: number;
             editorUUID: string;
+        }
+
+        export type DocLogData = DocDBData & {
+            diffAdd: number;
+            diffSubtract: number;
+        };
+
+        // controller Return Type
+        export namespace ControllerReturnTypes {
+            export type getLogData = {
+                logs: (Pick<Doc.DB.DocDBData, 'title' | 'version' | 'editedTime' | 'comment' | 'diffDecrease' | 'diffIncrease'> & { editor: string })[];
+                current: getLogData["logs"][number] | null;
+            }
         }
     }
     /**

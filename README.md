@@ -14,6 +14,8 @@ This project is being developed on `dev/main` branch, and will be merged to `mai
     - [server module](/docs/server_module.md)
 - [song data](/docs/song%20data.md)
 
+#### zh-tw translation need to be updated more
+
 ## Contributors
 
 - [Mahlerian](https://x.com/IchBinMahlerian)

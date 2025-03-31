@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
-    import { wikiDocRequestor } from "$lib/module/common/wikidoc/server/requestor.client";
+    import { wikiDocRequestor } from "$lib/module/common/wikidoc/client/requestor.client";
     import { getTheme } from "$lib/module/layout/theme";
     import type {Doc} from '$lib/module/common/wikidoc/types';
 

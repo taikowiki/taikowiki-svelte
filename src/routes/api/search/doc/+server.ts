@@ -11,7 +11,7 @@ export async function GET({ url }) {
         }));
     }
 
-    const searchResult: SearchResult[] = (await docDBController.getColumnsWhere(["title"], [["title", `%${sqlEscapeString(keyword)}%`]], 10)).map(e => ({
+    const searchResult: SearchResult[] = (await docDBController.getColumnsWhere(["title"], [["title", `%${sqlEscapeString(keyword)}%`]], 'and', [0, 20])).map(e => ({
         title: e.title as string,
         type: 'docs'
     }));

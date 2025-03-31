@@ -90,6 +90,12 @@
                 goto(`/song?${searchParams.toString()}`);
                 break;
             }
+            case "docs":{
+                const searchParams = new URLSearchParams();
+                searchParams.set("query", keyword);
+                goto(`/doc/search?${searchParams.toString()}`);
+                break;
+            }
         }
     }
 

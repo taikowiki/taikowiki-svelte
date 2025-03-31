@@ -290,10 +290,10 @@ export const docDBController = {
      * @param where 
      * @returns 
      */
-    getColumnsWhere: defineDBHandler<[columns: (keyof Doc.DB.DocDBData)[], where?: [column: keyof Doc.DB.DocDBData, value: any][], limit?: number], Partial<Doc.DB.DocDBData>[]>((columns, where, limit) => {
+    getColumnsWhere: defineDBHandler<[columns: (keyof Doc.DB.DocDBData)[], where?: [column: keyof Doc.DB.DocDBData, value: any][], type?: 'and' | 'or', limit?: [number, number]], Partial<Doc.DB.DocDBData>[]>((columns, where, type, limit) => {
         const columnsQuery = columns.map(e => `\`${sqlEscapeString(e)}\``).join(', ');
-        const whereQuery = where && where.length > 0 ? 'WHERE ' + where.map(e => typeof(e[1]) === "string" ? `\`${sqlEscapeString(e[0])}\` LIKE ?` : `\`${sqlEscapeString(e[0])}\` = ?`).join(' AND ') : '';
-        const limitQuery = limit ? `LIMIT 0, ${limit}` : '';
+        const whereQuery = where && where.length > 0 ? 'WHERE ' + where.map(e => typeof (e[1]) === "string" ? `\`${sqlEscapeString(e[0])}\` LIKE ?` : `\`${sqlEscapeString(e[0])}\` = ?`).join(' ' + (type?.toUpperCase() ?? 'AND') + '') : '';
+        const limitQuery = limit ? `LIMIT ${limit[0]}, ${limit[1]}` : '';
         return async (run) => {
             const result = await run(`SELECT ${columnsQuery} FROM \`docs\` ${whereQuery} ${limitQuery}`,
                 where ? where.map((e) => e[1]) : []
@@ -302,8 +302,9 @@ export const docDBController = {
             return (result as any[]).map(parseDBData) as Partial<Doc.DB.DocDBData>[];
         }
     }),
-    getCountWhere: defineDBHandler<[where?: [column: keyof Doc.DB.DocDBData, value: any][]], number>((where) => {
-        const whereQuery = where ? 'WHERE ' + where.map(e => `\`${sqlEscapeString(e[0])}\` = ?`).join(' AND ') : '';
+    getCountWhere: defineDBHandler<[where?: [column: keyof Doc.DB.DocDBData, value: any][], type?: 'and' | 'or'], number>((where, type) => {
+        const whereQuery = where ? 'WHERE ' + where.map(e => typeof (e[1]) === "string" ? `\`${sqlEscapeString(e[0])}\` LIKE ?` : `\`${sqlEscapeString(e[0])}\` = ?`).join(' ' + (type?.toUpperCase() ?? 'AND') + ' ') : '';
+
         return async (run) => {
             const result = await run(`SELECT COUNT(*) AS COUNT FROM \`docs\` ${whereQuery}`,
                 where ?

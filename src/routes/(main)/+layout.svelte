@@ -112,44 +112,90 @@
     });
 </script>
 
-<svelte:head>
-    <script
-        type="text/javascript"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${data.kakaoKey}&libraries=services`}
-    ></script>
-    {#if !browser}
-        {#if $theme === "light"}
-            <style>
-                a {
-                    color: #cf4844;
-                }
-                body {
-                    background-color: #e8e8e8;
-                    color: black;
-                }
-            </style>
-        {:else}
-            <style>
-                a {
-                    color: #e1a743;
-                }
-                body {
-                    background-color: black;
-                    color: white;
-                }
-            </style>
-        {/if}
-    {/if}
-</svelte:head>
-{#key $navigating}
-    <HrefLang />
-{/key}
 <img src="/assets/img/logo.webp" class="preview" alt="preview" />
 <div>
-    {@render children?.()}
+    <Header>
+        <svelte:fragment slot="left">
+            <HeaderItem href="/" useHover={false}>
+                {#if $isMobile}
+                    <img
+                        class="logo-mobile"
+                        src="/assets/img/logo_mobile.webp"
+                        alt="logo"
+                    />
+                {:else}
+                    <img class="logo" src="/assets/img/logo.webp" alt="logo" />
+                {/if}
+            </HeaderItem>
+            <HeaderItem
+                icon="/assets/icon/song.svg"
+                href="/song"
+                mobileHideSlot
+            >
+                <span class="header-text">{i18nLayout.song}</span>
+            </HeaderItem>
+            <HeaderItem
+                icon="/assets/icon/document.svg"
+                href="javascript:alert('WIP');"
+                mobileHideSlot
+            >
+                <span class="header-text">{i18nLayout.doc}</span>
+            </HeaderItem>
+            <HeaderItem
+                icon="/assets/icon/leaderboard.svg"
+                href="/diffchart"
+                mobileHideSlot
+            >
+                <span class="header-text">{i18nLayout.diffchart}</span>
+            </HeaderItem>
+            <HeaderItem
+                icon="/assets/icon/dani.svg"
+                href="/dani"
+                mobileHideSlot
+            >
+                <span class="header-text">{i18nLayout.dani}</span>
+            </HeaderItem>
+            <HeaderItem
+                icon="/assets/icon/maps-pin-header.svg"
+                href="/gamecenter"
+                mobileHideSlot
+            >
+                <span class="header-text">{i18nLayout.gamecenter}</span>
+            </HeaderItem>
+        </svelte:fragment>
+        <svelte:fragment slot="right">
+            <User />
+            <HeaderItem
+                icon="/assets/icon/donate.svg"
+                href="/donate"
+                mobileHideSlot
+            />
+        </svelte:fragment>
+    </Header>
+    <Main>
+        {#snippet main()}
+            {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
+                <Loading />
+            {:else}
+                {@render children?.()}
+                {#if $page.url.pathname !== "/song"}
+                    <ScrollSetter />
+                {/if}
+            {/if}
+        {/snippet}
+        {#snippet aside()}
+            <Aside>
+                <div bind:this={$pageAside} class="page-aside"></div>
+                {#if data.asideBanners}
+                    <AsideBanner banners={data.asideBanners} />
+                {/if}
+                <AsideNewSong newSongs={data.newSongs} />
+            </Aside>
+        {/snippet}
+    </Main>
+    <Footer version={data.version} />
 </div>
 
-<ServiceLayout />
 
 <style>
     .page-aside:empty {

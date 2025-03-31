@@ -44,6 +44,7 @@
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
+    import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -116,33 +117,12 @@
         type="text/javascript"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${data.kakaoKey}&libraries=services`}
     ></script>
-    {#if !browser}
-        {#if $theme === "light"}
-            <style>
-                a {
-                    color: #cf4844;
-                }
-                body {
-                    background-color: #e8e8e8;
-                    color: black;
-                }
-            </style>
-        {:else}
-            <style>
-                a {
-                    color: #e1a743;
-                }
-                body {
-                    background-color: black;
-                    color: white;
-                }
-            </style>
-        {/if}
-    {/if}
 </svelte:head>
+
 {#key $navigating}
     <HrefLang />
 {/key}
+<ServerTheme/>
 <img src="/assets/img/logo.webp" class="preview" alt="preview" />
 <div>
     <Header>

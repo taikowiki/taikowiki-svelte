@@ -112,35 +112,6 @@
     });
 </script>
 
-<svelte:head>
-    <script
-        type="text/javascript"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${data.kakaoKey}&libraries=services`}
-    ></script>
-    {#if !browser}
-        {#if $theme === "light"}
-            <style>
-                a {
-                    color: #cf4844;
-                }
-                body {
-                    background-color: #e8e8e8;
-                    color: black;
-                }
-            </style>
-        {:else}
-            <style>
-                a {
-                    color: #e1a743;
-                }
-                body {
-                    background-color: black;
-                    color: white;
-                }
-            </style>
-        {/if}
-    {/if}
-</svelte:head>
 {#key $navigating}
     <HrefLang />
 {/key}
@@ -228,6 +199,7 @@
     <Footer version={data.version} />
 </div>
 
+<ServiceLayout />
 
 <style>
     .page-aside:empty {

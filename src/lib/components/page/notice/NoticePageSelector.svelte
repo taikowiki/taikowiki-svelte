@@ -36,7 +36,7 @@
 
     let { pageNum = $bindable(), length }: Props = $props();
 
-    let maxPage = Math.ceil(length / 30);
+    let maxPage = Math.ceil(length / 20);
     let displayPages = getDisplayPages(pageNum, maxPage);
 
     const isMobile = getIsMobile();

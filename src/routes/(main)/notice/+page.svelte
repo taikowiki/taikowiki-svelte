@@ -28,6 +28,7 @@
 <PageSelector
     {pageNum}
     length={data.count}
+    countPerPage={30}
     {movePage}
 />
 

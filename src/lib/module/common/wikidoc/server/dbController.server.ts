@@ -1,9 +1,9 @@
-import { defineDBHandler } from "@yowza/db-handler";
+import { defineDBHandler, QB, queryBuilder, Select, Where } from "@yowza/db-handler";
 import type { Doc } from '$lib/module/common/wikidoc/types';
 import { WikiError, validateDocData } from "../util.js";
 import { renderer } from "../util.js";
 import { songDBController } from "../../song/song.server.js";
-import { sqlEscapeString } from "../../util.js";
+import { sqlString, sqlEscapeString } from "../../util.js";
 import * as Diff from 'diff';
 
 function parseDBData<T extends keyof Doc.DB.DocDBData = keyof Doc.DB.DocDBData>(dataFromDB: any): Pick<Doc.DB.DocDBData, T> {
@@ -412,6 +412,48 @@ export const docDBController = {
             }
 
             return result[0].editableGrade;
+        }
+    }),
+    search: defineDBHandler<[query: string, offset:number, limit: number], {count: number, searchResults: Pick<Doc.DB.DocDBData, 'title' | 'flattenedContent' | 'type' | 'songNo' | 'redirectTo'>[]}>((query, offset, limit) => {
+        const countQuery =
+            queryBuilder
+                .select('docs', [Select.Count()])
+                .where(Where.OR(
+                    Where.Like('title', `%${query}%`),
+                    Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').map(e => e).join('%'))}%`)
+                ))
+                .build()
+
+        const searchQuery =
+            queryBuilder.union([
+                queryBuilder
+                    .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
+                    .where(Where.Compare('title', '=', query)),
+                queryBuilder
+                    .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
+                    .where(Where.Like('title', `%${query.split(' ').map(e => e).join('%')}%`)),
+                queryBuilder
+                    .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
+                    .where(Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').map(e => e).join('%'))}%`))
+            ]).build() + ` LIMIT ${offset}, ${limit}`;
+        
+        return async(run) => {
+            const r1 = await run(countQuery)
+            const count = Object.values(r1[0])[0] as number;
+
+            if(count === 0){
+                return {
+                    count, 
+                    searchResults: []
+                }
+            }
+
+            const r2 = await run(searchQuery)
+            const searchResults = r2.map((e: any) => parseDBData(e));
+
+            return {
+                count, searchResults
+            }
         }
     })
 } as const;

@@ -140,10 +140,10 @@ export const renderer = {
      * @param contentTree 
      * @returns 
      */
-    async prerenderContentTree(contentTree: Doc.Data.ContentTree) {
+    prerenderContentTree(contentTree: Doc.Data.ContentTree) {
         const scope: Record<string, any> = {};
 
-        const prerenderContent = async (src: string) => {
+        const prerenderContent = (src: string) => {
             src = this.convertAnnotation(src);
             src = this.marked.parse(src, { async: false });
             const dom = parseHTML(src);
@@ -154,15 +154,15 @@ export const renderer = {
             return dom.innerHTML;
         }
 
-        async function prerenderParagraph(paragraph: Doc.Data.DocParagraph): Promise<Doc.Data.DocParagraph> {
+        function prerenderParagraph(paragraph: Doc.Data.DocParagraph): Doc.Data.DocParagraph {
             const subParagraphs: Doc.Data.DocParagraph['subParagraphs'] = [];
             for (const subParagraph of paragraph.subParagraphs) {
-                subParagraphs.push(await prerenderParagraph(subParagraph));
+                subParagraphs.push(prerenderParagraph(subParagraph));
             }
 
             const rendered: Doc.Data.DocParagraph = {
                 title: paragraph.title,
-                content: await prerenderContent(paragraph.content),
+                content: prerenderContent(paragraph.content),
                 subParagraphs
             };
 
@@ -171,10 +171,10 @@ export const renderer = {
 
         const subParagraphs: Doc.Data.DocParagraph['subParagraphs'] = [];
         for (const subParagraph of contentTree.subParagraphs) {
-            subParagraphs.push(await prerenderParagraph(subParagraph));
+            subParagraphs.push(prerenderParagraph(subParagraph));
         };
         const rendered: Doc.Data.ContentTree = {
-            content: await prerenderContent(contentTree.content),
+            content: prerenderContent(contentTree.content),
             subParagraphs
         };
 
@@ -193,10 +193,6 @@ export const renderer = {
             await finishCallback(dom);
         }
         return dom.innerHTML;
-
-        async function v() {
-
-        }
     },
     sharpConverter: {
         /**
@@ -244,8 +240,10 @@ export const renderer = {
      */
     flattenContentTree(contentTree: Doc.Data.ContentTree): string {
         let flattened = '';
+        contentTree = this.prerenderContentTree(contentTree);
+        const sharpConverter = this.sharpConverter;
 
-        flattened += this.sharpConverter.escapeSharp(contentTree.content);
+        flattened += parseHTML(sharpConverter.escapeSharp(contentTree.content)).innerText;
         contentTree.subParagraphs.forEach((subParagraph) => {
             flattened += '\n';
             flattened += flattenParagraph(subParagraph, 1);
@@ -264,7 +262,7 @@ export const renderer = {
             flattened += '\n';
 
             // 본문 추가
-            flattened += paragraph.content;
+            flattened += parseHTML(sharpConverter.escapeSharp(paragraph.content)).innerText;
 
             // 하위 문단 추가
             paragraph.subParagraphs.forEach((subParagraph) => {
@@ -375,7 +373,7 @@ export const renderer = {
      */
     purifyHTML(dom: HTMLElement): void {
         //허용되지 않은 태그 제거
-        const allowedTags: string[] = ['p', 'a', 'img', 'strong', 'em', 'del', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'wiki-annot', 'wiki-link', 'wiki-yt', 'wiki-float', 'style-table', 'style-cell', 'style-row', 'style-col'];
+        const allowedTags: string[] = ['p', 'a', 'img', 'strong', 'em', 'del', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'ul', 'ol', 'li', 'hr', 'blockquote', 'pre', 'code', 'wiki-annot', 'wiki-link', 'wiki-yt', 'wiki-float', 'style-table', 'style-cell', 'style-row', 'style-col'];
         dom.querySelectorAll(`:not(${allowedTags.join(', ')})`).forEach(e => e.remove());
 
         //허용되지 않은 속성 제거

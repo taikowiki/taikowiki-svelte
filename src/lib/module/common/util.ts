@@ -1,3 +1,5 @@
+import sqlString from 'sqlstring';
+
 /**
  * deep freeze object
  */
@@ -89,6 +91,7 @@ export function sqlEscapeString(val: string) {
 
     return escapedVal;
 }
+export {sqlString};
 
 /**
  * markdown

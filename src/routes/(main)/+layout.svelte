@@ -72,8 +72,7 @@
     });
 
     //page aside
-    const pageAside = usePageAside();
-    beforeNavigate(resetPageAside(pageAside));
+    setContext('asideElement', writable<HTMLElement>())
 
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
@@ -194,7 +193,6 @@
         {/snippet}
         {#snippet aside()}
             <Aside>
-                <div bind:this={$pageAside} class="page-aside"></div>
                 {#if data.asideBanners}
                     <AsideBanner banners={data.asideBanners} />
                 {/if}
@@ -206,10 +204,6 @@
 </div>
 
 <style>
-    .page-aside:empty {
-        display: none;
-    }
-
     .logo {
         height: 38px;
         margin-right: -10px;

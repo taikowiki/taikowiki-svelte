@@ -41,9 +41,9 @@ export namespace Doc {
             editorUUID: string | null;
             editorIp: string;
             comment: string;
-            contentTree: Data.ContentTree | null; // JSON
-            renderedContentTree: Data.ContentTree | null; // JSON
-            flattenedContent: string | null;
+            contentTree: Data.ContentTree | null; // markdown JSON
+            renderedContentTree: Data.ContentTree | null; // html JSON
+            flattenedContent: string | null; // string
             songNo: string | null;
             redirectTo: number | null;
             createdTime: Date;

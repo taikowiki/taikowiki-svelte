@@ -23,31 +23,8 @@
     }
 </script>
 
-<PageAside title="문서 검색">
-    <div class="search-container">
-        <input
-            type="text"
-            bind:value={$query}
-            enterkeyhint="search"
-            onkeypress={(event) => {
-                if (event.key === "Enter") {
-                    search($query);
-                }
-            }}
-        />
-        <button
-            class="standardbtn"
-            data-theme={$theme}
-            onclick={() => {
-                search($query);
-            }}
-        >
-            검색
-        </button>
-    </div>
-</PageAside>
-{#if $isMobile}
-    <div class="search-container">
+{#snippet searchView()}
+    <div class="search-container" data-isMobile={$isMobile}>
         <input
             type="text"
             bind:value={$query}
@@ -69,9 +46,17 @@
             검색
         </button>
     </div>
+{/snippet}
+
+{#if $isMobile}
+    {@render searchView()}
 {/if}
 
 {@render children?.()}
+
+<PageAside title="문서 검색">
+    {@render searchView()}
+</PageAside>
 
 <style>
     .search-container {
@@ -81,10 +66,13 @@
         justify-content: space-between;
         align-items: center;
 
+        &[data-isMobile="true"]{
+            column-gap: 5px;
+        }
         & input {
             width: 170px;
         }
-        & input[data-isMobile="true"]{
+        & input[data-isMobile="true"] {
             flex: 1 0 auto;
         }
     }

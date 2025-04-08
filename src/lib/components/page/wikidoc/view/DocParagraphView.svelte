@@ -26,6 +26,7 @@
         role="presentation"
         style={`transform:scale(${100 - (depth - 1)}%);`}
         data-theme={$theme}
+        data-doc-index={index}
     >
         <span>
             {`${index}. ${paragraph.title}`}

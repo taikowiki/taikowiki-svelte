@@ -244,18 +244,18 @@ export const renderer = {
         const sharpConverter = this.sharpConverter;
 
         flattened += parseHTML(sharpConverter.escapeSharp(contentTree.content)).innerText;
-        contentTree.subParagraphs.forEach((subParagraph) => {
+        contentTree.subParagraphs.forEach((subParagraph, index) => {
             flattened += '\n';
-            flattened += flattenParagraph(subParagraph, 1);
+            flattened += flattenParagraph(subParagraph, 1, (index + 1).toString());
         })
         return flattened;
 
-        function flattenParagraph(paragraph: Doc.Data.DocParagraph, depth: number) {
+        function flattenParagraph(paragraph: Doc.Data.DocParagraph, depth: number, index: string) {
             let flattened = '';
 
             // 제목 추가
             for (let i = 0; i < depth; i++) {
-                flattened += '#';
+                flattened += `${index}.`;
             }
             flattened += ' ';
             flattened += markdownEscape(paragraph.title);
@@ -265,9 +265,9 @@ export const renderer = {
             flattened += parseHTML(sharpConverter.escapeSharp(paragraph.content)).innerText;
 
             // 하위 문단 추가
-            paragraph.subParagraphs.forEach((subParagraph) => {
+            paragraph.subParagraphs.forEach((subParagraph, index_) => {
                 flattened += '\n';
-                flattened += flattenParagraph(subParagraph, depth + 1);
+                flattened += flattenParagraph(subParagraph, depth + 1, `${index}.${index_ + 1}`);
             })
             return flattened;
         }

@@ -2,6 +2,8 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import PageSelector from "$lib/components/common/PageSelector.svelte";
+    import { renderer } from "$lib/module/common/wikidoc/util.js";
+    import { getTheme } from "$lib/module/layout/theme.js";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
 
@@ -20,11 +22,82 @@
         }
     });
 
+    function extractAccording(flattenedContent: string, query: string) {
+        type P = {
+            type: "normal" | "strong";
+            value: string;
+        };
+        const extracted: P[][] = [];
+
+        let searched = flattenedContent.indexOf(query);
+        while (searched > -1) {
+            const pArr: P[] = [];
+            let pStart = Math.max(0, searched - 20);
+            let pEnd = Math.min(
+                flattenedContent.length,
+                searched + query.length + 20,
+            );
+
+            let sliced = flattenedContent.slice(pStart, pEnd);
+            if (pStart !== 0) {
+                pArr.push({
+                    type: "normal",
+                    value: " ... ",
+                });
+            }
+            sliced.split(query).forEach((v, i, a) => {
+                pArr.push({
+                    type: "normal",
+                    value: v,
+                });
+                if (i !== a.length - 1) {
+                    pArr.push({
+                        type: "strong",
+                        value: query,
+                    });
+                }
+            });
+
+            extracted.push(pArr);
+
+            searched = flattenedContent.indexOf(
+                query,
+                searched + query.length + 20,
+            );
+        }
+
+        let totalLength = 0;
+        let extractedString = "";
+        for (const p of extracted) {
+            let pString = "";
+            let pLength = 0;
+            p.forEach((e) => {
+                if (e.type === "normal") {
+                    pString += renderer.escapeHtml(e.value);
+                } else {
+                    pString += `<span class="em-query">${renderer.escapeHtml(e.value)}</span>`;
+                }
+                pLength += e.value.length;
+            });
+            if (totalLength + pLength > 200) {
+                break;
+            }
+            extractedString += pString;
+            totalLength += pLength;
+        }
+
+        extractedString += " ...";
+
+        return extractedString;
+    }
+
     function movePage(p: number) {
         const searchParams = new URLSearchParams(page.url.searchParams);
         searchParams.set("page", p.toString());
         goto(page.url.pathname + `?${searchParams.toString()}`);
     }
+
+    const [theme] = getTheme();
 </script>
 
 {#snippet searchResultsList(searchResults: SearchResult[])}
@@ -38,19 +111,26 @@
                         {searchResult.title}
                     </a>
                 </h2>
-                <div class="search-result-content-container">
+                <div
+                    class="search-result-content-container"
+                    data-theme={$theme}
+                >
                     {#if searchResult.songTitle}
                         <div class="redirect-container">
                             <img
                                 src="/assets/icon/song.svg"
                                 alt="song"
                                 class="redirect-icon"
+                                data-theme={$theme}
                             />{searchResult.songTitle ?? ""}
                         </div>
                     {/if}
                     {#if searchResult.flattenedContent}
-                        <div class="search-result-container">
-                            {searchResult.flattenedContent}
+                        <div class="search-result-container" data-theme={$theme}>
+                            {@html extractAccording(
+                                searchResult.flattenedContent,
+                                query_ ?? "",
+                            )}
                         </div>
                     {:else}
                         <div class="redirect-container">
@@ -58,6 +138,7 @@
                                 src="/assets/icon/document.svg"
                                 alt="song"
                                 class="redirect-icon"
+                                data-theme={$theme}
                             />{searchResult.redirectTitle}
                         </div>
                     {/if}
@@ -89,7 +170,7 @@
         row-gap: 15px;
     }
 
-    .search-result-content-container {
+    .search-result-content-container[data-theme="dark"] {
         color: white;
     }
 
@@ -112,9 +193,24 @@
         }
     }
 
+    .search-result-container {
+        & :global(.em-query) {
+            background: rgba(207, 72, 68, 0.3);
+            border-radius: 5px;
+            padding: 0px 1px;
+        }
+
+        &[data-theme="dark"] :global(.em-query) {
+            background: rgba(225, 167, 67, 0.5);
+        }
+    }
+
     .redirect-icon {
-        filter: invert(100%);
         width: 18px;
         height: 18px;
+
+        &[data-theme="dark"] {
+            filter: invert(100%);
+        }
     }
 </style>

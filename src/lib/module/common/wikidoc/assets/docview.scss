@@ -1,4 +1,5 @@
 .doc-view-container {
+    //취소선
     del {
         color: gray;
     }
@@ -6,6 +7,7 @@
         text-decoration: none;
     }
 
+    //표
     table {
         border: 1px solid black;
         border-collapse: collapse;
@@ -16,12 +18,14 @@
         }
     }
 
+    // 이거 뭐냐
     .doc-view-content::after{
         content:"";
         display:block;
         clear:both;
     }
 
+    // 커스텀 요소
     wiki-annot {
         width: 16px;
         display: inline-block;
@@ -36,6 +40,7 @@
 }
 
 .doc-view-container[data-theme="dark"] {
+    // 표
     table {
         border-color: gray;
 
@@ -43,5 +48,12 @@
         td {
             border-color: gray;
         }
+    }
+}
+
+// 모바일
+.doc-view-container[data-isMobile="true"]{
+    table{
+        float: none !important;
     }
 }

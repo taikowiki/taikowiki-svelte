@@ -6,6 +6,7 @@
 
     let { data } = $props();
     let wikiDoc = $state(data.docData);
+    wikiDoc.comment = "";
 
     docContext.defineWikiDocURLBase(
         (() => {

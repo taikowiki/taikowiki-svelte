@@ -19,7 +19,7 @@
     }
 </script>
 
-<div class="search-container" data-isMobile={$isMobile}>
+<div class="search-container" data-isMobile={$isMobile} data-theme={$theme}>
     <input
         type="text"
         bind:value={$query_}
@@ -52,6 +52,31 @@
 
         &[data-isMobile="true"] {
             column-gap: 5px;
+            margin-top: -15px;
+
+            width: calc(100% + 30px);
+            margin-left: -15px;
+
+            margin-bottom: 10px;
+            padding-top: 1px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 5px;
+            box-sizing: border-box;
+
+            background-color: #cf4844;
+
+            &[data-theme="dark"]{
+                background-color: #332e2e;
+            }
+
+            input{
+                height: 25px;
+                box-sizing: border-box;
+            }
+            button{
+                height: 25px;
+            }
         }
         & input {
             width: 170px;

@@ -66,6 +66,7 @@
 
         &[data-isMobile="true"]{
             border: 1px solid #cf4844;
+            margin-top: 20px;
             margin-bottom: 20px;
             border-radius: 5px;
         }

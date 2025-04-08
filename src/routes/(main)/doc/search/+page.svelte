@@ -32,7 +32,7 @@
         let searched = flattenedContent.indexOf(query);
         while (searched > -1) {
             const pArr: P[] = [];
-            let range = 30;
+            let range = 25;
             let pStart = Math.max(0, searched - range);
             let pEnd = Math.min(
                 flattenedContent.length,
@@ -84,7 +84,7 @@
                 }
                 pLength += e.value.length;
             });
-            if (totalLength + pLength > 300) {
+            if (totalLength + pLength > 250) {
                 break;
             }
             extractedString += pString;
@@ -166,6 +166,10 @@
 <style>
     h1 {
         font-weight: normal;
+        font-size: 25px;
+    }
+    h2{
+        font-size: 22px;
     }
 
     .search-results-container {
@@ -199,6 +203,8 @@
     }
 
     .search-result-container {
+        font-size: 14px;
+
         & :global(.em-query) {
             background: rgba(207, 72, 68, 0.3);
             border-radius: 5px;

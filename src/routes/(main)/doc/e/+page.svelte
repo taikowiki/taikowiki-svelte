@@ -12,6 +12,10 @@
             return base;
         })(),
     );
+    const title = page.url.searchParams.get('title');
+    if(title){
+        wikiDoc.title = title;
+    }
 </script>
 
 <DocEditor {wikiDoc} />

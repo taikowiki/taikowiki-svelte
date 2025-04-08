@@ -243,7 +243,16 @@ export const renderer = {
         contentTree = this.prerenderContentTree(contentTree);
         const sharpConverter = this.sharpConverter;
 
-        flattened += parseHTML(sharpConverter.escapeSharp(contentTree.content)).innerText;
+        const dom = parseHTML(sharpConverter.escapeSharp(contentTree.content));
+        dom.querySelectorAll('pre').forEach((e) => {
+            const v = parseHTML('<c-pre></c-pre>').querySelector('c-pre') as HTMLElement;
+            v.innerHTML = e.innerHTML;
+            Object.entries(e.attributes).forEach(([key, value]) => {
+                v.setAttribute(key, value)
+            })
+            e.replaceWith(v);
+        })
+        flattened += dom.innerText;
         contentTree.subParagraphs.forEach((subParagraph, index) => {
             flattened += '\n';
             flattened += flattenParagraph(subParagraph, 1, (index + 1).toString());
@@ -262,7 +271,16 @@ export const renderer = {
             flattened += '\n';
 
             // 본문 추가
-            flattened += parseHTML(sharpConverter.escapeSharp(paragraph.content)).innerText;
+            const dom = parseHTML(sharpConverter.escapeSharp(contentTree.content));
+            dom.querySelectorAll('pre').forEach((e) => {
+                const v = parseHTML('<c-pre></c-pre>').querySelector('c-pre') as HTMLElement;
+                v.innerHTML = e.innerHTML;
+                Object.entries(e.attributes).forEach(([key, value]) => {
+                    v.setAttribute(key, value)
+                })
+                e.replaceWith(v);
+            })
+            flattened += dom.innerText;
 
             // 하위 문단 추가
             paragraph.subParagraphs.forEach((subParagraph, index_) => {
@@ -428,6 +446,7 @@ export const renderer = {
                     url.pathname = href;
                     e.setAttribute('href', url.href);
                 }
+                e.setAttribute('target', '_blank')
             }
         })
     },

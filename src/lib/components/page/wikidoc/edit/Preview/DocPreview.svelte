@@ -4,6 +4,7 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { docContext } from "$lib/module/common/wikidoc/util";
     import '$lib/module/common/wikidoc/assets/docview.scss';
+    import { getIsMobile } from "$lib/module/layout/isMobile";
 
     /*
     import { getWindowContext } from "$lib/module/common/util.client";
@@ -24,9 +25,10 @@
     let convertedContentPromise = $derived(renderer.renderPreviewHTML(content));
 
     const [theme] = getTheme();
+    const isMobile = getIsMobile();
 </script>
 
-<div class="doc-view-container" data-theme={$theme}>
+<div class="doc-view-container" data-theme={$theme} data-isMobile={$isMobile}>
     {#await convertedContentPromise then convertedContent}
         {#key $theme}
             <div class="doc-view-content">

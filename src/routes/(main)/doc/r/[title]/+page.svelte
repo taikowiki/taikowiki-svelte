@@ -29,11 +29,13 @@
 {#if docData.isDeleted}
     이 문서는 삭제되었습니다.
 {:else}
-    <PageAside>
-        <DocIndex contentTree={docData.contentTree} />
-    </PageAside>
-    {#if $isMobile}
-        <DocIndex contentTree={docData.contentTree} />
+    {#if docData.contentTree.subParagraphs.length > 0}
+        <PageAside>
+            <DocIndex contentTree={docData.contentTree} />
+        </PageAside>
+        {#if $isMobile}
+            <DocIndex contentTree={docData.contentTree} />
+        {/if}
     {/if}
     <DocContentView contentTree={docData.contentTree} />
 {/if}

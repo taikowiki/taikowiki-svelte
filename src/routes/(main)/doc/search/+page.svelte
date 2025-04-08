@@ -32,10 +32,11 @@
         let searched = flattenedContent.indexOf(query);
         while (searched > -1) {
             const pArr: P[] = [];
-            let pStart = Math.max(0, searched - 20);
+            let range = 30;
+            let pStart = Math.max(0, searched - range);
             let pEnd = Math.min(
                 flattenedContent.length,
-                searched + query.length + 20,
+                searched + query.length + range,
             );
 
             let sliced = flattenedContent.slice(pStart, pEnd);
@@ -62,8 +63,12 @@
 
             searched = flattenedContent.indexOf(
                 query,
-                searched + query.length + 20,
+                searched + query.length + range,
             );
+        }
+
+        if(extracted.length === 0){
+            return flattenedContent.slice(0, 200);
         }
 
         let totalLength = 0;
@@ -79,7 +84,7 @@
                 }
                 pLength += e.value.length;
             });
-            if (totalLength + pLength > 200) {
+            if (totalLength + pLength > 300) {
                 break;
             }
             extractedString += pString;

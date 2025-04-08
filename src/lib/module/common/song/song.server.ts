@@ -162,7 +162,7 @@ export const songDBController = {
             sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
         }
         if (option?.query) {
-            const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
+            const query = `%${option.query.split(' ').map(sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
             sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)} OR \`romaji\` LIKE ${escape(query)})`;
         }
 
@@ -196,7 +196,7 @@ export const songDBController = {
             sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
         }
         if (option?.query) {
-            const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
+            const query = `%${option.query.split(' ').map(sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
             sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)} OR \`romaji\` LIKE ${escape(query)})`;
         }
 

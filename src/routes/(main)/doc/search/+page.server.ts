@@ -1,4 +1,3 @@
-import { songDBController } from '$lib/module/common/song/song.server.js';
 import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
 import type { Doc } from '$lib/module/common/wikidoc/types.js';
 import { queryBuilder, runQuery, Where } from '@yowza/db-handler';

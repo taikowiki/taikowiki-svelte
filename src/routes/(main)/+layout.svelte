@@ -149,7 +149,7 @@
             </HeaderItem>
             <HeaderItem
                 icon="/assets/icon/document.svg"
-                href="javascript:alert('WIP');"
+                href="/doc"
                 mobileHideSlot
             >
                 <span class="header-text">{i18nLayout.doc}</span>

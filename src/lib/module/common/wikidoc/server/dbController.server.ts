@@ -3,7 +3,7 @@ import type { Doc } from '$lib/module/common/wikidoc/types';
 import { WikiError, validateDocData } from "../util.js";
 import { renderer } from "../util.js";
 import { songDBController } from "../../song/song.server.js";
-import { sqlString, sqlEscapeString } from "../../util.js";
+import { sqlString, sqlEscapeString, sqlEscapeLike } from "../../util.js";
 import * as Diff from 'diff';
 
 function parseDBData<T extends keyof Doc.DB.DocDBData = keyof Doc.DB.DocDBData>(dataFromDB: any): Pick<Doc.DB.DocDBData, T> {
@@ -420,7 +420,7 @@ export const docDBController = {
                 .select('docs', [Select.Count()])
                 .where(Where.OR(
                     Where.Like('title', `%${query}%`),
-                    Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').map(e => e).join('%'))}%`)
+                    Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`)
                 ))
                 .build()
 
@@ -431,10 +431,10 @@ export const docDBController = {
                     .where(Where.Compare('title', '=', query)),
                 queryBuilder
                     .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
-                    .where(Where.Like('title', `%${query.split(' ').map(e => e).join('%')}%`)),
+                    .where(Where.Like('title', `%${query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%')}%`)),
                 queryBuilder
                     .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
-                    .where(Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').map(e => e).join('%'))}%`))
+                    .where(Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`))
             ]).build() + ` LIMIT ${offset}, ${limit}`;
         
         return async(run) => {

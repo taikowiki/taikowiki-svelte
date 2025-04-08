@@ -153,12 +153,12 @@
     </div>
 {/snippet}
 
+<h1>
+    <b>{query_ || "''"}</b>에 대한 검색 결과
+</h1>
 {#if data.count === 0 || data.searchResults.length === 0}
     검색 결과가 없습니다.
 {:else}
-    <h1>
-        <b>{query_}</b>에 대한 검색 결과
-    </h1>
     {@render searchResultsList(data.searchResults)}
     <PageSelector length={data.count} countPerPage={20} {pageNum} {movePage} />
 {/if}

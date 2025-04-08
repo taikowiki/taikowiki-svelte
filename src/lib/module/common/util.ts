@@ -91,6 +91,9 @@ export function sqlEscapeString(val: string) {
 
     return escapedVal;
 }
+export function sqlEscapeLike(val: string){
+    return val.replaceAll('\\', '\\\\').replaceAll('%', '\\%').replaceAll('_', '\\_')
+}
 export {sqlString};
 
 /**

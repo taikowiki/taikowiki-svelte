@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DocEditor from "$lib/components/page/wikidoc/edit/DocEditor.svelte";
     import DocSubmit from "$lib/components/page/wikidoc/edit/DocSubmit.svelte";
     import { createDefaultDocData, docContext } from "$lib/module/common/wikidoc/util";
@@ -18,5 +19,6 @@
     }
 </script>
 
+<PageTitle title="문서 작성"/>
 <DocEditor {wikiDoc} />
 <DocSubmit {wikiDoc} />

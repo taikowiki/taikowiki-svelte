@@ -2,6 +2,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import PageSelector from "$lib/components/common/PageSelector.svelte";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
     import type { Doc } from "$lib/module/common/wikidoc/types.js";
     import { DateTime } from "luxon";
 
@@ -62,6 +63,7 @@
     </div>
 {/snippet}
 
+<PageTitle title={`기록 - ${current.title}`}/>
 <h1>
     {current.title}
 </h1>

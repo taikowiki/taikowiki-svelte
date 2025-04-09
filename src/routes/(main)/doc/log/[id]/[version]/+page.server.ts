@@ -2,10 +2,10 @@ import { docDBController } from "$lib/module/common/wikidoc/server/dbController.
 import type { Doc } from "$lib/module/common/wikidoc/types.js";
 import { renderer } from "$lib/module/common/wikidoc/util";
 import { error } from "@sveltejs/kit";
-import { runQuery } from "@yowza/db-handler";
+import { queryBuilder, runQuery, Where } from "@yowza/db-handler";
 import type { HTMLElement } from "node-html-parser";
 
-export async function load({ params }) {
+export async function load({ params, locals }) {
     const id = Number(params.id);
     const version = Number(params.version);
 
@@ -13,10 +13,12 @@ export async function load({ params }) {
         throw error(404);
     }
 
-    const docData = await runQuery(async (run) => {
+    const { docData, editableGrade } = await runQuery(async (run) => {
         const pastDoc = await docDBController.getPast.getCallback(id, version)(run);
         if (!pastDoc) {
-            return null;
+            return {
+                docData: null
+            };
         }
 
         const preparedContent: Doc.Data.ContentTree = {
@@ -24,11 +26,17 @@ export async function load({ params }) {
             subParagraphs: await prepareParagraphs(pastDoc.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[])
         };
 
-        return {
-            ...pastDoc,
-            contentTree: preparedContent
-        }
+        const query = queryBuilder.select('docs', ['editableGrade']).where(Where.Compare('id', '=', id)).build();
+        const r = await run(query);
+        const editableGrade = r[0]?.editableGrade ?? 10;
 
+        return {
+            docData: {
+                ...pastDoc,
+                contentTree: preparedContent
+            },
+            editableGrade
+        }
         /**
          * 하위 문단 준비
          * @param subParagraphs 
@@ -73,6 +81,7 @@ export async function load({ params }) {
     }
 
     return {
-        docData
+        docData,
+        canEditable: locals.userData ? locals.userData.grade >= editableGrade : false
     }
 }

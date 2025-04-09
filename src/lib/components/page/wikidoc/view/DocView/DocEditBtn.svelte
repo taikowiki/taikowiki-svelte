@@ -4,16 +4,17 @@
     interface Props {
         id: number;
         title: string;
+        version?: number;
     }
 
-    let { id, title }: Props = $props();
+    let { id, title, version }: Props = $props();
 
     const [theme] = getTheme();
 </script>
 
 <a
     class="icon-anchor"
-    href={`/doc/e/${id}?title=${encodeURIComponent(title)}`}
+    href={`/doc/e/${id}?title=${encodeURIComponent(title)}${version ? `&version=${version}` : ''}`}
     data-theme={$theme}
 >
     <img class="icon" src="/assets/icon/doc-edit.svg" alt="edit" />

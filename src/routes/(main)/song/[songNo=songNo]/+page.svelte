@@ -68,7 +68,7 @@
         />
     </div>
     <CourseContainer courses={song.courses} selectedDifficulty={diff} />
-    {#if data.docData}
+    {#if docData}
         {#if docData.contentTree.subParagraphs.length > 0}
             <PageAside>
                 <DocIndex contentTree={docData.contentTree} />

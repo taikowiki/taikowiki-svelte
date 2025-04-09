@@ -7,6 +7,7 @@
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
     import { getIsMobile } from "$lib/module/layout/isMobile";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
 
     let { data } = $props();
     let docData = $state(data.docData);
@@ -19,6 +20,7 @@
     //$inspect(data.docViewData);
 </script>
 
+<PageTitle title={data.docData.title}/>
 <DocRedirectFrom />
 <DocTitleView
     id={docData.id}

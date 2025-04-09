@@ -2,6 +2,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import PageSelector from "$lib/components/common/PageSelector.svelte";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { renderer } from "$lib/module/common/wikidoc/util.js";
     import { getTheme } from "$lib/module/layout/theme.js";
     import { getContext } from "svelte";
@@ -153,6 +154,7 @@
     </div>
 {/snippet}
 
+<PageTitle title={`검색: ${query_ ?? ''}`}/>
 <h1>
     <b>{query_ || "''"}</b>에 대한 검색 결과
 </h1>
@@ -204,6 +206,7 @@
 
     .search-result-container {
         font-size: 14px;
+        word-break: break-all;
 
         & :global(.em-query) {
             background: rgba(207, 72, 68, 0.3);

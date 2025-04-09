@@ -40,10 +40,10 @@ export async function load({ params, url, locals }) {
             content: await renderer.prepareView(docData.renderedContentTree?.content as string, setWikiLinkAvailable),
             subParagraphs: await prepareSubParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[])
         };
-        
+
         return {
             song,
-            docData:{
+            docData: {
                 ...docData,
                 editor,
                 contentTree: preparedContent
@@ -85,15 +85,15 @@ export async function load({ params, url, locals }) {
     }
 
     let canEditable = false;
-    if(docData && locals.userData){
+    if (docData && locals.userData) {
         canEditable = locals.userData.grade >= docData.editableGrade;
     }
 
     return {
         song,
-        docData: {
+        docData: docData ? {
             ...docData,
             canEditable
-        } as DocData & {canEditable: boolean}
+        } as DocData & { canEditable: boolean } : null
     }
 }

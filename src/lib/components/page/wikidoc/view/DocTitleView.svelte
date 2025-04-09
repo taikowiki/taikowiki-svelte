@@ -8,8 +8,9 @@
         title: string;
         editedTime: Date;
         canEditable: boolean;
+        version?: number;
     }
-    let { id, title, editedTime, canEditable }: Props = $props();
+    let { id, title, editedTime, canEditable, version }: Props = $props();
 </script>
 
 <h1 class="container">
@@ -19,7 +20,7 @@
     <div class="title-others">
         <div class="icon-container">
             {#if canEditable}
-                <DocEditBtn {id} {title} />
+                <DocEditBtn {id} {title} {version}/>
             {/if}
             <DocLogBtn {id} />
         </div>

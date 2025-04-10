@@ -2,6 +2,8 @@
     import { DateTime } from "luxon";
     import DocEditBtn from "./DocView/DocEditBtn.svelte";
     import DocLogBtn from "../../wikidoc/view/DocView/DocLogBtn.svelte";
+    import { page } from "$app/state";
+    import DocAdminBtn from "./DocView/DocAdminBtn.svelte";
 
     interface Props {
         id: number;
@@ -11,6 +13,8 @@
         version?: number;
     }
     let { id, title, editedTime, canEditable, version }: Props = $props();
+
+    let isAdmin = $derived<boolean>(page.data.isAdmin);
 </script>
 
 <h1 class="container">
@@ -23,6 +27,9 @@
                 <DocEditBtn {id} {title} {version}/>
             {/if}
             <DocLogBtn {id} />
+            {#if isAdmin}
+                <DocAdminBtn {id}/>
+            {/if}
         </div>
         <div class="title-date">
             최근 수정 시각:

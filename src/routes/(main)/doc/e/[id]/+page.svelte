@@ -21,7 +21,7 @@
 <PageTitle title={`문서 수정 - ${data.docData.title}`}/>
 <DocEditor {wikiDoc} />
 <div class="comment-container">
-    <input type="text" bind:value={wikiDoc.comment} placeholder="수정 사항을 간략하게 써주세요."/>
+    <input type="text" bind:value={wikiDoc.comment} placeholder="수정 사항을 간략하게 써주세요." maxlength="150"/>
 </div>
 <DocSubmit {wikiDoc} type="update" />
 

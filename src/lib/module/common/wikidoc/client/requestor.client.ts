@@ -34,3 +34,36 @@ export const wikiDocRequestor = {
         method: 'post'
     })
 } as const;
+
+export const docAdminRequestor = {
+    delete: async(id: number) => {
+        const url = `/admin/api/doc/${id}/delete`;
+
+        const handler = defineRequestHandler({
+            url,
+            method: 'delete'
+        });
+
+        return await handler(null);
+    },
+    restore: async(id: number) => {
+        const url = `/admin/api/doc/${id}/restore`;
+
+        const handler = defineRequestHandler({
+            url,
+            method: 'get'
+        });
+
+        return await handler(null);
+    },
+    changeEditableGrade: async(id: number, grade: number) => {
+        const url = `/admin/api/doc/${id}/change-editable-grade`;
+
+        const handler = defineRequestHandler<{grade: number}, void>({
+            url,
+            method: 'post'
+        });
+
+        return await handler({grade})
+    }
+} as const;

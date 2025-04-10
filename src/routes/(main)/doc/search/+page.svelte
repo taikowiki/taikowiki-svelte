@@ -68,7 +68,7 @@
             );
         }
 
-        if(extracted.length === 0){
+        if (extracted.length === 0) {
             return flattenedContent.slice(0, 200);
         }
 
@@ -132,7 +132,10 @@
                         </div>
                     {/if}
                     {#if searchResult.flattenedContent}
-                        <div class="search-result-container" data-theme={$theme}>
+                        <div
+                            class="search-result-container"
+                            data-theme={$theme}
+                        >
                             {@html extractAccording(
                                 searchResult.flattenedContent,
                                 query_ ?? "",
@@ -154,10 +157,18 @@
     </div>
 {/snippet}
 
-<PageTitle title={`검색: ${query_ ?? ''}`}/>
+<PageTitle title={`검색: ${query_ ?? ""}`} />
 <h1>
     <b>{query_ || "''"}</b>에 대한 검색 결과
 </h1>
+{#if !data.titleExactMatched && query_}
+    <div class="title-not-exact-matched">
+        제목이 <b>{query_}</b>인 문서가 없습니다.
+        <a href={`/doc/e?title=${encodeURIComponent(query_)}`}>
+            문서 만들기
+        </a>
+    </div>
+{/if}
 {#if data.count === 0 || data.searchResults.length === 0}
     검색 결과가 없습니다.
 {:else}
@@ -170,7 +181,7 @@
         font-weight: normal;
         font-size: 25px;
     }
-    h2{
+    h2 {
         font-size: 22px;
     }
 
@@ -226,5 +237,9 @@
         &[data-theme="dark"] {
             filter: invert(100%);
         }
+    }
+
+    .title-not-exact-matched{
+        margin-bottom: 15px;
     }
 </style>

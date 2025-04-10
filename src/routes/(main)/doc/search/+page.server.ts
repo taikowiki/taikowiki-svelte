@@ -1,6 +1,6 @@
 import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
 import type { Doc } from '$lib/module/common/wikidoc/types.js';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { queryBuilder, runQuery, Select, Where } from '@yowza/db-handler';
 
 // 페이지에 20개
 export async function load({ url }) {
@@ -17,8 +17,13 @@ export async function load({ url }) {
         page = 1;
     }
 
-    const { searchResults, count } = await runQuery(async (run) => {
+    const { searchResults, count, titleExactMatched } = await runQuery(async (run) => {
         const { searchResults, count } = await docDBController.search.getCallback(query, (page - 1) * 20, 20)(run);
+        const titleExactMatched = await (async() => {
+            const query_ = queryBuilder.select('docs', [Select.As(Select.Count(), 'count')]).where(Where.Compare('title', '=', query)).build();
+            const r = await run(query_);
+            return (r[0]?.count ?? 0) > 0;
+        })();
         type P = typeof searchResults[number]
 
         const songNoMap = new Map<string, P[]>();
@@ -76,12 +81,14 @@ export async function load({ url }) {
 
         return {
             searchResults: searchResults as (Pick<Doc.DB.DocDBData, "songNo" | "title" | "type" | "redirectTo" | "flattenedContent"> & { songTitle?: string } & { redirectTitle?: string })[],
-            count
+            count,
+            titleExactMatched
         }
     })
 
     return {
         count,
-        searchResults
+        searchResults,
+        titleExactMatched
     }
 }

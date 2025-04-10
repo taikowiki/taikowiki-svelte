@@ -103,6 +103,35 @@ export class WikiError extends Error {
     }
 }
 
+/**
+ * Doc.DB.DocDBData를 Doc.Data.DocData로 변환
+ */
+export function parseDBData<T extends keyof Doc.DB.DocDBData = keyof Doc.DB.DocDBData>(dataFromDB: any): Pick<Doc.DB.DocDBData, T> {
+    const docData: any = {};
+    Object.keys(dataFromDB).forEach((key) => {
+        if (key === "contentTree" || key === "renderedContentTree") {
+            const value = dataFromDB[key];
+            if (value === null) {
+                docData[key] = null;
+            }
+            else {
+                docData[key] = JSON.parse(value);
+            }
+            return;
+        }
+        if (key === "createdTime" || key === "editedTime") {
+            docData[key] = new Date(dataFromDB[key]);
+            return;
+        }
+        if (key === "isDeleted") {
+            docData[key] = Boolean(dataFromDB[key]);
+            return;
+        }
+        docData[key] = dataFromDB[key];
+    })
+    return docData;
+}
+
 import { Marked } from 'marked';
 import { HTMLElement, parse as parseHTML_ } from 'node-html-parser';
 import { page } from '$app/state';

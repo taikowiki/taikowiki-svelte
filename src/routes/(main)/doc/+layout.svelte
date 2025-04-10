@@ -20,7 +20,7 @@
     const isMobile = getIsMobile();
 </script>
 
-{#if !page.url.pathname.startsWith('/doc/e')}
+{#if !page.url.pathname.startsWith('/doc/e') && page.url.pathname !== "/doc"}
     {#if $isMobile}
         <DocSideSearch {query} />
     {/if}

@@ -4,7 +4,11 @@
     import MainSearchTypeSelector from "./MainSearchTypeSelector.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { onDestroy, onMount } from "svelte";
-    import { mainpageAllSearch, mainpageDocSearch, mainpageSongSearch } from "$lib/module/common/search/search.client";
+    import {
+        mainpageAllSearch,
+        mainpageDocSearch,
+        mainpageSongSearch,
+    } from "$lib/module/common/search/search.client";
     import type { SearchResult } from "$lib/module/common/search/types";
     import MainSearchResult from "./MainSearchResult.svelte";
     import { goto } from "$app/navigation";
@@ -59,16 +63,18 @@
                 }
                 break;
             }
-            case "docs":{
+            case "docs": {
                 const response = await mainpageDocSearch(keyword);
                 if (response.status === "success") {
                     searchResults = response.data;
                 }
                 break;
             }
-            case "all":{
-                const results = await mainpageAllSearch(keyword);
-                searchResults = results;
+            case "all": {
+                const response = await mainpageAllSearch(keyword);
+                if (response.status === "success") {
+                    searchResults = response.data;
+                }
                 break;
             }
         }
@@ -90,7 +96,7 @@
                 goto(`/song?${searchParams.toString()}`);
                 break;
             }
-            case "docs":{
+            case "docs": {
                 const searchParams = new URLSearchParams();
                 searchParams.set("query", keyword);
                 goto(`/doc/search?${searchParams.toString()}`);

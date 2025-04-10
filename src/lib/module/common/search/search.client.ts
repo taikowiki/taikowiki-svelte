@@ -12,9 +12,9 @@ export async function mainpageSongSearch(keyword: string) {
     });
 
     return await requestHandler(null);
-} 
+}
 
-export async function mainpageDocSearch(keyword: string){
+export async function mainpageDocSearch(keyword: string) {
     const url = new URL(location.href);
     url.pathname = '/api/search/doc';
     url.searchParams.set('keyword', keyword);
@@ -27,8 +27,9 @@ export async function mainpageDocSearch(keyword: string){
     return await requestHandler(null);
 }
 
-export async function mainpageAllSearch(keyword: string){
-    const results = await Promise.all([mainpageSongSearch(keyword), mainpageDocSearch(keyword)]);
+export async function mainpageAllSearch(keyword: string) {
+    /**
+     * const results = await Promise.all([mainpageSongSearch(keyword), mainpageDocSearch(keyword)]);
 
     const r = []
 
@@ -40,4 +41,16 @@ export async function mainpageAllSearch(keyword: string){
     }
 
     return r;
+    */
+
+    const url = new URL(location.href);
+    url.pathname = '/api/search/all';
+    url.searchParams.set('keyword', keyword);
+
+    const requestHandler = defineRequestHandler<null, SearchResult[]>({
+        url: url.href,
+        method: 'get'
+    });
+
+    return await requestHandler(null);
 }

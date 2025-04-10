@@ -1,36 +1,10 @@
 import { defineDBHandler, QB, queryBuilder, Select, Where } from "@yowza/db-handler";
 import type { Doc } from '$lib/module/common/wikidoc/types';
-import { WikiError, validateDocData } from "../util.js";
+import { WikiError, validateDocData, parseDBData } from "../util.js";
 import { renderer } from "../util.js";
 import { songDBController } from "../../song/song.server.js";
 import { sqlString, sqlEscapeString, sqlEscapeLike } from "../../util.js";
 import * as Diff from 'diff';
-
-function parseDBData<T extends keyof Doc.DB.DocDBData = keyof Doc.DB.DocDBData>(dataFromDB: any): Pick<Doc.DB.DocDBData, T> {
-    const docData: any = {};
-    Object.keys(dataFromDB).forEach((key) => {
-        if (key === "contentTree" || key === "renderedContentTree") {
-            const value = dataFromDB[key];
-            if (value === null) {
-                docData[key] = null;
-            }
-            else {
-                docData[key] = JSON.parse(value);
-            }
-            return;
-        }
-        if (key === "createdTime" || key === "editedTime") {
-            docData[key] = new Date(dataFromDB[key]);
-            return;
-        }
-        if (key === "isDeleted") {
-            docData[key] = Boolean(dataFromDB[key]);
-            return;
-        }
-        docData[key] = dataFromDB[key];
-    })
-    return docData;
-}
 
 export const docDBController = {
     /**

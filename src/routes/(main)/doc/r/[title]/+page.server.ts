@@ -1,10 +1,10 @@
 import { songDBController } from '$lib/module/common/song/song.server.js';
 import { userDBController } from '$lib/module/common/user/user.server.js';
 import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server';
-import { renderer } from '$lib/module/common/wikidoc/util.js';
+import { parseDBData, renderer } from '$lib/module/common/wikidoc/util.js';
 import type { Doc } from '$lib/module/common/wikidoc/types';
 import { error, redirect } from '@sveltejs/kit';
-import { runQuery } from '@yowza/db-handler';
+import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
 import type { HTMLElement } from 'node-html-parser';
 
 export async function load({ params, locals }) {
@@ -14,7 +14,16 @@ export async function load({ params, locals }) {
     try {
         const docData = await runQuery(async (run) => {            
             // db View Data 가져오기
-            const docData = (await docDBController.getColumnsWhere(columns, [['title', params.title]]))[0] as DocData ?? null;
+            const docData = await (async() => {
+                const query = queryBuilder.select('docs', columns).where(Where.Compare('title', '=', params.title)).build();
+                const result = await run(query);
+                if(result[0]){
+                    return parseDBData(result[0]);
+                }
+                else{
+                    return null;
+                }
+            })()
             if (!docData) {
                 throw error(404);
             }

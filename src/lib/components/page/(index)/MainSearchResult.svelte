@@ -50,7 +50,10 @@
 {/snippet}
 
 {#if opened && searchResults.length > 0}
-    <div class="searchresult-container" data-theme={$theme}>
+    <div
+        class="searchresult-container"
+        data-theme={$theme}
+    >
         {#each searchResults.slice(0, 10) as searchResult}
             {@render searchResultView(searchResult)}
         {/each}
@@ -59,6 +62,9 @@
 
 <style>
     .searchresult-container {
+        width: 100%;
+
+        box-sizing: border-box;
         outline: 1px solid #cf4844;
         margin-top: 1px;
 

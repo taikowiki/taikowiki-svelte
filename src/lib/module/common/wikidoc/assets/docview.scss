@@ -9,6 +9,12 @@
     }
 
     //표
+    .table-container{
+        width: 100%;
+        &.overflow{
+            overflow-x: auto;
+        }
+    }
     table {
         border: 1px solid black;
         border-collapse: collapse;
@@ -16,6 +22,8 @@
         th,
         td {
             border: 1px solid black;
+            padding-inline: 3px;
+            box-sizing: border-box;
         }
     }
 
@@ -142,4 +150,8 @@
     table {
         float: none !important;
     }
+}
+
+.doc-view-content{
+    padding-inline: 8px;
 }

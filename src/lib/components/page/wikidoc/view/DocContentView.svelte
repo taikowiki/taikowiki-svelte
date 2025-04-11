@@ -93,28 +93,32 @@
                     index={`${index + 1}`}
                 />
             {/each}
-            <div class="doc-view-annot-container" data-theme={$theme}>
-                <h3>주석</h3>
-                {#each annotations as [annotKey, annotContent]}
-                    {@const clickHandler = () => {
-                        document
-                            .querySelector(`wiki-annot[key="${annotKey}"]`)
-                            ?.scrollIntoView();
-                    }}
-                    <div class="doc-view-annot" data-annot-key={annotKey}>
-                        <div
-                            class="doc-view-annot-key"
-                            onclick={clickHandler}
-                            role="presentation"
-                        >
-                            [{annotKey}]
+            {#if annotations.length > 0}<div
+                    class="doc-view-annot-container"
+                    data-theme={$theme}
+                >
+                    <h3>주석</h3>
+                    {#each annotations as [annotKey, annotContent]}
+                        {@const clickHandler = () => {
+                            document
+                                .querySelector(`wiki-annot[key="${annotKey}"]`)
+                                ?.scrollIntoView();
+                        }}
+                        <div class="doc-view-annot" data-annot-key={annotKey}>
+                            <div
+                                class="doc-view-annot-key"
+                                onclick={clickHandler}
+                                role="presentation"
+                            >
+                                [{annotKey}]
+                            </div>
+                            <div class="doc-view-annot-content">
+                                {@html annotContent}
+                            </div>
                         </div>
-                        <div class="doc-view-annot-content">
-                            {@html annotContent}
-                        </div>
-                    </div>
-                {/each}
-            </div>
+                    {/each}
+                </div>
+            {/if}
         </div>
     {/await}
 {/key}
@@ -132,7 +136,7 @@
             border-color: #e1a743;
         }
 
-        & h3{
+        & h3 {
             margin: 0;
         }
 

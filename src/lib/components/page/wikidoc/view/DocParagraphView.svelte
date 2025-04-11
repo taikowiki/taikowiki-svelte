@@ -33,7 +33,7 @@
         </span>
     </div>
     {#if opened}
-        <div class="dov-view-content">
+        <div class="doc-view-content">
             {@html paragraph.content}
         </div>
         <div class="doc-view-paragraphs">
@@ -84,6 +84,11 @@
         &::before{
             color: #e1a743;
         }
+    }
+
+    .doc-view-content{
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
     .doc-view-paragraphs {

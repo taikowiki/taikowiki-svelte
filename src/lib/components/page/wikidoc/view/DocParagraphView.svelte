@@ -88,7 +88,7 @@
 
     .doc-view-paragraphs {
         width: 100%;
-        padding-left: 5px;
+        padding-left: 10px;
         box-sizing: border-box;
     }
 </style>

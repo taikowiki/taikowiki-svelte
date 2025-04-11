@@ -188,7 +188,32 @@ export class WikiAnnotationElement extends LitElement {
                 background-color: rgba(0, 0, 0, 0.2);
                 backdrop-filter: blur(1px);
             }
-            
+
+            /*link*/
+            a{
+                color: rgb(207, 72, 68);
+                text-decoration: none;
+            }
+            *[data-theme="dark"] > .content a{
+                color: rgb(225, 167, 67);
+            }
+            a[href]::before{
+                content: '';
+                width: 15px;
+                height: 15px;
+                display:inline-block;
+                background-image: url('/assets/icon/link.svg');
+                background-size: 15px 15px;
+                background-position: center;
+                transform: translateY(1.5px);
+                filter: brightness(0) saturate(100%) invert(41%) sepia(11%) saturate(6392%) hue-rotate(329deg) brightness(87%) contrast(85%);
+            }
+            a[href]:hover{
+                text-decoration: underline;
+            }
+            *[data-theme="dark"] > .content a[href]::before{
+                filter: brightness(0) saturate(100%) invert(81%) sepia(5%) saturate(7020%) hue-rotate(340deg) brightness(100%) contrast(77%);
+            }
         `
     }
 
@@ -419,8 +444,11 @@ export class WikiLink extends LitElement {
 
     static get styles() {
         return css`
+            .not-available{
+                text-decoration: none !important;
+            }
             .not-available[data-theme="light"]{
-                color: darkred;
+                color: purple;
             }
             .not-available[data-theme="dark"]{
                 color: red;
@@ -543,7 +571,7 @@ export class WikiYoutube extends LitElement {
             </div>
             `
         }
-        else{
+        else {
             return html``;
         }
     }

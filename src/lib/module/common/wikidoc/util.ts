@@ -79,9 +79,19 @@ export const docContext = {
             annotationsMap.clear();
         }
         else {
-            annotationsMap = new Map<string, string>();
+            annotationsMap = new SvelteMap<string, string>();
             windowContext.set('wikiDocAnnotations', annotationsMap);
         }
+    },
+    getDocAnnotations(): SvelteMap<string, string> {
+        const windowContext = this.getContext();
+
+        let annotationsMap = windowContext.get('wikiDocAnnotations');
+        if(!annotationsMap){
+            annotationsMap = new SvelteMap<string, string>();
+            windowContext.set('wikiDocAnnotations', annotationsMap);
+        }
+        return annotationsMap;
     },
     /**
      * windowContext에 'wikiDocURLBase'를 설정
@@ -136,6 +146,7 @@ import { Marked } from 'marked';
 import { HTMLElement, parse as parseHTML_ } from 'node-html-parser';
 import { page } from '$app/state';
 import markdownEscape from 'markdown-escape';
+import { SvelteMap } from "svelte/reactivity";
 
 function parseHTML(src: string) {
     return parseHTML_(src, {
@@ -462,8 +473,12 @@ export const renderer = {
             }
             else {
                 try {
-                    //외부 링크
-                    var url = new URL(href);
+                    let href_ = href;
+                    console.log(e);
+                    if(!href_.startsWith('http://') || !href_.startsWith('https://')){
+                        href_ += 'http://'
+                    }
+                    var url = new URL(href_);
                     if (url.protocol === "javascript:") {
                         //자바스크립트 XSS
                         e.removeAttribute('href');
@@ -473,10 +488,7 @@ export const renderer = {
                     }
                 }
                 catch {
-                    //내부 링크
-                    var url = new URL(page.url);
-                    url.pathname = href;
-                    e.setAttribute('href', url.href);
+                    e.removeAttribute('href');
                 }
                 e.setAttribute('target', '_blank')
             }

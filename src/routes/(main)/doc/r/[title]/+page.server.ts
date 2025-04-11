@@ -65,7 +65,7 @@ export async function load({ params, locals }) {
             }
 
             const preparedContent: Doc.Data.ContentTree = {
-                content: await renderer.prepareView(docData.renderedContentTree?.content as string, async(dom) => {setWikiLinkAvailable(dom, run)}),
+                content: await renderer.prepareView(docData.renderedContentTree?.content as string, async(dom) => {await setWikiLinkAvailable(dom, run)}),
                 subParagraphs: await prepareParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[], run)
             };
             return {

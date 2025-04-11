@@ -38,7 +38,7 @@ export async function load({ params, url, locals }) {
 
         const editor = docData.editorUUID ? (await userDBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID : docData.editorIp;
         const preparedContent: Doc.Data.ContentTree = {
-            content: await renderer.prepareView(docData.renderedContentTree?.content as string, async(dom) => {setWikiLinkAvailable(dom, run)}),
+            content: await renderer.prepareView(docData.renderedContentTree?.content as string, async(dom) => {await setWikiLinkAvailable(dom, run)}),
             subParagraphs: await prepareParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[], run)
         };
 

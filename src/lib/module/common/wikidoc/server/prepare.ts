@@ -1,9 +1,10 @@
 import type { HTMLElement } from "node-html-parser";
 import type { Doc } from "../types";
 import { renderer } from "../util";
-import { docDBController } from "./dbController.server";
+import { queryBuilder, Select, Where } from "@yowza/db-handler";
+import type { QueryFunction } from '@yowza/db-handler/types';
 
-export async function setWikiLinkAvailable(dom: HTMLElement, run: any) {
+export async function setWikiLinkAvailable(dom: HTMLElement, run: QueryFunction) {
     for (const wikiLinkElement of dom.querySelectorAll('wiki-link')) {
         const docTitle = wikiLinkElement.getAttribute('doctitle');
         if (!docTitle) {
@@ -11,7 +12,20 @@ export async function setWikiLinkAvailable(dom: HTMLElement, run: any) {
             continue;
         }
 
-        const exists = await docDBController.docTitleExists.getCallback(docTitle)(run);
+        const query = queryBuilder.select('docs', [Select.As(Select.Count(), 'COUNT')])
+                        .where(
+                            Where.Compare('title', '=', docTitle), 
+                            Where.Compare('isDeleted', '=', 0)
+                        )
+                        .build();
+        const result = await run(query);
+        if((result?.[0]?.COUNT ?? 0) === 0){
+            var exists = false;
+        }
+        else{
+            var exists = true;
+        }
+
         if (exists) {
             wikiLinkElement.setAttribute('available', 'true');
         }
@@ -20,7 +34,7 @@ export async function setWikiLinkAvailable(dom: HTMLElement, run: any) {
         }
     }
 }
-export async function prepareParagraphs(subParagraphs: Doc.Data.DocParagraph[], run: any) {
+export async function prepareParagraphs(subParagraphs: Doc.Data.DocParagraph[], run: QueryFunction) {
     const prepared: Doc.Data.DocParagraph[] = [];
     for (const subParagraph of subParagraphs) {
         prepared.push({

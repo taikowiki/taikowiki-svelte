@@ -6,6 +6,7 @@ import type { Doc } from '$lib/module/common/wikidoc/types';
 import { error, redirect } from '@sveltejs/kit';
 import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
 import type { HTMLElement } from 'node-html-parser';
+import { prepareParagraphs, setWikiLinkAvailable } from '$lib/module/common/wikidoc/server/prepare';
 
 export async function load({ params, locals }) {
     const columns: (keyof Doc.DB.DocDBData)[] = ['id', 'contentTree', 'editedTime', 'editableGrade', 'editorUUID', 'id', 'isDeleted', 'renderedContentTree', 'songNo', 'title', 'redirectTo', 'type'] as const;
@@ -64,50 +65,13 @@ export async function load({ params, locals }) {
             }
 
             const preparedContent: Doc.Data.ContentTree = {
-                content: await renderer.prepareView(docData.renderedContentTree?.content as string, setWikiLinkAvailable),
-                subParagraphs: await prepareParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[])
+                content: await renderer.prepareView(docData.renderedContentTree?.content as string, async(dom) => {setWikiLinkAvailable(dom, run)}),
+                subParagraphs: await prepareParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[], run)
             };
             return {
                 ...docData,
                 editor,
                 contentTree: preparedContent
-            }
-
-            /**
-             * 하위 문단 준비
-             * @param subParagraphs 
-             * @returns 
-             */
-            async function prepareParagraphs(subParagraphs: Doc.Data.DocParagraph[]) {
-                const prepared: Doc.Data.DocParagraph[] = [];
-                for (const subParagraph of subParagraphs) {
-                    prepared.push({
-                        title: subParagraph.title,
-                        content: await renderer.prepareView(subParagraph.content, setWikiLinkAvailable),
-                        subParagraphs: await prepareParagraphs(subParagraph.subParagraphs)
-                    })
-                }
-                return prepared;
-            }
-            /**
-             * wiki-link가 사용가능한지 확인하고 속성 추가
-             */
-            async function setWikiLinkAvailable(dom: HTMLElement) {
-                for (const wikiLinkElement of dom.querySelectorAll('wiki-link')) {
-                    const docTitle = wikiLinkElement.getAttribute('doctitle');
-                    if (!docTitle) {
-                        wikiLinkElement.setAttribute('available', 'false');
-                        continue;
-                    }
-
-                    const exists = await docDBController.docTitleExists.getCallback(docTitle)(run);
-                    if (exists) {
-                        wikiLinkElement.setAttribute('available', 'true');
-                    }
-                    else {
-                        wikiLinkElement.setAttribute('available', 'false');
-                    }
-                }
             }
         });
 

@@ -158,6 +158,7 @@ export const renderer = {
         this.fillPreviewAnnotationKeys(dom);
         this.makePreviewLinkAvailable(dom);
         this.sanitizeTable(dom);
+        this.sanitizeText(dom);
 
         if (finishCallback) {
             await finishCallback(dom);
@@ -179,6 +180,7 @@ export const renderer = {
             this.purifyHTML(dom);
             this.fillAnnotationKeys(dom, scope);
             this.sanitizeTable(dom);
+            this.sanitizeText(dom);
 
             return dom.innerHTML;
         }
@@ -420,7 +422,7 @@ export const renderer = {
      */
     purifyHTML(dom: HTMLElement): void {
         //허용되지 않은 태그 제거
-        const allowedTags: string[] = ['p', 'a', 'img', 'strong', 'em', 'del', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'ul', 'ol', 'li', 'hr', 'blockquote', 'pre', 'code', 'wiki-annot', 'wiki-link', 'wiki-yt', 'wiki-float', 'style-table', 'style-cell', 'style-row', 'style-col'];
+        const allowedTags: string[] = ['p', 'a', 'img', 'strong', 'em', 'del', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'ul', 'ol', 'li', 'hr', 'blockquote', 'pre', 'code', 'text', 'wiki-annot', 'wiki-link', 'wiki-yt', 'wiki-float', 'style-table', 'style-cell', 'style-row', 'style-col'];
         dom.querySelectorAll(`:not(${allowedTags.join(', ')})`).forEach(e => e.remove());
 
         //허용되지 않은 속성 제거
@@ -429,6 +431,7 @@ export const renderer = {
             'img': ['src', 'alt', 'width', 'height'],
             'th': ['align', 'colspan', 'rowspan'],
             'td': ['colspan', 'rowspan'],
+            'text': ['color', 'bgcolor', 'size'],
             'wiki-annot': ['key'],
             'wiki-link': ['doctitle'],
             'wiki-yt': ['v', 'width', 'height'],
@@ -799,6 +802,35 @@ export const renderer = {
             table.querySelectorAll('style-table, style-row, style-col, style-cell').forEach(e => e.remove())
             table.replaceWith(container);
             container.appendChild(table);
+        })
+    },
+    sanitizeText(dom: HTMLElement){
+        dom.querySelectorAll('text').forEach((text: HTMLElement) => {
+            const color = text.getAttribute('color');
+            const bgcolor = text.getAttribute('bgcolor');
+            let size = text.getAttribute('size');
+            
+            const style = new CSSStyleDeclaration();
+            if(color){
+                style.setProperty('color', color);
+            }
+            if(bgcolor){
+                style.setProperty('background-color', bgcolor);
+            }
+            if(size){
+                if(size.endsWith('px')){
+                    size = size.slice(0, -2);
+                }
+                const size_ = Number(size);
+                if(!Number.isNaN(size_)){
+                    style.setProperty('font-size', `${size_}px`);
+                }
+            }
+
+            const span = new HTMLElement('span', {});
+            span.setAttribute('style', style.cssText);
+            text.replaceWith(span);
+            text.remove();
         })
     },
     /**

@@ -36,7 +36,7 @@
 
 {#snippet searchResultView(searchResult: SearchResult)}
     {@const { type, title } = searchResult}
-    <a class="searchresult" data-theme={$theme} href={getHref(searchResult)}>
+    <a class="searchresult" data-theme={$theme} href={getHref(searchResult)} tabindex="0">
         <img
             class="type-img"
             alt={type}
@@ -49,16 +49,15 @@
     </a>
 {/snippet}
 
-{#if opened && searchResults.length > 0}
-    <div
-        class="searchresult-container"
-        data-theme={$theme}
-    >
-        {#each searchResults.slice(0, 10) as searchResult}
-            {@render searchResultView(searchResult)}
-        {/each}
-    </div>
-{/if}
+<div
+    class="searchresult-container"
+    class:closed={!(opened && searchResults.length > 0)}
+    data-theme={$theme}
+>
+    {#each searchResults.slice(0, 10) as searchResult}
+        {@render searchResultView(searchResult)}
+    {/each}
+</div>
 
 <style>
     .searchresult-container {
@@ -75,6 +74,10 @@
         z-index: 2;
 
         background-color: white;
+
+        &.closed {
+            display: none;
+        }
     }
     .searchresult-container[data-theme="dark"] {
         outline-color: gray;

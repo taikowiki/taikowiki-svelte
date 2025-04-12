@@ -144,7 +144,6 @@ export function parseDBData<T extends keyof Doc.DB.DocDBData = keyof Doc.DB.DocD
 
 import { Marked } from 'marked';
 import { HTMLElement, parse as parseHTML_ } from 'node-html-parser';
-import { page } from '$app/state';
 import markdownEscape from 'markdown-escape';
 import { SvelteMap } from "svelte/reactivity";
 
@@ -433,7 +432,7 @@ export const renderer = {
      */
     purifyHTML(dom: HTMLElement): void {
         //허용되지 않은 태그 제거
-        const allowedTags: string[] = ['p', 'a', 'img', 'strong', 'em', 'del', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'ul', 'ol', 'li', 'hr', 'blockquote', 'pre', 'code', 'text', 'wiki-annot', 'wiki-link', 'wiki-yt', 'wiki-float', 'style-table', 'style-cell', 'style-row', 'style-col'];
+        const allowedTags: string[] = ['p', 'a', 'img', 'strong', 'em', 'del', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'ul', 'ol', 'li', 'hr', 'blockquote', 'pre', 'code', 'text', 'br', 'wiki-annot', 'wiki-link', 'wiki-yt', 'wiki-float', 'style-table', 'style-cell', 'style-row', 'style-col'];
         dom.querySelectorAll(`:not(${allowedTags.join(', ')})`).forEach(e => e.remove());
 
         //허용되지 않은 속성 제거
@@ -447,7 +446,7 @@ export const renderer = {
             'wiki-link': ['doctitle'],
             'wiki-yt': ['v', 'width', 'height'],
             'wiki-float': ['float'],
-            'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float', 'align'],
+            'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float', 'align', 'overflow'],
             'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align', 'colspan', 'rowspan', 'disable'],
             'style-row': ['bgcolor', 'textcolor', 'height', 'minheight', 'maxheight', 'align'],
             'style-col': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align'],
@@ -518,6 +517,7 @@ export const renderer = {
             })
 
             // style-table 확인
+            let overflow = false;
             const styleTableElement = table.querySelector('style-table');
             if (styleTableElement) {
                 const borderColor = styleTableElement.getAttribute('bordercolor');
@@ -531,6 +531,10 @@ export const renderer = {
                 const maxHeight = styleTableElement.getAttribute('maxheight');
                 const float = styleTableElement.getAttribute('float');
                 const align = styleTableElement.getAttribute('align');
+                const overflow_ = styleTableElement.getAttribute('overflow');
+                if(overflow_ && overflow_ !== "false"){
+                    overflow = true;
+                }
 
                 const style = new CSSStyleDeclaration();
                 borderColor && style.setProperty('border-color', borderColor);;
@@ -811,6 +815,9 @@ export const renderer = {
 
             // container에 씌우기
             const container = parseHTML('<div class="table-container"></div>').querySelector('div') as HTMLElement;
+            if(overflow){
+                container.classList.add('overflow');
+            }
             table.querySelectorAll('style-table, style-row, style-col, style-cell').forEach(e => e.remove())
             table.replaceWith(container);
             container.appendChild(table);
@@ -833,14 +840,22 @@ export const renderer = {
                 if(size.endsWith('px')){
                     size = size.slice(0, -2);
                 }
-                const size_ = Number(size);
+                let size_ = Number(size);
                 if(!Number.isNaN(size_)){
+                    if(size_ > 5){
+                        size_ = 5;
+                    }
+                    else if(size_ < -5){
+                        size_ = -5;
+                    }
+                    size_ += 16;
                     style.setProperty('font-size', `${size_}px`);
                 }
             }
 
             const span = new HTMLElement('span', {});
             span.setAttribute('style', style.cssText);
+            span.innerHTML = text.innerHTML;
             text.replaceWith(span);
             text.remove();
         })

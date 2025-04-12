@@ -1,30 +1,30 @@
-import { TIER_BORDER } from "./const";
+import { GRADE_INTERVAL, TIER_BORDER } from "./const";
 import type { UserRatingTierName } from "./types";
 
 export function getTier(rating: number) {
     let tierName: UserRatingTierName;
-    if (rating < 2255) {
+    if (rating < TIER_BORDER.bronze) {
         tierName = 'pearl';
     }
-    else if (rating < 4510) {
+    else if (rating < TIER_BORDER.silver) {
         tierName = 'bronze';
     }
-    else if (rating < 6765) {
+    else if (rating < TIER_BORDER.gold) {
         tierName = 'silver'
     }
-    else if (rating < 9020) {
+    else if (rating < TIER_BORDER.ruby) {
         tierName = 'gold'
     }
-    else if (rating < 11275) {
+    else if (rating < TIER_BORDER.sapphire) {
         tierName = 'ruby'
     }
-    else if (rating < 12628) {
+    else if (rating < TIER_BORDER.master) {
         tierName = 'sapphire'
     }
-    else if (rating < 13079) {
+    else if (rating < TIER_BORDER.grandmaster) {
         tierName = "master"
     }
-    else if (rating < 13530) {
+    else if (rating < TIER_BORDER.omega) {
         tierName = "grandmaster"
     }
     else {
@@ -38,10 +38,10 @@ export function getTier(rating: number) {
     else if (tierName === "sapphire") {
         const startBorder = TIER_BORDER[tierName];
 
-        if (rating < startBorder + 451) {
+        if (rating < startBorder + GRADE_INTERVAL) {
             detailTierGrade = 3;
         }
-        else if (rating < startBorder + 451 * 2) {
+        else if (rating < startBorder + GRADE_INTERVAL * 2) {
             detailTierGrade = 2;
         }
         else {
@@ -51,16 +51,16 @@ export function getTier(rating: number) {
     else {
         const startBorder = TIER_BORDER[tierName];
 
-        if (rating < startBorder + 451) {
+        if (rating < startBorder + GRADE_INTERVAL) {
             detailTierGrade = 5;
         }
-        else if (rating < startBorder + 451 * 2) {
+        else if (rating < startBorder + GRADE_INTERVAL * 2) {
             detailTierGrade = 4;
         }
-        else if (rating < startBorder + 451 * 3) {
+        else if (rating < startBorder + GRADE_INTERVAL * 3) {
             detailTierGrade = 3;
         }
-        else if (rating < startBorder + 451 * 4) {
+        else if (rating < startBorder + GRADE_INTERVAL * 4) {
             detailTierGrade = 2;
         }
         else {

@@ -9,7 +9,7 @@
         insertAnnotation,
         insertImage,
         insertWikiLink,
-        insertYoutube
+        insertYoutube,
     } from "$lib/module/common/wikidoc/client/markdownCommands.client";
     import AnnotationPopup from "./popup/AnnotationPopup.svelte";
     import WikiLinkPopup from "./popup/WikiLinkPopup.svelte";
@@ -18,9 +18,10 @@
 
     interface Props {
         mdContent: string;
+        show: boolean;
     }
 
-    let { mdContent = $bindable("") }: Props = $props();
+    let { mdContent = $bindable(""), show }: Props = $props();
 
     const [theme] = getTheme();
 
@@ -70,12 +71,12 @@
     // wiki-link popup
     const wikiLinkPopupContainer = document.createElement("div");
     let wikiLinkPopupProps = $state({
-        eventEmitter: null
+        eventEmitter: null,
     });
     mount(WikiLinkPopup, {
         target: wikiLinkPopupContainer,
         props: wikiLinkPopupProps,
-        context
+        context,
     });
     const wikiLinkToolbarItem = $state({
         name: "Wiki Link",
@@ -89,12 +90,12 @@
     // wiki-yt popup
     const wikiYoutubePopupContainer = document.createElement("div");
     let wikiYoutubePopupProps = $state({
-        eventEmitter: null
+        eventEmitter: null,
     });
     mount(WikiYoutubePopup, {
         target: wikiYoutubePopupContainer,
         props: wikiYoutubePopupProps,
-        context
+        context,
     });
     const wikiYoutubeToolbarItem = $state({
         name: "Youtube",
@@ -116,7 +117,11 @@
             ["ul", "ol"],
             ["table", imageToolbarItem, "link"],
             ["code", "codeblock"],
-            [annotationToolbarItem, wikiLinkToolbarItem, wikiYoutubeToolbarItem],
+            [
+                annotationToolbarItem,
+                wikiLinkToolbarItem,
+                wikiYoutubeToolbarItem,
+            ],
         ],
         plugins: [
             (context: any) => {
@@ -130,7 +135,7 @@
                         insertImage,
                         insertAnnotation,
                         insertWikiLink,
-                        insertYoutube
+                        insertYoutube,
                     },
                 };
             },
@@ -138,16 +143,24 @@
     };
 </script>
 
-{#if $theme === "light"}
+<div class="container" class:show={show && $theme==="light"}>
     <ToastEditorLight bind:mdContent {editorOption} />
-{:else}
+</div>
+<div class="container" class:show={show && $theme==="dark"}>
     <ToastEditorDark bind:mdContent {editorOption} />
-{/if}
+</div>
 
 <style>
     :global(.toastui-editor-md-heading) {
         font-size: inherit;
         color: inherit;
         font-weight: inherit;
+    }
+
+    .container{
+        display:none;
+        &.show{
+            display:block;
+        }
     }
 </style>

@@ -61,7 +61,6 @@
             },
         );
     });
-    $inspect(annotations);
 
     docContext.defineWikiDocURLBase(
         (() => {

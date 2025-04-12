@@ -87,7 +87,7 @@ export const docContext = {
         const windowContext = this.getContext();
 
         let annotationsMap = windowContext.get('wikiDocAnnotations');
-        if(!annotationsMap){
+        if (!annotationsMap) {
             annotationsMap = new SvelteMap<string, string>();
             windowContext.set('wikiDocAnnotations', annotationsMap);
         }
@@ -142,7 +142,7 @@ export function parseDBData<T extends keyof Doc.DB.DocDBData = keyof Doc.DB.DocD
     return docData;
 }
 
-import { Marked } from 'marked';
+import { lexer, Marked, parser, walkTokens, type Token, type TokenizerExtensionFunction, type TokenizerObject } from 'marked';
 import { HTMLElement, parse as parseHTML_ } from 'node-html-parser';
 import markdownEscape from 'markdown-escape';
 import { SvelteMap } from "svelte/reactivity";
@@ -161,8 +161,10 @@ export const renderer = {
      * @context client
      */
     async renderPreviewHTML(src: string, finishCallback?: (dom: HTMLElement) => Promise<any> | any) {
-        src = this.convertAnnotation(src);
+        //src = this.convertAnnotation(src);
         src = this.marked.parse(src, { async: false });
+
+        //src = this.parseMarkdown(src);
         const dom = parseHTML(src);
         this.purifyHTML(dom);
         this.fillPreviewAnnotationKeys(dom);
@@ -184,7 +186,7 @@ export const renderer = {
         const scope: Record<string, any> = {};
 
         const prerenderContent = (src: string) => {
-            src = this.convertAnnotation(src);
+            //src = this.convertAnnotation(src);
             src = this.marked.parse(src, { async: false });
             const dom = parseHTML(src);
             this.purifyHTML(dom);
@@ -336,6 +338,7 @@ export const renderer = {
      * `key`에 수를 사용하면 삭제됩니다.
      * @param src 
      * @returns 
+     * @deprecated
      */
     convertAnnotation(src: string) {
         // [*key]를 변환
@@ -372,7 +375,6 @@ export const renderer = {
         while (exec) {
             const left = src.substring(0, exec.index);
             const right = src.substring(exec.index + exec[0].length);
-
             if (exec[2].length > 0) {
                 const htmlEscapeMap = {
                     '&': '&amp;',
@@ -450,6 +452,7 @@ export const renderer = {
             'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align', 'colspan', 'rowspan', 'disable'],
             'style-row': ['bgcolor', 'textcolor', 'height', 'minheight', 'maxheight', 'align'],
             'style-col': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align'],
+            'code': ['class']
         };
         dom.querySelectorAll('*').forEach((element) => {
             const tag = element.tagName.toLowerCase();
@@ -473,8 +476,7 @@ export const renderer = {
             else {
                 try {
                     let href_ = href;
-                    console.log(e);
-                    if(!href_.startsWith('http://') || !href_.startsWith('https://')){
+                    if (!href_.startsWith('http://') || !href_.startsWith('https://')) {
                         href_ += 'http://'
                     }
                     var url = new URL(href_);
@@ -532,7 +534,7 @@ export const renderer = {
                 const float = styleTableElement.getAttribute('float');
                 const align = styleTableElement.getAttribute('align');
                 const overflow_ = styleTableElement.getAttribute('overflow');
-                if(overflow_ && overflow_ !== "false"){
+                if (overflow_ && overflow_ !== "false") {
                     overflow = true;
                 }
 
@@ -815,7 +817,7 @@ export const renderer = {
 
             // container에 씌우기
             const container = parseHTML('<div class="table-container"></div>').querySelector('div') as HTMLElement;
-            if(overflow){
+            if (overflow) {
                 container.classList.add('overflow');
             }
             table.querySelectorAll('style-table, style-row, style-col, style-cell').forEach(e => e.remove())
@@ -823,29 +825,29 @@ export const renderer = {
             container.appendChild(table);
         })
     },
-    sanitizeText(dom: HTMLElement){
+    sanitizeText(dom: HTMLElement) {
         dom.querySelectorAll('text').forEach((text: HTMLElement) => {
             const color = text.getAttribute('color');
             const bgcolor = text.getAttribute('bgcolor');
             let size = text.getAttribute('size');
-            
+
             const style = new CSSStyleDeclaration();
-            if(color){
+            if (color) {
                 style.setProperty('color', color);
             }
-            if(bgcolor){
+            if (bgcolor) {
                 style.setProperty('background-color', bgcolor);
             }
-            if(size){
-                if(size.endsWith('px')){
+            if (size) {
+                if (size.endsWith('px')) {
                     size = size.slice(0, -2);
                 }
                 let size_ = Number(size);
-                if(!Number.isNaN(size_)){
-                    if(size_ > 5){
+                if (!Number.isNaN(size_)) {
+                    if (size_ > 5) {
                         size_ = 5;
                     }
-                    else if(size_ < -5){
+                    else if (size_ < -5) {
                         size_ = -5;
                     }
                     size_ += 16;
@@ -944,5 +946,100 @@ export const renderer = {
             }
         },
         async: false,
+        extensions: [
+            {
+                name: 'annotKey',
+                level: 'inline',                                 // Is this a block-level or inline-level tokenizer?
+                //start(src) { return src.match(/\[\*/)?.index; },    // Hint to Marked.js to stop and check for a match
+                tokenizer(src) {
+                    const rule = /^((?<!\\)(?:\\\\)*)(\[\*([^ ]+?)(?<!\\)(?:\\\\)*\])/;  // Regex for the complete token, anchor to string start
+                    const exec = rule.exec(src);
+                    if (exec) {
+                        const htmlEscapeMap = {
+                            '&': '&amp;',
+                            '<': '&lt;',
+                            '>': '&gt;',
+                            '"': '&quot;',
+                            "'": '&#039;'
+                        };
+                        const annotKey = exec[3].trim().replace(/[&<>"']/g, (e) => {
+                            return htmlEscapeMap[e as keyof typeof htmlEscapeMap]
+                        });
+                        return {                                         // Token to generate
+                            type: 'annotKey',                           // Should match "name" above
+                            raw: exec[0],
+                            front: exec[1],
+                            key: annotKey
+                        };
+                    }
+                },
+                renderer(token) {
+                    if (/^[0-9]*$/.test(token.key)) {
+                        return token.front.replaceAll('\\\\', '\\');
+                    }
+                    return `${token.front}<wiki-annot key="${token.key}"></wiki-annot>`;
+                },
+            },
+            {
+                name: 'annot',
+                level: 'inline',
+                tokenizer(src): ReturnType<TokenizerExtensionFunction> {
+                    const annotRegexp = /^((?<!\\)(?:\\\\)*)(\[\*([^ \]]*)\s((?:(?:(?<!\\)(?:\\\\)*\[.*\]\(.*\))|(?:.))+?(?<!\\)(?:\\\\)*)\])/;
+                    const exec = annotRegexp.exec(src);
+                    //console.log(exec);
+                    if (exec) {
+                        if (exec[3].length > 0) {
+                            const htmlEscapeMap = {
+                                '&': '&amp;',
+                                '<': '&lt;',
+                                '>': '&gt;',
+                                '"': '&quot;',
+                                "'": '&#039;'
+                            };
+                            const annotKey = exec[3].trim().replace(/[&<>"']/g, (e) => {
+                                return htmlEscapeMap[e as keyof typeof htmlEscapeMap]
+                            });
+                            return {
+                                type: 'annot',
+                                raw: exec[0],
+                                front: exec[1],
+                                key: annotKey,
+                                content: exec[4].trim(),
+                                tokens: renderer.marked.lexer(exec[4].trim())
+                            }
+                        }
+                        else {
+                            return {
+                                type: 'annot',
+                                raw: exec[0],
+                                front: exec[1],
+                                content: exec[4].trim(),
+                                tokens: renderer.marked.lexer(exec[4].trim())
+                            }
+                        }
+                    }
+                },
+                renderer(token) {
+                    if (token.key && /^[0-9]*$/.test(token.key)) {
+                        return token.front.replaceAll('\\\\', '\\')
+                    }
+                    if (token.tokens) {
+                        const tokensParsed = parseHTML(renderer.marked.parser(token.tokens));
+                        var content = tokensParsed.querySelector('p')?.innerHTML ?? '';
+                    }
+                    else {
+                        var content = token.content as string;
+
+                    }
+                    if (token.key) {
+                        return `${token.front.replaceAll('\\\\', '\\')}<wiki-annot key="${token.key}">${content}</wiki-annot>`;
+                    }
+                    else {
+                        return `${token.front.replaceAll('\\\\', '\\')}<wiki-annot>${content}</wiki-annot>`;
+                    }
+                },
+
+            }
+        ]
     })
 } as const;

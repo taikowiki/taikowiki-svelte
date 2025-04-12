@@ -34,17 +34,16 @@
 <div class="container">
     {@render editorTypeSelector()}
     <div class="editor-container">
-        {#if editorType === "raw"}
-            <textarea
-                class="raw"
-                bind:value={content}
-                spellcheck="false"
-                data-theme={$theme}
-                placeholder="마크다운 문법으로 작성하세요."
-            ></textarea>
-        {:else if editorType === "toast"}
-            <ToastEditor bind:mdContent={content} />
-        {:else if editorType === "preview"}
+        <textarea
+            class="raw"
+            class:show={editorType === "raw"}
+            bind:value={content}
+            spellcheck="false"
+            data-theme={$theme}
+            placeholder="마크다운 문법으로 작성하세요."
+        ></textarea>
+        <ToastEditor bind:mdContent={content} show={editorType === "toast"} />
+        {#if editorType === "preview"}
             <WikiDocPreview {content} />
         {/if}
     </div>
@@ -82,6 +81,12 @@
         background-color: rgb(99, 99, 99);
     }
 
+    textarea {
+        display: none;
+    }
+    textarea.show {
+        display: block;
+    }
     textarea.raw {
         width: 100%;
         height: 500px;

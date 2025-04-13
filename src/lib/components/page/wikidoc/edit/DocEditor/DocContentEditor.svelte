@@ -2,6 +2,8 @@
     import ToastEditor from "./Toast/ToastEditor.svelte";
     import WikiDocPreview from "../Preview/DocPreview.svelte";
     import { getTheme } from "$lib/module/layout/theme";
+    import { onMount } from "svelte";
+    import { UndoStack } from "$lib/module/common/wikidoc/util";
 
     interface Props {
         content: string;
@@ -11,9 +13,51 @@
 
     let editorType: "raw" | "toast" | "preview" = $state("raw");
 
+    let undoStack = $state<UndoStack>();
+    let textarea = $state<HTMLTextAreaElement>();
+    onMount(() => {
+        if(!textarea) return;
+        undoStack = new UndoStack(textarea, {
+            cooldown: 10,
+            maxStackSize: 500,
+            onUndo: (element) => {
+                content = element.value
+            },
+            onRedo: (element) => {
+                content = element.value
+            },
+        });
+    })
+    $effect(() => {
+        if(editorType !== "raw" && undoStack){
+            content;
+            undoStack.pushCurrent();
+        }
+    })
+
     const [theme] = getTheme();
+
+    function textAreaTabEvent(this:HTMLTextAreaElement, event: KeyboardEvent){
+        if(event.key !== "Tab") return;
+        event.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        const tab = '    ';
+
+        const before = this.value.substring(0, start);
+        const after = this.value.substring(end);
+
+        this.value = before + tab + after;
+        this.selectionStart = start + tab.length;
+        this.focus();
+        content = this.value;
+        if(undoStack){
+            undoStack.pushCurrent();
+        }
+    }
 </script>
 
+<!-- svelte-ignore ownership_invalid_mutation -->
 {#snippet editorTypeSelector()}
     <div class="row-left">
         <label class:selected={editorType === "raw"} data-theme={$theme}>
@@ -38,9 +82,11 @@
             class="raw"
             class:show={editorType === "raw"}
             bind:value={content}
+            bind:this={textarea}
             spellcheck="false"
             data-theme={$theme}
             placeholder="마크다운 문법으로 작성하세요."
+            onkeydown={textAreaTabEvent}
         ></textarea>
         <ToastEditor bind:mdContent={content} show={editorType === "toast"} />
         {#if editorType === "preview"}

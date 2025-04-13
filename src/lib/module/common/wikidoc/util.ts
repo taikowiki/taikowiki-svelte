@@ -1045,3 +1045,100 @@ export const renderer = {
         ]
     })
 } as const;
+
+type UndoStackData = {
+    startPos: number | null;
+    endPos: number | null;
+    value: string;
+}
+export class UndoStack {
+    private element: HTMLInputElement | HTMLTextAreaElement;
+    private stack: UndoStackData[] = [];
+    private currentPos = -1;
+    private lastSave: number | null = null;
+    private saveCooldown: number = 500;
+    private maxStackSize: number = Infinity;
+    private onUndo?: (element: UndoStack['element']) => any;
+    private onRedo?: (element: UndoStack['element']) => any;
+
+    constructor(element: UndoStack['element'], option?: {cooldown?: number, maxStackSize?: number, onUndo?: UndoStack['onUndo'], onRedo?: UndoStack['onRedo']}) {
+        this.element = element;
+        if (option?.cooldown !== undefined) {
+            this.saveCooldown = option.cooldown;
+        }
+        if(option?.maxStackSize){
+            this.maxStackSize = option.maxStackSize;
+        }
+        if(option?.onUndo){
+            this.onUndo = option.onUndo;
+        }
+        if(option?.onRedo){
+            this.onRedo = option.onRedo;
+        }
+        this.pushCurrent();
+
+        element.addEventListener('keydown', (event) => {
+            const ev = event as KeyboardEvent;
+            if ((ev.key.toLowerCase() === "y" && ev.ctrlKey) || (ev.key.toLowerCase() === "z" && ev.shiftKey && ev.ctrlKey)) { // 앞으로 가기
+                event.preventDefault();
+                this.redo();
+            }
+            else 
+            if (ev.key.toLowerCase() === "z" && ev.ctrlKey) { // 뒤로 가기
+                event.preventDefault();
+                this.undo();
+            }
+        })
+
+        element.addEventListener('input', () => {
+            const now = Date.now();
+            if (this.lastSave === null || now - this.lastSave > this.saveCooldown) {
+                this.pushCurrent();
+            }
+        })
+    }
+
+    push(data: UndoStackData) {
+        const current = this.stack[this.currentPos];
+        if(current && current.value === data.value)return;
+
+        this.stack = this.stack.slice(0, this.currentPos + 1);
+        this.stack.push(data);
+        this.lastSave = Date.now();
+        if(this.currentPos >= this.maxStackSize - 1){
+            this.stack.shift();
+        }
+        else{
+            this.currentPos++;
+        }
+    }
+    pushCurrent() {
+        this.push({
+            startPos: this.element.selectionStart,
+            endPos: this.element.selectionEnd,
+            value: this.element.value
+        })
+    }
+    pop() {
+        this.currentPos--;
+        return this.stack.pop();
+    }
+    undo() {
+        if (this.currentPos <= -1) return;
+        if(this.currentPos > 0){
+            this.currentPos--;
+        }
+        this.element.value = this.stack[this.currentPos].value;
+        this.element.selectionStart = this.stack[this.currentPos].startPos;
+        this.element.selectionEnd = this.stack[this.currentPos].endPos;
+        this.onUndo?.(this.element);
+    }
+    redo() {
+        if (this.currentPos >= this.stack.length - 1) return;
+        this.currentPos++;
+        this.element.value = this.stack[this.currentPos].value;
+        this.element.selectionStart = this.stack[this.currentPos].startPos;
+        this.element.selectionEnd = this.stack[this.currentPos].endPos;
+        this.onRedo?.(this.element);
+    }
+}

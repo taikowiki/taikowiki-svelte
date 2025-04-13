@@ -19,6 +19,7 @@ export async function setWikiLinkAvailable(dom: HTMLElement, run: QueryFunction)
                         )
                         .build();
         const result = await run(query);
+
         if((result?.[0]?.COUNT ?? 0) === 0){
             var exists = false;
         }
@@ -40,7 +41,7 @@ export async function prepareParagraphs(subParagraphs: Doc.Data.DocParagraph[], 
         prepared.push({
             title: subParagraph.title,
             content: await renderer.prepareView(subParagraph.content, async (dom: HTMLElement) => {
-                setWikiLinkAvailable(dom, run)
+                await setWikiLinkAvailable(dom, run)
             }),
             subParagraphs: await prepareParagraphs(subParagraph.subParagraphs, run)
         })

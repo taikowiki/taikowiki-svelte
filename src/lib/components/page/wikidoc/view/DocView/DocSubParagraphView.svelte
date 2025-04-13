@@ -6,9 +6,10 @@
         paragraph: Doc.Data.DocParagraph;
         index: string;
         depth?: number;
+        onLoad: () => void
     }
 
-    let { paragraph, index, depth }: Props = $props();
+    let { paragraph, index, depth, onLoad }: Props = $props();
 </script>
 
-<DocParagraphView {paragraph} {index} {depth} />
+<DocParagraphView {paragraph} {index} {depth} {onLoad}/>

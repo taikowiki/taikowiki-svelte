@@ -284,9 +284,10 @@ export const renderer = {
     flattenContentTree(contentTree: Doc.Data.ContentTree): string {
         let flattened = '';
         contentTree = this.prerenderContentTree(contentTree);
-        const sharpConverter = this.sharpConverter;
+        //const sharpConverter = this.sharpConverter;
 
-        const dom = parseHTML(sharpConverter.escapeSharp(contentTree.content));
+        const dom = parseHTML(contentTree.content);
+        console.log(dom.innerText)
         dom.querySelectorAll('pre').forEach((e) => {
             const v = parseHTML('<c-pre></c-pre>').querySelector('c-pre') as HTMLElement;
             v.innerHTML = e.innerHTML;
@@ -295,6 +296,7 @@ export const renderer = {
             })
             e.replaceWith(v);
         })
+        console.log(dom.innerText);
         flattened += dom.innerText;
         contentTree.subParagraphs.forEach((subParagraph, index) => {
             flattened += '\n';
@@ -314,7 +316,7 @@ export const renderer = {
             flattened += '\n';
 
             // 본문 추가
-            const dom = parseHTML(sharpConverter.escapeSharp(contentTree.content));
+            const dom = parseHTML(paragraph.content);
             dom.querySelectorAll('pre').forEach((e) => {
                 const v = parseHTML('<c-pre></c-pre>').querySelector('c-pre') as HTMLElement;
                 v.innerHTML = e.innerHTML;

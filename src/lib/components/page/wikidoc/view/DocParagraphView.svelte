@@ -1,15 +1,35 @@
 <script lang="ts">
-    import type {Doc} from '$lib/module/common/wikidoc/types';
+    import type { Doc } from "$lib/module/common/wikidoc/types";
     import { getTheme } from "$lib/module/layout/theme";
+    import { onMount } from "svelte";
     import DocSubParagraphView from "./DocView/DocSubParagraphView.svelte";
+    import hljs from "highlight.js";
 
     interface Props {
         paragraph: Doc.Data.DocParagraph;
         index: string;
+        onLoad: () => void;
         depth?: number;
     }
 
-    let { paragraph, index, depth = 1 }: Props = $props();
+    let { paragraph, index, depth = 1, onLoad }: Props = $props();
+
+    //loaded
+    let contentDiv = $state<HTMLElement>();
+    let contentLoaded = $state(false);
+    let subParagraphLoaded = $state(
+        new Array(paragraph.subParagraphs.length).fill(false),
+    );
+    $effect(() => {
+        if (contentLoaded && subParagraphLoaded.every((e) => e)) {
+            onLoad();
+        }
+    });
+    $effect(() => {
+        if (contentDiv) {
+            contentLoaded = true;
+        }
+    });
 
     let opened = $state(true);
 
@@ -24,7 +44,7 @@
             opened = !opened;
         }}
         role="presentation"
-        style={`transform:scale(${100 - (depth - 1)}%);`}
+        style={`font-size:${Math.max(26 - (depth - 1) * 2, 18)}px;`}
         data-theme={$theme}
         data-doc-index={index}
     >
@@ -32,20 +52,22 @@
             {`${index}. ${paragraph.title}`}
         </span>
     </div>
-    {#if opened}
-        <div class="doc-view-content">
-            {@html paragraph.content}
-        </div>
-        <div class="doc-view-paragraphs">
-            {#each paragraph.subParagraphs as subParagraph, i}
-                <DocSubParagraphView
-                    paragraph={subParagraph}
-                    index={`${index}.${i+1}`}
-                    depth={depth + 1}
-                />
-            {/each}
-        </div>
-    {/if}
+    <div class="doc-view-content" bind:this={contentDiv} class:closed={!opened}>
+        {@html paragraph.content}
+    </div>
+    <div class="doc-view-paragraphs" class:closed={!opened}>
+        {#each paragraph.subParagraphs as subParagraph, i}
+            {@const onLoad = () => {
+                subParagraphLoaded[i] = true;
+            }}
+            <DocSubParagraphView
+                paragraph={subParagraph}
+                index={`${index}.${i + 1}`}
+                depth={depth + 1}
+                {onLoad}
+            />
+        {/each}
+    </div>
 </div>
 
 <style>
@@ -78,22 +100,26 @@
         }
     }
 
-    .paragraph-title[data-theme="dark"]{
+    .paragraph-title[data-theme="dark"] {
         color: #e1a743;
         border-color: #e1a743;
-        &::before{
+        &::before {
             color: #e1a743;
         }
     }
 
-    .doc-view-content{
+    .doc-view-content {
         padding-top: 10px;
         padding-bottom: 10px;
     }
 
     .doc-view-paragraphs {
         width: 100%;
-        padding-left: 10px;
+        /*padding-left: 10px;*/
         box-sizing: border-box;
+    }
+
+    .closed {
+        display: none;
     }
 </style>

@@ -7,9 +7,12 @@
     import { getTheme } from "$lib/module/layout/theme";
     import DocParagraphView from "./DocParagraphView.svelte";
     import "$lib/module/common/wikidoc/assets/docview.scss";
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
     import type { Writable } from "svelte/store";
     import { getIsMobile } from "$lib/module/layout/isMobile";
+    import hljs from "highlight.js";
+    import hljsLightStyle from "highlight.js/styles/atom-one-light.min.css?raw";
+    import hljsDarkStyle from "highlight.js/styles/atom-one-dark.min.css?raw";
 
     interface Props {
         contentTree: Doc.Data.ContentTree;
@@ -35,8 +38,29 @@
 
     // 문서 로딩 확인용
     let docReady = getContext("docReady") as Writable<boolean>;
+    let contentDiv = $state<HTMLElement>();
+    let contentLoaded = $state(false);
+    let paragraphLoaded = $state(
+        new Array(contentTree.subParagraphs.length).fill(false),
+    );
+    $effect(() => {
+        if (contentLoaded && paragraphLoaded.every((e) => e)) {
+            docReady.set(true);
+        }
+    });
     wikiElementsDefined.then(() => {
-        docReady.set(true);
+        contentLoaded = true;
+    });
+
+    //highlight
+    $effect(() => {
+        if (browser && $docReady && contentDiv) {
+            contentDiv.querySelectorAll("pre > code").forEach((codeElement) => {
+                if(codeElement.classList.length > 0){
+                    hljs.highlightElement(codeElement as HTMLElement);
+                }
+            });
+        }
     });
 
     //주석들
@@ -70,10 +94,21 @@
         })(),
     );
 
+    //highlight
+
+    onMount(() => {});
+
     const [theme] = getTheme();
     const isMobile = getIsMobile();
 </script>
 
+<svelte:element this={"style"}>
+    {#if $theme === "light"}
+        {@html hljsLightStyle}
+    {:else}
+        {@html hljsDarkStyle}
+    {/if}
+</svelte:element>
 {#key browser}
     {#await wikiElementsDefined}
         <Loading />
@@ -83,19 +118,23 @@
             data-theme={$theme}
             data-isMobile={$isMobile}
         >
-            <div class="doc-view-content">
-                {@html contentTree.content}
+            <div class="doc-view-content-container" bind:this={contentDiv}>
+                <div class="doc-view-content">
+                    {@html contentTree.content}
+                </div>
+                {#each contentTree.subParagraphs as subParagraph, index}
+                    {@const onLoad = () => {
+                        paragraphLoaded[index] = true;
+                    }}
+                    <DocParagraphView
+                        paragraph={subParagraph}
+                        index={`${index + 1}`}
+                        {onLoad}
+                    />
+                {/each}
             </div>
-            {#each contentTree.subParagraphs as subParagraph, index}
-                <DocParagraphView
-                    paragraph={subParagraph}
-                    index={`${index + 1}`}
-                />
-            {/each}
-            {#if annotations.length > 0}<div
-                    class="doc-view-annot-container"
-                    data-theme={$theme}
-                >
+            {#if annotations.length > 0}
+                <div class="doc-view-annot-container" data-theme={$theme}>
                     <h3>주석</h3>
                     {#each annotations as [annotKey, annotContent]}
                         {@const clickHandler = () => {

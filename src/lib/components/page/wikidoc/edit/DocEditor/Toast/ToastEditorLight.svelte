@@ -41,7 +41,7 @@
             setMdContent(editor.getMarkdown());
         });
 
-        // history 제거
+        // history 단축키 제거
         editor.mdEditor.view.state.plugins.unshift(
             keymap({
                 "Mod-z": () => true, // undo 무시

@@ -18,8 +18,8 @@
     onMount(() => {
         if(!textarea) return;
         undoStack = new UndoStack(textarea, {
-            cooldown: 300,
-            maxStackSize: 500,
+            cooldown: 500,
+            maxStackSize: 1000,
             onUndo: (element) => {
                 content = element.value
             },

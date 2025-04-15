@@ -18,7 +18,7 @@
     onMount(() => {
         if(!textarea) return;
         undoStack = new UndoStack(textarea, {
-            cooldown: 10,
+            cooldown: 300,
             maxStackSize: 500,
             onUndo: (element) => {
                 content = element.value
@@ -88,7 +88,7 @@
             placeholder="마크다운 문법으로 작성하세요."
             onkeydown={textAreaTabEvent}
         ></textarea>
-        <ToastEditor bind:mdContent={content} show={editorType === "toast"} />
+        <ToastEditor bind:mdContent={content} show={editorType === "toast"} {undoStack}/>
         {#if editorType === "preview"}
             <WikiDocPreview {content} />
         {/if}

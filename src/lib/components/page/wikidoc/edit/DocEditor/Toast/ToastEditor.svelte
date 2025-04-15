@@ -4,7 +4,7 @@
     import ToastEditorLight from "./ToastEditorLight.svelte";
     import ToastEditorDark from "./ToastEditorDark.svelte";
     import ImagePopup from "./popup/ImagePopup.svelte";
-    import { mount } from "svelte";
+    import { mount, setContext } from "svelte";
     import {
         insertAnnotation,
         insertImage,
@@ -15,13 +15,16 @@
     import WikiLinkPopup from "./popup/WikiLinkPopup.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import WikiYoutubePopup from "./popup/WikiYoutubePopup.svelte";
+    import { writable } from "svelte/store";
+    import { UndoStack } from "$lib/module/common/wikidoc/util";
 
     interface Props {
         mdContent: string;
         show: boolean;
+        undoStack?: UndoStack;
     }
 
-    let { mdContent = $bindable(""), show }: Props = $props();
+    let { mdContent = $bindable(""), show, undoStack }: Props = $props();
 
     const [theme] = getTheme();
 
@@ -106,11 +109,27 @@
         },
     });
 
+    // 동기화용
+    const setEditorMarkdowns = writable<((value: string) => any)[]>([]);
+    setContext("setEditorMarkdowns", setEditorMarkdowns);
+    $effect(() => {
+        if (!show) {
+            $setEditorMarkdowns.forEach((fn) => {
+                fn(mdContent);
+            });
+        }
+    });
+    function setMdContent(value: string) {
+        mdContent = value;
+    }
+
+    // 에디터 옵션
     const editorOption = {
         height: "500px",
         hideModeSwitch: true,
         language: "ko-KR",
         initialEditType: "markdown",
+        initialValue: mdContent,
         toolbarItems: [
             ["bold", "italic", "strike"],
             ["hr", "quote"],
@@ -140,14 +159,40 @@
                 };
             },
         ],
+        events: {
+            keydown(_: any, event: KeyboardEvent) {
+                if (
+                    (event.code === "KeyZ" &&
+                        event.shiftKey &&
+                        event.ctrlKey) ||
+                    (event.code === "KeyY" && event.ctrlKey)
+                ) {
+                    event.preventDefault();
+                    if (undoStack) {
+                        undoStack?.redo();
+                        $setEditorMarkdowns.forEach((fn) => {
+                            fn(mdContent);
+                        });
+                    }
+                } else if (event.code === "KeyZ" && event.ctrlKey) {
+                    event.preventDefault();
+                    if (undoStack) {
+                        undoStack?.undo();
+                        $setEditorMarkdowns.forEach((fn) => {
+                            fn(mdContent);
+                        });
+                    }
+                }
+            },
+        },
     };
 </script>
 
-<div class="container" class:show={show && $theme==="light"}>
-    <ToastEditorLight bind:mdContent {editorOption} />
+<div class="container" class:show={show && $theme === "light"}>
+    <ToastEditorLight {editorOption} {setMdContent} />
 </div>
-<div class="container" class:show={show && $theme==="dark"}>
-    <ToastEditorDark bind:mdContent {editorOption} />
+<div class="container" class:show={show && $theme === "dark"}>
+    <ToastEditorDark {editorOption} {setMdContent} />
 </div>
 
 <style>
@@ -157,10 +202,10 @@
         font-weight: inherit;
     }
 
-    .container{
-        display:none;
-        &.show{
-            display:block;
+    .container {
+        display: none;
+        &.show {
+            display: block;
         }
     }
 </style>

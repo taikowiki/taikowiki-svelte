@@ -1,27 +1,34 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { getContext, onMount } from "svelte";
     import annotationIcon from "$lib/module/common/wikidoc/assets/icon/annotation-invert.svg";
     import docLinkIcon from "$lib/module/common/wikidoc/assets/icon/doclink-invert.png";
+    import { keymap } from "prosemirror-keymap";
+    import type { Writable } from "svelte/store";
 
     interface Props {
-        mdContent: string;
         editorOption: Record<string, any>;
+        setMdContent: (value: string) => any;
     }
 
-    let { mdContent = $bindable(""), editorOption }: Props = $props();
+    let { editorOption, setMdContent }: Props = $props();
 
     let editorContainer = $state<HTMLDivElement>();
     let editor = $state<any>();
-    $effect(() => {
-        editor?.setMarkdown?.(mdContent);
-    })
+    const setEditorMarkdowns = getContext("setEditorMarkdowns") as Writable<
+        ((value: string) => any)[]
+    >;
+    setEditorMarkdowns.update((v) => [
+        ...v,
+        (value: string) => {
+            editor?.setMarkdown?.(value);
+        },
+    ]);
 
     onMount(async () => {
         //@ts-expect-error
         const Editor = (await import("@toast-ui/editor")).default;
 
         editor = new Editor({
-            initialValue: mdContent,
             el: editorContainer,
             theme: "dark",
             ...editorOption,
@@ -31,11 +38,21 @@
             editorContainer.querySelector(".toastui-editor-tabs")?.remove();
         }
         editor.addHook("change", () => {
-            mdContent = editor.getMarkdown();
+            setMdContent(editor.getMarkdown());
         });
+
+        // history 제거
+        editor.mdEditor.view.state.plugins.unshift(
+            keymap({
+                "Mod-z": () => true, // undo 무시
+                "Mod-y": () => true, // redo 무시 (Ctrl+Y)
+                "Mod-Shift-z": () => true, // redo 무시 (Cmd+Shift+Z)
+            }),
+        );
     });
 </script>
 
+<!-- svelte-ignore ownership_invalid_mutation -->
 <div class="editor-container" bind:this={editorContainer}></div>
 
 <svelte:element this={"style"}>

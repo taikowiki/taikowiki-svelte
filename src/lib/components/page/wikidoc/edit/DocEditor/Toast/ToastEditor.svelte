@@ -7,6 +7,8 @@
     import { mount, setContext } from "svelte";
     import {
         insertAnnotation,
+        insertBgColoredText,
+        insertColoredText,
         insertImage,
         insertWikiLink,
         insertYoutube,
@@ -17,6 +19,8 @@
     import WikiYoutubePopup from "./popup/WikiYoutubePopup.svelte";
     import { writable } from "svelte/store";
     import { UndoStack } from "$lib/module/common/wikidoc/util";
+    import ColorTextPopup from "./popup/ColorTextPopup.svelte";
+    import BgColorTextPopup from "./popup/BgColorTextPopup.svelte";
 
     interface Props {
         mdContent: string;
@@ -109,6 +113,44 @@
         },
     });
 
+    // colored text popup
+    const wikiColoredTextPopupContainer = document.createElement("div");
+    let wikiColoredTextProps = $state({
+        eventEmitter: null,
+    });
+    mount(ColorTextPopup, {
+        target: wikiColoredTextPopupContainer,
+        props: wikiColoredTextProps,
+        context,
+    });
+    const wikiColoredTextToolbarItem = $state({
+        name: "Colored-Text",
+        toolbar: "Insert Colored Text",
+        className: `toastui-editor-toolbar-icons doc-editor-wiki-yt`,
+        popup: {
+            body: wikiColoredTextPopupContainer,
+        },
+    });
+
+    // bg colored text popup
+    const wikiBgColoredTextPopupContainer = document.createElement("div");
+    let wikiBgColoredTextProps = $state({
+        eventEmitter: null,
+    });
+    mount(BgColorTextPopup, {
+        target: wikiBgColoredTextPopupContainer,
+        props: wikiBgColoredTextProps,
+        context,
+    });
+    const wikiBgColoredTextToolbarItem = $state({
+        name: "Background-Colored-Text",
+        toolbar: "Insert Background Colored Text",
+        className: `toastui-editor-toolbar-icons doc-editor-wiki-yt`,
+        popup: {
+            body: wikiBgColoredTextPopupContainer,
+        },
+    });
+
     // 동기화용
     const setEditorMarkdowns = writable<((value: string) => any)[]>([]);
     setContext("setEditorMarkdowns", setEditorMarkdowns);
@@ -131,7 +173,7 @@
         initialEditType: "markdown",
         initialValue: mdContent,
         toolbarItems: [
-            ["bold", "italic", "strike"],
+            ["bold", "italic", "strike", wikiColoredTextToolbarItem, wikiBgColoredTextToolbarItem],
             ["hr", "quote"],
             ["ul", "ol"],
             ["table", imageToolbarItem, "link"],
@@ -149,13 +191,29 @@
                 annotationPopupProps.eventEmitter = eventEmitter;
                 wikiLinkPopupProps.eventEmitter = eventEmitter;
                 wikiYoutubePopupProps.eventEmitter = eventEmitter;
+                wikiColoredTextProps.eventEmitter = eventEmitter;
+                wikiBgColoredTextProps.eventEmitter = eventEmitter;
+                function syncronize(v: Record<string, any>) {
+                    const p: Record<string, any> = {};
+                    Object.entries(v).forEach(([key, value]) => {
+                        p[key] = function (...args: any[]) {
+                            value(...args);
+                            $setEditorMarkdowns.forEach((fn) => {
+                                fn(mdContent);
+                            });
+                        };
+                    });
+                    return p;
+                }
                 return {
-                    markdownCommands: {
+                    markdownCommands: syncronize({
                         insertImage,
                         insertAnnotation,
                         insertWikiLink,
                         insertYoutube,
-                    },
+                        insertColoredText,
+                        insertBgColoredText
+                    }),
                 };
             },
         ],

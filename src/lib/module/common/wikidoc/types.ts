@@ -27,6 +27,10 @@ export namespace Doc {
             width: string | null;
             height: string | null;
         }
+
+        export interface ColoredTextFunctionOption{
+            color: string;
+        }
     }
     /**
      * DB에서 가져오는 데이터

@@ -23,7 +23,7 @@
     import Header from "$lib/components/layout/main/Header.svelte";
     import HeaderItem from "$lib/components/layout/main/HeaderItem.svelte";
     import Main from "$lib/components/layout/main/Main.svelte";
-    import useTheme from "$lib/module/layout/theme";
+    import useTheme, { getTheme } from "$lib/module/layout/theme";
     import { useIsMobile } from "$lib/module/layout/isMobile.js";
     import { navigating, page } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
@@ -111,7 +111,9 @@
         }
     });
 
-    docContext.getContext();
+    if(browser){
+        docContext.initContext({theme, isMobile});
+    }
 </script>
 
 <svelte:head>

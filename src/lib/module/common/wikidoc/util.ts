@@ -40,6 +40,13 @@ export function createDefaultDocData(): Doc.Data.DocData {
 }
 
 export const docContext = {
+    initContext({theme, isMobile}:{theme: Writable<'light'|'dark'>, isMobile: Writable<boolean>}){
+        const windowContext: Window['__doc__window__context__'] = new Map<string & any, any>();
+        windowContext.set('theme', theme);
+        windowContext.set('isMobile', isMobile);
+        window.__doc__window__context__ = windowContext;
+        return windowContext;
+    },
     /**
      * windowContext 반환
      * 
@@ -55,16 +62,6 @@ export const docContext = {
             windowContext = new Map<string & any, any>();
             window.__doc__window__context__ = windowContext;
         }
-
-        try {
-            if (!windowContext.has('isMobile')) {
-                windowContext.set('isMobile', getIsMobile());
-            }
-            if (!windowContext.has('theme')) {
-                windowContext.set('theme', getTheme()[0]);
-            }
-        }
-        catch { }
 
         return windowContext;
     },
@@ -146,6 +143,7 @@ import { lexer, Marked, parser, walkTokens, type Token, type TokenizerExtensionF
 import { HTMLElement, parse as parseHTML_ } from 'node-html-parser';
 import markdownEscape from 'markdown-escape';
 import { SvelteMap } from "svelte/reactivity";
+import type { Writable } from "svelte/store";
 
 function parseHTML(src: string) {
     return parseHTML_(src, {
@@ -862,6 +860,7 @@ export const renderer = {
             span.innerHTML = text.innerHTML;
             text.replaceWith(span);
             text.remove();
+            this.sanitizeText(span);
         })
     },
     /**

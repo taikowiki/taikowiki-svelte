@@ -96,6 +96,27 @@ export function insertYoutube(option: Doc.Toast.WikiYoutubePluginFunctionOption,
     return true;
 }
 
+export function insertColoredText(option: Doc.Toast.ColoredTextFunctionOption, state: any, dispatch: any, view: any){
+    const transaction: Transaction = state.tr;
+
+    transaction.insertText(`<text color="${option.color}"></text>`);
+
+    dispatch(transaction);
+    view.focus();
+
+    return true;
+}
+export function insertBgColoredText(option: Doc.Toast.ColoredTextFunctionOption, state: any, dispatch: any, view: any){
+    const transaction: Transaction = state.tr;
+
+    transaction.insertText(`<text bgcolor="${option.color}"></text>`);
+
+    dispatch(transaction);
+    view.focus();
+
+    return true;
+}
+
 function escapeBackSlash(content: string) {
     const part = content.split('\\');
     return part.join('\\\\');

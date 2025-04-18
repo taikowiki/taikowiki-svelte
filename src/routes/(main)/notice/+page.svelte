@@ -6,7 +6,7 @@
 
     let { data } = $props();
 
-    const pageNum = Number($page.url.searchParams.get("page")) || 1;
+    let pageNum = $state(Number($page.url.searchParams.get("page")) || 1);
 </script>
 
 <PageTitle title="공지" />

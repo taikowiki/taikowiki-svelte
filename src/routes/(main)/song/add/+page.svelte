@@ -6,7 +6,7 @@
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import PageTitle from '$lib/components/common/PageTitle.svelte'
 
-    let songData: SongData = {
+    let songData: SongData = $state({
         songNo: $page.url.searchParams.get("song_no") || "",
         title: "",
         titleEn: null,
@@ -77,10 +77,10 @@
             },
             ura: null,
         },
-    };
+    });
 
     const lang = getLang();
-    $: titleI18n = getI18N('other', $lang).title['/song/add']
+    let titleI18n = $derived(getI18N('other', $lang).title['/song/add']);
 </script>
 
 <PageTitle title={titleI18n}/>
@@ -88,7 +88,7 @@
 <SongEditor bind:songData />
 
 <button
-    on:click={() => {
+    onclick={() => {
         submit(songData.songNo, songData, '/song');
     }}
 >

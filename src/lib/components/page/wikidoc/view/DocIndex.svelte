@@ -64,18 +64,20 @@
         padding: 5px;
         box-sizing: border-box;
 
-        &[data-isMobile="true"]{
+        &[data-isMobile="true"] {
             border: 1px solid #cf4844;
             margin-top: 20px;
             margin-bottom: 20px;
             border-radius: 5px;
+            & .subparagraph-container {
+                padding-left: 15px;
+            }
         }
-        &[data-theme="dark"]{
+        &[data-theme="dark"] {
             border-color: #e1a743;
         }
-    }
-
-    .subparagraph-container{
-        padding-left: 3px;
+        & .subparagraph-container {
+            padding-left: 3px;
+        }
     }
 </style>

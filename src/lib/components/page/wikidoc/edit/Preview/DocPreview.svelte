@@ -1,9 +1,12 @@
 <script lang="ts">
     import { renderer } from "$lib/module/common/wikidoc/util";
-    import { defineWikiElements, isDefined } from "$lib/module/common/wikidoc/client/wikiElements.client";
+    import {
+        defineWikiElements,
+        isDefined,
+    } from "$lib/module/common/wikidoc/client/wikiElements.client";
     import { getTheme } from "$lib/module/layout/theme";
     import { docContext } from "$lib/module/common/wikidoc/util";
-    import '$lib/module/common/wikidoc/assets/docview.scss';
+    import "$lib/module/common/wikidoc/assets/docview.scss";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
     /*
@@ -14,11 +17,12 @@
 
     interface Props {
         content: string;
+        forRaw?: boolean;
     }
 
-    let { content }: Props = $props();
+    let { content, forRaw }: Props = $props();
 
-    if(!isDefined()){
+    if (!isDefined()) {
         defineWikiElements();
     }
     docContext.resetWikiDocAnnotations();
@@ -28,7 +32,7 @@
     const isMobile = getIsMobile();
 </script>
 
-<div class="doc-view-container" data-theme={$theme} data-isMobile={$isMobile}>
+<div class="doc-view-container" class:for-raw={forRaw} data-theme={$theme} data-isMobile={$isMobile}>
     {#await convertedContentPromise then convertedContent}
         {#key $theme}
             <div class="doc-view-content">
@@ -43,5 +47,9 @@
         width: 100%;
         min-height: 500px;
         border: 2px solid black;
+    }
+    .for-raw {
+        min-height: 0;
+        border: 0;
     }
 </style>

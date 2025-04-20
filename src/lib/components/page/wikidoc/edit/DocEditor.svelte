@@ -4,7 +4,9 @@
     import DocContentEditor from "./DocEditor/DocContentEditor.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import DocParagraphEditor from "./DocEditor/DocParagraphEditor.svelte";
-    import type {Doc} from '$lib/module/common/wikidoc/types';
+    import type { Doc } from "$lib/module/common/wikidoc/types";
+    import { page } from "$app/state";
+    import DocFullRawEditor from "./DocFullRawEditor.svelte";
 
     interface Props {
         wikiDoc: Doc.Data.DocData;
@@ -12,7 +14,14 @@
 
     let { wikiDoc = $bindable() }: Props = $props();
 
+    let useFullRawEditor = $derived(
+        page.url.searchParams.get("type") === "fullraw",
+    );
+    $inspect(useFullRawEditor);
+
     const [theme] = getTheme();
+
+    $inspect(wikiDoc.contentTree)
 
     //$inspect(wikiDoc);
 </script>
@@ -22,7 +31,11 @@
 
 {#snippet contentEditor()}
     {#if wikiDoc.type === "normal" || wikiDoc.type === "song"}
-        <DocContentEditor bind:content={wikiDoc.contentTree.content} />
+        {#if useFullRawEditor}
+            <DocFullRawEditor bind:contentTree={wikiDoc.contentTree} />
+        {:else}
+            <DocContentEditor bind:content={wikiDoc.contentTree.content} />
+        {/if}
     {/if}
 {/snippet}
 {#snippet subParagraphEditor()}
@@ -75,7 +88,9 @@
     <DocTitleEditor bind:title={wikiDoc.title} />
     <DocTypeSelector bind:wikiDoc />
     {@render contentEditor()}
-    {@render subParagraphEditor()}
+    {#if !useFullRawEditor}
+        {@render subParagraphEditor()}
+    {/if}
 </div>
 
 <style>
@@ -100,7 +115,7 @@
 
         row-gap: 5px;
     }
-    .subparagraph-add{
+    .subparagraph-add {
         border-radius: 5px;
         background-color: #cf4844;
         color: white;

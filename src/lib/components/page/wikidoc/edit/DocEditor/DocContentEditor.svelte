@@ -49,6 +49,7 @@
 
         this.value = before + tab + after;
         this.selectionStart = start + tab.length;
+        this.selectionEnd = this.selectionStart;
         this.focus();
         content = this.value;
         if(undoStack){

@@ -71,6 +71,9 @@
 </div>
 
 <style>
+    .paragraph-container{
+        margin-top: 10px;
+    }
     .paragraph-title {
         display: flex;
         justify-content: flex-start;

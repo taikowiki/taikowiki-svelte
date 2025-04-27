@@ -77,7 +77,7 @@
     .paragraph-title {
         display: flex;
         justify-content: flex-start;
-        align-items: center;
+        align-items: flex-start;
         column-gap: 3px;
 
         font-size: 26px;
@@ -87,6 +87,8 @@
         cursor: pointer;
 
         border-bottom: 2px solid #cf4844;
+
+        word-break: break-all;
 
         span {
             transform: translateY(-2px);

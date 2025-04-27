@@ -1,5 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DocMainSearch from "$lib/components/page/wikidoc/main/DocMainSearch.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
@@ -34,6 +35,8 @@
         )}
     </div>
 {/snippet}
+
+<PageTitle title={'문서'}/>
 <DocMainSearch />
 <div class="section-container">
     {@render docGuideView()}
@@ -84,7 +87,7 @@
 
             border-radius: 10px;
 
-            &:hover {
+            &:hover .guide-title {
                 text-decoration: underline;
             }
             &[data-theme="dark"]{

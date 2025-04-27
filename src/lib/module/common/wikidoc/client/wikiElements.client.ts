@@ -189,6 +189,39 @@ export class WikiAnnotationElement extends LitElement {
                 backdrop-filter: blur(1px);
             }
 
+            /* code */
+            code{
+                font-family: 'NanumGothicCoding';
+            }
+            :not(pre) > code{
+                background-color: rgb(226, 226, 226);
+                border-radius: 5px;
+                padding-inline: 2px;
+                font-size: 15px;
+        
+                display:inline-block;
+                padding-block: 0px !important;
+            }
+            pre > code{
+                display:block;
+                background-color: rgb(226, 226, 226);
+                padding: 10px;
+                font-size: 14px;
+            }
+            *[data-theme="dark"] :not(pre) > code{
+                background-color: rgb(62, 62, 62);
+                border-radius: 5px;
+                padding: 2px;
+                font-size: 15px;
+            }
+            *[data-theme="dark"] pre > code{
+                display:block;
+                background-color: rgb(62, 62, 62);
+                padding: 10px;
+                font-size: 14px;
+            }
+
+
             /*link*/
             a{
                 color: rgb(207, 72, 68);

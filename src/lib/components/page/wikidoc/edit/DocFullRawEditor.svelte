@@ -1,9 +1,11 @@
 <script lang="ts">
     import type { Doc } from "$lib/module/common/wikidoc/types";
-    import { UndoStack } from "$lib/module/common/wikidoc/util";
+    import { parseHTML, renderer, UndoStack } from "$lib/module/common/wikidoc/util";
     import { getTheme } from "$lib/module/layout/theme";
     import { onMount } from "svelte";
     import DocPreview from "./Preview/DocPreview.svelte";
+    import DocContentView from "../view/DocContentView.svelte";
+    import { pipe } from "$lib/module/common/util";
 
     interface Props {
         contentTree: Doc.Data.ContentTree;
@@ -34,6 +36,7 @@
 
     const [theme] = getTheme();
 
+    /** string을 contentTree로 변환 */
     function toTree(content: string) {
         const contentTree: Doc.Data.ContentTree = {
             content: "",
@@ -85,6 +88,7 @@
 
         return contentTree;
     }
+    /** contentTree를 string으로 변경 */
     function toContent(tree: Doc.Data.ContentTree) {
         let content = "";
         content += tree.content;
@@ -107,6 +111,7 @@
             });
         }
     }
+    /** textarea에서 tab을 눌렀을 때 tab문자가 추가되도록 하는 이벤트 핸들러 */
     function textAreaTabEvent(this: HTMLTextAreaElement, event: KeyboardEvent) {
         if (event.key !== "Tab") return;
         event.preventDefault();
@@ -176,11 +181,22 @@
         onkeydown={textAreaTabEvent}
     ></textarea>
 {:else}
+    {@const rendered = pipe(renderer.prerenderContentTree(contentTree), [(contentTree: Doc.Data.DocParagraph) => {
+        contentTree.content = p(contentTree.content);
+        contentTree.subParagraphs.forEach((e) => q(e));
+        return contentTree;
+        function p(html: string){
+            const dom = parseHTML(html);
+            renderer.makePreviewLinkAvailable(dom);
+            return dom.innerHTML;
+        }
+        function q(paragraph: Doc.Data.DocParagraph){
+            paragraph.content = p(paragraph.content);
+            paragraph.subParagraphs.forEach((s) => q(s))
+        }
+    }])}
     <div class="preview-container">
-        <DocPreview content={contentTree.content} forRaw={true} />
-        {#each contentTree.subParagraphs as paragraph, i}
-            {@render paragraphPreview(paragraph, (i + 1).toString(), 1)}
-        {/each}
+        <DocContentView contentTree={rendered}/>
     </div>
 {/if}
 

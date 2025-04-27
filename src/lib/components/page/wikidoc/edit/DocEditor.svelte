@@ -14,6 +14,7 @@
 
     let { wikiDoc = $bindable() }: Props = $props();
 
+    // fullraw 에디터 사용 여부
     let useFullRawEditor = $derived(
         page.url.searchParams.get("type") === "fullraw",
     );

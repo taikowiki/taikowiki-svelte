@@ -145,7 +145,7 @@ import markdownEscape from 'markdown-escape';
 import { SvelteMap } from "svelte/reactivity";
 import type { Writable } from "svelte/store";
 
-function parseHTML(src: string) {
+export function parseHTML(src: string) {
     return parseHTML_(src, {
         voidTag: {
             tags: ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr', 'style-table', 'style-cell', 'style-row', 'style-col']

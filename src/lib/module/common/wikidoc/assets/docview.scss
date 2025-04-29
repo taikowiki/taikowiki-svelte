@@ -65,7 +65,8 @@
         padding-inline: 2px;
         font-size: 15px;
 
-        display:inline-block;
+        display:inline-flex;
+        align-items: center;
         padding-block: 0px !important;
     }
     pre > code{
@@ -136,6 +137,9 @@
         filter: brightness(0) saturate(100%) invert(81%) sepia(5%) saturate(7020%) hue-rotate(340deg) brightness(100%) contrast(77%);
     }
 
+    code{
+        color:white;
+    }
     //코드
     :not(pre) > code{
         background-color: rgb(62, 62, 62);

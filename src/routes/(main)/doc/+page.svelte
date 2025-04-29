@@ -92,7 +92,7 @@
             }
             &[data-theme="dark"]{
                 color: white;
-                box-shadow: 0px 0px 3px black;
+                box-shadow: 0px 0px 3px rgb(151, 151, 151);
             }
             &[data-isMobile="true"]{
                 width: 100%;

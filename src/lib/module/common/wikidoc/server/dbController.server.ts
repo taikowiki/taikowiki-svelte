@@ -400,12 +400,15 @@ export const docDBController = {
 
         const searchQuery =
             queryBuilder.union([
+                //@ts-expect-error
                 queryBuilder
                     .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
                     .where(Where.Compare('title', '=', query)),
+                //@ts-expect-error
                 queryBuilder
                     .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
                     .where(Where.Like('title', `%${query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%')}%`)),
+                //@ts-expect-error
                 queryBuilder
                     .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
                     .where(Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`))
@@ -428,6 +431,30 @@ export const docDBController = {
             return {
                 count, searchResults
             }
+        }
+    }),
+    /**
+     * 문서를 완전히 삭제함
+     */
+    hardDelete: defineDBHandler<[docId: number], boolean>((id) => {
+        return async(run) => {
+            const result = await run(queryBuilder.select('docs', [Select.As(Select.Count(), 'COUNT')]).where(Where.Compare('id', '=', id)).build());
+            if(result[0].COUNT === 0){
+                return false;
+            }
+
+            const moveQuery = 
+                queryBuilder
+                .insert('docs/log')
+                .from(
+                    ['id', 'title', 'type', 'editableGrade', 'editorUUID', 'editorIp', 'comment', 'contentTree', 'renderedContentTree', 'flattenedContent', 'songNo', 'redirectTo', 'createdTime', 'editedTime', 'isDeleted', 'version', 'diffIncrease', 'diffDecrease'],
+                    queryBuilder.select('docs').where(Where.Compare('id', '=', id))
+                )
+                .build()
+                
+            await run(moveQuery);
+            await run("DELETE FROM `docs` WHERE `id` = ?", [id]);
+            return true;
         }
     })
 } as const;

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import { docAdminRequestor } from "$lib/module/common/wikidoc/client/requestor.client";
     import { DateTime } from "luxon";
 
@@ -46,6 +47,22 @@
         if (response.status === "success") {
             alert("삭제되었습니다.");
             isDeleted = true;
+        } else if (response.statusCode === 403) {
+            alert("권한이 없습니다.");
+        } else {
+            alert("오류가 발생했습니다.");
+        }
+    }
+
+    async function hardDeleteDoc() {
+        if (!confirm("문서를 완전히 삭제하시겠습니까?")) {
+            return;
+        }
+
+        const response = await docAdminRequestor.hardDelete(id);
+        if (response.status === "success") {
+            alert("삭제되었습니다.");
+            await goto(`/doc`);
         } else if (response.statusCode === 403) {
             alert("권한이 없습니다.");
         } else {
@@ -124,6 +141,9 @@
             <th>
                 {isDeleted ? "문서 복구" : "문서 삭제"}
             </th>
+            <th>
+                완전 삭제
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -160,6 +180,15 @@
                         삭제하기
                     </button>
                 {/if}
+            </th>
+            <th>
+                <button
+                        onclick={() => {
+                            hardDeleteDoc();
+                        }}
+                    >
+                        완전 삭제하기
+                    </button>
             </th>
         </tr>
     </tbody>

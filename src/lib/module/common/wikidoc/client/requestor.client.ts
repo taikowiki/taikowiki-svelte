@@ -65,5 +65,15 @@ export const docAdminRequestor = {
         });
 
         return await handler({grade})
+    },
+    hardDelete: async(id: number) => {
+        const url = `/admin/api/doc/${id}/harddelete`;
+
+        const handler = defineRequestHandler({
+            url,
+            method: 'delete'
+        });
+
+        return await handler(null);
     }
 } as const;

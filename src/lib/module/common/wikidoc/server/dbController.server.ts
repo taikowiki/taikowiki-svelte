@@ -5,6 +5,7 @@ import { renderer } from "../util.js";
 import { songDBController } from "../../song/song.server.js";
 import { sqlString, sqlEscapeString, sqlEscapeLike } from "../../util.js";
 import * as Diff from 'diff';
+import type { SearchResult } from "../../search/types.js";
 
 export const docDBController = {
     /**
@@ -388,14 +389,17 @@ export const docDBController = {
             return result[0].editableGrade;
         }
     }),
-    search: defineDBHandler<[query: string, offset:number, limit: number], {count: number, searchResults: Pick<Doc.DB.DocDBData, 'title' | 'flattenedContent' | 'type' | 'songNo' | 'redirectTo'>[]}>((query, offset, limit) => {
+    search: defineDBHandler<[query: string, offset: number, limit: number], { count: number, searchResults: Pick<Doc.DB.DocDBData, 'title' | 'flattenedContent' | 'type' | 'songNo' | 'redirectTo'>[] }>((query, offset, limit) => {
         const countQuery =
             queryBuilder
                 .select('docs', [Select.Count()])
-                .where(Where.OR(
-                    Where.Like('title', `%${query}%`),
-                    Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`)
-                ))
+                .where(
+                    Where.OR(
+                        Where.Like('title', `%${query}%`),
+                        Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`)
+                    ),
+                    Where.Compare('isDeleted', '=', 0)
+                )
                 .build()
 
         const searchQuery =
@@ -403,24 +407,33 @@ export const docDBController = {
                 //@ts-expect-error
                 queryBuilder
                     .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
-                    .where(Where.Compare('title', '=', query)),
+                    .where(
+                        Where.Compare('title', '=', query),
+                        Where.Compare('isDeleted', '=', 0)
+                    ),
                 //@ts-expect-error
                 queryBuilder
                     .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
-                    .where(Where.Like('title', `%${query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%')}%`)),
+                    .where(
+                        Where.Like('title', `%${query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%')}%`),
+                        Where.Compare('isDeleted', '=', 0)
+                    ),
                 //@ts-expect-error
                 queryBuilder
                     .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
-                    .where(Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`))
+                    .where(
+                        Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`),
+                        Where.Compare('isDeleted', '=', 0)
+                    )
             ]).build() + ` LIMIT ${offset}, ${limit}`;
-        
-        return async(run) => {
+
+        return async (run) => {
             const r1 = await run(countQuery)
             const count = Object.values(r1[0])[0] as number;
 
-            if(count === 0){
+            if (count === 0) {
                 return {
-                    count, 
+                    count,
                     searchResults: []
                 }
             }
@@ -437,24 +450,43 @@ export const docDBController = {
      * 문서를 완전히 삭제함
      */
     hardDelete: defineDBHandler<[docId: number], boolean>((id) => {
-        return async(run) => {
+        return async (run) => {
             const result = await run(queryBuilder.select('docs', [Select.As(Select.Count(), 'COUNT')]).where(Where.Compare('id', '=', id)).build());
-            if(result[0].COUNT === 0){
+            if (result[0].COUNT === 0) {
                 return false;
             }
 
-            const moveQuery = 
+            const moveQuery =
                 queryBuilder
-                .insert('docs/log')
-                .from(
-                    ['id', 'title', 'type', 'editableGrade', 'editorUUID', 'editorIp', 'comment', 'contentTree', 'renderedContentTree', 'flattenedContent', 'songNo', 'redirectTo', 'createdTime', 'editedTime', 'isDeleted', 'version', 'diffIncrease', 'diffDecrease'],
-                    queryBuilder.select('docs').where(Where.Compare('id', '=', id))
-                )
-                .build()
-                
+                    .insert('docs/log')
+                    .from(
+                        ['id', 'title', 'type', 'editableGrade', 'editorUUID', 'editorIp', 'comment', 'contentTree', 'renderedContentTree', 'flattenedContent', 'songNo', 'redirectTo', 'createdTime', 'editedTime', 'isDeleted', 'version', 'diffIncrease', 'diffDecrease'],
+                        queryBuilder.select('docs').where(Where.Compare('id', '=', id))
+                    )
+                    .build()
+
             await run(moveQuery);
             await run("DELETE FROM `docs` WHERE `id` = ?", [id]);
             return true;
+        }
+    }),
+    /**
+     * 메인 페이지 등에서 사용하는 퀵서치
+     */
+    quickSearch: defineDBHandler<[keyword: string]>((keyword) => {
+        return async (run) => {
+            const query = queryBuilder.select('docs', ['title']).where(
+                Where.Like('title', `%${keyword.split(' ').map(e => sqlEscapeLike(e)).join('%')}%`),
+                Where.Compare('isDeleted', '=', 0)
+            ).limit(20).build()
+            docDBController
+
+            const searchResult: SearchResult[] = (await run(query)).map((e: any) => ({
+                title: e.title as string,
+                type: 'docs'
+            }));
+
+            return searchResult;
         }
     })
 } as const;

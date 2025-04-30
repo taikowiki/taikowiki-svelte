@@ -23,6 +23,11 @@
         }
     });
 
+    /**
+     * 일치하는 부분 미리보기
+     * @param flattenedContent
+     * @param query
+     */
     function extractAccording(flattenedContent: string, query: string) {
         type P = {
             type: "normal" | "strong";

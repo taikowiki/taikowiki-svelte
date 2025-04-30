@@ -109,7 +109,7 @@ export namespace Doc {
         // controller Return Type
         export namespace ControllerReturnTypes {
             export type getLogData = {
-                logs: (Pick<Doc.DB.DocDBData, 'title' | 'version' | 'editedTime' | 'comment' | 'diffDecrease' | 'diffIncrease'> & { editor: string })[];
+                logs: (Pick<Doc.DB.DocDBData, 'title' | 'version' | 'editedTime' | 'comment' | 'diffDecrease' | 'diffIncrease'> & { editor: string, uuid: string })[];
                 current: getLogData["logs"][number] | null;
             }
         }

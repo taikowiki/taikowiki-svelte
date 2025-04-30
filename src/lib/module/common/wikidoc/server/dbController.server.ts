@@ -230,7 +230,8 @@ export const docDBController = {
                     comment: log.comment,
                     diffDecrease: log.diffDecrease,
                     diffIncrease: log.diffIncrease,
-                    editor: log.editorUUID ? (uuidRecord[log.editorUUID] ?? log.editorUUID) : log.editorIp
+                    editor: log.editorUUID ? (uuidRecord[log.editorUUID] ?? log.editorUUID) : log.editorIp,
+                    uuid: log.editorUUID ?? log.editorIp
                 }
             });
 
@@ -243,13 +244,19 @@ export const docDBController = {
                     comment: current.comment,
                     diffDecrease: current.diffDecrease,
                     diffIncrease: current.diffIncrease,
-                    editor: current.editorUUID ? (uuidRecord[current.editorUUID] ?? current.editorUUID) : current.editorIp
+                    editor: current.editorUUID ? (uuidRecord[current.editorUUID] ?? current.editorUUID) : current.editorIp,
+                    uuid: current.editorUUID ?? current.editorIp
                 }
             }
         }
     }),
     getPast: defineDBHandler<[id: number, version: number], Pick<Doc.DB.DocDBData, 'id' | 'contentTree' | 'editedTime' | 'editableGrade' | 'editorUUID' | 'id' | 'isDeleted' | 'renderedContentTree' | 'songNo' | 'title' | 'redirectTo' | 'type' | 'version' | 'comment'> | null>((id, version) => {
         return async (run) => {
+            const current = await run("SELECT COUNT(*) AS COUNT FROM `docs` WHERE `id` = ?", [id]);
+            if(current[0].COUNT === 0){
+                return null;
+            }
+
             const r = await run("SELECT `id`, `contentTree`, `editedTime`, `editableGrade`, `editorUUID`, `id`, `isDeleted`, `renderedContentTree`, `songNo`, `title`, `redirectTo`, `type`, `version`, `comment` FROM `docs/log` WHERE `id` = ? AND `version` = ? LIMIT 0, 1", [id, version]);
             if (r.length === 0) {
                 return null;
@@ -479,7 +486,6 @@ export const docDBController = {
                 Where.Like('title', `%${keyword.split(' ').map(e => sqlEscapeLike(e)).join('%')}%`),
                 Where.Compare('isDeleted', '=', 0)
             ).limit(20).build()
-            docDBController
 
             const searchResult: SearchResult[] = (await run(query)).map((e: any) => ({
                 title: e.title as string,

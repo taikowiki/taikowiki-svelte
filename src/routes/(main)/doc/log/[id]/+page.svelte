@@ -45,7 +45,7 @@
                 {/if}
             </div>
         {/if}
-        <div class="log-editor">
+        <div class="log-editor" title={log.uuid}>
             {log.editor}
         </div>
         {#if log.comment}

@@ -28,7 +28,7 @@
         if (response.status === "success") {
             await goto(`/doc/r/${encodeURIComponent(wikiDoc.title)}`);
         } else {
-            console.log(response);
+            //console.log(response);
             alert(getErrorMsg(response.reason));
             disabled = false;
         }
@@ -52,7 +52,7 @@
         if (response.status === "success") {
             await goto(`/doc/r/${encodeURIComponent(wikiDoc.title)}`);
         } else {
-            console.log(response);
+            //console.log(response);
             alert(getErrorMsg(response.reason));
             disabled = false;
         }

@@ -16,7 +16,7 @@
                 node.querySelectorAll(".div-td:nth-child(2)").forEach((td) => {
                     (td as HTMLElement).style.borderBottom = `0`;
                 });
-                console.log(node);
+                //console.log(node);
                 node.style.borderBottom = "1px solid #1c1c1c";
 
             } else {

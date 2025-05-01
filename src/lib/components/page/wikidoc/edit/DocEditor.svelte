@@ -18,11 +18,11 @@
     let useFullRawEditor = $derived(
         page.url.searchParams.get("type") === "fullraw",
     );
-    $inspect(useFullRawEditor);
+    //$inspect(useFullRawEditor);
 
     const [theme] = getTheme();
 
-    $inspect(wikiDoc.contentTree)
+    //$inspect(wikiDoc.contentTree)
 
     //$inspect(wikiDoc);
 </script>

@@ -4,6 +4,7 @@
     import DocLogBtn from "../../wikidoc/view/DocView/DocLogBtn.svelte";
     import { page } from "$app/state";
     import DocAdminBtn from "./DocView/DocAdminBtn.svelte";
+    import { getIsMobile } from "$lib/module/layout/isMobile";
 
     interface Props {
         id: number;
@@ -15,27 +16,34 @@
     let { id, title, editedTime, canEditable, version }: Props = $props();
 
     let isAdmin = $derived<boolean>(page.data.isAdmin);
+
+    const isMobile = getIsMobile();
 </script>
 
 <h1 class="container">
     <div class="title">
         {title}
     </div>
-    <div class="title-others">
+    <div class="title-others" data-isMobile={$isMobile}>
         <div class="icon-container">
             {#if canEditable}
-                <DocEditBtn {id} {title} {version}/>
+                <DocEditBtn {id} {title} {version} />
             {/if}
             <DocLogBtn {id} />
             {#if isAdmin}
-                <DocAdminBtn {id}/>
+                <DocAdminBtn {id} />
             {/if}
         </div>
         <div class="title-date">
-            최근 수정 시각:
-            {DateTime.fromJSDate(editedTime, {
-                zone: "Asia/Seoul",
-            }).toFormat("yyyy-MM-dd")}
+            <div>최근 수정 시각:</div>
+            <div>
+                {DateTime.fromJSDate(editedTime, {
+                    zone: "Asia/Seoul",
+                }).toFormat("yyyy-MM-dd")}
+            </div>
+        </div>
+        <div class="id">
+            문서 Id: {id}
         </div>
     </div>
 </h1>
@@ -76,10 +84,18 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+
+        &[data-isMobile="true"] {
+            max-width: 132px;
+        }
     }
-    .title-date {
+    .title-date, .id {
         color: gray;
         font-weight: normal;
         font-size: 13px;
+
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
     }
 </style>

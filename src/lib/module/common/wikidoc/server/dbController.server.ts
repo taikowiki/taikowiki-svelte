@@ -500,21 +500,21 @@ export const docDBController = {
             const query1 = queryBuilder
                             .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
                             .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
-                            .orderby('editedTime', 'desc')
+                            .orderby('createdTime', 'desc')
                             .limit(0, 5)
                             .build();
             const result1 = await run(query1);
-            const recentlyEditedDocs = result1.map((e: any) => parseDBData(e));
+            const recentlyCreatedDocs = result1.map((e: any) => parseDBData(e));
 
             const query2 = queryBuilder
                             .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
                             .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
-                            .where(...recentlyEditedDocs.map((e: any) => Where.Raw(`\`id\` != ${e.id}`)))
-                            .orderby('createdTime', 'desc')
+                            .where(...recentlyCreatedDocs.map((e: any) => Where.Raw(`\`id\` != ${e.id}`)))
+                            .orderby('editedTime', 'desc')
                             .limit(0, 5)
                             .build();
             const result2 = await run(query2);
-            const recentlyCreatedDocs = result2.map((e: any) => parseDBData(e));
+            const recentlyEditedDocs = result2.map((e: any) => parseDBData(e));
 
             console.log(query1, query2);
 

@@ -1,7 +1,9 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
+    import { DateTime } from "luxon";
     import DocEditBtn from "../../wikidoc/view/DocView/DocEditBtn.svelte";
     import DocLogBtn from "../../wikidoc/view/DocView/DocLogBtn.svelte";
+    import { getIsMobile } from "$lib/module/layout/isMobile";
 
     interface Props {
         title: string;
@@ -10,12 +12,14 @@
             id: number;
             title: string;
             canEditable: boolean;
+            editedTime: Date;
         } | null;
     }
 
     let { title, songNo, docData }: Props = $props();
 
     const [theme] = getTheme();
+    const isMobile = getIsMobile();
 </script>
 
 {#snippet docEdit()}
@@ -24,6 +28,23 @@
             <DocEditBtn id={docData.id} title={docData.title} />
         {/if}
         <DocLogBtn id={docData.id} />
+    {/if}
+{/snippet}
+{#snippet docDataView()}
+    {#if docData}
+        <div class="doc-data" data-isMobile={$isMobile}>
+            <div class="title-date">
+                <div>최근 수정 시각:</div>
+                <div>
+                    {DateTime.fromJSDate(docData.editedTime, {
+                        zone: "Asia/Seoul",
+                    }).toFormat("yyyy-MM-dd")}
+                </div>
+            </div>
+            <div class="id">
+                문서 Id: {docData.id}
+            </div>
+        </div>
     {/if}
 {/snippet}
 {#snippet youtube()}
@@ -46,10 +67,13 @@
     <div class="title">
         {title}
     </div>
-    <div class="icon-container">
-        {@render youtube()}
-        {@render edit()}
-        {@render docEdit()}
+    <div class="right">
+        <div class="icon-container">
+            {@render youtube()}
+            {@render edit()}
+            {@render docEdit()}
+        </div>
+        {@render docDataView()}
     </div>
 </h1>
 
@@ -77,6 +101,11 @@
         word-break: break-all;
     }
 
+    .right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
     .icon-container {
         display: flex;
         flex-direction: row;
@@ -105,5 +134,24 @@
     }
     .icon-anchor[data-theme="dark"] {
         background-color: #1c1c1c;
+    }
+
+    .doc-data {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        &[data-isMobile="true"] {
+            max-width: 132px;
+        }
+    }
+    .title-date, .id {
+        color: gray;
+        font-weight: normal;
+        font-size: 13px;
+
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
     }
 </style>

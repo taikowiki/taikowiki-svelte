@@ -68,7 +68,7 @@
         if (diff < hour) {
             return `${Math.floor(diff / min)}분 전`;
         } else if (diff < day) {
-            return `${Math.floor(diff / hour)}분 전`;
+            return `${Math.floor(diff / hour)}시간 전`;
         } else if (diff < 2 * day) {
             return `어제`;
         } else {

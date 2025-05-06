@@ -500,6 +500,7 @@ export const docDBController = {
             const query1 = queryBuilder
                             .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
                             .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
+                            .where(Where.NotNull('docs.id'))
                             .orderby('createdTime', 'desc')
                             .limit(0, 5)
                             .build();
@@ -509,14 +510,12 @@ export const docDBController = {
             const query2 = queryBuilder
                             .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
                             .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
-                            .where(...recentlyCreatedDocs.map((e: any) => Where.Raw(`\`id\` != ${e.id}`)))
+                            .where(...recentlyCreatedDocs.map((e: any) => Where.Raw(`\`id\` != ${e.id}`)), Where.NotNull('docs.id'))
                             .orderby('editedTime', 'desc')
                             .limit(0, 5)
                             .build();
             const result2 = await run(query2);
             const recentlyEditedDocs = result2.map((e: any) => parseDBData(e));
-
-            console.log(query1, query2);
 
             return {
                 recentlyCreatedDocs,

@@ -56,7 +56,7 @@
     $effect(() => {
         if (browser && $docReady && contentDiv) {
             contentDiv.querySelectorAll("pre > code").forEach((codeElement) => {
-                if(codeElement.classList.length > 0){
+                if (codeElement.classList.length > 0) {
                     hljs.highlightElement(codeElement as HTMLElement);
                 }
             });
@@ -102,13 +102,11 @@
     const isMobile = getIsMobile();
 </script>
 
-<svelte:element this={"style"}>
-    {#if $theme === "light"}
-        {@html hljsLightStyle}
-    {:else}
-        {@html hljsDarkStyle}
-    {/if}
-</svelte:element>
+{#if $theme === "light"}
+    {@html `<style>${hljsLightStyle}</style>`}
+{:else}
+    {@html `<style>${hljsDarkStyle}</style>`}
+{/if}
 {#key browser}
     {#await wikiElementsDefined}
         <Loading />

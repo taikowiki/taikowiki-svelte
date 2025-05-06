@@ -58,7 +58,7 @@
         | "editorIp"
         | "createdTime"
         | "editedTime"
-    >,
+    > & {nickname: string | null},
 )}
     {@const getTimeDiff = () => {
         const min = 60 * 1000;
@@ -79,7 +79,7 @@
         <div class="left">
             <div class="title">{doc.title}</div>
             <div class="editor">
-                {doc.editorUUID ?? doc.editorIp}에 의해 수정됨
+                {doc.nickname ?? doc.editorUUID ?? doc.editorIp}에 의해 수정됨
             </div>
         </div>
         <div class="right">

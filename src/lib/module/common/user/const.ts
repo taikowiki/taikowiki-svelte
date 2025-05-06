@@ -12,14 +12,16 @@ export const TIER_COLOR = {
     pearl: "#e0d7ad"
 } as const;
 
+export const TIER_INTERVAL = 2150;
+export const GRADE_INTERVAL = TIER_INTERVAL / 5; 
 export const TIER_BORDER: Record<UserRatingTierName, number> = {
-    omega: 13530,
-    grandmaster: 13079,
-    master: 12628,
-    sapphire: 11275,
-    ruby: 9020,
-    gold: 6765,
-    silver: 4510,
-    bronze: 2255,
+    omega: TIER_INTERVAL * 6, //패치 이전: 13530
+    grandmaster: TIER_INTERVAL * 5 + GRADE_INTERVAL * 4, //패치 이전: 13079
+    master: TIER_INTERVAL * 5 + GRADE_INTERVAL * 3, //패치 이전:  12628
+    sapphire: TIER_INTERVAL * 5, //패치 이전: 11275
+    ruby: TIER_INTERVAL * 4, //패치 이전: 9020
+    gold: TIER_INTERVAL * 3, //패치 이전: 6765
+    silver: TIER_INTERVAL * 2, //패치 이전: 4510
+    bronze: TIER_INTERVAL * 1, //패치 이전: 2255
     pearl: 0
 } as const;

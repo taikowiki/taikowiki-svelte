@@ -1,16 +1,31 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
+    import DocEditBtn from "../../wikidoc/view/DocView/DocEditBtn.svelte";
+    import DocLogBtn from "../../wikidoc/view/DocView/DocLogBtn.svelte";
 
     interface Props {
         title: string;
         songNo: string;
+        docData: {
+            id: number;
+            title: string;
+            canEditable: boolean;
+        } | null;
     }
 
-    let { title, songNo }: Props = $props();
+    let { title, songNo, docData }: Props = $props();
 
     const [theme] = getTheme();
 </script>
 
+{#snippet docEdit()}
+    {#if docData}
+        {#if docData.canEditable}
+            <DocEditBtn id={docData.id} title={docData.title} />
+        {/if}
+        <DocLogBtn id={docData.id} />
+    {/if}
+{/snippet}
 {#snippet youtube()}
     <a
         class="icon-anchor"
@@ -34,6 +49,7 @@
     <div class="icon-container">
         {@render youtube()}
         {@render edit()}
+        {@render docEdit()}
     </div>
 </h1>
 

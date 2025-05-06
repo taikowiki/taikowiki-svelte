@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { getContext, onMount, type Snippet } from "svelte";
-    import type { Writable } from "svelte/store";
+    import { getContext, mount, onDestroy, onMount, unmount, type Snippet } from "svelte";
     import AsideItem from "./AsideItem.svelte";
+    import { get, type Writable } from "svelte/store";
 
     interface Props {
         title?: string;
@@ -11,42 +11,27 @@
         children?: Snippet;
     }
 
-    let {
-        title = "",
-        titleHref = "",
-        align = "center",
-        icon = "",
-        children,
-    }: Props = $props();
+    let props: Props = $props();
 
-    const pageAsideRootStore = getContext("pageAside") as Writable<HTMLDivElement | null>;
-    let pageAsideRoot = $state.raw($pageAsideRootStore);
-    $effect(() => {
-        if(!pageAsideRoot){
-            pageAsideRoot = $pageAsideRootStore;
-        }
+    let wrapper = $state<HTMLElement>();
+    let asideItem = $state<AsideItem>();
+    onMount(() => {
+        let _aside = getContext('asideElement') as Writable<HTMLElement>;
+        const aside = get(_aside);
+        if(!aside) return;
+        wrapper = document.createElement('div');
+        asideItem = mount(AsideItem, {
+            target: wrapper,
+            props
+        });
+        aside.prepend(wrapper);
     })
-    let wrapper: HTMLDivElement;
-
-    let isPageAsideRootExists = $derived(pageAsideRoot !== null);
-    $effect(() => {
-        if(isPageAsideRootExists && wrapper){
-            (pageAsideRoot as HTMLDivElement).innerHTML = "";
-            (pageAsideRoot as HTMLDivElement).appendChild(wrapper);
+    onDestroy(() => {
+        if(asideItem){
+            unmount(asideItem);
+        }
+        if(wrapper){
+            wrapper.remove();
         }
     })
 </script>
-
-<div class="container">
-    <div class="wrapper" bind:this={wrapper}>
-        <AsideItem {title} {titleHref} {align} {icon}>
-            {@render children?.()}
-        </AsideItem>
-    </div>
-</div>
-
-<style>
-    .container {
-        display: none;
-    }
-</style>

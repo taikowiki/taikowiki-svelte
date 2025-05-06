@@ -11,6 +11,7 @@ export async function load(event) {
         logined: !!locals.userData,
         nickname: !!locals.userData ? locals.userData.nickname : getClientAddress(event),
     };
+    const isAdmin = locals.userData ? locals.userData.grade >= 9 : false;
 
     // Use UA to know if the device is mobile.
     let isMobile = false;
@@ -53,5 +54,6 @@ export async function load(event) {
         isBot,
         theme,
         asideBanners,
+        isAdmin
     };
 }

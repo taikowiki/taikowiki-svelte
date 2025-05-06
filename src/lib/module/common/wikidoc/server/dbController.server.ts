@@ -500,7 +500,7 @@ export const docDBController = {
             const query1 = queryBuilder
                             .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
                             .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
-                            .where(Where.NotNull('docs.id'))
+                            .where(Where.NotNull('docs.id'), Where.Compare('docs.version', '=', 1))
                             .orderby('createdTime', 'desc')
                             .limit(0, 5)
                             .build();

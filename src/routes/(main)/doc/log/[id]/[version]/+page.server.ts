@@ -4,6 +4,7 @@ import type { Doc } from "$lib/module/common/wikidoc/types.js";
 import { renderer } from "$lib/module/common/wikidoc/util";
 import { error } from "@sveltejs/kit";
 import { queryBuilder, runQuery, Where } from "@yowza/db-handler";
+import type { QueryFunction } from "@yowza/db-handler/types";
 import type { HTMLElement } from "node-html-parser";
 
 export async function load({ params, locals }) {
@@ -22,10 +23,7 @@ export async function load({ params, locals }) {
             };
         }
 
-        const preparedContent: Doc.Data.ContentTree = {
-            content: await renderer.prepareView(pastDoc.renderedContentTree?.content as string, async(dom: HTMLElement) => {await setWikiLinkAvailable(dom, run)}),
-            subParagraphs: await prepareParagraphs(pastDoc.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[], run)
-        };
+        const preparedContent: Doc.Data.ContentTree = await getPreparedContent(pastDoc, run);
 
         const query = queryBuilder.select('docs', ['editableGrade']).where(Where.Compare('id', '=', id)).build();
         const r = await run(query);
@@ -48,5 +46,18 @@ export async function load({ params, locals }) {
     return {
         docData,
         canEditable: locals.userData ? locals.userData.grade >= editableGrade : false
+    }
+}
+
+async function getPreparedContent(pastDoc: Pick<Doc.DB.DocDBData, 'renderedContentTree' | 'type' | 'redirectTo'>, run: QueryFunction){
+    if(pastDoc.type === "redirect"){
+        return {
+            content: ``,
+            subParagraphs: []
+        }
+    }
+    return {
+        content: await renderer.prepareView(pastDoc.renderedContentTree?.content as string, async(dom: HTMLElement) => {await setWikiLinkAvailable(dom, run)}),
+        subParagraphs: await prepareParagraphs(pastDoc.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[], run)
     }
 }

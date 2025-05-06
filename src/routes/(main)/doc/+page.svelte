@@ -75,7 +75,7 @@
             return `${Math.floor(diff / day)}일 전`;
         }
     }}
-    <a class="recent-doc" href={`/doc/r/${doc.title}`}>
+    <a class="recent-doc" href={`/doc/r/${doc.title}`} data-theme={$theme}>
         <div class="left">
             <div class="title">{doc.title}</div>
             <div class="editor">
@@ -165,7 +165,7 @@
             &[data-theme="dark"] {
                 color: white;
                 box-shadow: 0px 0px 3px rgb(151, 151, 151);
-                background-color: #1c1c1c;
+                /*background-color: #1c1c1c;*/
             }
             &[data-isMobile="true"] {
                 width: 100%;
@@ -184,7 +184,7 @@
         flex-direction: column;
         align-items: flex-start;
 
-        row-gap: 5px;
+        row-gap: 8px;
     }
 
     .recent-doc {
@@ -202,21 +202,29 @@
 
         color: inherit;
 
-        & .title, & .editor, & .date{
+        & .title,
+        & .editor,
+        & .date {
             transform: translateY(-1px);
         }
 
-        & .title{
+        & .title {
             font-weight: 500;
         }
 
-        & .editor, & .date{
+        & .editor,
+        & .date {
             font-size: 13px;
             color: gray;
         }
 
-        &:hover .title{
+        &:hover .title {
             text-decoration: underline;
+        }
+
+        &[data-theme="dark"] {
+            box-shadow: 0px 0px 3px rgb(151, 151, 151);
+            /*background-color: #1c1c1c;*/
         }
     }
 </style>

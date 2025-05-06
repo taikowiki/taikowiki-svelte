@@ -92,7 +92,7 @@ export const docDBController = {
                 throw new WikiError("ID_NOT_EXISTS");
             }
             const oldVersion = result[0].version as number;
-            const oldFlattenedContent = result[0].flattenedContent as string;
+            const oldFlattenedContent = result[0].flattenedContent ?? '' as string;
 
             // 제목 비어있는지 검사
             if (!docData.title) {

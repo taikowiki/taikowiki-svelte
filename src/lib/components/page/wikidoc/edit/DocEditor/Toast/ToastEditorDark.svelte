@@ -55,8 +55,7 @@
 <!-- svelte-ignore ownership_invalid_mutation -->
 <div class="editor-container" bind:this={editorContainer}></div>
 
-<svelte:element this={"style"}>
-    {`
+{@html `<style>
     .toastui-editor-dark .doc-editor-annot{
         background-image: url("${annotationIcon}");
         background-size: 60%;
@@ -74,9 +73,9 @@
         background-size: 60%;
         background-position: calc(50% + 1px) calc(50% - 1px);
         background-repeat: no-repeat;
-    }
-    `}
-</svelte:element>
+    }</style>
+    `
+}
 
 <style>
     .editor-container {

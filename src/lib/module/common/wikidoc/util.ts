@@ -1,5 +1,3 @@
-import { getIsMobile } from "$lib/module/layout/isMobile.js";
-import { getTheme } from "$lib/module/layout/theme.js";
 import type { Doc } from '$lib/module/common/wikidoc/types';
 import { CSSStyleDeclaration } from 'cssom';
 

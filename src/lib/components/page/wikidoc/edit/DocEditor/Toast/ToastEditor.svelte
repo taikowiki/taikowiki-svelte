@@ -21,6 +21,8 @@
     import { UndoStack } from "$lib/module/common/wikidoc/util";
     import ColorTextPopup from "./popup/ColorTextPopup.svelte";
     import BgColorTextPopup from "./popup/BgColorTextPopup.svelte";
+    import textColorIcon from "$lib/module/common/wikidoc/assets/icon/text-color.svg";
+    import bgColorIcon from "$lib/module/common/wikidoc/assets/icon/bg-color.svg";
 
     interface Props {
         mdContent: string;
@@ -126,7 +128,7 @@
     const wikiColoredTextToolbarItem = $state({
         name: "Colored-Text",
         toolbar: "Insert Colored Text",
-        className: `toastui-editor-toolbar-icons doc-editor-wiki-yt`,
+        className: `toastui-editor-toolbar-icons doc-editor-text-color`,
         popup: {
             body: wikiColoredTextPopupContainer,
         },
@@ -145,7 +147,7 @@
     const wikiBgColoredTextToolbarItem = $state({
         name: "Background-Colored-Text",
         toolbar: "Insert Background Colored Text",
-        className: `toastui-editor-toolbar-icons doc-editor-wiki-yt`,
+        className: `toastui-editor-toolbar-icons doc-editor-bg-color`,
         popup: {
             body: wikiBgColoredTextPopupContainer,
         },
@@ -173,7 +175,13 @@
         initialEditType: "markdown",
         initialValue: mdContent,
         toolbarItems: [
-            ["bold", "italic", "strike", wikiColoredTextToolbarItem, wikiBgColoredTextToolbarItem],
+            [
+                "bold",
+                "italic",
+                "strike",
+                wikiColoredTextToolbarItem,
+                wikiBgColoredTextToolbarItem,
+            ],
             ["hr", "quote"],
             ["ul", "ol"],
             ["table", imageToolbarItem, "link"],
@@ -212,7 +220,7 @@
                         insertWikiLink,
                         insertYoutube,
                         insertColoredText,
-                        insertBgColoredText
+                        insertBgColoredText,
                     }),
                 };
             },
@@ -244,14 +252,45 @@
             },
         },
     };
+
+    $effect(() => {
+        $theme;
+        editorOption.initialValue = mdContent;
+    });
 </script>
 
+{@html `<style>
+    .doc-editor-text-color{
+        background-image: url("${textColorIcon}");
+        background-size: 50%;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-position-y: 50% !important;
+    }
+    .doc-editor-bg-color{
+        background-image: url("${bgColorIcon}");
+        background-size: 65%;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-position-y: 50% !important;
+    }</style>`}
+
+{#if show}
+    {#if $theme === "light"}
+        <ToastEditorLight {editorOption} {setMdContent} />
+    {:else}
+        <ToastEditorDark {editorOption} {setMdContent} />
+    {/if}
+{/if}
+
+<!--
 <div class="container" class:show={show && $theme === "light"}>
     <ToastEditorLight {editorOption} {setMdContent} />
 </div>
 <div class="container" class:show={show && $theme === "dark"}>
     <ToastEditorDark {editorOption} {setMdContent} />
 </div>
+-->
 
 <style>
     :global(.toastui-editor-md-heading) {
@@ -260,10 +299,12 @@
         font-weight: inherit;
     }
 
+    /*
     .container {
         display: none;
         &.show {
             display: block;
         }
     }
+    */
 </style>

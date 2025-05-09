@@ -1,0 +1,166 @@
+.doc-view-container {
+    //취소선
+    del {
+        color: gray;
+    }
+
+    del:hover {
+        text-decoration: none;
+    }
+
+    //표
+    .table-container{
+        width: 100%;
+        &.overflow{
+            overflow-x: auto;
+        }
+    }
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+
+        th,
+        td {
+            border: 1px solid black;
+            padding-inline: 3px;
+            box-sizing: border-box;
+        }
+    }
+
+    // 리스트
+    ul, ol{
+        padding-left: 20px;
+    }
+    ol li::marker {
+        font-weight: bold;
+    }
+
+    // 인용구
+    blockquote {
+        position: relative;
+        margin: 2rem 0;
+        padding: 10px 15px 10px 15px;
+        box-sizing: border-box;
+        border-left: 4px solid #cf4844;
+        background-color: #f9f9f9;
+
+        &::before {
+            content: '"';
+            position: absolute;
+            font-style: italic;
+            left: 0px;
+            top: -5px;
+            font-size: 40px;
+            color: #ccc;
+        }
+    }
+
+    // 코드
+    code{
+        font-family: 'NanumGothicCoding';
+    }
+    :not(pre) > code{
+        background-color: rgb(226, 226, 226);
+        border-radius: 5px;
+        padding-inline: 2px;
+        font-size: 15px;
+
+        display:inline-flex;
+        align-items: center;
+        padding-block: 0px !important;
+    }
+    pre > code{
+        display:block;
+        background-color: rgb(226, 226, 226);
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    //링크
+    a[href]::before{
+        content: '';
+        width: 15px;
+        height: 15px;
+        display:inline-block;
+        background-image: url('/assets/icon/link.svg');
+        background-size: 15px 15px;
+        background-position: center;
+        transform: translateY(1.5px);
+        filter: brightness(0) saturate(100%) invert(41%) sepia(11%) saturate(6392%) hue-rotate(329deg) brightness(87%) contrast(85%);
+    }
+    a[href]:hover{
+        text-decoration: underline;
+    }
+
+    // 이거 뭐냐
+    .doc-view-content::after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+
+    // 커스텀 요소
+    wiki-annot {
+        display: inline-block;
+        text-align: center;
+    }
+
+    wiki-float[float="left"] {
+        float: left;
+    }
+
+    wiki-float[float="right"] {
+        float: right;
+    }
+}
+
+.doc-view-container[data-theme="dark"] {
+    // 표
+    table {
+        border-color: gray;
+
+        th,
+        td {
+            border-color: gray;
+        }
+    }
+
+    //인용
+    blockquote{
+        border-color: #000000;
+        background-color: #393939;
+    }
+
+    //링크
+    a[href]::before{
+        filter: brightness(0) saturate(100%) invert(81%) sepia(5%) saturate(7020%) hue-rotate(340deg) brightness(100%) contrast(77%);
+    }
+
+    code{
+        color:white;
+    }
+    //코드
+    :not(pre) > code{
+        background-color: rgb(62, 62, 62);
+        border-radius: 5px;
+        padding: 2px;
+        font-size: 15px;
+    }
+    pre > code{
+        display:block;
+        background-color: rgb(62, 62, 62);
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+// 모바일
+.doc-view-container[data-isMobile="true"] {
+    table {
+        float: none !important;
+    }
+}
+
+.doc-view-content{
+    padding-inline: 8px;
+}

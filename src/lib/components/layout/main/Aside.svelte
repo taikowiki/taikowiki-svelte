@@ -1,9 +1,18 @@
 <script lang="ts">
+    import { getContext, onMount, setContext, type Snippet } from "svelte";
+    import { writable, type Writable } from "svelte/store";
 
+    interface Props{
+        children?: Snippet;
+    }
+
+    let {children}: Props = $props();
+
+    let aside = getContext('asideElement') as Writable<HTMLElement>;
 </script>
 
-<aside> 
-    <slot />
+<aside bind:this={$aside}> 
+    {@render children?.()}
 </aside>
 
 <style>

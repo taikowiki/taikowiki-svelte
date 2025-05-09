@@ -1,4 +1,4 @@
-import { defineDBHandler } from "@yowza/db-handler";
+import { defineDBHandler, QB, queryBuilder, Where } from "@yowza/db-handler";
 import type { Notice } from "./types";
 
 export const noticeDBController = {
@@ -6,12 +6,16 @@ export const noticeDBController = {
     getNoticeList: defineDBHandler<[{ page?: number; type?: 'wiki' | 'official' }?], Omit<Notice, 'content'>[]>((param) => {
         return async (run) => {
             const { page, type } = param ?? {};
-            if(type === 'wiki' || type === "official"){
-                return await run("SELECT `order`, `title`, `type`, `writtenDate`, `officialDate` FROM `notice` WHERE `type` = ? ORDER BY `order` DESC" + (page ? ` LIMIT ${(page - 1) * 20}, 20` : ''), [type]);
+            let selectBuilder = queryBuilder.select('notice', ['order', 'title', 'type', 'writtenDate', 'officialDate']);
+            if(type === "wiki" || type === "official"){
+                selectBuilder = selectBuilder.where(Where.Compare('type', '=', type))
             }
-            else{
-                return await run("SELECT `order`, `title`, `type`, `writtenDate`, `officialDate` FROM `notice` ORDER BY `order` DESC" + (page ? ` LIMIT ${(page - 1) * 20}, 20` : ''));
+            selectBuilder = selectBuilder.orderby('order', 'desc');
+            if(page){
+                selectBuilder = selectBuilder.limit((page - 1) * 30, 30)
             }
+            
+            return await run(selectBuilder.build())
         }
     }),
     /**@param notice */

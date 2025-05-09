@@ -26,8 +26,6 @@
 
     let {data} = $props();
     let songData = $state(data.song);
-
-    $inspect(songData);
 </script>
 
 <SongEditor bind:songData type="edit" isAdmin={true}/>

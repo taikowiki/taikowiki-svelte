@@ -160,28 +160,28 @@ export const userDBController = {
      * Set Whether Rating Profile Disclose or not.
      */
     setShowRating: defineDBHandler<[string, Partial<Record<'nickname' | 'taikoNumber' | 'songs', boolean>>], void>((UUID, options) => {
-        return async(run) => {
+        return async (run) => {
             const setQuery: string[] = [];
-            if(options.nickname === true){
+            if (options.nickname === true) {
                 setQuery.push('showRatingNickname = 1');
             }
-            else if(options.nickname === false){
+            else if (options.nickname === false) {
                 setQuery.push('showRatingNickname = 0');
             }
-            if(options.taikoNumber === true){
+            if (options.taikoNumber === true) {
                 setQuery.push('showRatingTaikoNo = 1');
             }
-            else if(options.taikoNumber === false){
+            else if (options.taikoNumber === false) {
                 setQuery.push('showRatingTaikoNo = 0');
             }
-            if(options.songs === true){
+            if (options.songs === true) {
                 setQuery.push('showRatingSongs = 1');
             }
-            else if(options.songs === false){
+            else if (options.songs === false) {
                 setQuery.push('showRatingSongs = 0');
             }
 
-            if(setQuery.length !== 0){
+            if (setQuery.length !== 0) {
                 await run("UPDATE `user/data` SET " + setQuery.join(',') + " WHERE `UUID` = ?", [UUID]);
             }
         }
@@ -236,7 +236,7 @@ export const userDonderDBController = {
                 else {
                     const formerData = await userDonderDBController.getDataColumns(UUID, ['clearData']) as Pick<UserDonderData, 'clearData'>;
                     const mergedClearData = mergeClearData(formerData?.clearData, data.clearData);
-                    
+
                     await run("UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ? WHERE `UUID` = ?", [JSON.stringify(data.donderData), JSON.stringify(mergedClearData), UUID]);
                 }
             }
@@ -298,7 +298,7 @@ export const userDonderDBController = {
     /**
      * update current rating
      */
-    updateCurrentRating: defineDBHandler<[string, number, number, UserDonderData['ratingData']], void>((UUID, currentRating, currentExp, ratingData) => {
+    updateCurrentRating: defineDBHandler<[UUID: string, cuurentRating: number, currentExp: number, ratingData: UserDonderData['ratingData']], void>((UUID, currentRating, currentExp, ratingData) => {
         return async (run) => {
             await run("UPDATE `user/donder_data` SET `currentRating` = ?, `currentExp` = ?, `ratingData` = ?, `lastRatingCalculate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?", [currentRating, currentExp, JSON.stringify(ratingData), UUID])
         }
@@ -321,13 +321,13 @@ export const userDonderDBController = {
      * get rankings by page
      */
     getRanking: defineDBHandler<[number], any>((page) => {
-        return async(run) => {
+        return async (run) => {
             const limitQuery = `LIMIT ${(page - 1) * 50}, 50`;
             const result = await run("SELECT `user/donder_data`.`UUID`, `user/donder_data`.`currentRating`, `user/donder_data`.`donder`, `user/data`.`showRatingNickname` , `user/data`.`showRatingTaikoNo` FROM `user/donder_data` LEFT OUTER JOIN `user/data` ON `user/donder_data`.`UUID` = `user/data`.`UUID` WHERE `user/donder_data`.`currentRating` IS NOT NULL ORDER BY `currentRating` DESC " + limitQuery);
             result.forEach(parseDonderData);
             return result;
         }
-    }) as (page: number) => Promise<(Pick<UserDonderData, 'UUID' | 'currentRating' | 'donder'> & Pick<UserData, 'UUID' | 'showRatingNickname' | 'showRatingTaikoNo'> & {currentRating: number;})[]>,
+    }) as (page: number) => Promise<(Pick<UserDonderData, 'UUID' | 'currentRating' | 'donder'> & Pick<UserData, 'UUID' | 'showRatingNickname' | 'showRatingTaikoNo'> & { currentRating: number; })[]>,
     /**
      * count donder data
      */
@@ -341,11 +341,11 @@ export const userDonderDBController = {
     /**
      * get user rating
      */
-    getUserRating: defineDBHandler<[UUID: string], (UserDonderData & Pick<UserData, 'UUID'| 'showRatingNickname' | 'showRatingTaikoNo' | 'showRatingSongs'>) | null>((UUID) => {
-        return async(run) => {
+    getUserRating: defineDBHandler<[UUID: string], (UserDonderData & Pick<UserData, 'UUID' | 'showRatingNickname' | 'showRatingTaikoNo' | 'showRatingSongs'>) | null>((UUID) => {
+        return async (run) => {
             const result = await run("SELECT `user/donder_data`.*, `user/data`.`showRatingNickname`, `user/data`.`showRatingTaikoNo`, `user/data`.`showRatingSongs` from `user/donder_data` LEFT OUTER JOIN `user/data` ON `user/donder_data`.`UUID` = `user/data`.`UUID` WHERE `user/donder_data`.`UUID` = ?", [UUID]);
-            
-            if(result.length === 0){
+
+            if (result.length === 0) {
                 return null;
             }
 
@@ -367,7 +367,7 @@ function parseDonderData(data: any) {
 
 // 스코어데이터 병합
 function mergeScoreData(oldData: UserScoreData | undefined, newData: UserScoreData, measures: Measure[]): UserScoreData {
-    if(!oldData) return structuredClone(newData);
+    if (!oldData) return structuredClone(newData);
     const data = structuredClone(oldData);
     measures.forEach(measure => {
         const oldScoreData = oldData[measure.songno]?.difficulty?.[measure.diff];
@@ -375,10 +375,10 @@ function mergeScoreData(oldData: UserScoreData | undefined, newData: UserScoreDa
 
         if (!oldScoreData) {
             if (newScoreData) {
-                if(!data[measure.songno]){
+                if (!data[measure.songno]) {
                     data[measure.songno] = newData[measure.songno]
                 }
-                else{
+                else {
                     data[measure.songno].difficulty[measure.diff] = newData[measure.songno].difficulty[measure.diff];
                 }
                 return;
@@ -402,15 +402,15 @@ function mergeScoreData(oldData: UserScoreData | undefined, newData: UserScoreDa
     return data;
 }
 
-function mergeClearData(oldData: ClearData[] | undefined, newData: ClearData[]){
-    if(!oldData) return structuredClone(newData);
+function mergeClearData(oldData: ClearData[] | undefined, newData: ClearData[]) {
+    if (!oldData) return structuredClone(newData);
 
     const data = structuredClone(oldData);
     const crowns: Crown[] = [null, 'played', 'silver', 'gold', 'donderfull'];
     const badges: Badge[] = [null, 'white', 'bronze', 'silver', 'gold', 'pink', 'purple', 'rainbow'];
     newData.forEach(clearData => {
         const oldClearData = data.find((e) => e.songNo === clearData.songNo);
-        if(!oldClearData){
+        if (!oldClearData) {
             data.push(clearData);
             return;
         }
@@ -418,20 +418,20 @@ function mergeClearData(oldData: ClearData[] | undefined, newData: ClearData[]){
         Object.keys(clearData.difficulty).forEach((value) => {
             const diff = value as Difficulty;
             const oldDiffData = oldClearData.difficulty[diff];
-            if(!oldDiffData){
+            if (!oldDiffData) {
                 oldClearData.difficulty[diff] = clearData.difficulty[diff];
                 return;
             }
 
             const oldCrownNum = crowns.indexOf(oldDiffData.crown);
             const newCrownNum = crowns.indexOf((clearData.difficulty[diff] as Clear).crown);
-            if(newCrownNum > oldCrownNum){
+            if (newCrownNum > oldCrownNum) {
                 oldDiffData.crown = crowns[newCrownNum];
             }
 
             const oldBadgeNum = badges.indexOf(oldDiffData.badge);
             const newBadgeNum = badges.indexOf((clearData.difficulty[diff] as Clear).badge);
-            if(newBadgeNum > oldBadgeNum){
+            if (newBadgeNum > oldBadgeNum) {
                 oldDiffData.badge = badges[newBadgeNum];
             }
         })

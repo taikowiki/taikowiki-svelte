@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
 </script>
 
 <div class="container">
     <h1>
-        {$page.status} Error
+        {page.status} Error
     </h1>
-    {#if $page.status === 404}
+    {#if page.status === 404}
         <img src="/assets/img/error/404.png" alt="404 error" />
     {:else}
         <img src="/assets/img/error/other.png" alt="error" />
@@ -22,5 +22,7 @@
 
     img{
         max-width: 100%;
+
+        width: 300px;
     }
 </style>

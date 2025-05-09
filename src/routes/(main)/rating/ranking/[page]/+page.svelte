@@ -1,8 +1,9 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import { page } from "$app/stores";
+    import PageSelector from "$lib/components/common/PageSelector.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import RatingRanking from "$lib/components/page/rating/ranking/RatingRanking.svelte";
-    import RatingRankingPageSelector from "$lib/components/page/rating/ranking/RatingRankingPageSelector.svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
 
     let { data } = $props();

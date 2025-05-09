@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { TIER_BORDER, TIER_COLOR } from "$lib/module/common/user/const";
+    import { GRADE_INTERVAL, TIER_BORDER, TIER_COLOR, TIER_INTERVAL } from "$lib/module/common/user/const";
     import { getNextTier } from "$lib/module/common/user/getTier";
     import type { UserRatingTierName } from "$lib/module/common/user/types";
     import { pipe } from "$lib/module/common/util";
@@ -19,13 +19,13 @@
             return 100;
         }
         if(tierName === "master" || tierName === "grandmaster"){
-            return ((rating - TIER_BORDER[tierName]) / 451) * 100;
+            return ((rating - TIER_BORDER[tierName]) / GRADE_INTERVAL) * 100;
         }
         if(tierName === "sapphire"){
-            return ((rating - TIER_BORDER[tierName]) / 1353) * 100;
+            return ((rating - TIER_BORDER[tierName]) / (GRADE_INTERVAL * 3)) * 100;
         }
 
-        return ((rating - TIER_BORDER[tierName]) / 2255) * 100;
+        return ((rating - TIER_BORDER[tierName]) / TIER_INTERVAL) * 100;
     }])
 
     const [theme] = getTheme();

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import type { SearchResult } from "$lib/module/common/search/types";
     import { getTheme } from "$lib/module/layout/theme";
 
@@ -26,7 +27,7 @@
                 return `/song/${searchResult.songNo}`;
             }
             case "docs": {
-                return "";
+                return `/doc/r/${encodeURIComponent(searchResult.title)}`;
             }
         }
     }
@@ -34,9 +35,13 @@
     const [theme] = getTheme();
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_missing_attribute -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 {#snippet searchResultView(searchResult: SearchResult)}
     {@const { type, title } = searchResult}
-    <a class="searchresult" data-theme={$theme} href={getHref(searchResult)}>
+    <a class="searchresult" data-theme={$theme} tabindex="0" onclick={() => {goto(getHref(searchResult))}}>
         <img
             class="type-img"
             alt={type}
@@ -49,16 +54,21 @@
     </a>
 {/snippet}
 
-{#if opened && searchResults.length > 0}
-    <div class="searchresult-container" data-theme={$theme}>
-        {#each searchResults.slice(0, 10) as searchResult}
-            {@render searchResultView(searchResult)}
-        {/each}
-    </div>
-{/if}
+<div
+    class="searchresult-container"
+    class:closed={!(opened && searchResults.length > 0)}
+    data-theme={$theme}
+>
+    {#each searchResults.slice(0, 10) as searchResult}
+        {@render searchResultView(searchResult)}
+    {/each}
+</div>
 
 <style>
     .searchresult-container {
+        width: 100%;
+
+        box-sizing: border-box;
         outline: 1px solid #cf4844;
         margin-top: 1px;
 
@@ -69,6 +79,10 @@
         z-index: 2;
 
         background-color: white;
+
+        &.closed {
+            display: none;
+        }
     }
     .searchresult-container[data-theme="dark"] {
         outline-color: gray;

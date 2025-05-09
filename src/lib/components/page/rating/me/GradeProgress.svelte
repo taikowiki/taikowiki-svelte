@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { TIER_BORDER, TIER_COLOR } from "$lib/module/common/user/const";
+    import { GRADE_INTERVAL, TIER_BORDER, TIER_COLOR, TIER_INTERVAL } from "$lib/module/common/user/const";
     import { getNextTier } from "$lib/module/common/user/getTier";
     import type { UserRatingTierName } from "$lib/module/common/user/types";
     import { pipe } from "$lib/module/common/util";
@@ -21,24 +21,24 @@
                 return 100;
             }
             if (tierName === "pearl") {
-                return ((rating - TIER_BORDER[tierName]) / 2255) * 100;
+                return ((rating - TIER_BORDER[tierName]) / TIER_BORDER.bronze) * 100;
             }
             if (tierName === "master" || tierName === "grandmaster") {
-                return ((rating - TIER_BORDER[tierName]) / 451) * 100;
+                return ((rating - TIER_BORDER[tierName]) / GRADE_INTERVAL) * 100;
             }
             if (tierName === "sapphire") {
                 return (
                     ((rating -
                         (TIER_BORDER[tierName] +
-                            451 * (3 - (grade as number)))) /
-                        451) *
+                            GRADE_INTERVAL * (3 - (grade as number)))) /
+                        GRADE_INTERVAL) *
                     100
                 );
             }
             return (
                 ((rating -
-                    (TIER_BORDER[tierName] + 451 * (5 - (grade as number)))) /
-                    451) *
+                    (TIER_BORDER[tierName] + GRADE_INTERVAL * (5 - (grade as number)))) /
+                    GRADE_INTERVAL) *
                 100
             );
         },
@@ -95,18 +95,18 @@
         grade: 1 | 2 | 3 | 4 | 5 | null,
     ) {
         if (tierName === "omega") {
-            return 13530;
+            return TIER_BORDER.omega;
         }
         if (tierName === "grandmaster") {
-            return 13079;
+            return TIER_BORDER.grandmaster;
         }
         if (tierName === "master") {
-            return 12628;
+            return TIER_BORDER.master;
         }
         if (tierName === "sapphire") {
-            return TIER_BORDER[tierName] + 451 * (3 - (grade ?? 0));
+            return TIER_BORDER[tierName] + GRADE_INTERVAL * (3 - (grade ?? 0));
         }
-        return TIER_BORDER[tierName] + 451 * (5 - (grade ?? 0));
+        return TIER_BORDER[tierName] + GRADE_INTERVAL * (5 - (grade ?? 0));
     }
 
     function getRight(
@@ -114,18 +114,18 @@
         grade: 1 | 2 | 3 | 4 | 5 | null,
     ) {
         if (tierName === "pearl") {
-            return 2255;
+            return TIER_BORDER.bronze;
         }
         if (tierName === "grandmaster") {
-            return 13530;
+            return TIER_BORDER.omega;
         }
         if (tierName === "master") {
-            return 13079;
+            return TIER_BORDER.grandmaster;
         }
         if (tierName === "sapphire") {
-            return TIER_BORDER[tierName] + 451 * (4 - (grade || 0));
+            return TIER_BORDER[tierName] + GRADE_INTERVAL * (4 - (grade || 0));
         }
-        return TIER_BORDER[tierName] + 451 * (6 - (grade || 0));
+        return TIER_BORDER[tierName] + GRADE_INTERVAL * (6 - (grade || 0));
     }
 </script>
 

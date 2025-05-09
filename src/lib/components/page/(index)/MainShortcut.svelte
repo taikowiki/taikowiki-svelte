@@ -11,7 +11,7 @@
         {
             src: "/assets/icon/document.svg",
             name: "문서",
-            href: "/w",
+            href: "/doc",
         },
         {
             src: "/assets/icon/leaderboard.svg",

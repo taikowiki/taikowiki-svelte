@@ -10,19 +10,9 @@
     let { src, name, href }: Props = $props();
 
     const [theme] = getTheme();
-
-    /**
-     * @todo 문서기능 개발 후 제거
-     */
-    function noWiki() {
-        if (href === "/w") {
-            return 'javascript:alert("WIP")';
-        }
-        return href;
-    }
 </script>
 
-<a class="item" href={noWiki()} data-theme={$theme}>
+<a class="item" {href} data-theme={$theme}>
     <div class="item-icon" data-theme={$theme}>
         <img {src} alt={name} />
     </div>

@@ -38,7 +38,7 @@
                 <div>
                     {DateTime.fromJSDate(docData.editedTime, {
                         zone: "Asia/Seoul",
-                    }).toFormat("yyyy-MM-dd")}
+                    }).toFormat("yyyy-MM-dd HH:mm:ss")}
                 </div>
             </div>
             <div class="id">
@@ -145,7 +145,8 @@
             max-width: 132px;
         }
     }
-    .title-date, .id {
+    .title-date,
+    .id {
         color: gray;
         font-weight: normal;
         font-size: 13px;

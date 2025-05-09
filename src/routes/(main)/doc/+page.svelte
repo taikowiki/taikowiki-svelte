@@ -58,7 +58,8 @@
         | "editorIp"
         | "createdTime"
         | "editedTime"
-    >,
+    > & {nickname: string | null},
+    type: 'new' | 'update'
 )}
     {@const getTimeDiff = () => {
         const min = 60 * 1000;
@@ -68,7 +69,7 @@
         if (diff < hour) {
             return `${Math.floor(diff / min)}분 전`;
         } else if (diff < day) {
-            return `${Math.floor(diff / hour)}분 전`;
+            return `${Math.floor(diff / hour)}시간 전`;
         } else if (diff < 2 * day) {
             return `어제`;
         } else {
@@ -79,7 +80,7 @@
         <div class="left">
             <div class="title">{doc.title}</div>
             <div class="editor">
-                {doc.editorUUID ?? doc.editorIp}에 의해 수정됨
+                {doc.nickname ?? doc.editorUUID ?? doc.editorIp}에 의해 {type === 'new' ? '생성됨' : '수정됨'}
             </div>
         </div>
         <div class="right">
@@ -93,7 +94,7 @@
     <div class="recent-doc-container section">
         <div class="heading">최근 수정된 문서</div>
         {#each data.recentlyEditedDocs as doc}
-            {@render recentDoc(doc)}
+            {@render recentDoc(doc, 'update')}
         {/each}
     </div>
 {/snippet}
@@ -101,7 +102,7 @@
     <div class="recent-doc-container section">
         <div class="heading">최근 생성된 문서</div>
         {#each data.recentlyCreatedDocs as doc}
-            {@render recentDoc(doc)}
+            {@render recentDoc(doc, 'new')}
         {/each}
     </div>
 {/snippet}

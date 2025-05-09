@@ -1,5 +1,3 @@
-import { getIsMobile } from "$lib/module/layout/isMobile.js";
-import { getTheme } from "$lib/module/layout/theme.js";
 import type { Doc } from '$lib/module/common/wikidoc/types';
 import { CSSStyleDeclaration } from 'cssom';
 
@@ -40,7 +38,7 @@ export function createDefaultDocData(): Doc.Data.DocData {
 }
 
 export const docContext = {
-    initContext({theme, isMobile}:{theme: Writable<'light'|'dark'>, isMobile: Writable<boolean>}){
+    initContext({ theme, isMobile }: { theme: Writable<'light' | 'dark'>, isMobile: Writable<boolean> }) {
         const windowContext: Window['__doc__window__context__'] = new Map<string & any, any>();
         windowContext.set('theme', theme);
         windowContext.set('isMobile', isMobile);
@@ -539,8 +537,15 @@ export const renderer = {
                 }
 
                 const style = new CSSStyleDeclaration();
-                borderColor && style.setProperty('border-color', borderColor);;
-                bgColor && style.setProperty('background-color', bgColor);
+                borderColor && style.setProperty('border-color', borderColor);
+                if (bgColor) {
+                    if (bgColor === "rainbow") {
+                        style.setProperty('background', 'linear-gradient(90deg,rgba(255, 90, 140, 1) 0%, rgba(251, 255, 0, 1) 20%, rgba(121, 255, 112, 1) 40%, rgba(122, 246, 255, 1) 50%, rgba(166, 100, 255, 1) 70%, rgba(255, 82, 160, 1) 100%)');
+                    }
+                    else {
+                        style.setProperty('background-color', bgColor);
+                    }
+                }
                 textColor && style.setProperty('color', textColor);
                 width && style.setProperty('width', width);
                 minWidth && style.setProperty('min-width', minWidth);
@@ -625,8 +630,15 @@ export const renderer = {
                         const maxHeight = styleCol.getAttribute('maxheight');
                         align = styleCol.getAttribute('align');
 
-                        borderColor && (columnStyle['border-color'] = borderColor);;
-                        bgColor && (columnStyle['background-color'] = bgColor);
+                        borderColor && (columnStyle['border-color'] = borderColor);
+                        if (bgColor) {
+                            if (bgColor === "rainbow") {
+                                columnStyle['background'] = "linear-gradient(90deg,rgba(255, 90, 140, 1) 0%, rgba(251, 255, 0, 1) 20%, rgba(121, 255, 112, 1) 40%, rgba(122, 246, 255, 1) 50%, rgba(166, 100, 255, 1) 70%, rgba(255, 82, 160, 1) 100%)";
+                            }
+                            else {
+                                columnStyle['background-color'] = bgColor;
+                            }
+                        }
                         textColor && (columnStyle['color'] = textColor);
                         width && (columnStyle['width'] = width);
                         minWidth && (columnStyle['min-width'] = minWidth);
@@ -660,8 +672,15 @@ export const renderer = {
                         const maxHeight = styleCell.getAttribute('maxheight');
                         const align = styleCell.getAttribute('align');
 
-                        borderColor && style.setProperty('border-color', borderColor);;
-                        bgColor && style.setProperty('background-color', bgColor);
+                        borderColor && style.setProperty('border-color', borderColor);
+                        if (bgColor) {
+                            if (bgColor === "rainbow") {
+                                style.setProperty('background', "linear-gradient(90deg,rgba(255, 90, 140, 1) 0%, rgba(251, 255, 0, 1) 20%, rgba(121, 255, 112, 1) 40%, rgba(122, 246, 255, 1) 50%, rgba(166, 100, 255, 1) 70%, rgba(255, 82, 160, 1) 100%)");
+                            }
+                            else {
+                                style.setProperty('background-color', bgColor);
+                            }
+                        }
                         textColor && style.setProperty('color', textColor);
                         width && style.setProperty('width', width);
                         minWidth && style.setProperty('min-width', minWidth);
@@ -695,8 +714,15 @@ export const renderer = {
                     const maxHeight = styleRow.getAttribute('maxheight');
                     const align = styleRow.getAttribute('align');
 
-                    borderColor && style.setProperty('border-color', borderColor);;
-                    bgColor && style.setProperty('background-color', bgColor);
+                    borderColor && style.setProperty('border-color', borderColor);
+                    if (bgColor) {
+                        if (bgColor === "rainbow") {
+                            style.setProperty('background', "linear-gradient(90deg,rgba(255, 90, 140, 1) 0%, rgba(251, 255, 0, 1) 20%, rgba(121, 255, 112, 1) 40%, rgba(122, 246, 255, 1) 50%, rgba(166, 100, 255, 1) 70%, rgba(255, 82, 160, 1) 100%)");
+                        }
+                        else {
+                            style.setProperty('background-color', bgColor);
+                        }
+                    }
                     textColor && style.setProperty('color', textColor);
                     height && style.setProperty('height', height);
                     minHeight && style.setProperty('min-height', minHeight);
@@ -766,8 +792,15 @@ export const renderer = {
                             const maxHeight = styleCell.getAttribute('maxheight');
                             const align = styleCell.getAttribute('align');
 
-                            borderColor && style.setProperty('border-color', borderColor);;
-                            bgColor && style.setProperty('background-color', bgColor);
+                            borderColor && style.setProperty('border-color', borderColor);
+                            if (bgColor) {
+                                if (bgColor === "rainbow") {
+                                    style.setProperty('background', "linear-gradient(90deg,rgba(255, 90, 140, 1) 0%, rgba(251, 255, 0, 1) 20%, rgba(121, 255, 112, 1) 40%, rgba(122, 246, 255, 1) 50%, rgba(166, 100, 255, 1) 70%, rgba(255, 82, 160, 1) 100%)");
+                                }
+                                else {
+                                    style.setProperty('background-color', bgColor);
+                                }
+                            }
                             textColor && style.setProperty('color', textColor);
                             width && style.setProperty('width', width);
                             minWidth && style.setProperty('min-width', minWidth);
@@ -802,8 +835,15 @@ export const renderer = {
                         const maxHeight = styleRow.getAttribute('maxheight');
                         const align = styleRow.getAttribute('align');
 
-                        borderColor && style.setProperty('border-color', borderColor);;
-                        bgColor && style.setProperty('background-color', bgColor);
+                        borderColor && style.setProperty('border-color', borderColor);
+                        if(bgColor){
+                            if(bgColor === "rainbow"){
+                                style.setProperty('background', "linear-gradient(90deg,rgba(255, 90, 140, 1) 0%, rgba(251, 255, 0, 1) 20%, rgba(121, 255, 112, 1) 40%, rgba(122, 246, 255, 1) 50%, rgba(166, 100, 255, 1) 70%, rgba(255, 82, 160, 1) 100%)");
+                            }
+                            else{
+                                style.setProperty('background-color', bgColor);
+                            }
+                        }
                         textColor && style.setProperty('color', textColor);
                         height && style.setProperty('height', height);
                         minHeight && style.setProperty('min-height', minHeight);
@@ -836,7 +876,12 @@ export const renderer = {
                 style.setProperty('color', color);
             }
             if (bgcolor) {
-                style.setProperty('background-color', bgcolor);
+                if (bgcolor === "rainbow") {
+                    style.setProperty('background', 'linear-gradient(90deg,rgba(255, 90, 140, 1) 0%, rgba(251, 255, 0, 1) 20%, rgba(121, 255, 112, 1) 40%, rgba(122, 246, 255, 1) 50%, rgba(166, 100, 255, 1) 70%, rgba(255, 82, 160, 1) 100%)');
+                }
+                else {
+                    style.setProperty('background-color', bgcolor);
+                }
             }
             if (size) {
                 if (size.endsWith('px')) {
@@ -1060,18 +1105,18 @@ export class UndoStack {
     private onUndo?: (element: UndoStack['element']) => any;
     private onRedo?: (element: UndoStack['element']) => any;
 
-    constructor(element: UndoStack['element'], option?: {cooldown?: number, maxStackSize?: number, onUndo?: UndoStack['onUndo'], onRedo?: UndoStack['onRedo']}) {
+    constructor(element: UndoStack['element'], option?: { cooldown?: number, maxStackSize?: number, onUndo?: UndoStack['onUndo'], onRedo?: UndoStack['onRedo'] }) {
         this.element = element;
         if (option?.cooldown !== undefined) {
             this.saveCooldown = option.cooldown;
         }
-        if(option?.maxStackSize){
+        if (option?.maxStackSize) {
             this.maxStackSize = option.maxStackSize;
         }
-        if(option?.onUndo){
+        if (option?.onUndo) {
             this.onUndo = option.onUndo;
         }
-        if(option?.onRedo){
+        if (option?.onRedo) {
             this.onRedo = option.onRedo;
         }
         this.pushCurrent();
@@ -1082,11 +1127,11 @@ export class UndoStack {
                 event.preventDefault();
                 this.redo();
             }
-            else 
-            if (ev.key.toLowerCase() === "z" && ev.ctrlKey) { // 뒤로 가기
-                event.preventDefault();
-                this.undo();
-            }
+            else
+                if (ev.key.toLowerCase() === "z" && ev.ctrlKey) { // 뒤로 가기
+                    event.preventDefault();
+                    this.undo();
+                }
         })
 
         element.addEventListener('input', () => {
@@ -1099,15 +1144,15 @@ export class UndoStack {
 
     push(data: UndoStackData) {
         const current = this.stack[this.currentPos];
-        if(current && current.value === data.value)return;
+        if (current && current.value === data.value) return;
 
         this.stack = this.stack.slice(0, this.currentPos + 1);
         this.stack.push(data);
         this.lastSave = Date.now();
-        if(this.currentPos >= this.maxStackSize - 1){
+        if (this.currentPos >= this.maxStackSize - 1) {
             this.stack.shift();
         }
-        else{
+        else {
             this.currentPos++;
         }
     }
@@ -1124,7 +1169,7 @@ export class UndoStack {
     }
     undo() {
         if (this.currentPos <= -1) return;
-        if(this.currentPos > 0){
+        if (this.currentPos > 0) {
             this.currentPos--;
         }
         this.element.value = this.stack[this.currentPos].value;

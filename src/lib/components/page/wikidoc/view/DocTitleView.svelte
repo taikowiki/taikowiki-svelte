@@ -39,7 +39,7 @@
             <div>
                 {DateTime.fromJSDate(editedTime, {
                     zone: "Asia/Seoul",
-                }).toFormat("yyyy-MM-dd")}
+                }).toFormat("yyyy-MM-dd HH:mm:ss")}
             </div>
         </div>
         <div class="id">

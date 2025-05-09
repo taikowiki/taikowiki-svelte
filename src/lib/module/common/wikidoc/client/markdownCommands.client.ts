@@ -1,5 +1,6 @@
 import type { Doc } from "$lib/module/common/wikidoc/types";
-import type { Transaction } from "prosemirror-state";
+import type { Transaction, EditorState } from "prosemirror-state";
+import { Slice } from "prosemirror-model";
 import { renderer } from "../util.js";
 
 /**
@@ -99,7 +100,8 @@ export function insertYoutube(option: Doc.Toast.WikiYoutubePluginFunctionOption,
 export function insertColoredText(option: Doc.Toast.ColoredTextFunctionOption, state: any, dispatch: any, view: any){
     const transaction: Transaction = state.tr;
 
-    transaction.insertText(`<text color="${option.color}"></text>`);
+    const {from, to} = (state as EditorState).selection;
+    transaction.insertText('</text>', to).insertText(`<text color="${option.color}">`, from).scrollIntoView();
 
     dispatch(transaction);
     view.focus();
@@ -108,8 +110,9 @@ export function insertColoredText(option: Doc.Toast.ColoredTextFunctionOption, s
 }
 export function insertBgColoredText(option: Doc.Toast.ColoredTextFunctionOption, state: any, dispatch: any, view: any){
     const transaction: Transaction = state.tr;
-
-    transaction.insertText(`<text bgcolor="${option.color}"></text>`);
+    
+    const {from, to} = (state as EditorState).selection;
+    transaction.insertText('</text>', to).insertText(`<text bgcolor="${option.color}">`, from).scrollIntoView();
 
     dispatch(transaction);
     view.focus();

@@ -1,4 +1,4 @@
-import type { Handle } from "@sveltejs/kit";
+import { redirect, type Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import auth, { providers } from '@sveltekit-board/oauth'
 import { userDBController } from "$lib/module/common/user/user.server";
@@ -84,8 +84,19 @@ const checkPermission = checkPermissions([
 
 const cors = allowOrigin(["https://donderhiroba.jp"], { credentials: true });
 
+const docRedirect: Handle = async ({ event, resolve }) => {
+    if (event.url.pathname === '/api/doc/create') {
+        throw redirect(308, 'https://file.taiko.wiki/doc/create');
+    }
+    else if (event.url.pathname === "/api/doc/update") {
+        throw redirect(308, 'https://file.taiko.wiki/doc/update');
+    }
+
+    return await resolve(event);
+}
+
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(cors, authHandle, getUserData, logger, BanController.checkIp, checkPermission, setAssetsCacheControl, dynamicHtmlLang);
+export const handle = sequence(cors, authHandle, getUserData, logger, BanController.checkIp, checkPermission, setAssetsCacheControl, dynamicHtmlLang, docRedirect);

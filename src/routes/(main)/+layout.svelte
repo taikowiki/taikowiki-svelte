@@ -23,7 +23,7 @@
     import Header from "$lib/components/layout/main/Header.svelte";
     import HeaderItem from "$lib/components/layout/main/HeaderItem.svelte";
     import Main from "$lib/components/layout/main/Main.svelte";
-    import useTheme from "$lib/module/layout/theme";
+    import useTheme, { getTheme } from "$lib/module/layout/theme";
     import { useIsMobile } from "$lib/module/layout/isMobile.js";
     import { navigating, page } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
@@ -45,6 +45,7 @@
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
+    import { docContext } from "$lib/module/common/wikidoc/util.js";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -71,8 +72,7 @@
     });
 
     //page aside
-    const pageAside = usePageAside();
-    beforeNavigate(resetPageAside(pageAside));
+    setContext('asideElement', writable<HTMLElement>())
 
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
@@ -110,6 +110,10 @@
             pageScrolls = new Map();
         }
     });
+
+    if(browser){
+        docContext.initContext({theme, isMobile});
+    }
 </script>
 
 <svelte:head>
@@ -147,7 +151,7 @@
             </HeaderItem>
             <HeaderItem
                 icon="/assets/icon/document.svg"
-                href="javascript:alert('WIP');"
+                href="/doc"
                 mobileHideSlot
             >
                 <span class="header-text">{i18nLayout.doc}</span>
@@ -191,7 +195,6 @@
         {/snippet}
         {#snippet aside()}
             <Aside>
-                <div bind:this={$pageAside} class="page-aside"></div>
                 {#if data.asideBanners}
                     <AsideBanner banners={data.asideBanners} />
                 {/if}
@@ -203,10 +206,6 @@
 </div>
 
 <style>
-    .page-aside:empty {
-        display: none;
-    }
-
     .logo {
         height: 38px;
         margin-right: -10px;

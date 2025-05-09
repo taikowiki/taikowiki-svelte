@@ -162,7 +162,7 @@ export const songDBController = {
             sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
         }
         if (option?.query) {
-            const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
+            const query = `%${option.query.split(' ').map(sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
             sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)} OR \`romaji\` LIKE ${escape(query)})`;
         }
 
@@ -196,7 +196,7 @@ export const songDBController = {
             sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
         }
         if (option?.query) {
-            const query = `%${option.query.split(' ').map(sqlEscapeString).join('%')}%`
+            const query = `%${option.query.split(' ').map(sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
             sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)} OR \`romaji\` LIKE ${escape(query)})`;
         }
 
@@ -301,10 +301,25 @@ export const songDBController = {
                 await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `romaji`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, songData.romaji, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])
             }
             else {
-                await run("UPDATE `song` SET `songNo` = ?, `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `romaji` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, songData.romaji, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songNo])
+                await run("UPDATE `song` SET `songNo` = ?, `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `romaji` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, songData.romaji, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songNo]);
+                // 곡에 연결된 문서의 `songNo` 수정
+                await run("UPDATE `docs` SET `songNo` = ? WHERE `songNo` = ?", [songData.songNo, songNo]);
             }
 
             await run("INSERT INTO `song/log` (`songNo`, `before`, `after`, `updatedTime`) VALUES (?, ?, ?, ?)", [songData.songNo, song ? JSON.stringify(song) : null, JSON.stringify(songData), Date.now()]);
+        }
+    }),
+
+    /**
+     * 해당 songNo를 가진 곡이 존재하는지 여부 반환
+     */
+    songExistsBySongNo: defineDBHandler<[songNo: string]>((songNo) => {
+        return async (run) => {
+            const result = await run("SELECT COUNT(*) AS COUNT FROM `song` WHERE `songNo` = ?", [songNo]);
+            if (result[0].COUNT === 0) {
+                return false;
+            }
+            return true;
         }
     })
 }

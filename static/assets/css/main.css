@@ -52,6 +52,17 @@
     font-weight: normal;
 }
 
+@font-face{
+    font-family: 'NanumGothicCoding';
+    src: url('/assets/font/nanum-gothic-coding/normal.ttf') format('ttf');
+    font-weight: normal;
+}
+@font-face{
+    font-family: 'NanumGothicCoding';
+    src: url('/assets/font/nanum-gothic-coding/bold.ttf') format('ttf');
+    font-weight: bold;
+}
+
 :root {
     color-scheme: only light;
 }

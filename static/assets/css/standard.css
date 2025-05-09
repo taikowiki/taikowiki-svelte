@@ -1,0 +1,20 @@
+/*btn*/
+.standardbtn {
+    border: 1px solid #cf4844;
+    outline: 0;
+    color: black;
+
+    border-radius: 5px;
+
+    height: 22px;
+
+    cursor: pointer;
+}
+
+.standardbtn[data-theme="dark"] {
+    background-color: black;
+    color: white;
+
+    box-sizing: border-box;
+    border-color: rgb(145, 145, 145);
+}   

@@ -1,6 +1,29 @@
 import type { SearchResult } from '$lib/module/common/search/types.js';
 import { songDBController } from '$lib/module/common/song/song.server.js';
+import { sqlEscapeLike } from '$lib/module/common/util.js';
 import { error } from '@sveltejs/kit';
+import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+
+export async function _searchSong(keyword: string, run: any){
+    const likeQuery = `%${keyword.split(' ').map(e => sqlEscapeLike(e)).join('%')}%`
+    const query = queryBuilder.select('song', ['title', 'songNo']).where(Where.OR(
+        Where.Like('title', likeQuery),
+        Where.Like('titleKo', likeQuery),
+        Where.Like('aliasKo', likeQuery),
+        Where.Like('titleEn', likeQuery),
+        Where.Like('aliasEn', likeQuery),
+        Where.Like('romaji', likeQuery)
+    )).limit(20).build();
+    const result = await run(query);
+    const responseData: SearchResult[] = result.map(({title, songNo}: any) => {
+        return {
+            title,
+            type: 'song',
+            songNo
+        }
+    });
+    return responseData;
+}
 
 export async function GET({ request }) {
     const keyword = new URL(request.url).searchParams.get('keyword');
@@ -10,14 +33,9 @@ export async function GET({ request }) {
         }))
     }
 
-    const searchResults = await songDBController.searchColumns(1, ['title', 'songNo'], { query: keyword }) as {songs: {title: string; songNo: string;}[]; count: number;};
-    const responseData: SearchResult[] = searchResults.songs.map(({title, songNo}) => {
-        return {
-            title,
-            type: 'song',
-            songNo
-        }
-    });
+    const responseData = await runQuery(async(run) => {
+        return await _searchSong(keyword, run);
+    })
 
     return new Response(JSON.stringify(responseData));
 }

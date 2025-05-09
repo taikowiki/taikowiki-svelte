@@ -17,12 +17,12 @@ export async function load({ params, locals }) {
             currentRating: e.currentRating,
             donder: {
                 nickname: e.donder.nickname,
-                taikoNumber: e.donder.taikoNumber
-            } as {nickname: string | null; taikoNumber: string | null},
-            tier: getTier(e.currentRating)
-        }
+                taikoNumber: e.donder.taikoNumber,
+            } as { nickname: string | null; taikoNumber: string | null },
+            tier: getTier(e.currentRating),
+        };
 
-        if (!(locals.userData && locals.userData.grade >= 10)) {
+        if (!locals.userData || locals.userData.grade < 10) {
             if (!e.showRatingNickname) {
                 data.donder.nickname = null;
             }

@@ -11,6 +11,14 @@
     const lang = getLang();
     let i18n = $derived(getI18N($lang).page.rating.ranking);
     let titleI18n = $derived(getI18N($lang).title["/rating/ranking"]);
+
+    function movePage(p: number) {
+        goto(`/rating/ranking/${p}`);
+
+        window.scrollTo({
+            top: 0,
+        });
+    }
 </script>
 
 <PageTitle title={titleI18n} />
@@ -20,7 +28,7 @@
 </h2>
 {#if data.rankings.length !== 0}
     <RatingRanking rankings={data.rankings} page={pageNum} />
-    <RatingRankingPageSelector {pageNum} length={data.count} />
+    <PageSelector {pageNum} length={data.count} {movePage} countPerPage={50}/>
 {:else}
     <p>데이터가 없습니다.</p>
 {/if}

@@ -12,7 +12,12 @@
 <PageTitle title="공지" />
 <h1>공지</h1>
 <NoticeList notices={data.notices} />
-<NoticePageSelector {pageNum} length={data.count} />
+<PageSelector
+    {pageNum}
+    length={data.count}
+    countPerPage={30}
+    {movePage}
+/>
 
 <style>
     h1 {

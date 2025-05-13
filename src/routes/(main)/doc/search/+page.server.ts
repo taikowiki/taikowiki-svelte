@@ -4,13 +4,7 @@ import { queryBuilder, runQuery, Select, Where } from '@yowza/db-handler';
 
 // 페이지에 20개
 export async function load({ url }) {
-    const query = url.searchParams.get("query");
-    if (!query) {
-        return {
-            searchResults: [],
-            count: 0
-        }
-    }
+    const query = url.searchParams.get("query") ?? '';
 
     let page = parseInt(url.searchParams.get("page") || '1');
     if (Number.isNaN(page)) {

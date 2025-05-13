@@ -29,6 +29,8 @@
      * @param query
      */
     function extractAccording(flattenedContent: string, query: string) {
+        if(!query) return flattenedContent.slice(0, 200);
+
         type P = {
             type: "normal" | "strong";
             value: string;
@@ -163,15 +165,17 @@
 {/snippet}
 
 <PageTitle title={`검색: ${query_ ?? ""}`} />
-<h1>
-    <b>{query_ || "''"}</b>에 대한 검색 결과
-</h1>
+{#if query_}
+    <h1>
+        <b>{query_}</b>에 대한 검색 결과
+    </h1>
+{:else}
+    <h1><b>모든 문서</b></h1>
+{/if}
 {#if !data.titleExactMatched && query_}
     <div class="title-not-exact-matched">
         제목이 <b>{query_}</b>인 문서가 없습니다.
-        <a href={`/doc/e?title=${encodeURIComponent(query_)}`}>
-            문서 만들기
-        </a>
+        <a href={`/doc/e?title=${encodeURIComponent(query_)}`}> 문서 만들기 </a>
     </div>
 {/if}
 {#if data.count === 0 || data.searchResults.length === 0}
@@ -244,7 +248,7 @@
         }
     }
 
-    .title-not-exact-matched{
+    .title-not-exact-matched {
         margin-bottom: 15px;
     }
 </style>

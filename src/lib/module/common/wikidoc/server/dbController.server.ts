@@ -253,7 +253,7 @@ export const docDBController = {
     getPast: defineDBHandler<[id: number, version: number], Pick<Doc.DB.DocDBData, 'id' | 'contentTree' | 'editedTime' | 'editableGrade' | 'editorUUID' | 'id' | 'isDeleted' | 'renderedContentTree' | 'songNo' | 'title' | 'redirectTo' | 'type' | 'version' | 'comment'> | null>((id, version) => {
         return async (run) => {
             const current = await run("SELECT COUNT(*) AS COUNT FROM `docs` WHERE `id` = ?", [id]);
-            if(current[0].COUNT === 0){
+            if (current[0].COUNT === 0) {
                 return null;
             }
 
@@ -397,47 +397,65 @@ export const docDBController = {
         }
     }),
     search: defineDBHandler<[query: string, offset: number, limit: number], { count: number, searchResults: Pick<Doc.DB.DocDBData, 'title' | 'flattenedContent' | 'type' | 'songNo' | 'redirectTo'>[] }>((query, offset, limit) => {
-        const countQuery =
-            queryBuilder
-                .select('docs', [Select.Count()])
-                .where(
-                    Where.OR(
-                        Where.Like('title', `%${query}%`),
-                        Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`)
-                    ),
-                    Where.Compare('isDeleted', '=', 0)
-                )
-                .build()
+        if (query) {
+            var countQuery =
+                queryBuilder.union([
+                    //@ts-expect-error
+                    queryBuilder
+                        .select('docs', [Select.Count()])
+                        .where(
+                            Where.Compare('title', '=', query),
+                            Where.Compare('isDeleted', '=', 0)
+                        ),
+                    //@ts-expect-error
+                    queryBuilder
+                        .select('docs', [Select.Count()])
+                        .where(
+                            Where.Like('title', `%${query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%')}%`),
+                            Where.Compare('isDeleted', '=', 0)
+                        ),
+                    //@ts-expect-error
+                    queryBuilder
+                        .select('docs', [Select.Count()])
+                        .where(
+                            Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`),
+                            Where.Compare('isDeleted', '=', 0)
+                        )
+                ]).build()
 
-        const searchQuery =
-            queryBuilder.union([
-                //@ts-expect-error
-                queryBuilder
-                    .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
-                    .where(
-                        Where.Compare('title', '=', query),
-                        Where.Compare('isDeleted', '=', 0)
-                    ),
-                //@ts-expect-error
-                queryBuilder
-                    .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
-                    .where(
-                        Where.Like('title', `%${query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%')}%`),
-                        Where.Compare('isDeleted', '=', 0)
-                    ),
-                //@ts-expect-error
-                queryBuilder
-                    .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo'])
-                    .where(
-                        Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`),
-                        Where.Compare('isDeleted', '=', 0)
-                    )
-            ]).build() + ` LIMIT ${offset}, ${limit}`;
+            var searchQuery =
+                queryBuilder.union([
+                    //@ts-expect-error
+                    queryBuilder
+                        .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime'])
+                        .where(
+                            Where.Compare('title', '=', query),
+                            Where.Compare('isDeleted', '=', 0)
+                        ),
+                    //@ts-expect-error
+                    queryBuilder
+                        .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime'])
+                        .where(
+                            Where.Like('title', `%${query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%')}%`),
+                            Where.Compare('isDeleted', '=', 0)
+                        ),
+                    //@ts-expect-error
+                    queryBuilder
+                        .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime'])
+                        .where(
+                            Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`),
+                            Where.Compare('isDeleted', '=', 0)
+                        )
+                ]).build() + ` ORDER BY \`editedTime\` DESC LIMIT ${offset}, ${limit}`;
+        }
+        else{
+            var countQuery = queryBuilder.select('docs', [Select.Count()]).where(Where.Compare('isDeleted', '=', 0)).build();
+            var searchQuery = queryBuilder.select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime']).where(Where.Compare('isDeleted', '=', 0)).orderby('editedTime', 'desc').limit(offset, limit).build();
+        }
 
         return async (run) => {
             const r1 = await run(countQuery)
             const count = Object.values(r1[0])[0] as number;
-
             if (count === 0) {
                 return {
                     count,
@@ -447,7 +465,6 @@ export const docDBController = {
 
             const r2 = await run(searchQuery)
             const searchResults = r2.map((e: any) => parseDBData(e));
-
             return {
                 count, searchResults
             }
@@ -495,25 +512,25 @@ export const docDBController = {
             return searchResult;
         }
     }),
-    getRecentDocs: defineDBHandler<[], Record<'recentlyEditedDocs' | 'recentlyCreatedDocs', (Pick<Doc.DB.DocDBData, 'id' | 'title' | 'editorUUID' | 'editorIp' | 'createdTime' | 'editedTime'> & {nickname: string | null})[]>>(() => {
-        return async(run) => {
+    getRecentDocs: defineDBHandler<[], Record<'recentlyEditedDocs' | 'recentlyCreatedDocs', (Pick<Doc.DB.DocDBData, 'id' | 'title' | 'editorUUID' | 'editorIp' | 'createdTime' | 'editedTime'> & { nickname: string | null })[]>>(() => {
+        return async (run) => {
             const query1 = queryBuilder
-                            .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
-                            .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
-                            .where(Where.NotNull('docs.id'), Where.Compare('docs.version', '=', 1))
-                            .orderby('createdTime', 'desc')
-                            .limit(0, 5)
-                            .build();
+                .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
+                .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
+                .where(Where.NotNull('docs.id'), Where.Compare('docs.version', '=', 1))
+                .orderby('createdTime', 'desc')
+                .limit(0, 5)
+                .build();
             const result1 = await run(query1);
             const recentlyCreatedDocs = result1.map((e: any) => parseDBData(e));
 
             const query2 = queryBuilder
-                            .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
-                            .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
-                            .where(...recentlyCreatedDocs.map((e: any) => Where.Raw(`\`id\` != ${e.id}`)), Where.NotNull('docs.id'))
-                            .orderby('editedTime', 'desc')
-                            .limit(0, 5)
-                            .build();
+                .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
+                .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
+                .where(...recentlyCreatedDocs.map((e: any) => Where.Raw(`\`id\` != ${e.id}`)), Where.NotNull('docs.id'))
+                .orderby('editedTime', 'desc')
+                .limit(0, 5)
+                .build();
             const result2 = await run(query2);
             const recentlyEditedDocs = result2.map((e: any) => parseDBData(e));
 

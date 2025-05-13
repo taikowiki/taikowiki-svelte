@@ -450,7 +450,7 @@ export const docDBController = {
         }
         else{
             var countQuery = queryBuilder.select('docs', [Select.Count()]).where(Where.Compare('isDeleted', '=', 0)).build();
-            var searchQuery = queryBuilder.select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime']).where(Where.Compare('isDeleted', '=', 0)).orderby('editedTime', 'desc').limit(offset, limit).build();
+            var searchQuery = queryBuilder.select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime']).where(Where.Compare('isDeleted', '=', 0)).orderby('id', 'desc').limit(offset, limit).build();
         }
 
         return async (run) => {

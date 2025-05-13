@@ -29,7 +29,7 @@
      * @param query
      */
     function extractAccording(flattenedContent: string, query: string) {
-        if(!query) return flattenedContent.slice(0, 200);
+        if(!query) return flattenedContent.slice(0, 200) + (flattenedContent.length > 200 ? '...' : '');
 
         type P = {
             type: "normal" | "strong";

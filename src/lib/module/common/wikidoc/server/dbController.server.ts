@@ -136,15 +136,15 @@ export const docDBController = {
 
             // diff 확인
             const flattenedContent = docData.contentTree ? renderer.flattenContentTree(docData.contentTree) : '';
-            const diff = Diff.diffChars(oldFlattenedContent, flattenedContent);
+            const diff = Diff.diffLines(oldFlattenedContent, flattenedContent);
             let increase = 0;
             let decrease = 0;
             diff.forEach((change) => {
                 if (change.added) {
-                    increase += change.value.length;
+                    increase += 1;
                 }
                 else if (change.removed) {
-                    decrease += change.value.length;
+                    decrease += 1;
                 }
             })
 

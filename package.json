@@ -1,6 +1,6 @@
 {
 	"name": "taikowiki-svelte",
-	"version": "1.0.0b",
+	"version": "1.0.1",
 	"private": true,
 	"type": "module",
 	"scripts": {

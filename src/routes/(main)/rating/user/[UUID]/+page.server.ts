@@ -9,7 +9,7 @@ export async function load({ params, locals }) {
     if(!donderData || !donderData.currentRating || !donderData.ratingData || !donderData.scoreData){
         throw error(404);
     }
-
+    
     const refinedData = {
         UUID: donderData.UUID,
         currentRating: donderData.currentRating,

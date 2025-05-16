@@ -1,6 +1,6 @@
 {
 	"name": "taikowiki-svelte",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -39,7 +39,7 @@
 	"dependencies": {
 		"@lit/task": "^1.0.2",
 		"@sveltekit-board/oauth": "^0.7.3",
-		"@taiko-wiki/taiko-rating": "^1.4.0",
+		"@taiko-wiki/taiko-rating": "^1.8.0",
 		"@toast-ui/editor": "^3.2.2",
 		"@types/html2canvas": "^1.0.0",
 		"@types/markdown-escape": "^1.1.3",

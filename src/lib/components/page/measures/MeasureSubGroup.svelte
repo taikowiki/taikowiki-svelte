@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Course, SongData } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { Measure } from "@taiko-wiki/taiko-rating/src/types";
+    import type { Measure } from "@taiko-wiki/taiko-rating/types";
     import MeasureSong from "./MeasureSong.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 

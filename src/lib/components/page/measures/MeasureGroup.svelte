@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Course, SongData } from "$lib/module/common/song/types";
-    import type { Measure } from "@taiko-wiki/taiko-rating/src/types";
+    import type { Measure } from "@taiko-wiki/taiko-rating/types";
     import styled from "styled-svelte5";
     import groupBy from "object.groupby";
     import MeasureSubGroup from "./MeasureSubGroup.svelte";

@@ -4,7 +4,7 @@
         Genre,
         SongData,
     } from "$lib/module/common/song/types";
-    import type { Measure } from "@taiko-wiki/taiko-rating/src/types";
+    import type { Measure } from "@taiko-wiki/taiko-rating/types";
     import groupBy from "object.groupby";
     import MeasureGroup from "./MeasureGroup.svelte";
     import styled from "styled-svelte5";

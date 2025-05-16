@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { AsideBanner } from "$lib/module/common/banner/types";
+    import type { BannerType } from "$lib/module/common/banner/types";
     import AsideItem from "./AsideItem.svelte";
 
     interface Props {
-        banners: AsideBanner[];
+        banners: BannerType.AsideBanner[];
     }
 
     let { banners }: Props = $props();

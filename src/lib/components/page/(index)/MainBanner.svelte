@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { MainBanner } from "$lib/module/common/banner/types";
+    import type { BannerType } from "$lib/module/common/banner/types";
 
     interface Props {
-        banners: MainBanner[];
+        banners: BannerType.MainBanner[];
     }
 
     let { banners }: Props = $props();

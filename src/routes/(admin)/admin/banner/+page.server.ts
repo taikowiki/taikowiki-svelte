@@ -1,4 +1,4 @@
-import { bannerDBController } from "$lib/module/common/banner/banner.server"
+import { BannerServer } from "$lib/module/common/banner/banner.server"
 import { error } from "@sveltejs/kit";
 import { runQuery } from "@yowza/db-handler"
 
@@ -8,12 +8,12 @@ export async function load({locals}){
     }
 
     const data: {
-        mainBanners: Awaited<ReturnType<typeof bannerDBController.getMainBanner>>;
-        asideBanners: Awaited<ReturnType<typeof bannerDBController.getAsideBanner>>
+        mainBanners: Awaited<ReturnType<typeof BannerServer.DBController.getMainBanner>>;
+        asideBanners: Awaited<ReturnType<typeof BannerServer.DBController.getAsideBanner>>
     } = await runQuery(async(run) => {
         return {
-            mainBanners: await bannerDBController.getMainBanner.getCallback()(run),
-            asideBanners: await bannerDBController.getAsideBanner.getCallback()(run)
+            mainBanners: await BannerServer.DBController.getMainBanner.getCallback()(run),
+            asideBanners: await BannerServer.DBController.getAsideBanner.getCallback()(run)
         }
     })
 

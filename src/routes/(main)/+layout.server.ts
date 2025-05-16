@@ -1,4 +1,4 @@
-import { bannerDBController } from "$lib/module/common/banner/banner.server.js";
+import { BannerServer } from "$lib/module/common/banner/banner.server.js";
 import { songDBController } from "$lib/module/common/song/song.server";
 import { UAParser } from "ua-parser-js";
 import { isbot } from "isbot";
@@ -42,7 +42,7 @@ export async function load(event) {
 
     const [newSongs, asideBanners] = await Promise.all([
         songDBController.getNewSongs(3),
-        bannerDBController.getAsideBanner(),
+        BannerServer.DBController.getAsideBanner(),
     ]);
 
     return {

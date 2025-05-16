@@ -1,16 +1,19 @@
-import typer, { type Infer } from "typer-ts";
+import { z } from 'zod';
 
-export const MainBannerTyper = new typer.Object({
-    src: new typer.String(null),
-    size: new typer.String(['narrow', 'wide'] as const),
-    href: new typer.String(null),
-    target: new typer.String(null)
-})
-export type MainBanner = Infer<typeof MainBannerTyper>;
-
-export const AsideBannerTyper = new typer.Object({
-    src: new typer.String(null),
-    href: new typer.String(null),
-    target: new typer.String(null)
-})
-export type AsideBanner = Infer<typeof AsideBannerTyper>;
+export namespace BannerType{
+    export namespace Schema{
+        export const MainBanner = z.object({
+            src: z.string(),
+            size: z.union([z.literal('narrow'), z.literal('wide')]),
+            href: z.string(),
+            target: z.string()
+        });
+        export const AsideBanner = z.object({
+            src: z.string(),
+            href: z.string(),
+            target: z.string()
+        })
+    }
+    export type MainBanner = z.infer<typeof Schema.MainBanner>;
+    export type AsideBanner = z.infer<typeof Schema.AsideBanner>;
+}

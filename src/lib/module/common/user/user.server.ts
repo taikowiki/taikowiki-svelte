@@ -5,8 +5,8 @@ import { defineDBHandler } from "@yowza/db-handler";
 import type { Badge, CardData, Clear, ClearData, Crown, Difficulty } from "node-hiroba/types";
 import { randomUUID } from 'node:crypto';
 import groupBy from "object.groupby";
-import { getSongRating } from "@taiko-wiki/taiko-rating/src/getSongRating";
-import type { Measure } from "@taiko-wiki/taiko-rating/src/types";
+import { getSongRating } from "@taiko-wiki/taiko-rating";
+import type { Measure } from "@taiko-wiki/taiko-rating/types";
 
 export const userDBController = {
     /**

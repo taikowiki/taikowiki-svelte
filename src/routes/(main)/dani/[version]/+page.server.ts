@@ -1,11 +1,11 @@
-import { daniDBController } from "$lib/module/common/dani/dani.server";
+import { DaniServer } from "$lib/module/common/dani/dani.server";
 import { songDBController } from "$lib/module/common/song/song.server";
-import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
+import type { DaniType } from "$lib/module/common/dani/types";
 import { error } from "@sveltejs/kit";
 import { DAN } from "$lib/module/common/song/const.js";
 
 export async function load({ params }) {
-    const daniData = await daniDBController.getByVersion(params.version);
+    const daniData = await DaniServer.DBController.getByVersion(params.version);
 
     if (daniData === null) {
         throw error(404);
@@ -26,7 +26,7 @@ export async function load({ params }) {
     const songDatas = (await songDBController.getSongsColumnsBySongNo(
         [...songNos],
         ["songNo", "genre", "title", "courses"]
-    )) as SongDataPickedForDani[];
+    )) as DaniType.SongDataForDisplay[];
 
     return {
         daniData,

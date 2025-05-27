@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { DaniCondition } from "$lib/module/common/dani/types";
+    import type { DaniType } from "$lib/module/common/dani/types";
     import AdminDaniEditorCondition from "./AdminDaniEditor-Condition.svelte";
 
     interface Props {
-        conditions: DaniCondition[];
+        conditions: DaniType.Condition[];
     }
 
     let { conditions = $bindable() }: Props = $props();

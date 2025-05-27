@@ -1,4 +1,4 @@
-import { daniDBController } from '$lib/module/common/dani/dani.server.js';
+import { DaniServer } from '$lib/module/common/dani/dani.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request}){
@@ -6,11 +6,11 @@ export async function POST({request}){
 
     if(!version) throw error(400);
 
-    const hasVersion = await daniDBController.hasVersion(version);
+    const hasVersion = await DaniServer.DBController.hasVersion(version);
 
     if(hasVersion) throw error(400);
 
-    await daniDBController.addVersion(version)
+    await DaniServer.DBController.addVersion(version)
 
     return new Response();
 }

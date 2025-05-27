@@ -1,8 +1,7 @@
 <script lang="ts" module>
-    import type { Dan } from "$lib/module/common/dani/types";
     import { dani as daniColor } from "$lib/module/common/color";
 
-    function getBackgroundColor(dan: Dan, theme: "dark" | "light"): string {
+    function getBackgroundColor(dan: DaniType.Dan, theme: "dark" | "light"): string {
         let d = "kyu";
         if (/^[1-5]dan$/.test(dan) || dan === "senpo") {
             d = "lowdan";
@@ -31,17 +30,16 @@
 </script>
 
 <script lang="ts">
-    import type { Dani } from "$lib/module/common/dani/types";
+    import type { DaniType } from "$lib/module/common/dani/types";
     import DaniHead from "./DaniHead.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import DaniSongContainer from "./DaniSongContainer.svelte";
     import DaniConditionContainer from "./DaniConditionContainer.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile";
-    import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
 
     interface Props {
-        dani: Dani;
-        songDatas: SongDataPickedForDani[];
+        dani: DaniType.Dani;
+        songDatas: DaniType.SongDataForDisplay[];
     }
 
     let { dani, songDatas }: Props = $props();

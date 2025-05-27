@@ -1,6 +1,6 @@
 <script lang="ts">
     import AdminDaniEditor from "$lib/components/page/admin/dani/AdminDaniEditor.svelte";
-    import { daniAdminRequestor } from "$lib/module/common/dani/dani.client.js";
+    import { DaniClient } from "$lib/module/common/dani/dani.client.js";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
 
     let { data } = $props();
@@ -70,7 +70,7 @@
         if (!confirm("저장하시겠습니까?")) return;
 
         const response =
-            await daniAdminRequestor.updateVersion(versionDaniData);
+            await DaniClient.adminRequestor.updateVersion(versionDaniData);
 
         if (response.status === "success") {
             alert("저장 성공");

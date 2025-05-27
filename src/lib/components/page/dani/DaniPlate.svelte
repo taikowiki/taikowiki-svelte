@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { Dan } from "$lib/module/common/dani/types";
+    import type { DaniType } from "$lib/module/common/dani/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     interface Props {
-        dan: Dan;
+        dan: DaniType.Dan;
     }
 
     let { dan }: Props = $props();

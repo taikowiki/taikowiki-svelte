@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getLang, getI18N } from "$lib/module/common/i18n/i18n";
     import { DANIVERSION } from "$lib/module/common/song/const";
-    import { daniAdminRequestor } from "$lib/module/common/dani/dani.client";
+    import { DaniClient } from "$lib/module/common/dani/dani.client";
 
     let {data} = $props();
 
@@ -17,7 +17,7 @@
     let newVersion: string = $state("");
 
     async function addVersion(version: string){
-        const response = await daniAdminRequestor.addVersion(version);
+        const response = await DaniClient.adminRequestor.addVersion(version);
         if(response.status === 'success'){
             versions.push(version as any);
             alert('버전 추가 완료');

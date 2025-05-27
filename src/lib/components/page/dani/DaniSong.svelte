@@ -13,15 +13,14 @@
 </script>
 
 <script lang="ts">
-    import type { DaniSong } from "$lib/module/common/dani/types";
+    import type { DaniType } from "$lib/module/common/dani/types";
     import type { Genre } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
     import { DifficultyColor } from "$lib/module/common/styled";
 
     interface Props {
-        song: DaniSong;
-        songDatas: SongDataPickedForDani[];
+        song: DaniType.Song;
+        songDatas: DaniType.SongDataForDisplay[];
     }
 
     let { song, songDatas }: Props = $props();

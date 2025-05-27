@@ -17,4 +17,5 @@ export const VERSION = [
     ["PLUS", "PTB", "RC"]
 ] as const
 export const DANIVERSION = ["katsudon", "sorairo", "momoiro", "kimidori", "murasaki", "white", "red", "yellow", "blue", "green", "nijiiro_gaiden", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"] as const;
-export const DAN = ["senpo", "jiho", "chiuken", "fukusho", "taisho", "beginner", "10kyu", "9kyu", "8kyu", "7kyu", "6kyu", "5kyu", "4kyu", "3kyu", "2kyu", "1kyu", "1dan", "2dan", "3dan", "4dan", "5dan", "6dan", "7dan", "8dan", "9dan", "10dan", "kuroto", "meijin", "chojin", "tatsujin", "gaiden"] as const;
+export const REGULAR_DAN = ["senpo", "jiho", "chiuken", "fukusho", "taisho", "beginner", "10kyu", "9kyu", "8kyu", "7kyu", "6kyu", "5kyu", "4kyu", "3kyu", "2kyu", "1kyu", "1dan", "2dan", "3dan", "4dan", "5dan", "6dan", "7dan", "8dan", "9dan", "10dan", "kuroto", "meijin", "chojin", "tatsujin"] as const;
+export const DAN = [...REGULAR_DAN, "gaiden"] as const;

@@ -1,7 +1,7 @@
 <script lang="ts" module>
     import { dani as daniColor } from "$lib/module/common/color";
 
-    function getColor(dan: Dan, theme: "dark" | "light"): string {
+    function getColor(dan: DaniType.Dan, theme: "dark" | "light"): string {
         let d = "kyu";
         if (/^[1-5]dan$/.test(dan) || dan === "senpo") {
             d = "lowdan";
@@ -44,7 +44,7 @@
 </script>
 
 <script lang="ts">
-    import type { Dani, Dan } from "$lib/module/common/dani/types";
+    import type { DaniType } from "$lib/module/common/dani/types";
     import { getLang } from "$lib/module/common/i18n/i18n";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N } from "$lib/module/common/i18n/i18n";
@@ -53,7 +53,7 @@
 
     interface Props {
         opened: boolean;
-        dani: Dani;
+        dani: DaniType.Dani;
     }
 
     let { opened = $bindable(), dani }: Props = $props();

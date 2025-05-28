@@ -1,4 +1,4 @@
-import { BannerServer } from "$lib/module/common/banner/banner.server"
+import { BannerServer } from "$lib/module/banner/banner.server"
 import { error } from "@sveltejs/kit";
 import { runQuery } from "@yowza/db-handler"
 

@@ -1,4 +1,4 @@
-import { DaniServer } from "$lib/module/common/dani/dani.server";
+import { DaniServer } from "$lib/module/dani/dani.server";
 import { DANIVERSION } from "$lib/module/common/song/const";
 
 export async function load() {

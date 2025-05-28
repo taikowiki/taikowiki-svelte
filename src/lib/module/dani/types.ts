@@ -1,8 +1,8 @@
-import type { DaniVersion, SongData } from "$lib/module/common/song/types"
+import type { SongData } from "$lib/module/common/song/types"
 import { z } from "zod";
-import { DANIVERSION, DAN, DIFFICULTY, REGULAR_DAN } from "../song/const";
+import { DANIVERSION, DIFFICULTY, REGULAR_DAN } from "../common/song/const";
 
-export namespace DaniType {
+export namespace Dani {
     export namespace Schema{
         export const Song = z.object({
             songNo: z.union([z.string(), z.null()]),

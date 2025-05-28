@@ -1,13 +1,13 @@
 import { defineRequestHandler } from "@yowza/rrequestor";
-import type { BannerType } from "$lib/module/common/banner/types";
+import type { Banner } from "$lib/module/banner/types";
 
 export namespace BannerClient {
     export const adminRequestor = {
-        updateMainBanner: defineRequestHandler<{ banners: BannerType.MainBanner[] }, void>({
+        updateMainBanner: defineRequestHandler<{ banners: Banner.MainBanner[] }, void>({
             url: '/admin/api/banner/main',
             method: 'post'
         }),
-        updateAsideBanner: defineRequestHandler<{ banners: BannerType.AsideBanner[] }, void>({
+        updateAsideBanner: defineRequestHandler<{ banners: Banner.AsideBanner[] }, void>({
             url: '/admin/api/banner/aside',
             method: 'post'
         }),

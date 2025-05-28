@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export namespace BannerType{
+export namespace Banner{
     export namespace Schema{
         export const MainBanner = z.object({
             src: z.string(),

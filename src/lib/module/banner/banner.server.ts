@@ -1,9 +1,9 @@
 import { defineDBHandler } from "@yowza/db-handler";
-import type { BannerType } from "$lib/module/common/banner/types";
+import type { Banner } from "$lib/module/banner/types";
 
 export namespace BannerServer {
     export const DBController = {
-        getMainBanner: defineDBHandler<[], BannerType.MainBanner[] | null>(() => {
+        getMainBanner: defineDBHandler<[], Banner.MainBanner[] | null>(() => {
             return async (run) => {
                 const result = await run("SELECT * FROM `banner` WHERE `type` = 'main'");
                 if (result.length === 0) {
@@ -21,7 +21,7 @@ export namespace BannerServer {
         /**
          * @param {MainBanner[]} banners
          */
-        updateMainBanner: defineDBHandler<[BannerType.MainBanner[]], void>((banners) => {
+        updateMainBanner: defineDBHandler<[Banner.MainBanner[]], void>((banners) => {
             return async (run) => {
                 const mainBanners = await DBController.getMainBanner.getCallback()(run);
 
@@ -33,7 +33,7 @@ export namespace BannerServer {
                 }
             }
         }),
-        getAsideBanner: defineDBHandler<[], BannerType.AsideBanner[] | null>(() => {
+        getAsideBanner: defineDBHandler<[], Banner.AsideBanner[] | null>(() => {
             return async (run) => {
                 const result = await run("SELECT * FROM `banner` WHERE `type` = 'aside'");
                 if (result.length === 0) {
@@ -51,7 +51,7 @@ export namespace BannerServer {
         /**
          * @param {AsideBanner[]} banners
          */
-        updateAsideBanner: defineDBHandler<[BannerType.AsideBanner[]], void>((banners) => {
+        updateAsideBanner: defineDBHandler<[Banner.AsideBanner[]], void>((banners) => {
             return async (run) => {
                 const asideBanners = await DBController.getAsideBanner.getCallback()(run);
 

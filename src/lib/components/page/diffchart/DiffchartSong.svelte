@@ -10,20 +10,16 @@
 
 <script lang="ts">
     import { getIsMobile } from "$lib/module/layout/isMobile";
-    import type {
-        Song,
-        SongScoreDetail,
-    } from "$lib/module/common/diffchart/types";
+    import type { Diffchart } from "$lib/module/diffchart";
     import DiffchartSongMobile from "./DiffchartSongMobile.svelte";
     import DiffchartSongPc from "./DiffchartSongPc.svelte";
-    import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
 
     interface Props {
-        song: Song;
-        songs: SongDataPickedForDiffchart[];
+        song: Diffchart.Song;
+        songs: Diffchart.SongDataForDisplay[];
         theme: string;
         useMobile?: boolean;
-        userScore?: SongScoreDetail | null;
+        userScore?: Diffchart.Score.Detail | null;
     }
 
     let {

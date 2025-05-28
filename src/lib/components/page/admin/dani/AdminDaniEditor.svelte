@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { DaniType } from "$lib/module/common/dani/types";
+    import type { Dani } from "$lib/module/dani/types";
     import AdminDaniEditorDan from "./AdminDaniEditor-Dan.svelte";
     import AdminDaniEditorName from "./AdminDaniEditor-Name.svelte";
     import AdminDaniEditorSong from "./AdminDaniEditor-Song.svelte";
@@ -8,16 +8,16 @@
     import AdminDaniEditorQr from "./AdminDaniEditor-Qr.svelte";
 
     interface Props {
-        daniData: DaniType.Dani;
+        daniData: Dani.Dani;
         deleteDani: MouseEventHandler<any>;
     }
 
     let { daniData = $bindable(), deleteDani }: Props = $props();
 
-    function changeDan(dan: DaniType.Dan) {
+    function changeDan(dan: Dani.Dan) {
         daniData.dan = dan;
     }
-    function init(dan: DaniType.Dan) {
+    function init(dan: Dani.Dan) {
         daniData.dan = dan;
         if (daniData.dan === "gaiden") {
             daniData.name = {

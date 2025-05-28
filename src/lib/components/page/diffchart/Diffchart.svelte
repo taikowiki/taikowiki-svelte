@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    function parseSongScoreJSON(json: string): SongScore[] | null {
+    function parseSongScoreJSON(json: string): Diffchart.Score.SongScore[] | null {
         try {
             let result = JSON.parse(json);
             if (Array.isArray(result)) {
@@ -13,28 +13,20 @@
 </script>
 
 <script lang="ts">
-    import type {
-        CrownType,
-        DiffChart,
-        DiffchartSongData,
-        DifficultyType,
-        Section,
-        SongScore,
-    } from "$lib/module/common/diffchart/types";
+    import type { Diffchart } from "$lib/module/diffchart";
     import DiffchartName from "./DiffchartName.svelte";
     import DiffchartSection from "./DiffchartSection.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { browser } from "$app/environment";
     import html2canvas from "html2canvas";
-    import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import type { Difficulty } from "$lib/module/common/song/types";
     import DiffchartAllCrown from "./DiffchartAllCrown.svelte";
 
     interface Props {
-        diffChart: DiffChart;
-        songs: SongDataPickedForDiffchart[];
-        donderData: SongScore[] | null;
+        diffChart: Diffchart.Diffchart;
+        songs: Diffchart.SongDataForDisplay[];
+        donderData: Diffchart.Score.SongScore[] | null;
         color?: string | undefined;
         backgroundColor?: string | undefined;
         downloadImage: (() => Promise<void>) | null;
@@ -87,7 +79,7 @@
      * 플레이한 곡 기록 데이터
      */
     let playedSongScoreMap = $derived.by(() => {
-        const map = new Map<Section, SongScore[] | null>();
+        const map = new Map<Diffchart.Section, Diffchart.Score.SongScore[] | null>();
         sortedDifferChartSections.forEach((section) => {
             map.set(section, getPlayedSongScores(userScoreData, section.songs));
         });
@@ -97,7 +89,7 @@
      * 플레이한 곡 왕관 개수
      */
     let userCrownCountMap = $derived.by(() => {
-        const map = new Map<Section, ReturnType<typeof countUserCrown>>();
+        const map = new Map<Diffchart.Section, ReturnType<typeof countUserCrown>>();
         sortedDifferChartSections.forEach((section) => {
             const playedScoreData = playedSongScoreMap.get(section);
             if (typeof playedScoreData === "undefined") return;
@@ -106,16 +98,18 @@
         return map;
     });
     let allCrownCount = $derived.by(() => {
-        const songScoreSet = new Set<SongScore>();
+        const songScoreSet = new Set<Diffchart.Score.SongScore>();
         for (const values of playedSongScoreMap.values()) {
             if (!values) continue;
             for (const value of values) {
                 songScoreSet.add(value);
             }
         }
-        let songScores = Array.from(songScoreSet).map((e) => structuredClone(e));
+        let songScores = Array.from(songScoreSet).map((e) =>
+            structuredClone(e),
+        );
 
-        if(songScores.length === 0) return null;
+        if (songScores.length === 0) return null;
 
         let clearCount = 0;
         let fcCount = 0;
@@ -135,13 +129,14 @@
 
                 if (!scoreData) return;
 
-                const diff = scoreData.details[
-                    uraToOniUra(diffchartSongData.difficulty)
-                ]
+                const diff =
+                    scoreData.details[
+                        uraToOniUra(diffchartSongData.difficulty)
+                    ];
 
-                if(!diff) return;
+                if (!diff) return;
 
-                const crown = diff?.crown as CrownType;
+                const crown = diff?.crown as Diffchart.Score.Crown;
 
                 if (crown === "silver") {
                     clearCount++;
@@ -153,15 +148,15 @@
 
                 delete scoreData.details[
                     uraToOniUra(diffchartSongData.difficulty)
-                ]
+                ];
             });
         });
 
         return {
             clearCount,
             fcCount,
-            dfcCount
-        }
+            dfcCount,
+        };
     });
 
     const lang = getLang();
@@ -173,8 +168,8 @@
      * @param diffchartSongDatas
      */
     function countUserCrown(
-        userScoreData: SongScore[] | null,
-        diffchartSongDatas: DiffchartSongData[],
+        userScoreData: Diffchart.Score.SongScore[] | null,
+        diffchartSongDatas: Diffchart.Song[],
     ) {
         if (userScoreData === null) {
             return null;
@@ -198,7 +193,7 @@
 
             const crown = scoreData.details[
                 uraToOniUra(diffchartSongData.difficulty)
-            ]?.crown as CrownType;
+            ]?.crown as Diffchart.Score.Crown;
 
             if (crown === "silver") {
                 clearCount++;
@@ -222,9 +217,9 @@
      * @param songs
      */
     function getPlayedSongScores(
-        scoreData: SongScore[] | null,
-        songs: DiffchartSongData[],
-    ): SongScore[] | null {
+        scoreData: Diffchart.Score.SongScore[] | null,
+        songs: Diffchart.Song[],
+    ): Diffchart.Score.SongScore[] | null {
         return (
             scoreData?.filter((score) =>
                 songs.find(
@@ -241,7 +236,7 @@
      * "ura"를 "oni_ura"로 바꿉니다.
      * @param diff
      */
-    function uraToOniUra(diff: Difficulty): DifficultyType {
+    function uraToOniUra(diff: Difficulty): Diffchart.Score.Difficulty {
         return diff === "ura" ? "oni_ura" : diff;
     }
 </script>
@@ -255,7 +250,7 @@
     style="display:none;"
 />
 <div class="container">
-    <DiffchartAllCrown {allCrownCount} theme={$theme}/>
+    <DiffchartAllCrown {allCrownCount} theme={$theme} />
     <DiffchartName
         name={diffChart.name}
         color={colorValue}
@@ -263,7 +258,7 @@
     />
     {#each sortedDifferChartSections as section}
         {@const playedSongScores = playedSongScoreMap.get(section) as
-            | SongScore[]
+            | Diffchart.Score.SongScore[]
             | null}
         {@const userCrownCount = userCrownCountMap.get(section) as ReturnType<
             typeof countUserCrown
@@ -279,7 +274,7 @@
 </div>
 
 <div class="replica" bind:this={replica}>
-    <DiffchartAllCrown {allCrownCount} theme="light"/>
+    <DiffchartAllCrown {allCrownCount} theme="light" />
     <DiffchartName
         name={diffChart.name}
         color={colorValue}
@@ -287,7 +282,7 @@
     />
     {#each sortedDifferChartSections as section}
         {@const playedSongScores = playedSongScoreMap.get(section) as
-            | SongScore[]
+            | Diffchart.Score.SongScore[]
             | null}
         {@const userCrownCount = userCrownCountMap.get(section) as ReturnType<
             typeof countUserCrown

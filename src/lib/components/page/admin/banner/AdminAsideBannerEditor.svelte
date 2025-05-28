@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { BannerClient } from "$lib/module/common/banner/banner.client";
-    import type { BannerType } from "$lib/module/common/banner/types";
+    import { BannerClient } from "$lib/module/banner/banner.client";
+    import type { Banner } from "$lib/module/banner/types";
 
     interface Props {
-        banners: BannerType.AsideBanner[];
+        banners: Banner.AsideBanner[];
     }
 
     let { banners }: Props = $props();

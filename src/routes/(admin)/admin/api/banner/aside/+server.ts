@@ -1,13 +1,13 @@
-import { BannerServer } from '$lib/module/common/banner/banner.server.js';
-import { BannerType } from "$lib/module/common/banner/types";
+import { BannerServer } from '$lib/module/banner/banner.server.js';
+import { Banner } from "$lib/module/banner/types";
 import { error } from '@sveltejs/kit';
 import { z } from 'zod';
 
 export async function POST({request}){
     const requestData = await request.json();
-    const banners: BannerType.AsideBanner[] = requestData.banners;
+    const banners: Banner.AsideBanner[] = requestData.banners;
     
-    if(!z.array(BannerType.Schema.AsideBanner).safeParse(banners).success){
+    if(!z.array(Banner.Schema.AsideBanner).safeParse(banners).success){
         throw error(400, JSON.stringify({
             reason: 'Type Error'
         }));

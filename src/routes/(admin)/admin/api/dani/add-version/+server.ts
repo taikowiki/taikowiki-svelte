@@ -1,4 +1,4 @@
-import { DaniServer } from '$lib/module/common/dani/dani.server.js';
+import { DaniServer } from '$lib/module/dani/dani.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request}){

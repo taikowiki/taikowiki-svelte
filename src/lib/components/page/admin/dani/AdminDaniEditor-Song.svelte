@@ -1,10 +1,10 @@
 <script lang="ts">
-    import type { DaniType } from "$lib/module/common/dani/types";
+    import type { Dani } from "$lib/module/dani/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DIFFICULTY } from "$lib/module/common/song/const";
 
     interface Props {
-        songs: DaniType.Song[];
+        songs: Dani.Song[];
     }
 
     let { songs = $bindable() }: Props = $props();

@@ -48,22 +48,19 @@
 
 <script lang="ts">
     import type { Genre } from "$lib/module/common/song/types";
-    import type {
-        Song,
-        SongScoreDetail,
-    } from "$lib/module/common/diffchart/types";
+    import type { Diffchart } from "$lib/module/diffchart";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
     import color from "$lib/module/common/color";
     import { getLang } from "$lib/module/common/i18n/i18n";
     import { browser } from "$app/environment";
 
     interface Props {
-        song: Song;
+        song: Diffchart.Song;
         title: string;
         genre: Genre[];
         krTitle: string;
         theme: string;
-        userScore?: SongScoreDetail | null;
+        userScore?: Diffchart.Score.Detail | null;
     }
 
     let {

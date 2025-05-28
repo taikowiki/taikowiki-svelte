@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type { DaniType } from "$lib/module/common/dani/types";
+    import type { Dani } from "$lib/module/dani/types";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DAN } from "$lib/module/common/song/const";
 
     interface Props {
-        dan: DaniType.Dan;
-        changeDan: (dan: DaniType.Dan) => void;
-        init: (dan: DaniType.Dan) => void;
+        dan: Dani.Dan;
+        changeDan: (dan: Dani.Dan) => void;
+        init: (dan: Dani.Dan) => void;
     }
 
     let {dan, init, changeDan}: Props = $props();

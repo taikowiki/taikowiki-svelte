@@ -1,6 +1,6 @@
-import { DAN } from "../song/const";
-import type { DaniVersion } from "../song/types";
-import type { DaniType } from "./types";
+import { DAN } from "../common/song/const";
+import type { DaniVersion } from "../common/song/types";
+import type { Dani } from "./types";
 import { defineDBHandler } from "@yowza/db-handler";
 
 export namespace DaniServer {
@@ -8,7 +8,7 @@ export namespace DaniServer {
         /**
          * Retrieves all dani data.
          */
-        getAll: defineDBHandler<[], DaniType.DB[]>(() => {
+        getAll: defineDBHandler<[], Dani.DB[]>(() => {
             return async (run) => {
                 const result = await run("SELECT * FROM `dani`");
                 result.forEach((e: any) => {
@@ -20,7 +20,7 @@ export namespace DaniServer {
         /**
          * Retrieves all dani data for a specific version.
          */
-        getByVersion: defineDBHandler<[string], DaniType.DB | null>((version) => {
+        getByVersion: defineDBHandler<[string], Dani.DB | null>((version) => {
             return async (run) => {
                 const result = await run("SELECT * FROM `dani` WHERE `version` = ?", [version]);
                 result.forEach((e: any) => {
@@ -55,7 +55,7 @@ export namespace DaniServer {
         /**
          * Add Version
          */
-        addVersion: defineDBHandler<[string, DaniType.Dani[]?]>((version, danis) => {
+        addVersion: defineDBHandler<[string, Dani.Dani[]?]>((version, danis) => {
             return async (run) => {
                 await run("INSERT INTO `dani` (`version`, `data`) VALUES (?, ?)", [version, JSON.stringify(danis ?? [])])
             }
@@ -63,7 +63,7 @@ export namespace DaniServer {
         /**
          * Update Version
          */
-        updateVersion: defineDBHandler<[DaniType.UpdateData]>((updateData) => {
+        updateVersion: defineDBHandler<[Dani.UpdateData]>((updateData) => {
             updateData.data.sort((a, b) => {
                 const aIndex = DAN.indexOf(a as any);
                 const bIndex = DAN.indexOf(b as any);

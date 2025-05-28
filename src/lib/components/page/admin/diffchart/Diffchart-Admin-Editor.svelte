@@ -1,6 +1,6 @@
 <script lang="ts" module>
-    async function save(data: DiffchartData) {
-        const response = await diffchartRequestor.save(data);
+    async function save(data: Diffchart.DiffchartData) {
+        const response = await DiffchartClient.request.save(data);
         if (response.status === "success") {
             alert("저장 성공");
         } else {
@@ -9,7 +9,7 @@
     }
 
     async function remove(level: number, type: string) {
-        const response = await diffchartRequestor.remove({
+        const response = await DiffchartClient.request.remove({
             level,
             type,
         });
@@ -24,11 +24,11 @@
 
 <script lang="ts">
     import DIffchartEditor from "$lib/components/common/diffchart/DIffchart-Editor.svelte";
-    import { diffchartRequestor } from "$lib/module/common/diffchart/diffchart.client";
-    import { type DiffchartData } from "$lib/module/common/diffchart/types";
+    import { DiffchartClient } from "$lib/module/diffchart/diffchart.client";
+    import { Diffchart } from "$lib/module/diffchart";
 
     interface Props {
-        diffchartData: DiffchartData;
+        diffchartData: Diffchart.DiffchartData;
     }
 
     let { diffchartData }: Props = $props();

@@ -1,4 +1,4 @@
-import { diffchartDBController } from "$lib/module/common/diffchart/diffchart.server";
+import { diffchartDBController } from "$lib/module/diffchart/diffchart.server";
 import { error } from "@sveltejs/kit";
 
 export async function load({ params, locals }) {

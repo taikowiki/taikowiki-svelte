@@ -12,14 +12,13 @@
 <script lang="ts">
     import { intercept } from "$lib/module/common/util";
 
-    import { type DiffChart } from "$lib/module/common/diffchart/types";
+    import { Diffchart } from "$lib/module/diffchart/index";
     import DiffchartEditorSection from "./Diffchart-Editor-Section.svelte";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import { Table } from "../styled";
-    import { encodeDiffchart } from "$lib/module/common/diffchart/diffchart";
 
     interface Props {
-        diffchart: DiffChart;
+        diffchart: Diffchart.Diffchart;
         mode?: "admin" | "normal";
     }
 
@@ -29,9 +28,9 @@
         diffchart.sections.sort((a, b) => a.order - b.order);
     });
 
-    const url = new URL($page.url);
+    const url = new URL(page.url);
     $effect.pre(() => {
-        url.hash = encodeDiffchart(diffchart);
+        url.hash = Diffchart.encodeDiffchart(diffchart);
     });
 
     function copyLink() {
@@ -133,8 +132,8 @@
                                             order: diffchart.sections.length,
                                             name: "",
                                             songs: [],
-                                            color: 'black',
-                                            backgroundColor: 'grey'
+                                            color: "black",
+                                            backgroundColor: "grey",
                                         });
                                     }}
                                 >

@@ -1,7 +1,7 @@
 <script lang="ts" module>
     import { goto } from "$app/navigation";
 
-    async function submit(gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount' | 'coor'>>){
+    async function submit(gamecenterData: Omit<Gamecenter.Gamecenter, 'order' | 'favoriteCount' | 'coor'>){
         if(!gamecenterData.name){
             alert('이름을 입력해주세요.');
             return;
@@ -20,7 +20,7 @@
             return;
         }
 
-        const response = await gamecenterRequestor.report({gamecenterData});
+        const response = await GamecenterClient.request.report({gamecenterData});
 
         if(response.status === "error"){
             alert('오류가 발생했습니다.');
@@ -36,11 +36,10 @@
 
 <script lang="ts">
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import { AMENITY, GAMECENTERREGION } from "$lib/module/common/gamecenter/const";
-    import { gamecenterRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
-    import type { GameCenterDataWithoutOrder } from "$lib/module/common/gamecenter/types";
+    import { GamecenterClient } from "$lib/module/gamecenter/gamecenter.client";
+    import { Gamecenter } from "$lib/module/gamecenter";
 
-    let gamecenterData: Pick<GameCenterDataWithoutOrder, Exclude<keyof GameCenterDataWithoutOrder, 'favoriteCount' | 'coor'>> = $state({
+    let gamecenterData: Omit<Gamecenter.Gamecenter, 'order' | 'favoriteCount' | 'coor'> = $state({
         name: "",
         address: "",
         amenity: {
@@ -86,7 +85,7 @@
 <div class="field">
     <h3>지역</h3>
     <select bind:value={gamecenterData.region}>
-        {#each GAMECENTERREGION as region}
+        {#each Gamecenter.CONST.GAMECENTERREGION as region}
             <option value={region}>
                 {region}
             </option>
@@ -96,7 +95,7 @@
 
 <div class="field">
     <h3>편의시설</h3>
-    {#each AMENITY as amenity}
+    {#each Gamecenter.CONST.AMENITY as amenity}
         <label>
             <input
                 type="checkbox"
@@ -126,7 +125,7 @@
 
 <div class="field">
     <h3>영업시간</h3>
-    {#each [0,1,2,3,4,5,6] as day}
+    {#each ([0,1,2,3,4,5,6] as const) as day}
         <div>
             {i18n.date[day]} <input type="text" bind:value={gamecenterData.businessHours[day]}>
         </div>

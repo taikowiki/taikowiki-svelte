@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import type { Gamecenter } from "$lib/module/gamecenter";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { getTheme } from "$lib/module/layout/theme";
     import { getContext } from "svelte";
@@ -7,7 +7,7 @@
     import FavoriteButton from "./FavoriteButton.svelte";
 
     interface Props {
-        gamecenterData: GameCenterData;
+        gamecenterData: Gamecenter.Gamecenter;
         clickHandle: () => any;
         distance?: number;
         favorites: Writable<number[]>;
@@ -32,7 +32,7 @@
     const user: Writable<{ logined: boolean; nickname: string }> =
         getContext("user");
 
-    const today = new Date().getDay();
+    const today = new Date().getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
     let showOtherDayBusinessHours = $state(false);
     let showMachines = $state(false);
@@ -110,7 +110,7 @@
             </span>
         </div>
         <div class="other-day" class:shown={showOtherDayBusinessHours}>
-            {#each [0, 1, 2, 3, 4, 5, 6] as day}
+            {#each ([0, 1, 2, 3, 4, 5, 6] as const) as day}
                 <div>
                     ({i18n.date[day]}) {gamecenterData.businessHours[day]}
                 </div>

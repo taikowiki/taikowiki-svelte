@@ -1,4 +1,4 @@
-import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import { GamecenterServer } from '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request}){
@@ -9,7 +9,7 @@ export async function POST({request}){
         throw error(400);
     }
 
-    await gamecenterDBController.disapproveRequest(order);
+    await GamecenterServer.DBController.disapproveRequest(order);
 
     return new Response();
 }

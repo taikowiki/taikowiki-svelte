@@ -70,7 +70,7 @@
         if (!confirm("저장하시겠습니까?")) return;
 
         const response =
-            await DaniClient.adminRequestor.updateVersion(versionDaniData);
+            await DaniClient.adminRequest.updateVersion(versionDaniData);
 
         if (response.status === "success") {
             alert("저장 성공");

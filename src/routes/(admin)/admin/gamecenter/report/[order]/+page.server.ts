@@ -1,11 +1,11 @@
-import {userDBController} from '$lib/module/common/user/user.server';
-import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server';
+import { userDBController } from '$lib/module/common/user/user.server';
+import { GamecenterServer } from '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
 
-export async function load({params}){
-    const report = await gamecenterDBController.getReportByOrder(Number(params.order));
+export async function load({ params }) {
+    const report = await GamecenterServer.DBController.getReportByOrder(Number(params.order));
 
-    if(!report){
+    if (!report) {
         throw error(404);
     }
 

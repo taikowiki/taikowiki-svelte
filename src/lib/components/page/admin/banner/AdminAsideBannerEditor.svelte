@@ -13,7 +13,7 @@
             return;
         }
 
-        const response = await BannerClient.adminRequestor.updateAsideBanner({
+        const response = await BannerClient.adminRequest.updateAsideBanner({
             banners,
         });
 

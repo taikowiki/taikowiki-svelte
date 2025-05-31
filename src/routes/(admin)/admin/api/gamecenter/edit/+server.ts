@@ -1,54 +1,18 @@
-import { AMENITY, GAMECENTERREGION } from '$lib/module/common/gamecenter/const.js';
-import { gamecenterDBController, gamecenterServerRequestor } from '$lib/module/common/gamecenter/gamecenter.server.js';
-import type { GameCenterData, GameCenterDataWithoutOrder } from '$lib/module/common/gamecenter/types.js';
+import { GamecenterServer } from '$lib/module/gamecenter/gamecenter.server.js';
+import { Gamecenter } from '$lib/module/gamecenter/index.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request, url }) {
-    const requestData: Partial<GameCenterDataWithoutOrder> = (await request.json()).gamecenterData;
+    const requestData: Gamecenter.GamecenterWithoutOrder = (await request.json()).gamecenterData;
 
-    if (!("order" in requestData) || typeof (requestData.order) !== "number") {
-        throw error(400, JSON.stringify({
-            reason: 'Error in "order"'
-        }));
+    try{
+        Gamecenter.Schema.GamecenterWithoutOrder.parse(requestData)
     }
-    if (!("name" in requestData) || typeof (requestData.name) !== "string" || !requestData.name) {
-        throw error(400, JSON.stringify({
-            reason: 'Error in "name"'
-        }));
-    }
-    if (!("address" in requestData) || typeof (requestData.address) !== "string" || !requestData.address) {
-        throw error(400, JSON.stringify({
-            reason: 'Error in "address"'
-        }));
-    }
-    if (!("amenity" in requestData) || typeof (requestData.amenity) !== "object" || !AMENITY.every(amenity => {
-        return amenity in (requestData.amenity as any) && typeof ((requestData.amenity as any)[amenity]) === "boolean"
-    })) {
-        throw error(400, JSON.stringify({
-            reason: 'Error in "amenity"'
-        }));
-    }
-    if (!("businessHours" in requestData) || typeof (requestData.businessHours) !== "object" || ![0, 1, 2, 3, 4, 5, 6].every(day => {
-        return day in (requestData.businessHours as any) && typeof ((requestData.businessHours as any)[day]) === "string"
-    })) {
-        throw error(400, JSON.stringify({
-            reason: 'Error in "businessHours"'
-        }));
-    }
-    if (!("region" in requestData) || !GAMECENTERREGION.includes(requestData.region as typeof GAMECENTERREGION[number])) {
-        throw error(400, JSON.stringify({
-            reason: 'Error in "region"'
-        }));
-    }
-    if (!("machines" in requestData) || !Array.isArray(requestData.machines) || !(requestData.machines as any[]).every(machine => {
-        return "price" in machine && "tunes" in machine && "count" in machine && typeof (machine.price) === "number" && typeof (machine.tunes) === "number" && typeof (machine.count) === "number"
-    })) {
-        throw error(400), JSON.stringify({
-            reason: 'Error in "machines"'
-        });
+    catch{
+        throw error(400);
     }
 
-    const coorData = await gamecenterServerRequestor.searchCoorWithAddress(requestData.address, url.origin);
+    const coorData = await GamecenterServer.serverRequest.searchCoorWithAddress(requestData.address, url.origin);
 
     const gamecenterData = {
         ...requestData,
@@ -56,9 +20,9 @@ export async function POST({ request, url }) {
             x: coorData?.[0]?.x !== undefined ? Number(coorData?.[0]?.x) : null,
             y: coorData?.[0]?.y !== undefined ? Number(coorData?.[0]?.y) : null
         }
-    } as GameCenterData;
+    } as Gamecenter.Gamecenter;
 
-    await gamecenterDBController.editGamecenter(gamecenterData)
+    await GamecenterServer.DBController.editGamecenter(gamecenterData)
 
     return new Response();
 }

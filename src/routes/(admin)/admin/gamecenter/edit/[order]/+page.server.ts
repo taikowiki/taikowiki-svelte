@@ -1,8 +1,8 @@
-import { gamecenterDBController } from "$lib/module/common/gamecenter/gamecenter.server";
+import { GamecenterServer } from '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from "@sveltejs/kit";
 
 export async function load({params}){
-    const gamecenterData = await gamecenterDBController.getByOrder(Number(params.order))
+    const gamecenterData = await GamecenterServer.DBController.getByOrder(Number(params.order))
     if(!gamecenterData){
         throw error(404);
     }

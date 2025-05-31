@@ -17,7 +17,7 @@
     let newVersion: string = $state("");
 
     async function addVersion(version: string){
-        const response = await DaniClient.adminRequestor.addVersion(version);
+        const response = await DaniClient.adminRequest.addVersion(version);
         if(response.status === 'success'){
             versions.push(version as any);
             alert('버전 추가 완료');

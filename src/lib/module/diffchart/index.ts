@@ -3,12 +3,13 @@ import { z } from "zod";
 import { DIFFICULTY } from "../common/song/const";
 import type { Difficulty, SongData } from "../common/song/types";
 
+// module
 export namespace Diffchart {
     /**
- * Decode stringified diffchart to object.
- * @param hash 
- * @returns 
- */
+     * Decode stringified diffchart to object.
+     * @param hash 
+     * @returns 
+     */
     export function decodeDiffchart(hash: string) {
         const stringifiedCompressed = decodeURIComponent(atob(hash));
         const compressed = Uint8Array.from(JSON.parse(stringifiedCompressed));
@@ -103,6 +104,7 @@ export namespace Diffchart {
     }
 }
 
+// types
 export namespace Diffchart {
     export namespace Schema {
         // diffchart
@@ -155,7 +157,7 @@ export namespace Diffchart {
             })
         }
 
-        export namespace Tuple{
+        export namespace Tuple {
             export const SongTuple = z.tuple([z.string(), z.string(), z.enum(DIFFICULTY)]);
             export const SectionTuple = z.tuple([z.string(), z.array(SongTuple), z.optional(z.string()), z.optional(z.string())]);
             export const DiffchartTuple = z.tuple([z.string(), z.array(SectionTuple), z.optional(z.string()), z.optional(z.string())]);
@@ -170,7 +172,7 @@ export namespace Diffchart {
     export type DiffchartData = z.infer<typeof Schema.DiffchartData>;
 
     // user score
-    export namespace Score{
+    export namespace Score {
         export type Difficulty = z.infer<typeof Schema.Score.Difficulty>;
         export type Crown = z.infer<typeof Schema.Score.Crown>;
         export type Badge = z.infer<typeof Schema.Score.Badge>;
@@ -179,7 +181,7 @@ export namespace Diffchart {
     }
 
     // tuple
-    export namespace Tuple{
+    export namespace Tuple {
         export type SongTuple = [songNo: string, title: string, difficulty: Difficulty];
         export type SectionTuple = [name: string, songs: SongTuple[], color?: string, backgroundColor?: string];
         export type DiffchartTuple = [name: string, sections: SectionTuple[], color?: string, backgroundColor?: string];

@@ -2,7 +2,7 @@ import { defineRequestHandler } from "@yowza/rrequestor";
 import type { Banner } from "$lib/module/banner/types";
 
 export namespace BannerClient {
-    export const adminRequestor = {
+    export const adminRequest = {
         updateMainBanner: defineRequestHandler<{ banners: Banner.MainBanner[] }, void>({
             url: '/admin/api/banner/main',
             method: 'post'

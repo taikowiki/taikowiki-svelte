@@ -1,14 +1,14 @@
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import type { Gamecenter } from "$lib/module/gamecenter";
     import type { Writable } from "svelte/store";
     import GamecenterInfo from "./GamecenterInfo.svelte";
     import { getContext } from "svelte";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
 
     interface Props {
-        gamecenterDatas: GameCenterData[];
+        gamecenterDatas: Gamecenter.Gamecenter[];
         favorites: Writable<number[]>;
-        distanceMap: Map<GameCenterData, number>;
+        distanceMap: Map<Gamecenter.Gamecenter, number>;
         gamecenterMarkers: Record<
             number,
             {

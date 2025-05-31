@@ -1,11 +1,8 @@
 <script lang="ts">
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import {
-        GAMECENTERREGION,
-        AMENITY,
-    } from "$lib/module/common/gamecenter/const.js";
-    import { gamecenterAdminRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
+    import { GamecenterClient } from "$lib/module/gamecenter/gamecenter.client.js";
     import { goto } from "$app/navigation";
+    import { Gamecenter } from "$lib/module/gamecenter/index.js";
 
     let { data } = $props();
     const { report, nickname } = data;
@@ -19,7 +16,7 @@
             return;
         }
 
-        const response = await gamecenterAdminRequestor.approve({ order });
+        const response = await GamecenterClient.adminRequest.approve({ order });
 
         if (response.status === "success") {
             alert("완료되었습니다.");
@@ -35,7 +32,7 @@
             return;
         }
 
-        const response = await gamecenterAdminRequestor.disapprove({ order });
+        const response = await GamecenterClient.adminRequest.disapprove({ order });
 
         if (response.status === "success") {
             alert("완료되었습니다.");
@@ -79,7 +76,7 @@
     <div class="field">
         <h3>지역</h3>
         <select bind:value={gamecenterData.region}>
-            {#each GAMECENTERREGION as region}
+            {#each Gamecenter.CONST.GAMECENTERREGION as region}
                 <option value={region}>
                     {region}
                 </option>
@@ -89,7 +86,7 @@
 
     <div class="field">
         <h3>편의시설</h3>
-        {#each AMENITY as amenity}
+        {#each Gamecenter.CONST.AMENITY as amenity}
             <label>
                 <input
                     readonly

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Notice } from "$lib/module/common/notice/types";
+    import type { Notice } from "$lib/module/notice";
     import { getTheme } from "$lib/module/layout/theme";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
@@ -7,7 +7,7 @@
 
     //props
     interface Props {
-        notices: Omit<Notice, "content">[];
+        notices: Omit<Notice.Notice, "content">[];
     }
 
     let { notices }: Props = $props();

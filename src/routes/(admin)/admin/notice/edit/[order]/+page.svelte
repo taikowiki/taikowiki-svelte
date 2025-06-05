@@ -1,11 +1,11 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import AdminNoticeEditor from "$lib/components/page/admin/notice/AdminNoticeEditor.svelte";
-    import { adminNoticeRequestor } from "$lib/module/common/notice/notice.client";
-    import type { Notice } from "$lib/module/common/notice/types";
+    import { NoticeClient } from "$lib/module/notice/notice.client";
+    import {Notice} from '$lib/module/notice';
 
     let {data} = $props();
-    let notice: Notice = $state(data.notice);
+    let notice: Notice.Notice = $state(data.notice);
 
     async function submit() {
         if (!confirm("작성하시겠습니까?")) {
@@ -23,7 +23,7 @@
             alert("공식 공지 날짜가 비어있습니다.");
             return;
         }
-        const result = await adminNoticeRequestor.editNotice({
+        const result = await NoticeClient.adminRequest.editNotice({
             order: notice.order,
             notice
         });

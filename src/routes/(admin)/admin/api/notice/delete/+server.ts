@@ -1,4 +1,4 @@
-import { noticeDBController } from '$lib/module/common/notice/notice.server.js';
+import { NoticeServer } from '$lib/module/notice/notice.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function DELETE({request}){
@@ -7,7 +7,7 @@ export async function DELETE({request}){
         throw error(400);
     }
 
-    await noticeDBController.deleteNotice(data.order);
+    await NoticeServer.DBController.deleteNotice(data.order);
 
     return new Response();
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Banner } from "$lib/module/banner/types";
+    import { Banner } from "$lib/module/banner";
     import AsideItem from "./AsideItem.svelte";
 
     interface Props {

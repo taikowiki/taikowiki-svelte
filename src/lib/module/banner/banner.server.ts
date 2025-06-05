@@ -1,7 +1,7 @@
 import { defineDBHandler } from "@yowza/db-handler";
-import type { Banner } from "$lib/module/banner/types";
+import { Banner } from "$lib/module/banner";
 
-export namespace BannerServer {
+namespace BannerServer {
     export const DBController = {
         getMainBanner: defineDBHandler<[], Banner.MainBanner[] | null>(() => {
             return async (run) => {
@@ -65,3 +65,5 @@ export namespace BannerServer {
         })
     }
 }
+
+Banner.Server = BannerServer;

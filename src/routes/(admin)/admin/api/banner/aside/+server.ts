@@ -1,5 +1,5 @@
-import { BannerServer } from '$lib/module/banner/banner.server.js';
-import { Banner } from "$lib/module/banner/types";
+import { Banner } from "$lib/module/banner";
+import '$lib/module/banner/banner.server.js';
 import { error } from '@sveltejs/kit';
 import { z } from 'zod';
 
@@ -13,7 +13,7 @@ export async function POST({request}){
         }));
     }
 
-    await BannerServer.DBController.updateAsideBanner(banners);
+    await Banner.Server.DBController.updateAsideBanner(banners);
 
     return new Response();
 }

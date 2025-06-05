@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Banner } from "$lib/module/banner/types";
+    import type { Banner } from "$lib/module/banner";
 
     interface Props {
         banners: Banner.MainBanner[];

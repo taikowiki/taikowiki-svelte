@@ -1,7 +1,7 @@
 import { defineRequestHandler } from "@yowza/rrequestor";
-import type { Banner } from "$lib/module/banner/types";
+import { Banner } from "$lib/module/banner";
 
-export namespace BannerClient {
+namespace BannerClient {
     export const adminRequest = {
         updateMainBanner: defineRequestHandler<{ banners: Banner.MainBanner[] }, void>({
             url: '/admin/api/banner/main',
@@ -13,3 +13,5 @@ export namespace BannerClient {
         }),
     }
 }
+
+Banner.Client = BannerClient;

@@ -5,7 +5,7 @@ import { renderer } from "../util.js";
 import { songDBController } from "../../song/song.server.js";
 import { sqlString, sqlEscapeString, sqlEscapeLike } from "../../util.js";
 import * as Diff from 'diff';
-import type { SearchResult } from "../../search/types.js";
+import { Search } from "$lib/module/search/index.js";
 
 export const docDBController = {
     /**
@@ -504,7 +504,7 @@ export const docDBController = {
                 Where.Compare('isDeleted', '=', 0)
             ).limit(20).build()
 
-            const searchResult: SearchResult[] = (await run(query)).map((e: any) => ({
+            const searchResult: Search.Result[] = (await run(query)).map((e: any) => ({
                 title: e.title as string,
                 type: 'docs'
             }));

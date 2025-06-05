@@ -1,8 +1,6 @@
-import type { SearchResult } from '$lib/module/common/search/types.js';
-import { sqlEscapeLike } from '$lib/module/common/util.js';
 import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
 import { error } from '@sveltejs/kit';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { runQuery } from '@yowza/db-handler';
 
 export async function _searchDoc(keyword: string, run: any) {
     return docDBController.quickSearch.getCallback(keyword)(run)

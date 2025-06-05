@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Dani } from "$lib/module/dani/types";
+    import type { Dani } from "$lib/module/dani";
     import AdminDaniEditorDan from "./AdminDaniEditor-Dan.svelte";
     import AdminDaniEditorName from "./AdminDaniEditor-Name.svelte";
     import AdminDaniEditorSong from "./AdminDaniEditor-Song.svelte";

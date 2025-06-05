@@ -1,5 +1,5 @@
-import { DaniServer } from '$lib/module/dani/dani.server.js';
-import { Dani } from '$lib/module/dani/types.js';
+import { Dani } from '$lib/module/dani';
+import '$lib/module/dani/dani.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request }) {
@@ -11,7 +11,7 @@ export async function POST({ request }) {
         throw error(400);
     }
 
-    await DaniServer.DBController.updateVersion(requestData);
+    await Dani.Server.DBController.updateVersion(requestData);
 
     return new Response();
 }

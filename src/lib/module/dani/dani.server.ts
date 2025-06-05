@@ -1,9 +1,9 @@
 import { DAN } from "../common/song/const";
 import type { DaniVersion } from "../common/song/types";
-import type { Dani } from "./types";
+import { Dani } from ".";
 import { defineDBHandler } from "@yowza/db-handler";
 
-export namespace DaniServer {
+namespace DaniServer {
     export const DBController = {
         /**
          * Retrieves all dani data.
@@ -78,3 +78,5 @@ export namespace DaniServer {
     }
 
 }
+
+Dani.Server = DaniServer;

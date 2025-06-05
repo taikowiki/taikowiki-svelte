@@ -1,11 +1,11 @@
-import { DaniServer } from "$lib/module/dani/dani.server";
+import { Dani } from "$lib/module/dani";
+import "$lib/module/dani/dani.server";
 import { songDBController } from "$lib/module/common/song/song.server";
-import { Dani } from "$lib/module/dani/types";
 import { error } from "@sveltejs/kit";
 import { DAN } from "$lib/module/common/song/const.js";
 
 export async function load({ params }) {
-    const daniData = await DaniServer.DBController.getByVersion(params.version);
+    const daniData = await Dani.Server.DBController.getByVersion(params.version);
 
     if (daniData === null) {
         throw error(404);

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Dani } from "$lib/module/dani/types";
+    import type { Dani } from "$lib/module/dani";
     import DaniSong from "./DaniSong.svelte";
 
     interface Props {

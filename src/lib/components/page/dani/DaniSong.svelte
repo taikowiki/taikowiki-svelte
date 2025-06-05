@@ -13,7 +13,7 @@
 </script>
 
 <script lang="ts">
-    import type { Dani } from "$lib/module/dani/types";
+    import type { Dani } from "$lib/module/dani";
     import type { Genre } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
     import { DifficultyColor } from "$lib/module/common/styled";

@@ -44,7 +44,7 @@
 </script>
 
 <script lang="ts">
-    import type { Dani } from "$lib/module/dani/types";
+    import type { Dani } from "$lib/module/dani";
     import { getLang } from "$lib/module/common/i18n/i18n";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N } from "$lib/module/common/i18n/i18n";

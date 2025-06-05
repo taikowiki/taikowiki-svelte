@@ -30,7 +30,7 @@
 </script>
 
 <script lang="ts">
-    import type { Dani } from "$lib/module/dani/types";
+    import type { Dani } from "$lib/module/dani";
     import DaniHead from "./DaniHead.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import DaniSongContainer from "./DaniSongContainer.svelte";

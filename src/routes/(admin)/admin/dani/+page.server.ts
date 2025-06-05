@@ -1,7 +1,8 @@
-import { DaniServer } from "$lib/module/dani/dani.server";
+import { Dani } from "$lib/module/dani"
+import '$lib/module/dani/dani.server'
 
 export async function load(){
     return {
-        versions: await DaniServer.DBController.getVersions()
+        versions: await Dani.Server.DBController.getVersions()
     }
 }

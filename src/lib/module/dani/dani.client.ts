@@ -1,7 +1,7 @@
 import { defineRequestHandler } from "@yowza/rrequestor";
-import type { Dani } from "./types";
+import { Dani } from ".";
 
-export namespace DaniClient {
+namespace DaniClient {
     export const adminRequest = {
         addVersion: defineRequestHandler<string, void>({
             url: '/admin/api/dani/add-version',
@@ -13,3 +13,5 @@ export namespace DaniClient {
         })
     }
 }
+
+Dani.Client = DaniClient;

@@ -1,6 +1,27 @@
-import type { SongData } from "$lib/module/common/song/types"
+import type { DaniVersion, SongData } from "$lib/module/common/song/types"
 import { z } from "zod";
 import { DANIVERSION, DIFFICULTY, REGULAR_DAN } from "../common/song/const";
+import type { defineRequestHandler } from "@yowza/rrequestor";
+import type { defineDBHandler } from "@yowza/db-handler";
+
+export namespace Dani{
+    export declare namespace Client{
+        const adminRequest: {
+            addVersion: ReturnType<typeof defineRequestHandler<string, void>>;
+            updateVersion: ReturnType<typeof defineRequestHandler<Dani.UpdateData, void>>;
+        }
+    }
+    export declare namespace Server{
+        const DBController: {
+            getAll: ReturnType<typeof defineDBHandler<[], Dani.DB[]>>;
+            getByVersion: ReturnType<typeof defineDBHandler<[string], Dani.DB | null>>;
+            getVersions: ReturnType<typeof defineDBHandler<[], Partial<DaniVersion>[]>>;
+            hasVersion: ReturnType<typeof defineDBHandler<[string]>>;
+            addVersion: ReturnType<typeof defineDBHandler<[string, Dani.Dani[]?]>>;
+            updateVersion: ReturnType<typeof defineDBHandler<[Dani.UpdateData]>>;
+        }
+    }
+}
 
 export namespace Dani {
     export namespace Schema{

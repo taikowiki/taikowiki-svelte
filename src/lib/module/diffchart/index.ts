@@ -2,6 +2,8 @@ import LZUTF8 from "lzutf8";
 import { z } from "zod";
 import { DIFFICULTY } from "../common/song/const";
 import type { Difficulty, SongData } from "../common/song/types";
+import type { defineRequestHandler } from "@yowza/rrequestor";
+import type { defineDBHandler } from "@yowza/db-handler";
 
 // module
 export namespace Diffchart {
@@ -101,6 +103,30 @@ export namespace Diffchart {
         };
 
         return diffchart;
+    }
+}
+
+// client/server
+export namespace Diffchart {
+    export declare namespace Client {
+        const request: {
+            save: ReturnType<typeof defineRequestHandler<Diffchart.DiffchartData, void>>,
+            remove: ReturnType<typeof defineRequestHandler<{ level: number, type: string }, void>>
+        }
+    }
+    export declare namespace Server {
+        const DBController: {
+            getClearByLevel: ReturnType<typeof defineDBHandler<[number], Diffchart.DiffchartData | null>>,
+            getFullcomboByLevel: ReturnType<typeof defineDBHandler<[number], Diffchart.DiffchartData | null>>,
+            getDonderfullcomboByLevel: ReturnType<typeof defineDBHandler<[number], Diffchart.DiffchartData | null>>,
+            getAll: ReturnType<typeof defineDBHandler<[], Diffchart.DiffchartData[]>>,
+            uploadDiffchart: ReturnType<typeof defineDBHandler<[Diffchart.DiffchartData], void>>,
+            deleteDiffchart: ReturnType<typeof defineDBHandler<[number, string], void>>
+        }
+
+        // function parseDiffchart(e: any): void;
+        // function sortDiffchart(a: Diffchart.DiffchartData, b: Diffchart.DiffchartData): number;
+        // function typeToNum(type: 'clear' | 'fc' | 'dfc'): 0 | 1 | 2 | 3;
     }
 }
 

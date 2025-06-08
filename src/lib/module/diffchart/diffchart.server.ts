@@ -1,7 +1,7 @@
-import type { Diffchart } from './index';
+import { Diffchart } from './index';
 import { defineDBHandler } from "@yowza/db-handler";
 
-export namespace DiffchartServer {
+namespace DiffchartServer {
     export const DBController = {
         /**
          * Retrieves the clear difficulty chart data by level.
@@ -89,33 +89,34 @@ export namespace DiffchartServer {
             }
         })
     }
+
+    function parseDiffchart(e: any) {
+        e.data &&= JSON.parse(e.data);
+    }
+    function sortDiffchart(a: Diffchart.DiffchartData, b: Diffchart.DiffchartData) {
+        if (a.type === b.type) {
+            return a.level - b.level
+        }
+        else {
+            return typeToNum(a.type) - typeToNum(b.type);
+        }
+    }
+    function typeToNum(type: 'clear' | 'fc' | 'dfc') {
+        switch (type) {
+            case ('clear'): {
+                return 0;
+            }
+            case ('fc'): {
+                return 1;
+            }
+            case ('dfc'): {
+                return 2;
+            }
+            default: {
+                return 3;
+            }
+        }
+    }
 }
 
-function parseDiffchart(e: any) {
-    e.data &&= JSON.parse(e.data);
-}
-
-function sortDiffchart(a: Diffchart.DiffchartData, b: Diffchart.DiffchartData) {
-    if (a.type === b.type) {
-        return a.level - b.level
-    }
-    else {
-        return typeToNum(a.type) - typeToNum(b.type);
-    }
-}
-function typeToNum(type: 'clear' | 'fc' | 'dfc') {
-    switch (type) {
-        case ('clear'): {
-            return 0;
-        }
-        case ('fc'): {
-            return 1;
-        }
-        case ('dfc'): {
-            return 2;
-        }
-        default: {
-            return 3;
-        }
-    }
-}
+Diffchart.Server = DiffchartServer;

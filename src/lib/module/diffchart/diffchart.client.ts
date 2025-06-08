@@ -1,7 +1,7 @@
 import { defineRequestHandler } from "@yowza/rrequestor";
-import { type Diffchart } from "./index";
+import { Diffchart } from "./index";
 
-export namespace DiffchartClient {
+namespace DiffchartClient {
     export const request = {
         save: defineRequestHandler<Diffchart.DiffchartData, void>({
             url: "/admin/api/diffchart/upload",
@@ -13,3 +13,5 @@ export namespace DiffchartClient {
         })
     }
 }
+
+Diffchart.Client = DiffchartClient;

@@ -1,5 +1,5 @@
-import { GamecenterServer } from '$lib/module/gamecenter/gamecenter.server.js';
-import { Gamecenter } from '$lib/module/gamecenter/index.js';
+import { Gamecenter } from "$lib/module/gamecenter";
+import '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request, url }) {
@@ -12,7 +12,7 @@ export async function POST({ request, url }) {
         throw error(400);
     }
 
-    const coorData = await GamecenterServer.serverRequest.searchCoorWithAddress(requestData.address, url.origin);
+    const coorData = await Gamecenter.Server.serverRequest.searchCoorWithAddress(requestData.address, url.origin);
 
     const gamecenterData = {
         ...requestData,
@@ -22,7 +22,7 @@ export async function POST({ request, url }) {
         }
     } as Gamecenter.Gamecenter;
 
-    await GamecenterServer.DBController.editGamecenter(gamecenterData)
+    await Gamecenter.Server.DBController.editGamecenter(gamecenterData)
 
     return new Response();
 }

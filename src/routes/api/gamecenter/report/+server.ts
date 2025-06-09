@@ -1,5 +1,5 @@
-import { GamecenterServer } from '$lib/module/gamecenter/gamecenter.server.js';
-import { Gamecenter } from '$lib/module/gamecenter/index.js';
+import { Gamecenter } from "$lib/module/gamecenter";
+import '$lib/module/gamecenter/gamecenter.server.js';
 import { getClientAddress } from '$lib/module/common/util.server.js';
 import { error } from '@sveltejs/kit';
 
@@ -19,7 +19,7 @@ export async function POST(event){
         throw error(400);
     }
 
-    await GamecenterServer.DBController.addReport({
+    await Gamecenter.Server.DBController.addReport({
         gamecenterData,
         UUID: locals.userData.UUID,
         ip: getClientAddress(event)

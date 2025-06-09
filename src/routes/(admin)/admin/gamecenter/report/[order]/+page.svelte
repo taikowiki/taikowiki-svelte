@@ -1,8 +1,8 @@
 <script lang="ts">
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import { GamecenterClient } from "$lib/module/gamecenter/gamecenter.client.js";
+    import { Gamecenter } from "$lib/module/gamecenter";
+    import "$lib/module/gamecenter/gamecenter.client";
     import { goto } from "$app/navigation";
-    import { Gamecenter } from "$lib/module/gamecenter/index.js";
 
     let { data } = $props();
     const { report, nickname } = data;
@@ -16,7 +16,7 @@
             return;
         }
 
-        const response = await GamecenterClient.adminRequest.approve({ order });
+        const response = await Gamecenter.Client.adminRequest.approve({ order });
 
         if (response.status === "success") {
             alert("완료되었습니다.");
@@ -32,7 +32,7 @@
             return;
         }
 
-        const response = await GamecenterClient.adminRequest.disapprove({ order });
+        const response = await Gamecenter.Client.adminRequest.disapprove({ order });
 
         if (response.status === "success") {
             alert("완료되었습니다.");

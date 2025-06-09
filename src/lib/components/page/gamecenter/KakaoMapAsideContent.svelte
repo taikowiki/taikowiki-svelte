@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { Gamecenter } from "$lib/module/gamecenter";
     import { onMount } from "svelte";
     import KakaoMapAsideContentSearch from "./KakaoMapAsideContentSearch.svelte";
     import KakaoMapAsideContentFavorites from "./KakaoMapAsideContentFavorites.svelte";
-    import { GamecenterClient } from "$lib/module/gamecenter/gamecenter.client";
+    import { Gamecenter } from "$lib/module/gamecenter";
+    import "$lib/module/gamecenter/gamecenter.client";
     import { writable } from "svelte/store";
 
     interface Props {
@@ -29,7 +29,7 @@
         gamecenterDatas: gcData,
     }: Props = $props();
 
-    const kakaoMap = GamecenterClient.getKakaoMap();
+    const kakaoMap = Gamecenter.Client.getKakaoMap();
 
     let container: HTMLDivElement;
     let gamecenterDatas = $state(gcData);
@@ -58,7 +58,7 @@
     let favorites = writable<number[]>([]);
 
     onMount(() => {
-        GamecenterClient.request.getFavorites(null).then((response) => {
+        Gamecenter.Client.request.getFavorites(null).then((response) => {
             if (response.status === "success") {
                 $favorites = response.data;
             }

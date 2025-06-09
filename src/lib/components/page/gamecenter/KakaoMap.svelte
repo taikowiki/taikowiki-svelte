@@ -76,8 +76,8 @@
 </script>
 
 <script lang="ts">
-    import type { Gamecenter } from "$lib/module/gamecenter";
-    import { GamecenterClient } from "$lib/module/gamecenter/gamecenter.client";
+    import { Gamecenter } from "$lib/module/gamecenter";
+    import "$lib/module/gamecenter/gamecenter.client";
     import { mount, onDestroy, onMount } from "svelte";
     import KakaoMapAside from "./KakaoMapAside.svelte";
     import MarkerInfo from "./MarkerInfo.svelte";
@@ -100,7 +100,7 @@
     > = $state({});
 
     //지도 관련 변수
-    const kakaoMap = GamecenterClient.getKakaoMap();
+    const kakaoMap = Gamecenter.Client.getKakaoMap();
 
     let mapContainer: HTMLDivElement | undefined = $state();
     let map: kakao.maps.Map | undefined = $state();

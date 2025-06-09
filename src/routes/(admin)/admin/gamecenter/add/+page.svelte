@@ -1,7 +1,7 @@
 <script lang="ts">
     import GamecenterEditor from "$lib/components/page/admin/gamecenter/GamecenterEditor.svelte";
     import { Gamecenter } from "$lib/module/gamecenter";
-    import { GamecenterClient } from "$lib/module/gamecenter/gamecenter.client";
+    import "$lib/module/gamecenter/gamecenter.client";
     import { goto } from "$app/navigation";
 
     const gamecenterData: Gamecenter.GamecenterWithoutOrder = {
@@ -50,7 +50,7 @@
             return;
         }
 
-        const response = await GamecenterClient.adminRequest.add({gamecenterData});
+        const response = await Gamecenter.Client.adminRequest.add({gamecenterData});
 
         if(response.status === "error"){
             alert('오류가 발생했습니다.');

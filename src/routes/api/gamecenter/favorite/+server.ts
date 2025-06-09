@@ -1,4 +1,5 @@
-import { GamecenterServer } from '$lib/module/gamecenter/gamecenter.server.js';
+import { Gamecenter } from "$lib/module/gamecenter";
+import '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function GET({locals}){
@@ -8,7 +9,7 @@ export async function GET({locals}){
         throw error(401);
     }
 
-    return new Response(JSON.stringify(await GamecenterServer.DBController.getFavorites(userData.UUID)), {
+    return new Response(JSON.stringify(await Gamecenter.Server.DBController.getFavorites(userData.UUID)), {
         headers: {
             'Content-Type': 'application/json'
         }

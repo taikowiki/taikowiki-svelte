@@ -20,7 +20,7 @@
             return;
         }
 
-        const response = await GamecenterClient.request.report({gamecenterData});
+        const response = await Gamecenter.Client.request.report({gamecenterData});
 
         if(response.status === "error"){
             alert('오류가 발생했습니다.');
@@ -36,8 +36,8 @@
 
 <script lang="ts">
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import { GamecenterClient } from "$lib/module/gamecenter/gamecenter.client";
     import { Gamecenter } from "$lib/module/gamecenter";
+    import "$lib/module/gamecenter/gamecenter.client";
 
     let gamecenterData: Omit<Gamecenter.Gamecenter, 'order' | 'favoriteCount' | 'coor'> = $state({
         name: "",

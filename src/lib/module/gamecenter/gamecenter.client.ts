@@ -1,7 +1,7 @@
 import { defineRequestHandler } from "@yowza/rrequestor";
 import { Gamecenter } from ".";
 
-export namespace GamecenterClient {
+namespace GamecenterClient {
     export function getKakaoMap() {
         return window.kakao.maps;
     }
@@ -75,3 +75,5 @@ export namespace GamecenterClient {
         })
     }
 }
+
+Gamecenter.Client = GamecenterClient;

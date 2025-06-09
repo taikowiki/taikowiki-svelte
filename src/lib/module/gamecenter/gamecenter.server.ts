@@ -1,8 +1,8 @@
 import axios from "axios";
-import type { Gamecenter } from ".";
+import { Gamecenter } from ".";
 import { defineDBHandler } from "@yowza/db-handler";
 
-export namespace GamecenterServer {
+namespace GamecenterServer {
     export const DBController = {
         /**
      * Retrieves the arcade favorites for a specific UUID user.
@@ -255,3 +255,5 @@ export namespace GamecenterServer {
         }
     }
 }
+
+Gamecenter.Server = GamecenterServer;

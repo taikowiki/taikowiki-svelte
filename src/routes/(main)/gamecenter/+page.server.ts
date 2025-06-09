@@ -1,7 +1,8 @@
-import { GamecenterServer } from '$lib/module/gamecenter/gamecenter.server.js';
+import { Gamecenter } from "$lib/module/gamecenter";
+import '$lib/module/gamecenter/gamecenter.server.js';
 
 export async function load({ url }) {
-    const gamecenterDatas = await GamecenterServer.DBController.getAll();
+    const gamecenterDatas = await Gamecenter.Server.DBController.getAll();
     return {
         gamecenterDatas
     }

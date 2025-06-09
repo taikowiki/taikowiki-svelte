@@ -1,3 +1,6 @@
+import type { defineDBHandler } from "@yowza/db-handler";
+import type { defineRequestHandler } from "@yowza/rrequestor";
+import type { RRequestHandler } from "@yowza/rrequestor/types";
 import { z } from "zod";
 
 // module
@@ -5,6 +8,49 @@ export namespace Gamecenter {
     export namespace CONST {
         export const GAMECENTERREGION = ["서울", "경기", "대전", "인천", "충남", "강원", "부산", "울산", "경남", "대구", "경북", "광주", "전남", "전북", "제주"] as const;
         export const AMENITY = ['water', 'toilet', 'park', 'capture', 'rental', 'night', 'atm', 'fan', 'mybachi'] as const;
+    }
+}
+
+// client/server
+export namespace Gamecenter {
+    export declare namespace Client {
+        function getKakaoMap(): typeof kakao.maps;
+        const request: {
+            getFavorites: ReturnType<typeof defineRequestHandler<null, number[]>>,
+            addFavorite: ReturnType<typeof defineRequestHandler<{ gamecenterOrder: number }, void>>,
+            deleteFavorite: ReturnType<typeof defineRequestHandler<{ gamecenterOrder: number }, void>>,
+            report: ReturnType<typeof defineRequestHandler<{ gamecenterData: Omit<Gamecenter.Gamecenter, 'order' | 'favoriteCount' | 'coor'> }, void>>
+        }
+        const adminRequest: {
+            edit: RRequestHandler<{gamecenterData: Gamecenter.GamecenterWithoutOrder}, void>,
+            delete: RRequestHandler<{order: number;}, void>,
+            add: RRequestHandler<{ gamecenterData: Gamecenter.GamecenterWithoutOrder }, void>,
+            approve: RRequestHandler<{ order: number }, void>,
+            disapprove: RRequestHandler<{ order: number }, void>
+        }
+    }
+
+    export declare namespace Server{
+        const DBController:{
+            getFavorites: ReturnType<typeof defineDBHandler<[string], number[]>>,
+            addFavorite: ReturnType<typeof defineDBHandler<[string, number], void>>,
+            deleteFavorite: ReturnType<typeof defineDBHandler<[string, number], void>>,
+            getAll: ReturnType<typeof defineDBHandler<[], Gamecenter.Gamecenter[]>>,
+            getByOrder: ReturnType<typeof defineDBHandler<[number], Gamecenter.Gamecenter | null>>,
+            getAllNames: ReturnType<typeof defineDBHandler<[], Pick<Gamecenter.Gamecenter, 'name' | 'order'>[]>>,
+            addGamecenter: ReturnType<typeof defineDBHandler<[Gamecenter.GamecenterWithoutOrderAndFavoriteCount], void>>,
+            editGamecenter: ReturnType<typeof defineDBHandler<[Gamecenter.Gamecenter], void>>,
+            deleteGamecenter: ReturnType<typeof defineDBHandler<[number], void>>,
+            addReport: ReturnType<typeof defineDBHandler<[{ gamecenterData: Gamecenter.Req; UUID: string, ip: string }], void>>,
+            getReports: ReturnType<typeof defineDBHandler<['none' | 'approved' | 'disapproved'], { order: number; UUID: string, ip: string, data: Gamecenter.Req }[]>>,
+            getReportByOrder: ReturnType<typeof defineDBHandler<[number], { order: number; UUID: string, ip: string, data: Gamecenter.Req } | null>>,
+            approveRequest: ReturnType<typeof defineDBHandler<[number, string], void>>,
+            disapproveRequest: ReturnType<typeof defineDBHandler<[number], void>>,
+        }
+
+        const serverRequest:{
+            searchCoorWithAddress(address: string, origin: string): Promise<Gamecenter.CoorSearchResult[]>
+        }
     }
 }
 

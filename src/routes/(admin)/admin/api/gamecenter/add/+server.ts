@@ -1,18 +1,18 @@
-import { GamecenterServer } from '$lib/module/gamecenter/gamecenter.server.js';
-import { Gamecenter } from '$lib/module/gamecenter/index.js';
+import { Gamecenter } from "$lib/module/gamecenter";
+import '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request, url }) {
     const gamecenterData: Gamecenter.Req = (await request.json()).gamecenterData;
 
-    try{
+    try {
         Gamecenter.Schema.Req.parse(gamecenterData)
     }
-    catch(err){
+    catch (err) {
         return error(400);
     }
 
-    const coorData = await GamecenterServer.serverRequest.searchCoorWithAddress(gamecenterData.address, url.origin);
+    const coorData = await Gamecenter.Server.serverRequest.searchCoorWithAddress(gamecenterData.address, url.origin);
 
     const data = {
         ...gamecenterData,
@@ -22,7 +22,7 @@ export async function POST({ request, url }) {
         }
     }
 
-    await GamecenterServer.DBController.addGamecenter(data);
+    await Gamecenter.Server.DBController.addGamecenter(data);
 
     return new Response();
 }

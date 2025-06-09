@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { GamecenterClient } from "$lib/module/gamecenter/gamecenter.client";
+    import { Gamecenter } from "$lib/module/gamecenter";
+    import "$lib/module/gamecenter/gamecenter.client";
 
     let {data} = $props();
     let gamecenterDatas = $state(data.gamecenterDatas);
@@ -9,7 +10,7 @@
             return;
         }
 
-        const response = await GamecenterClient.adminRequest.delete({ order });
+        const response = await Gamecenter.Client.adminRequest.delete({ order });
 
         if (response.status === "success") {
             alert("삭제가 완료되었습니다.");

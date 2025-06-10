@@ -2,7 +2,7 @@
     import type { Genre } from "$lib/module/common/song/types";
     import type { Diffchart } from "$lib/module/diffchart";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import { getLang } from "$lib/module/i18n";
 
     interface Props {
@@ -36,7 +36,7 @@
     <div class="title-container">
         <div
             class="title"
-            style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
+            style={`color:${theme === "light" ? Util.Color.difficulty[song.difficulty] : Util.Color.darkDifficulty[song.difficulty]};`}
         >
             {title}
         </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Difficulty, SongData } from "$lib/module/common/song/types";
     import CourseDisplay from "./CourseDisplay.svelte";
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { page } from "$app/stores";
     import { replaceState } from "$app/navigation";
@@ -31,7 +31,7 @@
                 $page.url.searchParams.set("diff", difficulty);
                 replaceState($page.url, $page.state);
             }}
-            style={`background-color:${color.difficulty[difficulty]};`}
+            style={`background-color:${Util.Color.difficulty[difficulty]};`}
         >
             <span data-isMobile={$isMobile}>
                 ★ {courses[difficulty]?.level}

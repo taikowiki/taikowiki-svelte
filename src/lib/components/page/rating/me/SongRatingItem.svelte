@@ -5,7 +5,7 @@
         DifficultyScoreData,
         ScoreData,
     } from "node-hiroba/types";
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import { getI18N, getLang } from "$lib/module/i18n";
     import type { Difficulty, SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
@@ -80,7 +80,7 @@
         <div class="detail-layer1">
             <a
                 class="song-title"
-                style={`color:${color.difficulty[songRatingData.difficulty]};`}
+                style={`color:${Util.Color.difficulty[songRatingData.difficulty]};`}
                 href={`/song/${songRatingData.songNo}?diff=${songRatingData.difficulty}`}
             >
                 {songData.title}

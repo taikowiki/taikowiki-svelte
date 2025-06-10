@@ -42,7 +42,7 @@
 
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
@@ -93,7 +93,7 @@
             step="1"
             bind:value={option.level}
             disabled={option.difficulty === undefined ? true : false}
-            style={`accent-color:${color.difficulty[option.difficulty || "oni"]};`}
+            style={`accent-color:${Util.Color.difficulty[option.difficulty || "oni"]};`}
         />
     </div>
 {/snippet}

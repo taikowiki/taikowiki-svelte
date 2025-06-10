@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Diffchart } from "$lib/module/diffchart";
-    import { difficulty } from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
 
     interface Props {
         song: Diffchart.Song;
@@ -58,7 +58,7 @@
         <div class="layer" style="column-gap: 5px;justify-content:center;">
             <div
                 class="color"
-                style={`background-color:${difficulty[song.difficulty]};`}
+                style={`background-color:${Util.Color.difficulty[song.difficulty]};`}
             ></div>
             <select bind:value={song.difficulty}>
                 {#each ["easy", "normal", "hard", "oni", "ura"] as diff}

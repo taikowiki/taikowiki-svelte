@@ -9,7 +9,7 @@
 </script>
 
 <script lang="ts">
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import type { Genre } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
     import type { Snippet } from "svelte";
@@ -43,7 +43,7 @@
     class={`button`}
     class:selected={genre === value}
     class:unselected={genre !== value && genre !== undefined}
-    style={`background-color:${color.genre[value]};`}
+    style={`background-color:${Util.Color.genre[value]};`}
     onclick={() => {
         genre = clickHandle(genre, value);
     }}

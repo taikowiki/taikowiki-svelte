@@ -1,6 +1,6 @@
 <script lang="ts">
     // @ts-nocheck
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import { getI18N, getLang } from "$lib/module/i18n";
     import type { Course, Difficulty } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
@@ -268,7 +268,7 @@
 {/snippet}
 
 <div
-    style={`${`border: 2px solid ${color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}`}
+    style={`${`border: 2px solid ${Util.Color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}`}
 >
     <table class="wrapper">
         <tbody>

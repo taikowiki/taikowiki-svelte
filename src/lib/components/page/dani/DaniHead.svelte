@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import { dani as daniColor } from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
 
     function getColor(dan: Dani.Dan, theme: "dark" | "light"): string {
         let d = "kyu";
@@ -25,7 +25,7 @@
             d = "gaiden";
         }
 
-        return (daniColor.color?.[theme] as any)?.[d] ?? "";
+        return (Util.Color.dani.color?.[theme] as any)?.[d] ?? "";
     }
 
     function outsideClickHandler(event: MouseEvent) {
@@ -170,7 +170,7 @@
 {#if dani.name}
     <div
         class="name"
-        style={`background-color:${daniColor.color.light["gaiden"]};`}
+        style={`background-color:${Util.Color.dani.color.light["gaiden"]};`}
     >
         <span>
             {dani.name[$lang] ?? dani.name.ja}

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import type { Difficulty } from "$lib/module/common/song/types";
     import { onDestroy, onMount } from "svelte";
     import type { SongLang } from "$lib/module/common/song/types";
@@ -52,7 +52,7 @@
         {#each song.genre as genre}
             <div
                 class="genre-item"
-                style={`background-color:${color.genre[genre]};`}
+                style={`background-color:${Util.Color.genre[genre]};`}
                 data-theme={$theme}
             >
                 <!--<span>{genre}</span>-->
@@ -90,7 +90,7 @@
                     {song.courses[diff]?.level}
                     <div
                         class="level-color"
-                        style={`background-color:${color.difficulty[diff]};`}
+                        style={`background-color:${Util.Color.difficulty[diff]};`}
                         data-theme={$theme}
                     ></div>
                 </div>

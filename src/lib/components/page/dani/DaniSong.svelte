@@ -1,14 +1,12 @@
 <script lang="ts" module>
-    import color from "$lib/module/common/color";
-
     function getGenreColors(genre: Genre[]): string {
         if (genre.length === 1) {
-            return `${color.genre[genre[0]]}`;
+            return `${Util.Color.genre[genre[0]]}`;
         }
         if (genre.length === 2) {
-            return `linear-gradient(${color.genre[genre[0]]} 0%, ${color.genre[genre[0]]} 50%, ${color.genre[genre[1]]} 50%, ${color.genre[genre[1]]} 100%)`;
+            return `linear-gradient(${Util.Color.genre[genre[0]]} 0%, ${Util.Color.genre[genre[0]]} 50%, ${Util.Color.genre[genre[1]]} 50%, ${Util.Color.genre[genre[1]]} 100%)`;
         }
-        return `linear-gradient(${color.genre[genre[0]]} 0%, ${color.genre[genre[0]]} 33%, ${color.genre[genre[1]]} 33%, ${color.genre[genre[1]]} 66%, ${color.genre[genre[2]]} 66%, ${color.genre[genre[2]]} 100%)`;
+        return `linear-gradient(${Util.Color.genre[genre[0]]} 0%, ${Util.Color.genre[genre[0]]} 33%, ${Util.Color.genre[genre[1]]} 33%, ${Util.Color.genre[genre[1]]} 66%, ${Util.Color.genre[genre[2]]} 66%, ${Util.Color.genre[genre[2]]} 100%)`;
     }
 </script>
 
@@ -16,7 +14,7 @@
     import type { Dani } from "$lib/module/dani";
     import type { Genre } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import { DifficultyColor } from "$lib/module/common/styled";
+    import { Util } from "$lib/module/util";
 
     interface Props {
         song: Dani.Song;
@@ -35,6 +33,8 @@
     const level = songData?.courses?.[song.difficulty]?.level ?? " -";
     const combo =
         songData?.courses?.[song.difficulty]?.maxCombo?.toString() ?? "-";
+
+    const { DifficultyColor } = Util.Styled;
 </script>
 
 {#snippet titleView()}

@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Genre } from "$lib/module/common/song/types";
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
@@ -19,7 +19,7 @@
     {#each genres as genre}
         <a
             class="item"
-            style={`background-color:${color.genre[genre]};`}
+            style={`background-color:${Util.Color.genre[genre]};`}
             data-isMobile={$isMobile}
             href={`/song?genre=${genre}`}
         >

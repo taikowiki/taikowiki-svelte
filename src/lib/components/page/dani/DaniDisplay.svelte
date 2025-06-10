@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import { dani as daniColor } from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
 
     function getBackgroundColor(dan: Dani.Dan, theme: "dark" | "light"): string {
         let d = "kyu";
@@ -25,7 +25,7 @@
             d = "gaiden";
         }
 
-        return (daniColor.backgroundColor?.[theme] as any)?.[d] ?? "";
+        return (Util.Color.dani.backgroundColor?.[theme] as any)?.[d] ?? "";
     }
 </script>
 

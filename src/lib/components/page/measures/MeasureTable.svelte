@@ -8,7 +8,7 @@
     import groupBy from "object.groupby";
     import MeasureGroup from "./MeasureGroup.svelte";
     import styled from "styled-svelte5";
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import { setContext } from "svelte";
     import { getI18N, getLang } from "$lib/module/i18n";
 
@@ -26,7 +26,7 @@
     const GenreDiv = styled<{ genre: Genre[] }, {}>(
         "div",
         ({ genre }) => `
-        background: linear-gradient(${genre.length === 1 ? `${color.genre[genre[0]]}, ${color.genre[genre[0]]}` : genre.map((g, i) => `${color.genre[g]} calc(100% / ${genre.length} * ${i}), ${color.genre[g]} calc(100% / ${genre.length} * ${i + 1})`).join(", ")});`,
+        background: linear-gradient(${genre.length === 1 ? `${Util.Color.genre[genre[0]]}, ${Util.Color.genre[genre[0]]}` : genre.map((g, i) => `${Util.Color.genre[g]} calc(100% / ${genre.length} * ${i}), ${Util.Color.genre[g]} calc(100% / ${genre.length} * ${i + 1})`).join(", ")});`,
         () => `    
         width: 8px;
         height: 100%;
@@ -37,7 +37,7 @@
     const Level = styled<{ diff: "oni" | "ura" }, {}>(
         "div",
         ({ diff }) => `
-        background-color:${color.difficulty[diff]};
+        background-color:${Util.Color.difficulty[diff]};
         `,
         () => `
         color:white;

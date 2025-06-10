@@ -13,7 +13,7 @@
 
 <script lang="ts">
     import type { Difficulty } from "$lib/module/common/song/types";
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import { getTheme } from "$lib/module/layout/theme";
     import type { Snippet } from "svelte";
 
@@ -32,7 +32,7 @@
     class={`button`}
     class:selected={group === value}
     class:unselected={group !== value && group !== undefined}
-    style={`background:${color.difficulty[value]};`}
+    style={`background:${Util.Color.difficulty[value]};`}
     onclick={() => {
         group = clickHandle(group, value);
     }}

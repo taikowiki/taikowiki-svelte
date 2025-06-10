@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Genre } from "$lib/module/common/song/types";
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
 
     interface Props{
         width: string;
@@ -18,7 +18,7 @@
 
 <div class="container" style={`width:${width};height:${height};`}>
     {#each genres as genre}
-        <div class="genre" style={`background-color:${color.genre[genre]};height: calc( 100% / ${genres.length} );`}></div>
+        <div class="genre" style={`background-color:${Util.Color.genre[genre]};height: calc( 100% / ${genres.length} );`}></div>
     {/each}
 </div>
 

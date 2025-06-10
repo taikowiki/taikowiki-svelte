@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Dani } from "$lib/module/dani";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { DIFFICULTY } from "$lib/module/common/song/const";
 
     interface Props {

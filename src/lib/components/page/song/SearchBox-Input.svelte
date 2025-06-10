@@ -26,7 +26,7 @@
 <script lang="ts">
     import type { SongSearchOption } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         opened: boolean;

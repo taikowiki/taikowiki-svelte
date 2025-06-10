@@ -13,7 +13,7 @@
 
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import type { Genre } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";

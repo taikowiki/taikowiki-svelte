@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Genre } from "$lib/module/common/song/types";
     import color from "$lib/module/common/color";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
     interface Props {

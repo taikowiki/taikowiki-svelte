@@ -2,7 +2,7 @@
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DonderData from "$lib/components/page/rating/me/DonderData.svelte";
     import DonderRating from "$lib/components/page/rating/me/DonderRating.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
     let { data } = $props();

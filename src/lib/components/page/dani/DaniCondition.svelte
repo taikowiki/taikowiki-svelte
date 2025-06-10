@@ -24,7 +24,7 @@
 
 <script lang="ts">
     import type { Dani } from "$lib/module/dani";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {

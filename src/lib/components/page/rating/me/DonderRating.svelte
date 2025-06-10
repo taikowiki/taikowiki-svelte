@@ -5,7 +5,7 @@
     import TierImage from "./TierImage.svelte";
     import TierProgress from "./TierProgress.svelte";
     import GradeProgress from "./GradeProgress.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         ratings: ReturnType<typeof getRating>;

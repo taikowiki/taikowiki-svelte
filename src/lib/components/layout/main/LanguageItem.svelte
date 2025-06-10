@@ -1,5 +1,5 @@
 <script>
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import UserItem from "./User-Item.svelte";
 
     const lang = getLang();

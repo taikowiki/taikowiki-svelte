@@ -20,7 +20,7 @@
     import { browser } from "$app/environment";
     import { getTheme } from "$lib/module/layout/theme";
     import SongLanguageButton from "./SongLanguageButton.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
     interface Props {

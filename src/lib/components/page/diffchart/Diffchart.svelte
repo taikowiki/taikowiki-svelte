@@ -19,7 +19,7 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { browser } from "$app/environment";
     import html2canvas from "html2canvas";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import type { Difficulty } from "$lib/module/common/song/types";
     import DiffchartAllCrown from "./DiffchartAllCrown.svelte";
 

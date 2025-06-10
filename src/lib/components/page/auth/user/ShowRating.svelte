@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { userRequestor } from "$lib/module/common/user/user.client";
     import { getTheme } from "$lib/module/layout/theme";
 

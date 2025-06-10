@@ -5,7 +5,7 @@
     import OtherDonderData from "$lib/components/page/rating/user/OtherDonderData.svelte";
     import OtherDonderRating from "$lib/components/page/rating/user/OtherDonderRating.svelte";
     import OtherSongRatings from "$lib/components/page/rating/user/OtherSongRatings.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
+    import { getI18N, getLang } from "$lib/module/i18n.js";
     import { getTier } from "$lib/module/common/user/getTier.js";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 

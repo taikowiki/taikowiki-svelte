@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import type { UserRatingTierName } from "$lib/module/common/user/types";
     import { getTheme } from "$lib/module/layout/theme";
     import type { Action } from "svelte/action";

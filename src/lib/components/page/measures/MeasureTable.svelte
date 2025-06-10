@@ -10,7 +10,7 @@
     import styled from "styled-svelte5";
     import color from "$lib/module/common/color";
     import { setContext } from "svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         measures: Measure[];

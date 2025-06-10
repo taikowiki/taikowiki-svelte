@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         donder: { nickname: string | null; taikoNumber: string | null };

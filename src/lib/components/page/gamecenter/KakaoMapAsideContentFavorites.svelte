@@ -3,7 +3,7 @@
     import type { Writable } from "svelte/store";
     import GamecenterInfo from "./GamecenterInfo.svelte";
     import { getContext } from "svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         gamecenterDatas: Gamecenter.Gamecenter[];

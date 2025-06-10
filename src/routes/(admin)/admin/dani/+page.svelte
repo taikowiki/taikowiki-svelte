@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getLang, getI18N } from "$lib/module/common/i18n/i18n";
+    import { getLang, getI18N } from "$lib/module/i18n";
     import { DANIVERSION } from "$lib/module/common/song/const";
     import { Dani } from "$lib/module/dani/index.js";
     import "$lib/module/dani/dani.client";

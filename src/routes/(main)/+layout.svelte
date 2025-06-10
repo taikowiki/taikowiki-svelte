@@ -27,9 +27,9 @@
     import { useIsMobile } from "$lib/module/layout/isMobile.js";
     import { navigating, page } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
-    import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n";
+    import { I18N } from "$lib/module/i18n";
+    import { setI18N, useLang } from "$lib/module/i18n";
     import { writable, get, type Writable } from "svelte/store";
-    import { type PathLangFile } from "$lib/module/common/i18n/types.js";
     import { getContext, onMount, setContext } from "svelte";
     import {
         afterNavigate,
@@ -58,8 +58,9 @@
 
     //lang
     const lang = useLang();
+    const {i18n} = I18N;
     let i18nLayout = $derived(i18n[$lang].layout.main);
-    const i18nPage = writable<PathLangFile>(setI18N($lang, $page.url.pathname));
+    const i18nPage = writable<I18N.PathLangFile>(setI18N($lang, $page.url.pathname));
     setContext("i18n", i18nPage);
     $effect.pre(() => {
         $i18nPage = setI18N($lang, $page.url.pathname);
@@ -72,7 +73,7 @@
     });
 
     //page aside
-    setContext('asideElement', writable<HTMLElement>())
+    setContext("asideElement", writable<HTMLElement>());
 
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
@@ -111,8 +112,8 @@
         }
     });
 
-    if(browser){
-        docContext.initContext({theme, isMobile});
+    if (browser) {
+        docContext.initContext({ theme, isMobile });
     }
 </script>
 
@@ -126,7 +127,7 @@
 {#key $navigating}
     <HrefLang />
 {/key}
-<ServerTheme/>
+<ServerTheme />
 <img src="/assets/img/logo.webp" class="preview" alt="preview" />
 <div>
     <Header>

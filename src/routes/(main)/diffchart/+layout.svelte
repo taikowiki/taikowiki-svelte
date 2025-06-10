@@ -2,7 +2,7 @@
     import DiffchartSelectorMobile from "$lib/components/page/diffchart/DiffchartSelector-mobile.svelte";
     import DiffchartSelectorPc from "$lib/components/page/diffchart/DiffchartSelector-pc.svelte";
     import PageAside from "$lib/components/layout/main/PageAside.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import { setContext } from "svelte";

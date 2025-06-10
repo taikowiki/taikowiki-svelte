@@ -7,7 +7,7 @@
     import { writable } from "svelte/store";
     import { navigating, page } from "$app/stores";
     import { setContext } from "svelte";
-    import { useLang } from "$lib/module/common/i18n/i18n.js";
+    import { useLang } from "$lib/module/i18n.js";
     import { userRequestor } from "$lib/module/common/user/user.client.js";
 
     let { data, children } = $props();

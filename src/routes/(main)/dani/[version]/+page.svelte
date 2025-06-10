@@ -2,7 +2,7 @@
     import { page } from "$app/stores";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DaniDisplay from "$lib/components/page/dani/DaniDisplay.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { DAN } from "$lib/module/common/song/const.js";
 
     let { data } = $props();

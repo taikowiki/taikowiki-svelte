@@ -17,7 +17,7 @@
     import { type Writable } from "svelte/store";
     import { getTheme } from "$lib/module/layout/theme";
     import { userRequestor } from "$lib/module/common/user/user.client";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     const user = getContext("user") as Writable<{
         provider: string;

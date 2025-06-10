@@ -1,10 +1,10 @@
-import { mdToHtml } from "../../util";
-import type { LangFile, RecursiveStringRecord } from "../types";
+import { Util } from '$lib/module/util';
+import type { I18N } from '..';
 
 import ratingUploadGuide from '../md/en/ratingUploadGuide.md?raw';
 import ratingExplanation from '../md/en/ratingExplanation.md?raw';
 
-const newEn: RecursiveStringRecord = {
+const newEn: I18N.RecursiveStringRecord = {
     layout: {
         main: {
             song: 'Song',
@@ -371,7 +371,7 @@ const newEn: RecursiveStringRecord = {
     }
 }
 
-const en: LangFile = {
+const en: I18N.LangFile = {
     other: {
         title: {
             base: 'Taiko no Tatsujin Wiki',
@@ -482,8 +482,8 @@ const en: LangFile = {
         rating: 'Ratings',
         hiroba: 'Hiroba',
         measureValue: 'Mesurement',
-        uploadGuide: mdToHtml(ratingUploadGuide),
-        explanation: mdToHtml(ratingExplanation)
+        uploadGuide: Util.mdToHtml(ratingUploadGuide),
+        explanation: Util.mdToHtml(ratingExplanation)
     },
     '/song': {
         placeholder: 'Keywords',

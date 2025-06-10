@@ -1,6 +1,6 @@
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         songNo: string;

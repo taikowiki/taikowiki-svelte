@@ -38,7 +38,7 @@
     import { page } from "$app/stores";
     import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
     import type { Diffchart as D } from "$lib/module/diffchart";

@@ -35,7 +35,7 @@
 </script>
 
 <script lang="ts">
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { Gamecenter } from "$lib/module/gamecenter";
     import "$lib/module/gamecenter/gamecenter.client";
 

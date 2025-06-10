@@ -2,7 +2,7 @@
     // @ts-nocheck
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import CourseEditor from "$lib/components/common/song/editor/CourseEditor.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { DIFFICULTY } from "$lib/module/common/song/const";
     import type { SongData } from "$lib/module/common/song/types";
 

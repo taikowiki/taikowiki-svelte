@@ -37,7 +37,7 @@
 </script>
 
 <script lang="ts">
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     import type { SongData } from "$lib/module/common/song/types";
     import { getIsMobile } from "$lib/module/layout/isMobile";

@@ -1,10 +1,10 @@
-import { mdToHtml } from "../../util";
-import type { LangFile, RecursiveStringRecord } from "../types";
+import { Util } from '$lib/module/util';
+import type { I18N } from '..';
 
 import ratingUploadGuide from '../md/zh-tw/ratingUploadGuide.md?raw';
 import ratingExplanation from '../md/zh-tw/ratingExplanation.md?raw';
 
-const newZhtw: RecursiveStringRecord = {
+const newZhtw: I18N.RecursiveStringRecord = {
     layout: {
         main: {
             song: '曲目',
@@ -323,7 +323,7 @@ const newZhtw: RecursiveStringRecord = {
     }
 }
 
-const zhtw: LangFile = {
+const zhtw: I18N.LangFile = {
     other: {
         //페이지 제목
         title: {
@@ -440,8 +440,8 @@ const zhtw: LangFile = {
         rating: 'レーティング',
         hiroba: 'ひろば',
         measureValue: 'レーティング',
-        uploadGuide: mdToHtml(ratingUploadGuide),
-        explanation: mdToHtml(ratingExplanation)
+        uploadGuide: Util.mdToHtml(ratingUploadGuide),
+        explanation: Util.mdToHtml(ratingExplanation)
     },
     '/song': {
         placeholder: 'キーワード',

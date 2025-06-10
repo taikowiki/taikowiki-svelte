@@ -4,7 +4,7 @@
     import PageSelector from "$lib/components/common/PageSelector.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import RatingRanking from "$lib/components/page/rating/ranking/RatingRanking.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
+    import { getI18N, getLang } from "$lib/module/i18n.js";
 
     let { data } = $props();
     const pageNum = Number($page.params.page);

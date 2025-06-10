@@ -1,10 +1,10 @@
-import { mdToHtml } from "../../util";
-import type { LangFile, RecursiveStringRecord } from "../types";
+import { Util } from '$lib/module/util';
+import type { I18N } from '..';
 
 import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
 import ratingExplanation from '../md/ko/ratingExplanation.md?raw'
 
-const newKo: RecursiveStringRecord = {
+const newKo: I18N.RecursiveStringRecord = {
     //레이아웃
     layout: {
         main: {
@@ -378,7 +378,7 @@ const newKo: RecursiveStringRecord = {
     }
 }
 
-const ko: LangFile = {
+const ko: I18N.LangFile = {
     other: {
         //페이지 제목
         title: {
@@ -491,8 +491,8 @@ const ko: LangFile = {
         rating: '레이팅',
         hiroba: '히로바',
         measureValue: '상수',
-        uploadGuide: mdToHtml(ratingUploadGuide),
-        explanation: mdToHtml(ratingExplanation)
+        uploadGuide: Util.mdToHtml(ratingUploadGuide),
+        explanation: Util.mdToHtml(ratingExplanation)
     },
     '/song': {
         placeholder: '검색어',

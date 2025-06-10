@@ -3,7 +3,7 @@
     import type { Diffchart } from "$lib/module/diffchart";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
     import color from "$lib/module/common/color";
-    import { getLang } from "$lib/module/common/i18n/i18n";
+    import { getLang } from "$lib/module/i18n";
 
     interface Props {
         song: Diffchart.Song;

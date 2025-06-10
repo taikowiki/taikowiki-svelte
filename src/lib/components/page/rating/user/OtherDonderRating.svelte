@@ -4,7 +4,7 @@
     import TierImage from "../me/TierImage.svelte";
     import TierProgress from "../me/TierProgress.svelte";
     import GradeProgress from "../me/GradeProgress.svelte";
-    //import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    //import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         currentRating: number;

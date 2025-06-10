@@ -1,7 +1,7 @@
 import { error, redirect, type Handle } from "@sveltejs/kit";
 import { runQuery } from "@yowza/db-handler";
 import { getClientAddress } from "../common/util.server";
-import i18n from "$lib/module/common/i18n/i18n";
+import { I18N } from "$lib/module/i18n/";
 import { sequence } from "@sveltejs/kit/hooks";
 import { userDBController } from "../common/user/user.server";
 
@@ -65,7 +65,7 @@ export namespace Hooks {
      */
     export const dynamicHtmlLang: Handle = async ({ event, resolve }) => {
         const urlLang = event.url.searchParams.get('lang');
-        const languages = Object.keys(i18n);
+        const languages = Object.keys(I18N.i18n);
         let lang = 'ko';
         if (urlLang && (languages.includes(urlLang))) {
             lang = urlLang;

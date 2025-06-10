@@ -2,7 +2,7 @@
     import { GRADE_INTERVAL, TIER_BORDER, TIER_COLOR, TIER_INTERVAL } from "$lib/module/common/user/const";
     import { getNextTier } from "$lib/module/common/user/getTier";
     import type { UserRatingTierName } from "$lib/module/common/user/types";
-    import { pipe } from "$lib/module/common/util";
+    import { Util } from "$lib/module/util";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
@@ -15,7 +15,7 @@
 
     const nextTier = getNextTier(tierName);
 
-    const progress: number = pipe(tierName, [
+    const progress: number = Util.pipe(tierName, [
         (tierName: UserRatingTierName) => {
             if (tierName === "omega") {
                 return 100;

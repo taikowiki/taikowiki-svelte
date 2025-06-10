@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Diffchart } from "$lib/module/diffchart";
     import DiffchartEditorSong from "./Diffchart-Editor-Song.svelte";
-    import { intercept as _intercept } from "$lib/module/common/util";
+    import { Util } from "$lib/module/util";
     import styled from "styled-svelte5";
 
     interface Props {
@@ -87,7 +87,7 @@
                                 bind:song={section.songs[index]}
                                 {index}
                                 intercept={(from, to) => {
-                                    const intercepted = _intercept(
+                                    const intercepted = Util.intercept(
                                         section.songs,
                                         from,
                                         to,

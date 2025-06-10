@@ -3,7 +3,7 @@ import type { Doc } from '$lib/module/common/wikidoc/types';
 import { WikiError, validateDocData, parseDBData } from "../util.js";
 import { renderer } from "../util.js";
 import { songDBController } from "../../song/song.server.js";
-import { sqlString, sqlEscapeString, sqlEscapeLike } from "../../util.js";
+import { Util } from "$lib/module/util/index.js";
 import * as Diff from 'diff';
 import { Search } from "$lib/module/search/index.js";
 
@@ -212,7 +212,7 @@ export const docDBController = {
                 if (editorUUIDSet.size === 0) {
                     return {} as Record<string, string>;
                 }
-                const whereConditionStatement = Array.from(editorUUIDSet).map((v) => `\`UUID\` = '${sqlEscapeString(v)}'`).join(" OR ");
+                const whereConditionStatement = Array.from(editorUUIDSet).map((v) => `\`UUID\` = '${Util.sqlEscapeString(v)}'`).join(" OR ");
                 const r = await run(`SELECT \`nickname\`, \`UUID\` FROM \`user/data\` WHERE ${whereConditionStatement}`);
 
                 const s: Record<string, string> = {};
@@ -273,8 +273,8 @@ export const docDBController = {
      * @returns 
      */
     getColumnsWhere: defineDBHandler<[columns: (keyof Doc.DB.DocDBData)[], where?: [column: keyof Doc.DB.DocDBData, value: any][], type?: 'and' | 'or', limit?: [number, number]], Partial<Doc.DB.DocDBData>[]>((columns, where, type, limit) => {
-        const columnsQuery = columns.map(e => `\`${sqlEscapeString(e)}\``).join(', ');
-        const whereQuery = where && where.length > 0 ? 'WHERE ' + where.map(e => typeof (e[1]) === "string" ? `\`${sqlEscapeString(e[0])}\` LIKE ?` : `\`${sqlEscapeString(e[0])}\` = ?`).join(' ' + (type?.toUpperCase() ?? 'AND') + '') : '';
+        const columnsQuery = columns.map(e => `\`${Util.sqlEscapeString(e)}\``).join(', ');
+        const whereQuery = where && where.length > 0 ? 'WHERE ' + where.map(e => typeof (e[1]) === "string" ? `\`${Util.sqlEscapeString(e[0])}\` LIKE ?` : `\`${Util.sqlEscapeString(e[0])}\` = ?`).join(' ' + (type?.toUpperCase() ?? 'AND') + '') : '';
         const limitQuery = limit ? `LIMIT ${limit[0]}, ${limit[1]}` : '';
         return async (run) => {
             const result = await run(`SELECT ${columnsQuery} FROM \`docs\` ${whereQuery} ${limitQuery}`,
@@ -285,7 +285,7 @@ export const docDBController = {
         }
     }),
     getCountWhere: defineDBHandler<[where?: [column: keyof Doc.DB.DocDBData, value: any][], type?: 'and' | 'or'], number>((where, type) => {
-        const whereQuery = where ? 'WHERE ' + where.map(e => typeof (e[1]) === "string" ? `\`${sqlEscapeString(e[0])}\` LIKE ?` : `\`${sqlEscapeString(e[0])}\` = ?`).join(' ' + (type?.toUpperCase() ?? 'AND') + ' ') : '';
+        const whereQuery = where ? 'WHERE ' + where.map(e => typeof (e[1]) === "string" ? `\`${Util.sqlEscapeString(e[0])}\` LIKE ?` : `\`${Util.sqlEscapeString(e[0])}\` = ?`).join(' ' + (type?.toUpperCase() ?? 'AND') + ' ') : '';
 
         return async (run) => {
             const result = await run(`SELECT COUNT(*) AS COUNT FROM \`docs\` ${whereQuery}`,
@@ -411,14 +411,14 @@ export const docDBController = {
                     queryBuilder
                         .select('docs', [Select.Count()])
                         .where(
-                            Where.Like('title', `%${query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%')}%`),
+                            Where.Like('title', `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
                             Where.Compare('isDeleted', '=', 0)
                         ),
                     //@ts-expect-error
                     queryBuilder
                         .select('docs', [Select.Count()])
                         .where(
-                            Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`),
+                            Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
                             Where.Compare('isDeleted', '=', 0)
                         )
                 ]).build()
@@ -436,14 +436,14 @@ export const docDBController = {
                     queryBuilder
                         .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime'])
                         .where(
-                            Where.Like('title', `%${query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%')}%`),
+                            Where.Like('title', `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
                             Where.Compare('isDeleted', '=', 0)
                         ),
                     //@ts-expect-error
                     queryBuilder
                         .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime'])
                         .where(
-                            Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => sqlEscapeLike(e)).join('%'))}%`),
+                            Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
                             Where.Compare('isDeleted', '=', 0)
                         )
                 ]).build() + ` ORDER BY \`editedTime\` DESC LIMIT ${offset}, ${limit}`;
@@ -500,7 +500,7 @@ export const docDBController = {
     quickSearch: defineDBHandler<[keyword: string]>((keyword) => {
         return async (run) => {
             const query = queryBuilder.select('docs', ['title']).where(
-                Where.Like('title', `%${keyword.split(' ').map(e => sqlEscapeLike(e)).join('%')}%`),
+                Where.Like('title', `%${keyword.split(' ').map(e => Util.sqlEscapeLike(e)).join('%')}%`),
                 Where.Compare('isDeleted', '=', 0)
             ).limit(20).build()
 

@@ -1,10 +1,10 @@
-import { sqlEscapeLike } from '$lib/module/common/util.js';
+import { Util } from '$lib/module/util/index.js';
 import type { Search } from '$lib/module/search/index.js';
 import { error } from '@sveltejs/kit';
 import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
 
 export async function _searchSong(keyword: string, run: any){
-    const likeQuery = `%${keyword.split(' ').map(e => sqlEscapeLike(e)).join('%')}%`
+    const likeQuery = `%${keyword.split(' ').map(e => Util.sqlEscapeLike(e)).join('%')}%`
     const query = queryBuilder.select('song', ['title', 'songNo']).where(Where.OR(
         Where.Like('title', likeQuery),
         Where.Like('titleKo', likeQuery),

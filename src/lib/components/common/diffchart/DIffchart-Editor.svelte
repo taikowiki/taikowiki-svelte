@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-    import { intercept } from "$lib/module/common/util";
+    import { Util } from "$lib/module/util";
 
     import { Diffchart } from "$lib/module/diffchart/index";
     import DiffchartEditorSection from "./Diffchart-Editor-Section.svelte";
@@ -104,7 +104,7 @@
                                 bind:section={diffchart.sections[index]}
                                 {index}
                                 intercept={(from, to) => {
-                                    const intercepted = intercept(
+                                    const intercepted = Util.intercept(
                                         diffchart.sections,
                                         from,
                                         to,

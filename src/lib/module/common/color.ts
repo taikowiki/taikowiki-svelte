@@ -1,5 +1,5 @@
 import type { Difficulty, Genre } from "./song/types";
-import {deepFreeze} from "./util";
+import { Util } from "$lib/module/util";
 
 export const genre: Record<Genre, string> = {
     pops: "#4fb5bd",
@@ -87,6 +87,6 @@ const color = {
     dani
 } as const
 
-deepFreeze(color);
+Util.deepFreeze(color);
 
 export default color;

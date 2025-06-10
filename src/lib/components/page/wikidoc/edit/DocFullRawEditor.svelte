@@ -5,7 +5,7 @@
     import { onMount } from "svelte";
     import DocPreview from "./Preview/DocPreview.svelte";
     import DocContentView from "../view/DocContentView.svelte";
-    import { pipe } from "$lib/module/common/util";
+    import { Util } from "$lib/module/util";
 
     interface Props {
         contentTree: Doc.Data.ContentTree;
@@ -181,7 +181,7 @@
         onkeydown={textAreaTabEvent}
     ></textarea>
 {:else}
-    {@const rendered = pipe(renderer.prerenderContentTree(contentTree), [(contentTree: Doc.Data.DocParagraph) => {
+    {@const rendered = Util.pipe(renderer.prerenderContentTree(contentTree), [(contentTree: Doc.Data.DocParagraph) => {
         contentTree.content = p(contentTree.content);
         contentTree.subParagraphs.forEach((e) => q(e));
         return contentTree;

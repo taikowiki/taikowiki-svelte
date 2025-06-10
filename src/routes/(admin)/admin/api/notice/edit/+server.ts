@@ -1,5 +1,5 @@
-import { NoticeServer } from '$lib/module/notice/notice.server.js';
-import { Notice } from '$lib/module/notice';
+import { Notice } from '$lib/module/notice/index.js';
+import '$lib/module/notice/notice.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request}){
@@ -30,7 +30,7 @@ export async function POST({request}){
         reason: 'Empty Official Date'
     }))
 
-    const result = await NoticeServer.DBController.editNotice(order, notice);
+    const result = await Notice.Server.DBController.editNotice(order, notice);
     if(!result){
         throw error(500);
     }

@@ -1,5 +1,5 @@
-import { NoticeServer } from '$lib/module/notice/notice.server.js';
-import type { Notice } from "$lib/module/notice";
+import { Notice } from '$lib/module/notice/index.js';
+import '$lib/module/notice/notice.server.js';
 import { runQuery } from "@yowza/db-handler";
 
 export async function load({ url }) {
@@ -8,8 +8,8 @@ export async function load({ url }) {
 
     const data = await runQuery(async (run) => {
         const [notices, count] = await Promise.all([
-            NoticeServer.DBController.getNoticeList.getCallback({ page, type })(run),
-            NoticeServer.DBController.countNotice.getCallback()(run),
+            Notice.Server.DBController.getNoticeList.getCallback({ page, type })(run),
+            Notice.Server.DBController.countNotice.getCallback()(run),
         ]);
 
         return { notices, count };

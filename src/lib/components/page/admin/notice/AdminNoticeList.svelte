@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { Notice } from "$lib/module/notice";
     import { getTheme } from "$lib/module/layout/theme";
     import { getIsMobile } from "$lib/module/layout/isMobile";
-    import { NoticeClient } from "$lib/module/notice/notice.client";
+    import { Notice } from "$lib/module/notice";
+    import "$lib/module/notice/notice.client";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DateTime } from "luxon";
 
@@ -27,7 +27,7 @@
         if (!confirm("삭제하시겠습니까?")) {
             return;
         }
-        const response = await NoticeClient.adminRequest.deleteNotice({ order });
+        const response = await Notice.Client.adminRequest.deleteNotice({ order });
         if (response.status === "success") {
             alert("삭제 완료.");
             notices = notices.filter((e) => e.order !== order);

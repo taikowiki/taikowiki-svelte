@@ -1,8 +1,8 @@
 import { defineRequestHandler } from "@yowza/rrequestor";
 import showdown from "showdown";
-import type { Notice } from ".";
+import { Notice } from ".";
 
-export namespace NoticeClient {
+namespace NoticeClient {
     const converter = new showdown.Converter({
         requireSpaceBeforeHeadingText: true,
         tables: true,
@@ -31,3 +31,5 @@ export namespace NoticeClient {
         })
     }
 };
+
+Notice.Client = NoticeClient;

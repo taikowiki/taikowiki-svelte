@@ -1,7 +1,7 @@
 import { Banner } from "$lib/module/banner";
 import "$lib/module/banner/banner.server";
-import { NoticeServer } from '$lib/module/notice/notice.server.js';
-import type { Notice } from "$lib/module/notice";
+import { Notice } from '$lib/module/notice/index.js';
+import '$lib/module/notice/notice.server.js';
 import { runQuery } from "@yowza/db-handler";
 
 export async function load() {
@@ -13,7 +13,7 @@ export async function load() {
         mainBanners: Banner.MainBanner[];
     } = await runQuery(async (run) => {
         const [recentNotices, mainBanners] = await Promise.all([
-            NoticeServer.DBController.getRecentNotices.getCallback()(run),
+            Notice.Server.DBController.getRecentNotices.getCallback()(run),
             Banner.Server.DBController.getMainBanner.getCallback()(run),
         ]);
 

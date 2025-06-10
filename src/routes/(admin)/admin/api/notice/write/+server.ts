@@ -1,5 +1,5 @@
-import { NoticeServer } from '$lib/module/notice/notice.server.js';
-import { Notice } from '$lib/module/notice';
+import { Notice } from '$lib/module/notice/index.js';
+import '$lib/module/notice/notice.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request}){
@@ -27,7 +27,7 @@ export async function POST({request}){
         reason: 'Empty Official Date'
     }))
 
-    await NoticeServer.DBController.writeNotice(data.notice);
+    await Notice.Server.DBController.writeNotice(data.notice);
 
     return new Response();
 }

@@ -1,7 +1,7 @@
-import { defineDBHandler, QB, queryBuilder, Where } from "@yowza/db-handler";
-import type { Notice } from ".";
+import { defineDBHandler, queryBuilder, Where } from "@yowza/db-handler";
+import { Notice } from ".";
 
-export namespace NoticeServer {
+namespace NoticeServer {
     export const DBController = {
         /**@param page*/
         getNoticeList: defineDBHandler<[{ page?: number; type?: 'wiki' | 'official' }?], Omit<Notice.Notice, 'content'>[]>((param) => {
@@ -67,3 +67,5 @@ export namespace NoticeServer {
         })
     }
 }
+
+Notice.Server = NoticeServer;

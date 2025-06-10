@@ -1,8 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import AdminNoticeEditor from "$lib/components/page/admin/notice/AdminNoticeEditor.svelte";
-    import { NoticeClient } from "$lib/module/notice/notice.client";
     import {Notice} from '$lib/module/notice';
+    import "$lib/module/notice/notice.client";
 
     let {data} = $props();
     let notice: Notice.Notice = $state(data.notice);
@@ -23,7 +23,7 @@
             alert("공식 공지 날짜가 비어있습니다.");
             return;
         }
-        const result = await NoticeClient.adminRequest.editNotice({
+        const result = await Notice.Client.adminRequest.editNotice({
             order: notice.order,
             notice
         });

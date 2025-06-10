@@ -8,7 +8,7 @@ export namespace Search{
             all(keyword: string): Promise<RResponse<Search.Result[]>>;
         }
     }
-    function foo(){};
+    //function foo(){};
 }
 
 export namespace Search {

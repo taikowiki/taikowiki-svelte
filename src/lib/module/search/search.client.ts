@@ -49,5 +49,3 @@ namespace SearchClient {
 }
 
 Search.Client = SearchClient;
-
-export {}

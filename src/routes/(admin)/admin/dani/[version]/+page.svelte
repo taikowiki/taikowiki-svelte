@@ -1,6 +1,6 @@
 <script lang="ts">
     import AdminDaniEditor from "$lib/components/page/admin/dani/AdminDaniEditor.svelte";
-    import { getI18N, getLang } from "$lib/module/i18n.js";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { Dani } from "$lib/module/dani/index.js";
     import "$lib/module/dani/dani.client.js";
 

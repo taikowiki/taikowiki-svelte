@@ -1,5 +1,5 @@
-import { getTier } from "$lib/module/common/user/getTier.js";
-import { userDonderDBController } from "$lib/module/common/user/user.server";
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
 import { error } from "@sveltejs/kit";
 
 export async function load({ params, locals }) {
@@ -9,8 +9,8 @@ export async function load({ params, locals }) {
     }
 
     const [rankings, count] = await Promise.all([
-        userDonderDBController.getRanking(page),
-        userDonderDBController.count(),
+        User.Server.donderDBController.getRanking(page),
+        User.Server.donderDBController.count(),
     ]);
 
     const refinedRankings = rankings.map((e) => {
@@ -21,7 +21,7 @@ export async function load({ params, locals }) {
                 nickname: e.donder.nickname,
                 taikoNumber: e.donder.taikoNumber,
             } as { nickname: string | null; taikoNumber: string | null },
-            tier: getTier(e.currentRating),
+            tier: User.getTier(e.currentRating),
         };
 
         if (!locals.userData || locals.userData.grade < 10) {

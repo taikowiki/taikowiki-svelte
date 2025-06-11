@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type { UserDonderData } from "$lib/module/common/user/types";
+    import { User } from "$lib/module/user";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/i18n";
     import { DateTime } from "luxon";
     import { onMount } from "svelte";
 
     interface Props {
-        donderData: UserDonderData;
+        donderData: User.DonderData;
         loaded?: boolean;
         isDownload?: boolean;
     }

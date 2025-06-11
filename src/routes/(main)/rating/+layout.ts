@@ -1,7 +1,6 @@
 import type { SongData } from '$lib/module/common/song/types.js';
-import { getTier } from '$lib/module/common/user/getTier.js';
-import type { UserDonderData, UserScoreData } from '$lib/module/common/user/types.js';
-import { userDonderRequestor } from '$lib/module/common/user/user.client.js';
+import { User } from '$lib/module/user';
+import '$lib/module/user/user.client';
 import { error } from '@sveltejs/kit';
 import { fetchMeasures, getRating } from '@taiko-wiki/taiko-rating';
 import axios from 'axios';
@@ -12,7 +11,7 @@ export async function load(event) {
 
     if (data.ratingDataExists) {
         const scoreData = data.donderData.scoreData;
-        const donderData = data.donderData as UserDonderData;
+        const donderData = data.donderData as User.DonderData;
 
         const measureCommitData = await axios({
             method: 'get',
@@ -23,7 +22,7 @@ export async function load(event) {
             //레이팅 계산이 상수표 갱신 이전인 경우
             var ratings = getRating(scoreData, measures);
 
-            const rankingResponse = await userDonderRequestor.updateRating({ rating: ratings.rating, exp: ratings.exp, ratingData: ratings.songRatingDatas });
+            const rankingResponse = await User.Client.donderRequest.updateRating({ rating: ratings.rating, exp: ratings.exp, ratingData: ratings.songRatingDatas });
             if (rankingResponse.status === "error") {
                 throw error(500);
             }
@@ -39,7 +38,7 @@ export async function load(event) {
             var ranking = data.ranking;
         }
 
-        const tier = getTier(ratings.rating);
+        const tier = User.getTier(ratings.rating);
 
         return {
             ...data,
@@ -59,7 +58,7 @@ export async function load(event) {
 
 type LayoutData = ({
     ratingDataExists: true,
-    donderData: UserDonderData & {scoreData: UserScoreData},
+    donderData: User.DonderData & {scoreData: User.ScoreData},
     songDatas: Pick<SongData, 'songNo' | 'title' | 'genre' | 'courses'>[],
     ranking: { count: number, ranking: number }
 } | {

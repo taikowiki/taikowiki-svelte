@@ -8,7 +8,7 @@
     import CourseContainer from "$lib/components/page/song/[songNo]/CourseContainer.svelte";
     import AddSongButton from "$lib/components/page/song/AddSongButton.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import { getI18N, getLang } from "$lib/module/i18n.js";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import type { Difficulty } from "$lib/module/common/song/types.js";
     import { DIFFICULTY } from "$lib/module/common/song/const.js";
     import DocContentView from "$lib/components/page/wikidoc/view/DocContentView.svelte";

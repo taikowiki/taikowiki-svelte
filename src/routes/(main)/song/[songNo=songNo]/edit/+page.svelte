@@ -3,7 +3,7 @@
     import submit from "$lib/module/common/song/submit.client";
 
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
-    import { getI18N, getLang } from "$lib/module/i18n.js";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
 
     let {data} = $props();

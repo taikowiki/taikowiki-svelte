@@ -1,44 +1,42 @@
 <script lang="ts">
-    import { GRADE_INTERVAL, TIER_BORDER, TIER_COLOR, TIER_INTERVAL } from "$lib/module/common/user/const";
-    import { getNextTier } from "$lib/module/common/user/getTier";
-    import type { UserRatingTierName } from "$lib/module/common/user/types";
+    import { User } from "$lib/module/user";
     import { Util } from "$lib/module/util";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
         rating: number;
-        tierName: UserRatingTierName;
+        tierName: User.RatingTierName;
         grade: 1 | 2 | 3 | 4 | 5 | null;
     }
 
     let { rating, tierName, grade }: Props = $props();
 
-    const nextTier = getNextTier(tierName);
+    const nextTier = User.getNextTier(tierName);
 
     const progress: number = Util.pipe(tierName, [
-        (tierName: UserRatingTierName) => {
+        (tierName: User.RatingTierName) => {
             if (tierName === "omega") {
                 return 100;
             }
             if (tierName === "pearl") {
-                return ((rating - TIER_BORDER[tierName]) / TIER_BORDER.bronze) * 100;
+                return ((rating - User.TIER_BORDER[tierName]) / User.TIER_BORDER.bronze) * 100;
             }
             if (tierName === "master" || tierName === "grandmaster") {
-                return ((rating - TIER_BORDER[tierName]) / GRADE_INTERVAL) * 100;
+                return ((rating - User.TIER_BORDER[tierName]) / User.GRADE_INTERVAL) * 100;
             }
             if (tierName === "sapphire") {
                 return (
                     ((rating -
-                        (TIER_BORDER[tierName] +
-                            GRADE_INTERVAL * (3 - (grade as number)))) /
-                        GRADE_INTERVAL) *
+                        (User.TIER_BORDER[tierName] +
+                            User.GRADE_INTERVAL * (3 - (grade as number)))) /
+                        User.GRADE_INTERVAL) *
                     100
                 );
             }
             return (
                 ((rating -
-                    (TIER_BORDER[tierName] + GRADE_INTERVAL * (5 - (grade as number)))) /
-                    GRADE_INTERVAL) *
+                    (User.TIER_BORDER[tierName] + User.GRADE_INTERVAL * (5 - (grade as number)))) /
+                    User.GRADE_INTERVAL) *
                 100
             );
         },
@@ -48,26 +46,26 @@
 
     function getNextColor(
         grade: 1 | 2 | 3 | 4 | 5 | null,
-        tierName: UserRatingTierName,
+        tierName: User.RatingTierName,
     ) {
         if (tierName === "grandmaster") {
             return "color:#00d17d;";
         }
         if (tierName === "master") {
-            return `color:${TIER_COLOR[nextTier]};`;
+            return `color:${User.TIER_COLOR[nextTier]};`;
         }
         if (grade === 1) {
-            return `color:${TIER_COLOR[nextTier]};`;
+            return `color:${User.TIER_COLOR[nextTier]};`;
         }
         if (tierName === "pearl") {
-            return `color:${TIER_COLOR.bronze};`;
+            return `color:${User.TIER_COLOR.bronze};`;
         }
-        return `color:${TIER_COLOR[tierName]};`;
+        return `color:${User.TIER_COLOR[tierName]};`;
     }
 
     function getNextGrade(
         grade: 1 | 2 | 3 | 4 | 5 | null,
-        tierName: UserRatingTierName,
+        tierName: User.RatingTierName,
     ) {
         if (tierName === "pearl") {
             return "Bronze5";
@@ -91,41 +89,41 @@
     }
 
     function getLeft(
-        tierName: UserRatingTierName,
+        tierName: User.RatingTierName,
         grade: 1 | 2 | 3 | 4 | 5 | null,
     ) {
         if (tierName === "omega") {
-            return TIER_BORDER.omega;
+            return User.TIER_BORDER.omega;
         }
         if (tierName === "grandmaster") {
-            return TIER_BORDER.grandmaster;
+            return User.TIER_BORDER.grandmaster;
         }
         if (tierName === "master") {
-            return TIER_BORDER.master;
+            return User.TIER_BORDER.master;
         }
         if (tierName === "sapphire") {
-            return TIER_BORDER[tierName] + GRADE_INTERVAL * (3 - (grade ?? 0));
+            return User.TIER_BORDER[tierName] + User.GRADE_INTERVAL * (3 - (grade ?? 0));
         }
-        return TIER_BORDER[tierName] + GRADE_INTERVAL * (5 - (grade ?? 0));
+        return User.TIER_BORDER[tierName] + User.GRADE_INTERVAL * (5 - (grade ?? 0));
     }
 
     function getRight(
-        tierName: UserRatingTierName,
+        tierName: User.RatingTierName,
         grade: 1 | 2 | 3 | 4 | 5 | null,
     ) {
         if (tierName === "pearl") {
-            return TIER_BORDER.bronze;
+            return User.TIER_BORDER.bronze;
         }
         if (tierName === "grandmaster") {
-            return TIER_BORDER.omega;
+            return User.TIER_BORDER.omega;
         }
         if (tierName === "master") {
-            return TIER_BORDER.grandmaster;
+            return User.TIER_BORDER.grandmaster;
         }
         if (tierName === "sapphire") {
-            return TIER_BORDER[tierName] + GRADE_INTERVAL * (4 - (grade || 0));
+            return User.TIER_BORDER[tierName] + User.GRADE_INTERVAL * (4 - (grade || 0));
         }
-        return TIER_BORDER[tierName] + GRADE_INTERVAL * (6 - (grade || 0));
+        return User.TIER_BORDER[tierName] + User.GRADE_INTERVAL * (6 - (grade || 0));
     }
 </script>
 
@@ -136,7 +134,7 @@
             ? ""
             : tierName === "omega"
               ? "color:#00d17d;"
-              : `color:${TIER_COLOR[tierName]}`}
+              : `color:${User.TIER_COLOR[tierName]}`}
         data-theme={$theme}
     >
         {getLeft(tierName, grade)}
@@ -156,7 +154,7 @@
             style={`width:${progress}%;` +
                 (tierName === "omega"
                     ? "background: linear-gradient(90deg, rgba(255,160,254,1) 0%, rgba(86,251,185,1) 50%, rgba(99,171,248,1) 100%);"
-                    : `background:${TIER_COLOR[tierName]};`)}
+                    : `background:${User.TIER_COLOR[tierName]};`)}
         ></div>
     </div>
 </div>

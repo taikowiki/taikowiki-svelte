@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getI18N, getLang } from "$lib/module/i18n.js";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { DateTime } from "luxon";
     import { Notice } from "$lib/module/notice/index.js";

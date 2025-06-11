@@ -1,9 +1,11 @@
 import { error, redirect, type Handle } from "@sveltejs/kit";
 import { runQuery } from "@yowza/db-handler";
-import { getClientAddress } from "../common/util.server";
 import { I18N } from "$lib/module/i18n/";
 import { sequence } from "@sveltejs/kit/hooks";
-import { userDBController } from "../common/user/user.server";
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
+import { Util } from "../util";
+import '../util/util.server'
 
 export namespace Hooks {
     /**
@@ -41,7 +43,7 @@ export namespace Hooks {
         const banned = await runQuery(async (run) => {
             let clientAddress: string;
             try {
-                clientAddress = getClientAddress(event);
+                clientAddress = Util.Server.getClientAddress(event);
                 const result = await run("SELECT COUNT(*) FROM `ban/ip` WHERE `ip` = ?", [clientAddress]);
                 if (Object.values(result[0]) === undefined) {
                     return false;
@@ -93,7 +95,7 @@ export namespace Hooks {
             UUID = event.locals.userData.UUID
         }
         await runQuery(async (run) => {
-            return await run("INSERT INTO `log` (`UUID`, `ip`, `path`) VALUES (?, ?, ?)", [UUID, getClientAddress(event), event.url.pathname]);
+            return await run("INSERT INTO `log` (`UUID`, `ip`, `path`) VALUES (?, ?, ?)", [UUID, Util.Server.getClientAddress(event), event.url.pathname]);
         })
 
         return await resolve(event);
@@ -111,9 +113,9 @@ export namespace Hooks {
      */
     export const getUserData: Handle = async ({ event, resolve }) => {
         if (event.locals.user) {
-            let userData = await userDBController.getDataByProvider(event.locals.user.provider, event.locals.user.providerId);
+            let userData = await User.Server.DBController.getDataByProvider(event.locals.user.provider, event.locals.user.providerId);
             if (!userData) {
-                userData = await userDBController.createData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)
+                userData = await User.Server.DBController.createData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)
             }
             event.locals.userData = userData;
         }

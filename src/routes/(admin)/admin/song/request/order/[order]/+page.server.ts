@@ -1,5 +1,6 @@
 import { songDBController, songRequestDBController } from "$lib/module/common/song/song.server";
-import { userDBController } from "$lib/module/common/user/user.server";
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
 import { error } from "@sveltejs/kit";
 
 export async function load({ params }) {
@@ -15,7 +16,7 @@ export async function load({ params }) {
 
     const song = await songDBController.getSongBySongNo(request.songNo);
 
-    const requestor = await userDBController.getNickname(request.UUID)
+    const requestor = await User.Server.DBController.getNickname(request.UUID)
 
     return {
         request,

@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { SongData } from "$lib/module/common/song/types";
-    import type { UserScoreData } from "$lib/module/common/user/types";
+    import { User } from "$lib/module/user";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/i18n";
     import type { getRating } from "@taiko-wiki/taiko-rating";
@@ -8,7 +8,7 @@
 
     interface Props {
         songDatas: Pick<SongData, "songNo" | "title">[];
-        scoreData: UserScoreData;
+        scoreData: User.ScoreData;
         ratingData: ReturnType<typeof getRating>["songRatingDatas"];
     }
 

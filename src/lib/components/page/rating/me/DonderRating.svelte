@@ -1,7 +1,6 @@
 <script lang="ts">
     import { getRating } from "@taiko-wiki/taiko-rating";
-    import { TIER_COLOR } from "$lib/module/common/user/const";
-    import { getTier } from "$lib/module/common/user/getTier";
+    import { User } from "$lib/module/user";
     import TierImage from "./TierImage.svelte";
     import TierProgress from "./TierProgress.svelte";
     import GradeProgress from "./GradeProgress.svelte";
@@ -9,7 +8,7 @@
 
     interface Props {
         ratings: ReturnType<typeof getRating>;
-        tier: ReturnType<typeof getTier>;
+        tier: ReturnType<typeof User.getTier>;
         ranking: { count: number; ranking: number };
         isDownload?: boolean;
     }
@@ -30,7 +29,7 @@
             class="rating"
             style={tier.tierName === "omega"
                 ? ""
-                : `background:${TIER_COLOR[tier.tierName]}`}
+                : `background:${User.TIER_COLOR[tier.tierName]}`}
             class:pearl={tier.tierName === "pearl"}
             class:omega={tier.tierName === "omega"}
         >

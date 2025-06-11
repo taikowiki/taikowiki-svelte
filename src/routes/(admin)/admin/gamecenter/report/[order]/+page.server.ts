@@ -1,4 +1,5 @@
-import { userDBController } from '$lib/module/common/user/user.server';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
 import { Gamecenter } from "$lib/module/gamecenter";
 import '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
@@ -10,7 +11,7 @@ export async function load({ params }) {
         throw error(404);
     }
 
-    const nickname = await userDBController.getNickname(report.UUID);
+    const nickname = await User.Server.DBController.getNickname(report.UUID);
 
     return {
         report,

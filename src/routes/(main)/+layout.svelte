@@ -40,7 +40,6 @@
     } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
     import Footer from "$lib/components/layout/main/Footer.svelte";
-    import { userRequestor } from "$lib/module/common/user/user.client.js";
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";

@@ -1,6 +1,7 @@
 import { songDBController } from '$lib/module/common/song/song.server';
 import type { Difficulty } from '$lib/module/common/song/types.js';
-import { userDBController } from '$lib/module/common/user/user.server.js';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
 import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
 import { renderer } from '$lib/module/common/wikidoc/util.js';
 import type { Doc } from '$lib/module/common/wikidoc/types';
@@ -36,7 +37,7 @@ export async function load({ params, url, locals }) {
             }
         }
 
-        const editor = docData.editorUUID ? (await userDBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID : docData.editorIp;
+        const editor = docData.editorUUID ? (await User.Server.DBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID : docData.editorIp;
         const preparedContent: Doc.Data.ContentTree = {
             content: await renderer.prepareView(docData.renderedContentTree?.content as string, async(dom) => {await setWikiLinkAvailable(dom, run)}),
             subParagraphs: await prepareParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[], run)

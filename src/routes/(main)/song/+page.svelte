@@ -7,7 +7,7 @@
     import { navigating } from "$app/stores";
     import Loading from "$lib/components/common/Loading.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import { getI18N, getLang } from "$lib/module/i18n.js";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import PageSelector from "$lib/components/common/PageSelector.svelte";
     import { goto } from "$app/navigation";
 

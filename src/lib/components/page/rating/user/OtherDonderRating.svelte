@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { TIER_COLOR } from "$lib/module/common/user/const";
-    import { getTier } from "$lib/module/common/user/getTier";
+    import { User } from "$lib/module/user";
     import TierImage from "../me/TierImage.svelte";
     import TierProgress from "../me/TierProgress.svelte";
     import GradeProgress from "../me/GradeProgress.svelte";
@@ -9,7 +8,7 @@
     interface Props {
         currentRating: number;
         currentExp: number | null;
-        tier: ReturnType<typeof getTier>;
+        tier: ReturnType<typeof User.getTier>;
     }
 
     let { currentRating, currentExp, tier }: Props = $props();
@@ -34,7 +33,7 @@
             class="rating"
             style={tier.tierName === "omega"
                 ? ""
-                : `background:${TIER_COLOR[tier.tierName]}`}
+                : `background:${User.TIER_COLOR[tier.tierName]}`}
             class:pearl={tier.tierName === "pearl"}
             class:omega={tier.tierName === "omega"}
         >

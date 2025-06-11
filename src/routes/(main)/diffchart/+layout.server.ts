@@ -1,4 +1,5 @@
-import { userDonderDBController } from "$lib/module/common/user/user.server.js";
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
 import type { Diffchart } from '$lib/module/diffchart';
 import type { Clear, ClearData, Difficulty } from "node-hiroba/types";
 import { songDBController } from "$lib/module/common/song/song.server.js";
@@ -6,7 +7,7 @@ import { songDBController } from "$lib/module/common/song/song.server.js";
 export async function load({ locals }) {
     let donderDataResult = null;
     if (locals.userData) {
-        donderDataResult = await userDonderDBController.getClearData(
+        donderDataResult = await User.Server.donderDBController.getClearData(
             locals.userData.UUID
         );
         donderDataResult &&= parseSongScoreDonderData(donderDataResult);

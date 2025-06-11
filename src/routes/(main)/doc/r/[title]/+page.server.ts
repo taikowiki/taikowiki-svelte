@@ -1,5 +1,6 @@
 import { songDBController } from '$lib/module/common/song/song.server.js';
-import { userDBController } from '$lib/module/common/user/user.server.js';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
 import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server';
 import { parseDBData, renderer } from '$lib/module/common/wikidoc/util.js';
 import type { Doc } from '$lib/module/common/wikidoc/types';
@@ -28,7 +29,7 @@ export async function load({ params, locals }) {
             if (!docData) {
                 throw error(404);
             }
-            const editor = docData.editorUUID ? (await userDBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID : docData.editorIp;
+            const editor = docData.editorUUID ? (await User.Server.DBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID : docData.editorIp;
 
             // 삭제되었으면 삭제되었다고 표기하기
             if (docData.isDeleted) {

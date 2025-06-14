@@ -1,11 +1,12 @@
 <script lang="ts">
-    import type { Doc } from "$lib/module/common/wikidoc/types";
-    import { parseHTML, renderer, UndoStack } from "$lib/module/common/wikidoc/util";
+    import { Doc } from "$lib/module/doc";
     import { getTheme } from "$lib/module/layout/theme";
     import { onMount } from "svelte";
     import DocPreview from "./Preview/DocPreview.svelte";
     import DocContentView from "../view/DocContentView.svelte";
     import { Util } from "$lib/module/util";
+
+    const { UndoStack, renderer, parseHTML } = Doc;
 
     interface Props {
         contentTree: Doc.Data.ContentTree;
@@ -18,7 +19,7 @@
 
     let type = $state<"edit" | "preview">("edit");
 
-    let undoStack = $state<UndoStack>();
+    let undoStack = $state<Doc.UndoStack>();
     let textarea = $state<HTMLTextAreaElement>();
     onMount(() => {
         if (!textarea) return;
@@ -181,22 +182,24 @@
         onkeydown={textAreaTabEvent}
     ></textarea>
 {:else}
-    {@const rendered = Util.pipe(renderer.prerenderContentTree(contentTree), [(contentTree: Doc.Data.DocParagraph) => {
-        contentTree.content = p(contentTree.content);
-        contentTree.subParagraphs.forEach((e) => q(e));
-        return contentTree;
-        function p(html: string){
-            const dom = parseHTML(html);
-            renderer.makePreviewLinkAvailable(dom);
-            return dom.innerHTML;
-        }
-        function q(paragraph: Doc.Data.DocParagraph){
-            paragraph.content = p(paragraph.content);
-            paragraph.subParagraphs.forEach((s) => q(s))
-        }
-    }])}
+    {@const rendered = Util.pipe(renderer.prerenderContentTree(contentTree), [
+        (contentTree: Doc.Data.DocParagraph) => {
+            contentTree.content = p(contentTree.content);
+            contentTree.subParagraphs.forEach((e) => q(e));
+            return contentTree;
+            function p(html: string) {
+                const dom = parseHTML(html);
+                renderer.makePreviewLinkAvailable(dom);
+                return dom.innerHTML;
+            }
+            function q(paragraph: Doc.Data.DocParagraph) {
+                paragraph.content = p(paragraph.content);
+                paragraph.subParagraphs.forEach((s) => q(s));
+            }
+        },
+    ])}
     <div class="preview-container">
-        <DocContentView contentTree={rendered}/>
+        <DocContentView contentTree={rendered} />
     </div>
 {/if}
 

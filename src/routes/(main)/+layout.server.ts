@@ -4,7 +4,8 @@ import { songDBController } from "$lib/module/common/song/song.server";
 import { UAParser } from "ua-parser-js";
 import { isbot } from "isbot";
 import pkg from "../../../package.json";
-import { getClientAddress } from "$lib/module/common/util.server";
+import { Util } from '$lib/module/util/util.server';
+const { getClientAddress } = Util.Server;
 
 export async function load(event) {
     const { locals, request, cookies } = event;

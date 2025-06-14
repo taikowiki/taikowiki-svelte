@@ -1,8 +1,8 @@
 import { defineDBHandler, QB, queryBuilder, Select, Where } from "@yowza/db-handler";
-import type { Doc } from '$lib/module/common/wikidoc/types';
+import type { Doc } from '$lib/module/doc';
 import { WikiError, validateDocData, parseDBData } from "../util.js";
 import { renderer } from "../util.js";
-import { songDBController } from "../../song/song.server.js";
+import { songDBController } from "$lib/module/common/song/song.server.js";
 import { Util } from "$lib/module/util/index.js";
 import * as Diff from 'diff';
 import { Search } from "$lib/module/search/index.js";

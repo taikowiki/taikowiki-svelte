@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Doc } from "$lib/module/common/wikidoc/types";
+    import type { Doc } from "$lib/module/doc";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {

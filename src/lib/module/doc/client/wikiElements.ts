@@ -5,7 +5,7 @@ import { Task } from '@lit/task';
 import { get, type Unsubscriber, type Writable } from 'svelte/store';
 import { docContext } from '../util.js';
 import { defineRequestHandler } from '@yowza/rrequestor';
-import type { Doc } from '$lib/module/common/wikidoc/types';
+import type { Doc } from '$lib/module/doc';
 import { CSSStyleDeclaration } from 'cssom';
 
 // custom elements

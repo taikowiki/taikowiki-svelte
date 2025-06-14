@@ -1,5 +1,7 @@
-import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
+import { Doc } from "$lib/module/doc/doc.server";
 import { error, redirect } from '@sveltejs/kit';
+
+const {DBController} = Doc.Server;
 
 export async function load({url}){
     const id = Number(url.searchParams.get('id'));
@@ -7,7 +9,7 @@ export async function load({url}){
         throw error(404);
     }
 
-    const title = await docDBController.getDocTitleById(id);
+    const title = await DBController.getDocTitleById(id);
     if(!title){
         throw error(404);
     }

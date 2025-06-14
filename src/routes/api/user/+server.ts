@@ -1,4 +1,6 @@
-import { getClientAddress } from '$lib/module/common/util.server.js';
+import { Util } from '$lib/module/util/util.server';
+
+const {getClientAddress} = Util.Server;
 
 export async function GET(event) {
     const { locals } = event;

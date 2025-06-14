@@ -1,7 +1,9 @@
 import { songRequestDBController } from '$lib/module/common/song/song.server.js';
 import type { SongData } from '$lib/module/common/song/types.js';
-import { getClientAddress } from '$lib/module/common/util.server.js';
 import { error } from '@sveltejs/kit';
+import { Util } from '$lib/module/util/util.server';
+
+const {getClientAddress} = Util.Server;
 
 export async function POST(event) {
     const { request, locals } = event;

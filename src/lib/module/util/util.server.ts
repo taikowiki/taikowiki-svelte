@@ -8,3 +8,5 @@ namespace UtilServer {
 }
 
 Util.Server = UtilServer;
+
+export { Util };

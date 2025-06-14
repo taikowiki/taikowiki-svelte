@@ -1,5 +1,7 @@
-import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
+import { Doc } from "$lib/module/doc/doc.server";
 import { error } from '@sveltejs/kit';
+
+const { DBController } = Doc.Server;
 
 export async function load({ params, url }) {
     const id = Number(params.id);
@@ -12,9 +14,9 @@ export async function load({ params, url }) {
         throw error(404);
     }
 
-    let logData = await docDBController.getLogData(id, page);
+    let logData = await DBController.getLogData(id, page);
 
-    if(logData.current === null || logData.logs.length === 0){
+    if (logData.current === null || logData.logs.length === 0) {
         throw error(404);
     }
 

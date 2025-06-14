@@ -1,4 +1,4 @@
-import type { Doc } from '$lib/module/common/wikidoc/types';
+import type { Doc } from '$lib/module/doc';
 import { CSSStyleDeclaration } from 'cssom';
 
 /**

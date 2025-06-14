@@ -2,13 +2,12 @@ import { songDBController } from '$lib/module/common/song/song.server';
 import type { Difficulty } from '$lib/module/common/song/types.js';
 import { User } from "$lib/module/user";
 import '$lib/module/user/user.client';
-import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
-import { renderer } from '$lib/module/common/wikidoc/util.js';
-import type { Doc } from '$lib/module/common/wikidoc/types';
+import { Doc } from "$lib/module/doc/doc.server";
 import { redirect } from '@sveltejs/kit';
 import { runQuery } from '@yowza/db-handler';
-import type { HTMLElement } from 'node-html-parser';
-import { prepareParagraphs, setWikiLinkAvailable } from '$lib/module/common/wikidoc/server/prepare';
+
+const { renderer } = Doc;
+const { prepareParagraphs, setWikiLinkAvailable } = Doc.Server;
 
 const docDataColumns: (keyof Doc.DB.DocDBData)[] = ['id', 'contentTree', 'editedTime', 'editableGrade', 'editorUUID', 'id', 'isDeleted', 'renderedContentTree', 'songNo', 'title', 'redirectTo', 'type'] as const;
 type DocData = Pick<Doc.DB.DocDBData, (typeof docDataColumns)[number]> & { editor: string } & { contentTree: Doc.Data.ContentTree };
@@ -25,7 +24,7 @@ export async function load({ params, url, locals }) {
             }
         }
 
-        const docData = (await docDBController.getColumnsWhere(docDataColumns, [['songNo', params.songNo]]))[0] as DocData ?? null;
+        const docData = (await Doc.Server.DBController.getColumnsWhere(docDataColumns, [['songNo', params.songNo]]))[0] as DocData ?? null;
         if (!docData) {
             return { song, docData }
         }
@@ -39,7 +38,7 @@ export async function load({ params, url, locals }) {
 
         const editor = docData.editorUUID ? (await User.Server.DBController.getNickname.getCallback(docData.editorUUID)(run)) ?? docData.editorUUID : docData.editorIp;
         const preparedContent: Doc.Data.ContentTree = {
-            content: await renderer.prepareView(docData.renderedContentTree?.content as string, async(dom) => {await setWikiLinkAvailable(dom, run)}),
+            content: await renderer.prepareView(docData.renderedContentTree?.content as string, async (dom) => { await setWikiLinkAvailable(dom, run) }),
             subParagraphs: await prepareParagraphs(docData.renderedContentTree?.subParagraphs as Doc.Data.DocParagraph[], run)
         };
 

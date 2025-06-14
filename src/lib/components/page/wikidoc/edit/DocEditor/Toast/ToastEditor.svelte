@@ -5,29 +5,28 @@
     import ToastEditorDark from "./ToastEditorDark.svelte";
     import ImagePopup from "./popup/ImagePopup.svelte";
     import { mount, setContext } from "svelte";
-    import {
+    import AnnotationPopup from "./popup/AnnotationPopup.svelte";
+    import WikiLinkPopup from "./popup/WikiLinkPopup.svelte";
+    import { getTheme } from "$lib/module/layout/theme";
+    import WikiYoutubePopup from "./popup/WikiYoutubePopup.svelte";
+    import { writable } from "svelte/store";
+    import ColorTextPopup from "./popup/ColorTextPopup.svelte";
+    import BgColorTextPopup from "./popup/BgColorTextPopup.svelte";
+    import { Doc } from "$lib/module/doc/doc.client";
+
+    const {
         insertAnnotation,
         insertBgColoredText,
         insertColoredText,
         insertImage,
         insertWikiLink,
         insertYoutube,
-    } from "$lib/module/common/wikidoc/client/markdownCommands.client";
-    import AnnotationPopup from "./popup/AnnotationPopup.svelte";
-    import WikiLinkPopup from "./popup/WikiLinkPopup.svelte";
-    import { getTheme } from "$lib/module/layout/theme";
-    import WikiYoutubePopup from "./popup/WikiYoutubePopup.svelte";
-    import { writable } from "svelte/store";
-    import { UndoStack } from "$lib/module/common/wikidoc/util";
-    import ColorTextPopup from "./popup/ColorTextPopup.svelte";
-    import BgColorTextPopup from "./popup/BgColorTextPopup.svelte";
-    import textColorIcon from "$lib/module/common/wikidoc/assets/icon/text-color.svg";
-    import bgColorIcon from "$lib/module/common/wikidoc/assets/icon/bg-color.svg";
+    } = Doc.Client.markdownCommands;
 
     interface Props {
         mdContent: string;
         show: boolean;
-        undoStack?: UndoStack;
+        undoStack?: Doc.UndoStack;
     }
 
     let { mdContent = $bindable(""), show, undoStack }: Props = $props();

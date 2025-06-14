@@ -44,7 +44,9 @@
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
-    import { docContext } from "$lib/module/common/wikidoc/util.js";
+    import { Doc } from '$lib/module/doc/index.js';
+
+    const { docContext } = Doc;
 
     let { data, children } = $props();
     //deepFreeze songs

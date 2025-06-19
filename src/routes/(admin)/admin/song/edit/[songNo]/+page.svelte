@@ -1,10 +1,10 @@
 <script lang="ts" module>
-    async function upload(songNo: string, songData: Partial<SongData>) {
+    async function upload(songNo: string, songData: Partial<Song.SongData>) {
         if (!songData.title || !songData.songNo) {
             alert("곡 번호와 제목을 입력해주세요.");
             return;
         }
-        const response = await songAdminRequestor.uploadSong({
+        const response = await Song.Client.adminRequest.uploadSong({
             songNo,
             songData,
         });
@@ -20,9 +20,8 @@
     import { goto } from "$app/navigation";
 
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
-    import type { SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song/song.client";
     import { page } from "$app/stores";
-    import { songAdminRequestor } from "$lib/module/common/song/song.client.js";
 
     let {data} = $props();
     let songData = $state(data.song);

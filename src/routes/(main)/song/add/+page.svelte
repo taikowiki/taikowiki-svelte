@@ -1,12 +1,11 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import submit from "$lib/module/common/song/submit.client";
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
-    import type { SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song/song.client";
     import { getI18N, getLang } from "$lib/module/i18n";
     import PageTitle from '$lib/components/common/PageTitle.svelte'
 
-    let songData: SongData = $state({
+    let songData: Song.SongData = $state({
         songNo: $page.url.searchParams.get("song_no") || "",
         title: "",
         titleEn: null,
@@ -89,7 +88,7 @@
 
 <button
     onclick={() => {
-        submit(songData.songNo, songData, '/song');
+        Song.Client.submit(songData.songNo, songData, '/song');
     }}
 >
     <img src="/assets/icon/plus.svg" alt="" />

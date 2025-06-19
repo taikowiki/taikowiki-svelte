@@ -1,9 +1,10 @@
 import LZUTF8 from "lzutf8";
 import { z } from "zod";
-import { DIFFICULTY } from "../common/song/const";
-import type { Difficulty, SongData } from "../common/song/types";
+import { Song } from "../song";
 import type { defineRequestHandler } from "@yowza/rrequestor";
 import type { defineDBHandler } from "@yowza/db-handler";
+
+const { DIFFICULTY } = Song.CONST;
 
 // module
 export namespace Diffchart {
@@ -208,12 +209,12 @@ export namespace Diffchart {
 
     // tuple
     export namespace Tuple {
-        export type SongTuple = [songNo: string, title: string, difficulty: Difficulty];
+        export type SongTuple = [songNo: string, title: string, difficulty: Song.Difficulty];
         export type SectionTuple = [name: string, songs: SongTuple[], color?: string, backgroundColor?: string];
         export type DiffchartTuple = [name: string, sections: SectionTuple[], color?: string, backgroundColor?: string];
     }
 
-    export type SongDataForDisplay = Pick<SongData, "songNo" | "genre" | "title" | "titleKo" | "aliasKo">;
+    export type SongDataForDisplay = Pick<Song.SongData, "songNo" | "genre" | "title" | "titleKo" | "aliasKo">;
 }
 
 export default Diffchart;

@@ -1,5 +1,5 @@
 import { songDBController } from '$lib/module/common/song/song.server';
-import type { Difficulty } from '$lib/module/common/song/types.js';
+import { Song } from '$lib/module/song/index.js';
 import { User } from "$lib/module/user";
 import '$lib/module/user/user.client';
 import { Doc } from "$lib/module/doc/doc.server";
@@ -13,7 +13,7 @@ const docDataColumns: (keyof Doc.DB.DocDBData)[] = ['id', 'contentTree', 'edited
 type DocData = Pick<Doc.DB.DocDBData, (typeof docDataColumns)[number]> & { editor: string } & { contentTree: Doc.Data.ContentTree };
 
 export async function load({ params, url, locals }) {
-    const diff = (url.searchParams.get('diff') ?? 'oni') as Difficulty;
+    const diff = (url.searchParams.get('diff') ?? 'oni') as Song.Difficulty;
 
     const { song, docData } = await runQuery(async (run) => {
         const song = await songDBController.getSongBySongNo.getCallback(params.songNo)(run);

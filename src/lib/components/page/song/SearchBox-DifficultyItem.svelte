@@ -12,10 +12,12 @@
 </script>
 
 <script lang="ts">
-    import type { Difficulty } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { Util } from "$lib/module/util";
     import { getTheme } from "$lib/module/layout/theme";
     import type { Snippet } from "svelte";
+
+    type Difficulty = Song.Difficulty;
 
     interface Props {
         value: Difficulty | "oniura";

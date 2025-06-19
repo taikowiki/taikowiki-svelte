@@ -1,8 +1,11 @@
 import type { RequestEvent } from '@sveltejs/kit';
+import type { Song } from '../song';
 import showdown from 'showdown';
 import sqlString_ from 'sqlstring';
-import type { Difficulty, Genre } from '../common/song/types';
 import styled from 'styled-svelte5';
+
+type Difficulty = Song.Difficulty;
+type Genre = Song.Genre;
 
 export namespace Util {
     /**

@@ -39,15 +39,15 @@
 <script lang="ts">
     import { getI18N, getLang } from "$lib/module/i18n";
 
-    import type { SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import { DateTime } from "luxon";
     import SongDataDisplayTag from "./SongDataDisplayTag.svelte";
 
     interface Props {
-        bpm: SongData["bpm"];
-        bpmShiver: SongData["bpmShiver"];
+        bpm: Song.SongData["bpm"];
+        bpmShiver: Song.SongData["bpmShiver"];
         version: string[];
         artists: string[];
         addedDate: number | null;

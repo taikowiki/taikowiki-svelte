@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
 
     import OtherEditor from "./admin-OtherEditor.svelte";
     import TitleEditor from "./admin-TitleEditor.svelte";
@@ -8,7 +8,7 @@
 
     interface Props {
         compare: any | null;
-        songData: SongData;
+        songData: Song.SongData;
     }
 
     let {compare, songData = $bindable()}: Props = $props();

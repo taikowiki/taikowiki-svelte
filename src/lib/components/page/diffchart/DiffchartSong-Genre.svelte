@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { Genre } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { Util } from "$lib/module/util";
 
     interface Props{
         width: string;
         height: string;
-        genre: Genre[];
+        genre: Song.Genre[];
     }
 
     let {

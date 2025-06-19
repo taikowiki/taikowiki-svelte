@@ -24,9 +24,11 @@
 </script>
 
 <script lang="ts">
-    import type { SongSearchOption } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/i18n";
+
+    type SongSearchOption = Song.SongSearchOption;
 
     interface Props {
         opened: boolean;

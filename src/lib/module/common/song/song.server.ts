@@ -1,5 +1,5 @@
 import { escape, escapeId } from 'mysql2';
-import { type SongData, type SongRequest, type SongSearchOption } from "./types";
+import { Song } from '$lib/module/song';
 //@ts-expect-error
 import r from 'regex-escape';
 import { defineDBHandler } from "@yowza/db-handler";
@@ -7,6 +7,10 @@ import { Util } from '$lib/module/util';
 function regexEscape(str: string): string {
     return r(str)
 }
+
+type SongData = Song.SongData;
+type SongRequest = Song.SongRequest;
+type SongSearchOption = Song.SongSearchOption;
 
 /**
  * Parse songData fetched from the database to match the SongData type

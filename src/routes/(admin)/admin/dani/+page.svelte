@@ -1,8 +1,10 @@
 <script lang="ts">
     import { getLang, getI18N } from "$lib/module/i18n";
-    import { DANIVERSION } from "$lib/module/common/song/const";
+    import { Song } from "$lib/module/song/index.js";
     import { Dani } from "$lib/module/dani/index.js";
     import "$lib/module/dani/dani.client";
+
+    const { DANIVERSION } = Song.CONST;
 
     let {data} = $props();
 

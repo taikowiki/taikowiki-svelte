@@ -1,9 +1,5 @@
 <script lang="ts">
-    import type {
-        Course,
-        Genre,
-        SongData,
-    } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import type { Measure } from "@taiko-wiki/taiko-rating/types";
     import groupBy from "object.groupby";
     import MeasureGroup from "./MeasureGroup.svelte";
@@ -14,8 +10,8 @@
 
     interface Props {
         measures: Measure[];
-        songDatas: (Pick<SongData, "title" | "songNo" | "genre"> & {
-            courses: { oni: Course; ura: Course | null };
+        songDatas: (Pick<Song.SongData, "title" | "songNo" | "genre"> & {
+            courses: { oni: Song.Course; ura: Song.Course | null };
         })[];
     }
 
@@ -23,7 +19,7 @@
 
     const groupedMeasures = groupBy(measures, (measure) => measure.range);
 
-    const GenreDiv = styled<{ genre: Genre[] }, {}>(
+    const GenreDiv = styled<{ genre: Song.Genre[] }, {}>(
         "div",
         ({ genre }) => `
         background: linear-gradient(${genre.length === 1 ? `${Util.Color.genre[genre[0]]}, ${Util.Color.genre[genre[0]]}` : genre.map((g, i) => `${Util.Color.genre[g]} calc(100% / ${genre.length} * ${i}), ${Util.Color.genre[g]} calc(100% / ${genre.length} * ${i + 1})`).join(", ")});`,

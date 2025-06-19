@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { SongLang } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { getTheme } from "$lib/module/layout/theme";
     import type { Snippet } from "svelte";
 
     interface Props {
-        songLang: SongLang;
-        value: SongLang;
+        songLang: Song.SongLang;
+        value: Song.SongLang;
         btn?: HTMLElement;
         children?: Snippet;
     }

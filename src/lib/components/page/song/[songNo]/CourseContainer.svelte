@@ -1,10 +1,13 @@
 <script lang="ts">
-    import type { Difficulty, SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import CourseDisplay from "./CourseDisplay.svelte";
     import { Util } from "$lib/module/util";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { page } from "$app/stores";
     import { replaceState } from "$app/navigation";
+
+    type SongData = Song.SongData;
+    type Difficulty = Song.Difficulty;
 
     interface Props {
         courses: SongData["courses"];

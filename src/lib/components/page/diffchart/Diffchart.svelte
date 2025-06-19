@@ -20,7 +20,7 @@
     import { browser } from "$app/environment";
     import html2canvas from "html2canvas";
     import { getI18N, getLang } from "$lib/module/i18n";
-    import type { Difficulty } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import DiffchartAllCrown from "./DiffchartAllCrown.svelte";
 
     interface Props {
@@ -236,7 +236,7 @@
      * "ura"를 "oni_ura"로 바꿉니다.
      * @param diff
      */
-    function uraToOniUra(diff: Difficulty): Diffchart.Score.Difficulty {
+    function uraToOniUra(diff: Song.Difficulty): Diffchart.Score.Difficulty {
         return diff === "ura" ? "oni_ura" : diff;
     }
 </script>

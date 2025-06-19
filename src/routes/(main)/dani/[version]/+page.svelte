@@ -3,7 +3,9 @@
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DaniDisplay from "$lib/components/page/dani/DaniDisplay.svelte";
     import { getI18N, getLang } from "$lib/module/i18n";
-    import { DAN } from "$lib/module/common/song/const.js";
+    import { Song } from "$lib/module/song";
+
+    const { DAN } = Song.CONST;
 
     let { data } = $props();
 

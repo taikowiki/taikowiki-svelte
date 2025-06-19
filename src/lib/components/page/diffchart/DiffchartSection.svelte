@@ -2,7 +2,7 @@
     import type { Diffchart } from '$lib/module/diffchart';
     import DiffchartSectionName from "./DiffchartSectionName.svelte";
     import DiffchartSong from "./DiffchartSong.svelte";
-    import type { Difficulty } from "$lib/module/common/song/types";
+    import { Song } from '$lib/module/song';
 
     interface Props {
         section: Diffchart.Section;
@@ -35,7 +35,7 @@
      * "ura"를 "oni_ura"로 바꿉니다.
      * @param diff
      */
-     function uraToOniUra(diff: Difficulty): Diffchart.Score.Difficulty {
+     function uraToOniUra(diff: Song.Difficulty): Diffchart.Score.Difficulty {
         return diff === "ura" ? "oni_ura" : diff;
     }
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    function getGenreColors(genre: Genre[]): string {
+    function getGenreColors(genre: Song.Genre[]): string {
         if (genre.length === 1) {
             return `${Util.Color.genre[genre[0]]}`;
         }
@@ -12,7 +12,7 @@
 
 <script lang="ts">
     import type { Dani } from "$lib/module/dani";
-    import type { Genre } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { getTheme } from "$lib/module/layout/theme";
     import { Util } from "$lib/module/util";
 

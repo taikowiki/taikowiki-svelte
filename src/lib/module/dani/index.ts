@@ -1,8 +1,9 @@
-import type { DaniVersion, SongData } from "$lib/module/common/song/types"
 import { z } from "zod";
-import { DANIVERSION, DIFFICULTY, REGULAR_DAN } from "../common/song/const";
+import { Song } from "../song";
 import type { defineRequestHandler } from "@yowza/rrequestor";
 import type { defineDBHandler } from "@yowza/db-handler";
+
+const { DANIVERSION, DIFFICULTY, REGULAR_DAN } = Song.CONST;
 
 export namespace Dani{
     export declare namespace Client{
@@ -15,7 +16,7 @@ export namespace Dani{
         const DBController: {
             getAll: ReturnType<typeof defineDBHandler<[], Dani.DB[]>>;
             getByVersion: ReturnType<typeof defineDBHandler<[string], Dani.DB | null>>;
-            getVersions: ReturnType<typeof defineDBHandler<[], Partial<DaniVersion>[]>>;
+            getVersions: ReturnType<typeof defineDBHandler<[], Partial<Song.DaniVersion>[]>>;
             hasVersion: ReturnType<typeof defineDBHandler<[string]>>;
             addVersion: ReturnType<typeof defineDBHandler<[string, Dani.Dani[]?]>>;
             updateVersion: ReturnType<typeof defineDBHandler<[Dani.UpdateData]>>;
@@ -83,7 +84,7 @@ export namespace Dani {
     export type Dan = RegularDan | GaidenDan;
     export type Dani = z.infer<typeof Schema.Dani>;
     export type DB = z.infer<typeof Schema.DB>;
-    export type SongDataForDisplay = Pick<SongData, "songNo" | "genre" | "title" | "courses">
+    export type SongDataForDisplay = Pick<Song.SongData, "songNo" | "genre" | "title" | "courses">
 
     export type UpdateData = z.infer<typeof Schema.UpdateData>;
 }

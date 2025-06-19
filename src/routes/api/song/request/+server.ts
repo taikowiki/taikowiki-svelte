@@ -1,5 +1,5 @@
 import { songRequestDBController } from '$lib/module/common/song/song.server.js';
-import type { SongData } from '$lib/module/common/song/types.js';
+import { Song } from '$lib/module/song/index.js';
 import { error } from '@sveltejs/kit';
 import { Util } from '$lib/module/util/util.server';
 
@@ -12,7 +12,7 @@ export async function POST(event) {
     if (locals.userData.grade < 2) throw error(401);
 
     const data = await request.json();
-    const songData = data.songData as SongData;
+    const songData = data.songData as Song.SongData;
     const songNo = data.songNo as string;
     if (!songData || !songNo) throw error(400);
 

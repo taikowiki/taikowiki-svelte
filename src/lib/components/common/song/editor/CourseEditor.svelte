@@ -1,19 +1,18 @@
 <script lang="ts">
-    // @ts-nocheck
     import { Util } from "$lib/module/util";
     import { getI18N, getLang } from "$lib/module/i18n";
-    import type { Course, Difficulty } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import DaniEditor from "./DaniEditor.svelte";
 
     interface Props {
-        difficulty: Difficulty;
-        course: Course | null;
+        difficulty: Song.Difficulty;
+        course: Song.Course | null;
     }
 
     let { difficulty, course = $bindable() }: Props = $props();
 
-    const init: Course = {
+    const init: Song.Course = {
         level: 1,
         isBranched: 0,
         maxCombo: 0,
@@ -66,7 +65,7 @@
         {/if}
     </td>
 {/snippet}
-{#snippet courseData(course: Course)}
+{#snippet courseData(course: Song.Course)}
     {#snippet level()}
         <tr>
             <td> {i18n.level} </td>
@@ -130,7 +129,8 @@
     {/snippet}
     {#snippet balloon()}
         {@const setBalloon = (event: Event) => {
-            const text = event.currentTarget.value;
+            if(!event.currentTarget) return;
+            const text = (event.currentTarget as HTMLTextAreaElement).value;
             course.balloon = text
                 .split(",")
                 .map((v) => {
@@ -159,7 +159,7 @@
     {/snippet}
     {#snippet roll()}
         {@const setRoll = (event: Event) => {
-            const text = event.currentTarget.value;
+            const text = (event.currentTarget as HTMLTextAreaElement).value;
 
             course.rollTime = text
                 .split(",")

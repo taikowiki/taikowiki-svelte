@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    function clickHandle(group: string | undefined, value: Genre) {
+    function clickHandle(group: string | undefined, value: Song.Genre) {
         if (group !== value) {
             return value;
         } else {
@@ -10,13 +10,13 @@
 
 <script lang="ts">
     import { Util } from "$lib/module/util";
-    import type { Genre } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { getTheme } from "$lib/module/layout/theme";
     import type { Snippet } from "svelte";
 
     interface Props {
         genre: string | undefined;
-        value: Genre;
+        value: Song.Genre;
         children?: Snippet;
     }
 

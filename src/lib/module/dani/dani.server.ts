@@ -1,7 +1,8 @@
-import { DAN } from "../common/song/const";
-import type { DaniVersion } from "../common/song/types";
+import { Song } from "../song";
 import { Dani } from ".";
 import { defineDBHandler } from "@yowza/db-handler";
+
+const { DAN } = Song.CONST;
 
 namespace DaniServer {
     export const DBController = {
@@ -32,7 +33,7 @@ namespace DaniServer {
         /**
          * Retrieves versions.
          */
-        getVersions: defineDBHandler<[], Partial<DaniVersion>[]>(() => {
+        getVersions: defineDBHandler<[], Partial<Song.DaniVersion>[]>(() => {
             return async (run) => {
                 const result = (await run("SELECT `version` FROM `dani`")).map((e: any) => Object.values(e)[0]);
                 return JSON.parse(JSON.stringify(result));

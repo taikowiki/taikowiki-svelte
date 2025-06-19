@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import submit from "$lib/module/common/song/submit.client";
+    import { Song } from "$lib/module/song/song.client";
 
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import { getI18N, getLang } from "$lib/module/i18n";
@@ -19,7 +19,7 @@
 
 <button
     onclick={() => {
-        submit(songData.songNo, songData, `/song/${$page.params.songNo}`);
+        Song.Client.submit(songData.songNo, songData, `/song/${$page.params.songNo}`);
     }}
 >
     <img src="/assets/icon/plus.svg" alt="" />

@@ -1,6 +1,8 @@
 import { Dani } from "$lib/module/dani";
 import "$lib/module/dani/dani.server";
-import { DANIVERSION } from "$lib/module/common/song/const";
+import { Song } from "$lib/module/song";
+
+const { DANIVERSION } = Song.CONST;
 
 export async function load() {
     const versions = await Dani.Server.DBController.getVersions();

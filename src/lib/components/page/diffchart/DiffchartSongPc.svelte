@@ -47,7 +47,7 @@
 </script>
 
 <script lang="ts">
-    import type { Genre } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import type { Diffchart } from "$lib/module/diffchart";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
     import { Util } from "$lib/module/util";
@@ -57,7 +57,7 @@
     interface Props {
         song: Diffchart.Song;
         title: string;
-        genre: Genre[];
+        genre: Song.Genre[];
         krTitle: string;
         theme: string;
         userScore?: Diffchart.Score.Detail | null;

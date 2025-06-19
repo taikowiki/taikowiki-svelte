@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { type SongLang } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song/index.js";
     import SongLanguageSelector from "$lib/components/page/song/SongLanguageSelector.svelte";
     import SongList from "$lib/components/page/song/SongList.svelte";
     import AddSongButton from "$lib/components/page/song/AddSongButton.svelte";
@@ -13,7 +13,7 @@
 
     let {data} = $props();
 
-    let songLang: SongLang = $state("ja");
+    let songLang: Song.SongLang = $state("ja");
 
     let pageNum = $derived(data.pageNum);
     let option = $derived(data.option);

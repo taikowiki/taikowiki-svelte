@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { User } from "$lib/module/user";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/i18n";
@@ -12,7 +12,7 @@
 
     interface Props {
         ratings: ReturnType<typeof getRating>;
-        songDatas: Pick<SongData, "songNo" | "title">[];
+        songDatas: Pick<Song.SongData, "songNo" | "title">[];
         donderData: User.DonderData;
         only50?: boolean;
     }

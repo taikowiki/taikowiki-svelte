@@ -1,7 +1,9 @@
 <script lang="ts">
     import type { Dani } from "$lib/module/dani";
     import { getI18N, getLang } from "$lib/module/i18n";
-    import { DAN } from "$lib/module/common/song/const";
+    import { Song } from "$lib/module/song";
+
+    const { DAN } = Song.CONST;
 
     interface Props {
         dan: Dani.Dan;

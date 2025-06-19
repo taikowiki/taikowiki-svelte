@@ -7,14 +7,14 @@
     } from "node-hiroba/types";
     import { Util } from "$lib/module/util";
     import { getI18N, getLang } from "$lib/module/i18n";
-    import type { Difficulty, SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
         songRatingData: ReturnType<typeof getRating>["songRatingDatas"][number];
         songDifficultyScoreData: DifficultyScoreData;
-        songData: Pick<SongData, "songNo" | "title">;
+        songData: Pick<Song.SongData, "songNo" | "title">;
         isTop50: boolean;
         order: number;
         isDownload?: boolean;

@@ -1,19 +1,17 @@
 <script lang="ts">
     import { Util } from "$lib/module/util";
-    import type { Difficulty } from "$lib/module/common/song/types";
     import { onDestroy, onMount } from "svelte";
-    import type { SongLang } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { SongDataPickedForSearch } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
 
     interface Props {
-        song: SongDataPickedForSearch;
-        songLang: SongLang;
+        song: Song.SongDataPickedForSearch;
+        songLang: Song.SongLang;
     }
 
     let { song, songLang }: Props = $props();
 
-    const diffs: Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
+    const diffs: Song.Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
 
     //let titleContainer: HTMLElement;
     //onMount(resizeHandle);

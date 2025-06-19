@@ -1,16 +1,16 @@
 <script lang="ts">
-    // @ts-nocheck
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import CourseEditor from "$lib/components/common/song/editor/CourseEditor.svelte";
     import { getI18N, getLang } from "$lib/module/i18n";
-    import { DIFFICULTY } from "$lib/module/common/song/const";
-    import type { SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
 
-    interface Props{
-        courses: SongData["courses"]
+    const { DIFFICULTY } = Song.CONST;
+
+    interface Props {
+        courses: Song.SongData["courses"];
     }
 
-    let {courses = $bindable()}: Props = $props();
+    let { courses = $bindable() }: Props = $props();
 
     const lang = getLang();
     let i18n = $derived(getI18N($lang).component.SongEditor.CoursesEditor);

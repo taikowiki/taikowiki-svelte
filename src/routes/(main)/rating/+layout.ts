@@ -1,4 +1,4 @@
-import type { SongData } from '$lib/module/common/song/types.js';
+import { Song } from '$lib/module/song/index.js';
 import { User } from '$lib/module/user';
 import '$lib/module/user/user.client';
 import { error } from '@sveltejs/kit';
@@ -59,11 +59,11 @@ export async function load(event) {
 type LayoutData = ({
     ratingDataExists: true,
     donderData: User.DonderData & {scoreData: User.ScoreData},
-    songDatas: Pick<SongData, 'songNo' | 'title' | 'genre' | 'courses'>[],
+    songDatas: Pick<Song.SongData, 'songNo' | 'title' | 'genre' | 'courses'>[],
     ranking: { count: number, ranking: number }
 } | {
     ratingDataExists: false,
     donderData: null,
-    songDatas: Pick<SongData, 'songNo' | 'title' | 'genre' | 'courses'>[],
+    songDatas: Pick<Song.SongData, 'songNo' | 'title' | 'genre' | 'courses'>[],
     ranking: null
 }) & {logined: boolean}

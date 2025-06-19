@@ -1,5 +1,5 @@
 import { songDBController } from "$lib/module/common/song/song.server.js";
-import type { SongData } from "$lib/module/common/song/types.js";
+import { Song } from "$lib/module/song/index.js";
 import { User } from "$lib/module/user";
 import '$lib/module/user/user.client';
 
@@ -9,7 +9,7 @@ export async function load({ locals: { userData } }) {
         "songNo",
         "genre",
         "courses",
-    ])) as Pick<SongData, "songNo" | "title" | "genre" | "courses">[];
+    ])) as Pick<Song.SongData, "songNo" | "title" | "genre" | "courses">[];
 
     const logined = !!userData;
     const donderData = logined

@@ -3,7 +3,7 @@ import { runQuery } from "@yowza/db-handler";
 import { I18N } from "$lib/module/i18n/";
 import { sequence } from "@sveltejs/kit/hooks";
 import { User } from "$lib/module/user";
-import '$lib/module/user/user.client';
+import '$lib/module/user/user.server';
 import { Util } from "../util";
 import '../util/util.server'
 

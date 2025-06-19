@@ -2,7 +2,9 @@ import { Dani } from "$lib/module/dani";
 import "$lib/module/dani/dani.server";
 import { songDBController } from "$lib/module/common/song/song.server";
 import { error } from "@sveltejs/kit";
-import { DAN } from "$lib/module/common/song/const.js";
+import { Song } from "$lib/module/song/index.js";
+
+const { DAN } = Song.CONST;
 
 export async function load({ params }) {
     const daniData = await Dani.Server.DBController.getByVersion(params.version);

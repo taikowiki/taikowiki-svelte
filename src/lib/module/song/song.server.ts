@@ -112,7 +112,7 @@ namespace SongServer {
                 result.forEach(parseSongDataFromDB);
                 return result[0] ?? null;
             }
-        }) as <T extends (keyof SongData | "order")[]>(songNo: string, columns: T) => Promise<Pick<SongData & { order: number }, T[number]> | null>,
+        }),
 
         /**
          * Retrieve data of multiple songs by their songNos.
@@ -143,7 +143,7 @@ namespace SongServer {
                 result.forEach(parseSongDataFromDB);
                 return JSON.parse(JSON.stringify(result));
             }
-        }) as <T extends (keyof SongData | "order")[]>(songNo: string[], columns: T) => Promise<Pick<SongData & { order: number }, T[number]>[]>,
+        }),
 
         /**
          * Search and retrieve song data.
@@ -211,7 +211,7 @@ namespace SongServer {
                     count
                 }
             };
-        }) as <T extends (keyof SongData | "order")[]>(page: number, columns: T, option?: SongSearchOption) => Promise<{ songs: Pick<SongData & { order: number }, T[number]>[], count: number }>,
+        }),
 
         /**
          * Adds a song.
@@ -439,5 +439,7 @@ namespace SongServer {
         })
     }
 }
+
+Song.Server = SongServer;
 
 export { Song }

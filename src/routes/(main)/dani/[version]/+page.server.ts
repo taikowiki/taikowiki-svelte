@@ -1,8 +1,7 @@
 import { Dani } from "$lib/module/dani";
 import "$lib/module/dani/dani.server";
-import { songDBController } from "$lib/module/common/song/song.server";
+import { Song } from '$lib/module/song/song.server';
 import { error } from "@sveltejs/kit";
-import { Song } from "$lib/module/song/index.js";
 
 const { DAN } = Song.CONST;
 
@@ -25,7 +24,7 @@ export async function load({ params }) {
     );
     songNos.delete("");
 
-    const songDatas = (await songDBController.getSongsColumnsBySongNo(
+    const songDatas = (await Song.Server.DBController.getSongsColumnsBySongNo(
         [...songNos],
         ["songNo", "genre", "title", "courses"]
     )) as Dani.SongDataForDisplay[];

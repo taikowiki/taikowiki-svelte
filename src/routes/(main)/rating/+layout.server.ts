@@ -1,10 +1,9 @@
-import { songDBController } from "$lib/module/common/song/song.server.js";
-import { Song } from "$lib/module/song/index.js";
+import { Song } from '$lib/module/song/song.server';
 import { User } from "$lib/module/user";
 import '$lib/module/user/user.client';
 
 export async function load({ locals: { userData } }) {
-    const songDatas = (await songDBController.getAllColumns([
+    const songDatas = (await Song.Server.DBController.getAllColumns([
         "title",
         "songNo",
         "genre",

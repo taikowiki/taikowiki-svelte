@@ -1,5 +1,4 @@
-import { songDBController } from "$lib/module/common/song/song.server";
-import { Song } from "$lib/module/song/index.js";
+import { Song } from '$lib/module/song/song.server';
 
 export async function load({ url }) {
     let page = Number(url.searchParams.get("page")) || 1;
@@ -12,7 +11,7 @@ export async function load({ url }) {
     let level: number | undefined = Number(url.searchParams.get('level'));
     if (isNaN(level) || level === 0) level = undefined;
 
-    const songSearchResult = await songDBController.searchColumns(page, ["order", "songNo", "genre", "title", "titleKo", "aliasKo", "titleEn", "aliasEn", "artists", "courses", "romaji"], { query, difficulty, genre, level });
+    const songSearchResult = await Song.Server.DBController.searchColumns(page, ["order", "songNo", "genre", "title", "titleKo", "aliasKo", "titleEn", "aliasEn", "artists", "courses", "romaji"], { query, difficulty, genre, level });
 
     return {
         songs: songSearchResult.songs as Song.SongDataPickedForSearch[],

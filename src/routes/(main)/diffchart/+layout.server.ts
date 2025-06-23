@@ -2,7 +2,7 @@ import { User } from "$lib/module/user";
 import '$lib/module/user/user.client';
 import type { Diffchart } from '$lib/module/diffchart';
 import type { Clear, ClearData, Difficulty } from "node-hiroba/types";
-import { songDBController } from "$lib/module/common/song/song.server.js";
+import { Song } from '$lib/module/song/song.server';
 
 export async function load({ locals }) {
     let donderDataResult = null;
@@ -13,7 +13,7 @@ export async function load({ locals }) {
         donderDataResult &&= parseSongScoreDonderData(donderDataResult);
     }
 
-    const songs = (await songDBController.getAllColumns([
+    const songs = (await Song.Server.DBController.getAllColumns([
         "genre",
         "songNo",
         "title",

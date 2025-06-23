@@ -1,6 +1,8 @@
 import axios from "axios";
-import { type SongData } from "./types";
+import { Song } from ".";
 import { getContext } from "svelte";
+
+type SongData = Song.SongData;
 
 export async function loadAllSongs(fetch: ((input: string | URL | globalThis.Request,
     init?: RequestInit) => Promise<Response>)): Promise<SongData[]> {

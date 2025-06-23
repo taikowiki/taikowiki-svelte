@@ -1,5 +1,4 @@
-import { songDBController } from '$lib/module/common/song/song.server';
-import { Song } from '$lib/module/song/index.js';
+import { Song } from '$lib/module/song/song.server';
 import { User } from "$lib/module/user";
 import '$lib/module/user/user.client';
 import { Doc } from "$lib/module/doc/doc.server";
@@ -16,7 +15,7 @@ export async function load({ params, url, locals }) {
     const diff = (url.searchParams.get('diff') ?? 'oni') as Song.Difficulty;
 
     const { song, docData } = await runQuery(async (run) => {
-        const song = await songDBController.getSongBySongNo.getCallback(params.songNo)(run);
+        const song = await Song.Server.DBController.getSongBySongNo.getCallback(params.songNo)(run);
         if (!song) {
             return {
                 song,

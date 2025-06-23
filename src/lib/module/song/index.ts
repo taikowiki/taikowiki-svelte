@@ -1,10 +1,13 @@
 import type { RRequestHandler } from '@yowza/rrequestor/types';
+import type { defineDBHandler as d } from '@yowza/db-handler';
 
 //@ts-expect-error
 import r from 'regex-escape';
 function regexEscape(str: string): string {
     return r(str)
 }
+
+type defineDBHandler<T extends any[], K = any> = ReturnType<typeof d<T, K>>
 
 export namespace Song {
     export namespace CONST {
@@ -272,6 +275,35 @@ export namespace Song {
             }, void>
         }
         function submit(songNo: string, songData: Song.SongData, redirectPath: string): Promise<void>
+    }
+    export declare namespace Server {
+        const DBController: {
+            createTable: defineDBHandler<[], void>,
+            getAll: defineDBHandler<[], SongData[]>,
+            getAllColumns: defineDBHandler<[string[]], Partial<SongData>[]>,
+            getAfter: defineDBHandler<[number], SongData[]>,
+            getSongBySongNo: defineDBHandler<[string], SongData | null>,
+            getSongColumnsBySongNo: defineDBHandler<[songNo: string, columns: (keyof SongData | "order")[]], Partial<SongData> | null>,
+            getSongsBySongNo: defineDBHandler<[string[]], SongData[]>,
+            getSongsColumnsBySongNo: defineDBHandler<[string[], (keyof SongData | "order")[]], Partial<SongData>[]>,
+            search: defineDBHandler<[number | null, SongSearchOption?], { songs: (SongData & { order: number })[], count: number }>,
+            searchColumns: defineDBHandler<[page: number | null, columns: (keyof SongData | "order")[], option?: SongSearchOption], { songs: Partial<(SongData & { order: number })>[], count: number }>,
+            addSong: defineDBHandler<[SongData], void>,
+            getUpdateTime: defineDBHandler<[], number>,
+            getCreateTime: defineDBHandler<[], number>,
+            getNewSongs: defineDBHandler<[number], SongData[]>,
+            uploadSong: defineDBHandler<[string, SongData], void>,
+            songExistsBySongNo: defineDBHandler<[songNo: string]>,
+        };
+        const reqDBController: {
+            getAll: defineDBHandler<[SongRequest['status']?], (SongRequest & { order: number })[]>,
+            getRequestsBySongNo: defineDBHandler<[string, SongRequest['status']?], (SongRequest & { order: number })[]>,
+            getRequestByOrder: defineDBHandler<[number, SongRequest['status']?]>,
+            createRequest: defineDBHandler<[{ UUID: string; songNo: string; data: SongData; ip: string; }], void>,
+            approve: defineDBHandler<[number, SongData?], void>,
+            disapprove: defineDBHandler<[number | number[]], void>,
+            removeRequest: defineDBHandler<[number], void>
+        }
     }
 }
 

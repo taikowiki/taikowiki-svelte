@@ -1,5 +1,4 @@
-import { songRequestDBController } from '$lib/module/common/song/song.server.js';
-import { Song } from '$lib/module/song/index.js';
+import { Song } from '$lib/module/song/song.server';
 import { error } from '@sveltejs/kit';
 import { Util } from '$lib/module/util/util.server';
 
@@ -21,7 +20,7 @@ export async function POST(event) {
         course.images = course.images.filter(e => e !== '');
     })
 
-    await songRequestDBController.createRequest({
+    await Song.Server.reqDBController.createRequest({
         UUID: locals.userData.UUID,
         songNo,
         data: songData,

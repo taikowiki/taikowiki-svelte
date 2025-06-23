@@ -2,7 +2,7 @@ import { defineDBHandler, QB, queryBuilder, Select, Where } from "@yowza/db-hand
 import type { Doc } from '$lib/module/doc';
 import { WikiError, validateDocData, parseDBData } from "../util.js";
 import { renderer } from "../util.js";
-import { songDBController } from "$lib/module/common/song/song.server.js";
+import { Song } from '$lib/module/song/song.server';
 import { Util } from "$lib/module/util/index.js";
 import * as Diff from 'diff';
 import { Search } from "$lib/module/search/index.js";
@@ -43,7 +43,7 @@ export const docDBController = {
                 if (alreadyExists) {
                     throw new WikiError("DUPLICATED_SONG_NO");
                 }
-                const songExists = await songDBController.songExistsBySongNo.getCallback(docData.songNo)(run);
+                const songExists = await Song.Server.DBController.songExistsBySongNo.getCallback(docData.songNo)(run);
                 if (!songExists) {
                     throw new WikiError("SONG_NOT_EXISTS");
                 }
@@ -118,7 +118,7 @@ export const docDBController = {
                 if (alreadyExists) {
                     throw new WikiError("DUPLICATED_SONG_NO");
                 }
-                const songExists = await songDBController.songExistsBySongNo.getCallback(docData.songNo)(run);
+                const songExists = await Song.Server.DBController.songExistsBySongNo.getCallback(docData.songNo)(run);
                 if (!songExists) {
                     throw new WikiError("SONG_NOT_EXISTS");
                 }
@@ -448,7 +448,7 @@ export const docDBController = {
                         )
                 ]).build() + ` ORDER BY \`editedTime\` DESC LIMIT ${offset}, ${limit}`;
         }
-        else{
+        else {
             var countQuery = queryBuilder.select('docs', [Select.Count()]).where(Where.Compare('isDeleted', '=', 0)).build();
             var searchQuery = queryBuilder.select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime']).where(Where.Compare('isDeleted', '=', 0)).orderby('id', 'desc').limit(offset, limit).build();
         }

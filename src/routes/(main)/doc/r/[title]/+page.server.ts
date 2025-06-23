@@ -1,4 +1,4 @@
-import { songDBController } from '$lib/module/common/song/song.server.js';
+import { Song } from '$lib/module/song/song.server';
 import { User } from "$lib/module/user";
 import '$lib/module/user/user.server';
 import { Doc } from "$lib/module/doc/doc.server";
@@ -59,7 +59,7 @@ export async function load({ params, locals }) {
 
             if (docData.type === "song") {
                 // 곡 문서이고 해당 곡 번호를 가진 곡이 존재하면 리다이렉트
-                if (docData.songNo && await songDBController.songExistsBySongNo.getCallback(docData.songNo)(run)) {
+                if (docData.songNo && await Song.Server.DBController.songExistsBySongNo.getCallback(docData.songNo)(run)) {
                     throw redirect(302, `/song/${docData.songNo}?from=${encodeURIComponent(docData.title)}`)
                 }
             }

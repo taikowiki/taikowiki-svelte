@@ -5,7 +5,7 @@
     import LanguageItem from "./LanguageItem.svelte";
     import UserInfo from "./User-Info.svelte";
     import { page } from "$app/stores";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getContext } from "svelte";
 
     let opened = $state(false);

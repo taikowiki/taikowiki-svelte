@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import type { Doc } from "$lib/module/common/wikidoc/types";
+    import type { Doc } from "$lib/module/doc";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import { getContext } from "svelte";

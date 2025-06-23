@@ -1,20 +1,17 @@
 <script lang="ts">
-    import type { Genre } from "$lib/module/common/song/types";
-    import type {
-        Song,
-        SongScoreDetail,
-    } from "$lib/module/common/diffchart/types";
+    import { Song } from "$lib/module/song";
+    import type { Diffchart } from "$lib/module/diffchart";
     import DiffchartSongGenre from "./DiffchartSong-Genre.svelte";
-    import color from "$lib/module/common/color";
-    import { getLang } from "$lib/module/common/i18n/i18n";
+    import { Util } from "$lib/module/util";
+    import { getLang } from "$lib/module/i18n";
 
     interface Props {
-        song: Song;
+        song: Diffchart.Song;
         title: string;
-        genre: Genre[];
+        genre: Song.Genre[];
         krTitle: string;
         theme: string;
-        userScore?: SongScoreDetail | null;
+        userScore?: Diffchart.Score.Detail | null;
     }
 
     let {
@@ -39,7 +36,7 @@
     <div class="title-container">
         <div
             class="title"
-            style={`color:${theme === "light" ? color.difficulty[song.difficulty] : color.darkDifficulty[song.difficulty]};`}
+            style={`color:${theme === "light" ? Util.Color.difficulty[song.difficulty] : Util.Color.darkDifficulty[song.difficulty]};`}
         >
             {title}
         </div>

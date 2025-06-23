@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { Notice } from "$lib/module/common/notice/types";
+    import type { Notice } from "$lib/module/notice";
     import { onMount } from "svelte";
     import "@toast-ui/editor/toastui-editor.css";
     import { DateTime } from "luxon";
 
     interface Props {
-        notice: Omit<Notice, "order" | "writtenDate">;
+        notice: Omit<Notice.Notice, "order" | "writtenDate">;
     }
 
     let { notice = $bindable() }: Props = $props();

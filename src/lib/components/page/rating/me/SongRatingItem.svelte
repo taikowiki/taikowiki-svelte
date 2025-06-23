@@ -5,16 +5,16 @@
         DifficultyScoreData,
         ScoreData,
     } from "node-hiroba/types";
-    import color from "$lib/module/common/color";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import type { Difficulty, SongData } from "$lib/module/common/song/types";
+    import { Util } from "$lib/module/util";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    import { Song } from "$lib/module/song";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
         songRatingData: ReturnType<typeof getRating>["songRatingDatas"][number];
         songDifficultyScoreData: DifficultyScoreData;
-        songData: Pick<SongData, "songNo" | "title">;
+        songData: Pick<Song.SongData, "songNo" | "title">;
         isTop50: boolean;
         order: number;
         isDownload?: boolean;
@@ -80,7 +80,7 @@
         <div class="detail-layer1">
             <a
                 class="song-title"
-                style={`color:${color.difficulty[songRatingData.difficulty]};`}
+                style={`color:${Util.Color.difficulty[songRatingData.difficulty]};`}
                 href={`/song/${songRatingData.songNo}?diff=${songRatingData.difficulty}`}
             >
                 {songData.title}

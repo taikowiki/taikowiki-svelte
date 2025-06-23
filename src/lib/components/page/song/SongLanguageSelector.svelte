@@ -16,12 +16,14 @@
 </script>
 
 <script lang="ts">
-    import type { SongLang } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { browser } from "$app/environment";
     import { getTheme } from "$lib/module/layout/theme";
     import SongLanguageButton from "./SongLanguageButton.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
+
+    type SongLang = Song.SongLang;
 
     interface Props {
         songLang: SongLang;

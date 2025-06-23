@@ -1,10 +1,10 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import type { SearchResult } from "$lib/module/common/search/types";
+    import { Search } from "$lib/module/search";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
-        searchResults: SearchResult[];
+        searchResults: Search.Result[];
         opened?: boolean;
     }
 
@@ -21,7 +21,7 @@
         }
     }
 
-    function getHref(searchResult: SearchResult) {
+    function getHref(searchResult: Search.Result) {
         switch (searchResult.type) {
             case "song": {
                 return `/song/${searchResult.songNo}`;
@@ -39,7 +39,7 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_missing_attribute -->
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-{#snippet searchResultView(searchResult: SearchResult)}
+{#snippet searchResultView(searchResult: Search.Result)}
     {@const { type, title } = searchResult}
     <a class="searchresult" data-theme={$theme} tabindex="0" onclick={() => {goto(getHref(searchResult))}}>
         <img

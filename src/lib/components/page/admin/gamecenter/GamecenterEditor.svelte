@@ -1,14 +1,10 @@
 <script lang="ts">
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import {
-        AMENITY,
-        GAMECENTERREGION,
-    } from "$lib/module/common/gamecenter/const";
-    import type { GameCenterDataWithoutOrder } from "$lib/module/common/gamecenter/types";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    import { Gamecenter } from "$lib/module/gamecenter";
 
     interface Props {
-        gamecenterData: GameCenterDataWithoutOrder;
-        submit: (gamecenterData: GameCenterDataWithoutOrder) => any;
+        gamecenterData: Gamecenter.GamecenterWithoutOrder;
+        submit: (gamecenterData: Gamecenter.GamecenterWithoutOrder) => any;
     }
 
     let {gamecenterData, submit}: Props = $props();
@@ -34,7 +30,7 @@
 <div class="field">
     <h3>지역</h3>
     <select bind:value={gamecenterDataState.region}>
-        {#each GAMECENTERREGION as region}
+        {#each Gamecenter.CONST.GAMECENTERREGION as region}
             <option value={region}>
                 {region}
             </option>
@@ -44,7 +40,7 @@
 
 <div class="field">
     <h3>편의시설</h3>
-    {#each AMENITY as amenity}
+    {#each Gamecenter.CONST.AMENITY as amenity}
         <label>
             <input
                 type="checkbox"
@@ -84,7 +80,7 @@
 
 <div class="field">
     <h3>영업시간</h3>
-    {#each [0, 1, 2, 3, 4, 5, 6] as day}
+    {#each ([0, 1, 2, 3, 4, 5, 6] as const) as day}
         <div>
             {i18n.date[day]}
             <input type="text" bind:value={gamecenterDataState.businessHours[day]} />

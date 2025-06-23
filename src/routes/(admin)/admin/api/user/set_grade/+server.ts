@@ -1,4 +1,6 @@
-import { userDBController } from '$lib/module/common/user/user.server.js';
+
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ locals, request }) {
@@ -11,7 +13,7 @@ export async function POST({ locals, request }) {
 
     const { grade } = locals.userData;
 
-    const user = await userDBController.getData(UUID);
+    const user = await User.Server.DBController.getData(UUID);
 
     if(!user){
         throw error(400);
@@ -19,7 +21,7 @@ export async function POST({ locals, request }) {
 
     if (user.grade >= grade || to >= grade) throw error(403);
 
-    await userDBController.setGrade(UUID, to);
+    await User.Server.DBController.setGrade(UUID, to);
 
     return new Response();
 }

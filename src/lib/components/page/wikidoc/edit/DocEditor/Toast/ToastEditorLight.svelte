@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getContext, onMount } from "svelte";
-    import annotationIcon from "$lib/module/common/wikidoc/assets/icon/annotation.svg";
-    import docLinkIcon from "$lib/module/common/wikidoc/assets/icon/doclink.svg";
+    import annotationIcon from "$lib/module/doc/assets/icon/annotation.svg";
+    import docLinkIcon from "$lib/module/doc/assets/icon/doclink.svg";
     import { keymap } from "prosemirror-keymap";
     import type { Writable } from "svelte/store";
 

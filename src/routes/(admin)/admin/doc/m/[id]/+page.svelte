@@ -1,7 +1,9 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { docAdminRequestor } from "$lib/module/common/wikidoc/client/requestor.client";
     import { DateTime } from "luxon";
+    import { Doc } from "$lib/module/doc/doc.client";
+
+    const {adminRequest} = Doc.Client;
 
     let { data } = $props();
     let docData = $derived(data.docData);
@@ -28,7 +30,7 @@
             return;
         }
 
-        const response = await docAdminRequestor.changeEditableGrade(id, grade);
+        const response = await adminRequest.changeEditableGrade(id, grade);
         if (response.status === "success") {
             alert("변경되었습니다.");
         } else if (response.statusCode === 403) {
@@ -43,7 +45,7 @@
             return;
         }
 
-        const response = await docAdminRequestor.delete(id);
+        const response = await adminRequest.delete(id);
         if (response.status === "success") {
             alert("삭제되었습니다.");
             isDeleted = true;
@@ -59,7 +61,7 @@
             return;
         }
 
-        const response = await docAdminRequestor.hardDelete(id);
+        const response = await adminRequest.hardDelete(id);
         if (response.status === "success") {
             alert("삭제되었습니다.");
             await goto(`/doc`);
@@ -75,7 +77,7 @@
             return;
         }
 
-        const response = await docAdminRequestor.restore(id);
+        const response = await adminRequest.restore(id);
         if (response.status === "success") {
             alert("복구되었습니다.");
             isDeleted = false;

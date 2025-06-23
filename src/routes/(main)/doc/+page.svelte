@@ -2,7 +2,7 @@
     import { goto } from "$app/navigation";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DocMainSearch from "$lib/components/page/wikidoc/main/DocMainSearch.svelte";
-    import type { Doc } from "$lib/module/common/wikidoc/types.js";
+    import type { Doc } from "$lib/module/doc.js";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
     import { DateTime } from "luxon";

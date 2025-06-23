@@ -1,8 +1,9 @@
-import { getClientAddress } from '$lib/module/common/util.server.js';
-import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
-import { parseDBData } from '$lib/module/common/wikidoc/util.js';
 import { error } from '@sveltejs/kit';
 import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { Doc } from '$lib/module/doc/doc.server';
+
+const { parseDBData } = Doc;
+const {DBController} = Doc.Server;
 
 export async function DELETE(event){
     const {locals, params} = event;
@@ -28,7 +29,7 @@ export async function DELETE(event){
                 throw error(403);
             }
 
-            await docDBController.hardDelete.getCallback(id)(run);
+            await DBController.hardDelete.getCallback(id)(run);
         })
     }
     catch(err){

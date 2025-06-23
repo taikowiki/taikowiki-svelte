@@ -3,7 +3,7 @@
     import { getContext } from "svelte";
     import UserItem from "./User-Item.svelte";
     import UserBorder from "./User-Border.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         close: () => void;

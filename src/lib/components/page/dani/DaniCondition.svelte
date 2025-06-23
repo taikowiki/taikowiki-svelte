@@ -1,12 +1,12 @@
 <script lang="ts" module>
-    function getSuffix2(conditionType: DaniCondition["type"]) {
+    function getSuffix2(conditionType: Dani.ConditionType) {
         if (conditionType === "bad" || conditionType === "ok") {
             return "down";
         }
         return "up";
     }
 
-    function getSuffix1(conditionType: DaniCondition["type"]) {
+    function getSuffix1(conditionType: Dani.ConditionType) {
         switch (conditionType) {
             case "gauge": {
                 return "percent";
@@ -23,12 +23,12 @@
 </script>
 
 <script lang="ts">
-    import type { DaniCondition } from "$lib/module/common/dani/types";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import type { Dani } from "$lib/module/dani";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
-        condition: DaniCondition;
+        condition: Dani.Condition;
     }
 
     let { condition = $bindable() }: Props = $props();

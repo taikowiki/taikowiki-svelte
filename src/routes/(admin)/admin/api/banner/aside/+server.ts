@@ -1,19 +1,19 @@
-import { bannerDBController } from '$lib/module/common/banner/banner.server.js';
-import { AsideBannerTyper, type AsideBanner } from '$lib/module/common/banner/types';
+import { Banner } from "$lib/module/banner";
+import '$lib/module/banner/banner.server.js';
 import { error } from '@sveltejs/kit';
-import typer from 'typer-ts';
+import { z } from 'zod';
 
 export async function POST({request}){
     const requestData = await request.json();
-    const banners: AsideBanner[] = requestData.banners;
-
-    if(!new typer.Array([AsideBannerTyper] as const).check(banners)){
+    const banners: Banner.AsideBanner[] = requestData.banners;
+    
+    if(!z.array(Banner.Schema.AsideBanner).safeParse(banners).success){
         throw error(400, JSON.stringify({
             reason: 'Type Error'
         }));
     }
 
-    await bannerDBController.updateAsideBanner(banners);
+    await Banner.Server.DBController.updateAsideBanner(banners);
 
     return new Response();
 }

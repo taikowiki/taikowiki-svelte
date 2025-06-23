@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    const genres: Genre[] = [
+    const genres: Song.Genre[] = [
         "pops",
         "anime",
         "kids",
@@ -13,15 +13,14 @@
 
 <script lang="ts">
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import type { Genre } from "$lib/module/common/song/types";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { SongSearchOption } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import SearchBoxGenreItem from "./SearchBox-GenreItem.svelte";
 
     interface Props {
-        option: SongSearchOption;
+        option: Song.SongSearchOption;
     }
 
     let { option = $bindable() }: Props = $props();

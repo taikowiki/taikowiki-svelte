@@ -4,9 +4,11 @@
     import MainNotice from "$lib/components/page/(index)/MainNotice.svelte";
     import MainSearch from "$lib/components/page/(index)/MainSearch.svelte";
     import MainShortcut from "$lib/components/page/(index)/MainShortcut.svelte";
-    import { Center } from "$lib/module/common/styled";
+    import { Util } from "$lib/module/util";
 
-    let {data} = $props();
+    let { data } = $props();
+
+    const { Center } = Util.Styled;
 </script>
 
 <PageTitle />

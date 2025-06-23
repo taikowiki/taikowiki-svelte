@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Course, SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import type { Measure } from "@taiko-wiki/taiko-rating/types";
     import styled from "styled-svelte5";
     import groupBy from "object.groupby";
@@ -8,8 +8,8 @@
     interface Props {
         group: number;
         measures: Measure[];
-        songDatas: (Pick<SongData, "title" | "songNo" | "genre"> & {
-            courses: { oni: Course; ura: Course | null };
+        songDatas: (Pick<Song.SongData, "title" | "songNo" | "genre"> & {
+            courses: { oni: Song.Course; ura: Song.Course | null };
         })[];
     }
 

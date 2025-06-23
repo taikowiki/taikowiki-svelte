@@ -3,10 +3,12 @@
     import { page } from "$app/state";
     import PageSelector from "$lib/components/common/PageSelector.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import { renderer } from "$lib/module/common/wikidoc/util.js";
+    import { Doc } from "$lib/module/doc/index.js";
     import { getTheme } from "$lib/module/layout/theme.js";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
+
+    const {renderer} = Doc;
 
     let { data } = $props();
 

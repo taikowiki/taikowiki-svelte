@@ -4,7 +4,7 @@
     import DocContentEditor from "./DocEditor/DocContentEditor.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import DocParagraphEditor from "./DocEditor/DocParagraphEditor.svelte";
-    import type { Doc } from "$lib/module/common/wikidoc/types";
+    import type { Doc } from "$lib/module/doc";
     import { page } from "$app/state";
     import DocFullRawEditor from "./DocFullRawEditor.svelte";
 

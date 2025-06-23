@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { Section } from "$lib/module/common/diffchart/types";
+    import { Diffchart } from "$lib/module/diffchart";
     import DiffchartEditorSong from "./Diffchart-Editor-Song.svelte";
-    import { intercept as _intercept } from "$lib/module/common/util";
+    import { Util } from "$lib/module/util";
     import styled from "styled-svelte5";
 
     interface Props {
-        section: Section;
+        section: Diffchart.Section;
         index: number;
         intercept: (from: number, to: number) => any;
         remove: (index: number) => any;
@@ -87,7 +87,7 @@
                                 bind:song={section.songs[index]}
                                 {index}
                                 intercept={(from, to) => {
-                                    const intercepted = _intercept(
+                                    const intercepted = Util.intercept(
                                         section.songs,
                                         from,
                                         to,

@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { TIER_COLOR } from "$lib/module/common/user/const";
-    import type { UserRatingTierName } from "$lib/module/common/user/types";
+    import { User } from "$lib/module/user";
     import CssFilterConverter from "css-filter-converter";
     import { onMount } from "svelte";
 
     interface Props {
-        tierName: UserRatingTierName;
+        tierName: User.RatingTierName;
         grade: number | null;
         width?: string;
         height?: string;
@@ -28,7 +27,7 @@
         transform = getDefaultTransform(tierName);
     }
 
-    function getDefaultTransform(tierName: UserRatingTierName) {
+    function getDefaultTransform(tierName: User.RatingTierName) {
         if (tierName === "grandmaster") {
             return "translate(0px, -7px)";
         }
@@ -57,7 +56,7 @@
         });
 
         const filter = CssFilterConverter.hexToFilter(
-            TIER_COLOR[tierName as Exclude<UserRatingTierName, "omega">],
+            User.TIER_COLOR[tierName as Exclude<User.RatingTierName, "omega">],
         ).color;
         if (filter) {
             ctx.filter = filter;
@@ -83,7 +82,7 @@
     <div class="tier-image pearl" style={`width:${width};height:${height};`}>
         <img
             src="/assets/icon/rating/tier/plate.png"
-            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};width:${width};height:${height};`}
+            style={`filter:${CssFilterConverter.hexToFilter(User.TIER_COLOR[tierName]).color};width:${width};height:${height};`}
             alt="pearl"
             bind:this={imgElement}
         />
@@ -93,7 +92,7 @@
     <div class="tier-image" style={`width:${width};height:${height};`}>
         <img
             src="/assets/icon/rating/tier/plate.png"
-            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};width:${width};height:${height};`}
+            style={`filter:${CssFilterConverter.hexToFilter(User.TIER_COLOR[tierName]).color};width:${width};height:${height};`}
             alt="grandmaster"
             bind:this={imgElement}
         />
@@ -103,7 +102,7 @@
     <div class="tier-image" style={`width:${width};height:${height};`}>
         <img
             src="/assets/icon/rating/tier/plate.png"
-            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};width:${width};height:${height};`}
+            style={`filter:${CssFilterConverter.hexToFilter(User.TIER_COLOR[tierName]).color};width:${width};height:${height};`}
             alt="master"
             bind:this={imgElement}
         />
@@ -113,7 +112,7 @@
     <div class="tier-image" style={`width:${width};height:${height};`}>
         <img
             src="/assets/icon/rating/tier/plate.png"
-            style={`filter:${CssFilterConverter.hexToFilter(TIER_COLOR[tierName]).color};width:${width};height:${height};`}
+            style={`filter:${CssFilterConverter.hexToFilter(User.TIER_COLOR[tierName]).color};width:${width};height:${height};`}
             alt={tierName}
             bind:this={imgElement}
         />

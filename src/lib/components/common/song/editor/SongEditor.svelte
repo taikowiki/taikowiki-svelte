@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
 
     import OtherEditor from "$lib/components/common/song/editor/OtherEditor.svelte";
     import TitleEditor from "$lib/components/common/song/editor/TitleEditor.svelte";
@@ -7,7 +7,7 @@
     import BasicEditor from "./BasicEditor.svelte";
 
     interface Props {
-        songData: SongData;
+        songData: Song.SongData;
         type?: "edit" | "new";
         isAdmin?: boolean;
     }

@@ -1,7 +1,8 @@
-import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
-import type { Doc } from '$lib/module/common/wikidoc/types';
+import { Doc } from "$lib/module/doc/doc.server";
 import { error } from '@sveltejs/kit';
 import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+
+const {DBController} = Doc.Server;
 
 export async function load({ params, locals, url }) {
     if (!locals.userData) {
@@ -20,18 +21,18 @@ export async function load({ params, locals, url }) {
 
     const { docDBData, redirectTo, editableGrade } = await runQuery(async (run) => {
         if(version){
-            var docDBData: any = await docDBController.getPast.getCallback(id, version)(run);
+            var docDBData: any = await DBController.getPast.getCallback(id, version)(run);
             const query = queryBuilder.select('docs', ['editableGrade']).where(Where.Compare('id', '=', id)).build();
             const r =  await run(query);
             var editableGrade: number = r[0]?.editableGrade ?? 10;
         }
         else{
-            var docDBData: any = await docDBController.getDocDataById.getCallback(id)(run);
+            var docDBData: any = await DBController.getDocDataById.getCallback(id)(run);
             var editableGrade: number = docDBData?.editableGrade ?? 10;
         }
 
         const redirectTo = docDBData?.redirectTo ?
-            (await docDBController.getColumnsWhere.getCallback(['title'], [['id', docDBData.redirectTo]])(run))[0]?.title ?? null : null;
+            (await DBController.getColumnsWhere.getCallback(['title'], [['id', docDBData.redirectTo]])(run))[0]?.title ?? null : null;
         return { docDBData, redirectTo, editableGrade }
     })
     if (!docDBData) {

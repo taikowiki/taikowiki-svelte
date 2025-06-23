@@ -7,8 +7,9 @@
     import { writable } from "svelte/store";
     import { navigating, page } from "$app/stores";
     import { setContext } from "svelte";
-    import { useLang } from "$lib/module/common/i18n/i18n.js";
-    import { userRequestor } from "$lib/module/common/user/user.client.js";
+    import { useLang } from "$lib/module/i18n";
+    import { User as UserModule } from "$lib/module/user";
+    import '$lib/module/user/user.client';
 
     let { data, children } = $props();
 
@@ -28,7 +29,7 @@
     setContext("user", user);
     $effect.pre(() => {
         if (($navigating || $page.state) && browser) {
-            userRequestor.getUserData(null).then((response) => {
+            UserModule.Client.request.getUserData(null).then((response) => {
                 if (response.status === "success") {
                     user.set(response.data);
                 }

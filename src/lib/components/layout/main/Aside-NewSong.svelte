@@ -1,6 +1,6 @@
 <script lang="ts">
     import AsideItem from "./AsideItem.svelte";
-    import { getI18N, getLang, useLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang, useLang } from "$lib/module/i18n";
 
     interface Props {
         newSongs: {

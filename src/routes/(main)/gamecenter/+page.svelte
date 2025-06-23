@@ -3,7 +3,7 @@
     import { page } from "$app/stores";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import KakaoMap from "$lib/components/page/gamecenter/KakaoMap.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.ts";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getTheme } from "$lib/module/layout/theme";
 
     let {data} = $props();

@@ -1,15 +1,15 @@
 <script lang="ts">
-    import type { Song } from "$lib/module/common/diffchart/types";
-    import { difficulty } from "$lib/module/common/color";
+    import { Diffchart } from "$lib/module/diffchart";
+    import { Util } from "$lib/module/util";
 
-    interface Props{
-        song: Song;
+    interface Props {
+        song: Diffchart.Song;
         index: number;
         intercept: (from: number, to: number) => any;
         remove: (index: number) => any;
     }
 
-    let {song = $bindable(), index, intercept, remove}: Props = $props();
+    let { song = $bindable(), index, intercept, remove }: Props = $props();
 
     song.order = index;
 </script>
@@ -47,14 +47,18 @@
     </td>
     <td>
         <div class="layer">
-            <input type="text" bind:value={song.title} placeholder="비워두어도 됩니다."/>
+            <input
+                type="text"
+                bind:value={song.title}
+                placeholder="비워두어도 됩니다."
+            />
         </div>
     </td>
     <td>
         <div class="layer" style="column-gap: 5px;justify-content:center;">
             <div
                 class="color"
-                style={`background-color:${difficulty[song.difficulty]};`}
+                style={`background-color:${Util.Color.difficulty[song.difficulty]};`}
             ></div>
             <select bind:value={song.difficulty}>
                 {#each ["easy", "normal", "hard", "oni", "ura"] as diff}
@@ -63,11 +67,13 @@
             </select>
         </div>
     </td>
-    <td> 
+    <td>
         <div class="layer">
-            <button onclick={() => {
-                remove(index)
-            }}>삭제</button>
+            <button
+                onclick={() => {
+                    remove(index);
+                }}>삭제</button
+            >
         </div>
     </td>
 </tr>

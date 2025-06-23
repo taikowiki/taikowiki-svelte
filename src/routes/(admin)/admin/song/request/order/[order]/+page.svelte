@@ -1,9 +1,9 @@
 <script lang="ts" module>
     async function approve(
         request: any & { order: number },
-        songData: SongData,
+        songData: Song.SongData,
     ) {
-        const response = await songAdminRequestor.approve({
+        const response = await Song.Client.adminRequest.approve({
             order: request.order,
             songData,
         });
@@ -16,7 +16,7 @@
     }
 
     async function disapprove(request: any & { order: number }) {
-        const response = await songAdminRequestor.disapproveRequest({
+        const response = await Song.Client.adminRequest.disapproveRequest({
             order: [request.order],
         });
         if (response.status === "success") {
@@ -31,18 +31,16 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import AdminRequestEditor from "$lib/components/page/admin/song/request/order/[order]/admin-RequestEditor.svelte";
-    import compareSong from "$lib/module/common/song/compare-song";
-    import type { SongData } from "$lib/module/common/song/types.js";
-    import { songAdminRequestor } from "$lib/module/common/song/song.client.js";
+    import { Song } from "$lib/module/song/song.client";
 
-    let {data} = $props();
+    let { data } = $props();
 
     let song = $state(data.song);
     let request = $state(data.request);
 
     let compare = $state(null);
     if (song !== null) {
-        compare = compareSong(song, request.data);
+        compare = Song.compareSong(song, request.data);
     }
 </script>
 

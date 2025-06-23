@@ -1,11 +1,10 @@
 <script lang="ts">
-    import type { DaniSong as DaniSongType } from "$lib/module/common/dani/types";
-    import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
+    import type { Dani } from "$lib/module/dani";
     import DaniSong from "./DaniSong.svelte";
 
     interface Props {
-        songs: DaniSongType[];
-        songDatas: SongDataPickedForDani[];
+        songs: Dani.Song[];
+        songDatas: Dani.SongDataForDisplay[];
     }
     
     let { songs, songDatas }: Props = $props();

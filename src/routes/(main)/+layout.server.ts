@@ -1,9 +1,11 @@
-import { bannerDBController } from "$lib/module/common/banner/banner.server.js";
-import { songDBController } from "$lib/module/common/song/song.server";
+import { Banner } from "$lib/module/banner";
+import "$lib/module/banner/banner.server.js";
+import { Song } from '$lib/module/song/song.server';
 import { UAParser } from "ua-parser-js";
 import { isbot } from "isbot";
 import pkg from "../../../package.json";
-import { getClientAddress } from "$lib/module/common/util.server";
+import { Util } from '$lib/module/util/util.server';
+const { getClientAddress } = Util.Server;
 
 export async function load(event) {
     const { locals, request, cookies } = event;
@@ -41,8 +43,8 @@ export async function load(event) {
     }
 
     const [newSongs, asideBanners] = await Promise.all([
-        songDBController.getNewSongs(3),
-        bannerDBController.getAsideBanner(),
+        Song.Server.DBController.getNewSongs(3),
+        Banner.Server.DBController.getAsideBanner(),
     ]);
 
     return {

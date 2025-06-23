@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { Genre } from "$lib/module/common/song/types";
-    import color from "$lib/module/common/color";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { Song } from "$lib/module/song";
+    import { Util } from "$lib/module/util";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
     interface Props {
-        genres: Genre[];
+        genres: Song.Genre[];
     }
 
     let { genres }: Props = $props();
@@ -19,7 +19,7 @@
     {#each genres as genre}
         <a
             class="item"
-            style={`background-color:${color.genre[genre]};`}
+            style={`background-color:${Util.Color.genre[genre]};`}
             data-isMobile={$isMobile}
             href={`/song?genre=${genre}`}
         >

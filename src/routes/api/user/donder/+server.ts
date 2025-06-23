@@ -1,4 +1,5 @@
-import { userDonderDBController } from '$lib/module/common/user/user.server.js';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
 import { error } from '@sveltejs/kit';
 import lzutf8 from 'lzutf8';
 
@@ -12,7 +13,7 @@ export async function POST({request, locals}){
     const json = lzutf8.decompress(unit8array, {inputEncoding: "ByteArray"});
     const data = JSON.parse(json);
 
-    await userDonderDBController.updateData(locals.userData.UUID, data);
+    await User.Server.donderDBController.updateData(locals.userData.UUID, data);
 
     return new Response();
 }

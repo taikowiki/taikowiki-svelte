@@ -1,9 +1,9 @@
 <script lang="ts" module>
-    import type { SongData } from "$lib/module/common/song/types";
+    import type { Song } from '$lib/module/song/index.js';
 
     function songSortCallback(
-        a: Pick<SongData, "songNo" | "title">,
-        b: Pick<SongData, "songNo" | "title">,
+        a: Pick<Song.SongData, "songNo" | "title">,
+        b: Pick<Song.SongData, "songNo" | "title">,
     ) {
         const numberRegexp = /^([0-9]*)$/;
         if (numberRegexp.test(a.songNo) && numberRegexp.test(b.songNo)) {

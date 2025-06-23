@@ -1,13 +1,14 @@
 <script lang="ts">
-    import { renderer } from "$lib/module/common/wikidoc/util";
-    import {
+    import { Doc } from "$lib/module/doc/doc.client";
+    import { getTheme } from "$lib/module/layout/theme";
+    import "$lib/module/doc/assets/docview.scss";
+    import { getIsMobile } from "$lib/module/layout/isMobile";
+
+    const { docContext, renderer } = Doc;
+    const {
         defineWikiElements,
         isDefined,
-    } from "$lib/module/common/wikidoc/client/wikiElements.client";
-    import { getTheme } from "$lib/module/layout/theme";
-    import { docContext } from "$lib/module/common/wikidoc/util";
-    import "$lib/module/common/wikidoc/assets/docview.scss";
-    import { getIsMobile } from "$lib/module/layout/isMobile";
+    } = Doc.Client.element;
 
     /*
     import { getWindowContext } from "$lib/module/common/util.client";
@@ -32,7 +33,12 @@
     const isMobile = getIsMobile();
 </script>
 
-<div class="doc-view-container" class:for-raw={forRaw} data-theme={$theme} data-isMobile={$isMobile}>
+<div
+    class="doc-view-container"
+    class:for-raw={forRaw}
+    data-theme={$theme}
+    data-isMobile={$isMobile}
+>
     {#await convertedContentPromise then convertedContent}
         {#key $theme}
             <div class="doc-view-content">

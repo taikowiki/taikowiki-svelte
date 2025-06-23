@@ -304,6 +304,7 @@ export namespace Song {
             disapprove: defineDBHandler<[number | number[]], void>,
             removeRequest: defineDBHandler<[number], void>
         }
+        function parseSongDataFromDB(songDataFromDB: any): void
     }
 }
 

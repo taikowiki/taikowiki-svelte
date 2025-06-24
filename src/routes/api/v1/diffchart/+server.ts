@@ -3,7 +3,7 @@ import '$lib/module/diffchart/diffchart.server.js';
 import { Util } from '$lib/module/util/index.js';
 import { error } from '@sveltejs/kit';
 
-export async function GET({ url }) {
+export async function GET({ url, setHeaders }) {
     const type = url.searchParams.get('type');
     let level = Util.pipe(url.searchParams.get('level'), [
         (level: string | undefined) => Number(level),
@@ -14,33 +14,33 @@ export async function GET({ url }) {
         throw error(400);
     }
 
-    if(type === 'clear'){
+    if (type === 'clear') {
         var diffchartData_ = await Diffchart.Server.DBController.getClearByLevel(level);
     }
-    else if(type === 'fc'){
+    else if (type === 'fc') {
         var diffchartData_ = await Diffchart.Server.DBController.getFullcomboByLevel(level);
     }
-    else{
+    else {
         var diffchartData_ = await Diffchart.Server.DBController.getDonderfullcomboByLevel(level);
     }
 
-    if(!diffchartData_){
+    if (!diffchartData_) {
         throw error(400);
     }
 
-    let {order, ...diffchartData} = diffchartData_;
+    let { order, ...diffchartData } = diffchartData_;
 
     diffchartData.data.sections.forEach((section) => {
         section.songs.forEach((song: any) => {
-            if(song.option){
+            if (song.option) {
                 delete song.option;
             }
         })
     })
 
-    return new Response(JSON.stringify(diffchartData), {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
+    setHeaders({
+        'Content-Type': 'application/json'
+    });
+
+    return new Response(JSON.stringify(diffchartData))
 }

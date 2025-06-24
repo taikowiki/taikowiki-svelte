@@ -1,7 +1,7 @@
 import { Song } from '$lib/module/song/song.server';
 import { error } from '@sveltejs/kit';
 
-export async function GET({ params }) {
+export async function GET({ params, setHeaders }) {
     const { songNo } = params;
 
     const songData = await Song.Server.DBController.getSongBySongNo(songNo);
@@ -10,9 +10,9 @@ export async function GET({ params }) {
         throw error(404);
     }
 
-    return new Response(JSON.stringify(songData), {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
+    setHeaders({
+        'Content-Type': 'application/json'
+    });
+
+    return new Response(JSON.stringify(songData))
 }

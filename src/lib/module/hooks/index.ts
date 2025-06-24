@@ -37,7 +37,10 @@ export namespace Hooks {
                 }
                 if (event.request.method === "OPTIONS") {
                     event.setHeaders(event.locals.headers);
-                    return new Response();
+                    return new Response(null, {
+                        status: 204,
+                        headers: event.locals.headers
+                    });
                 }
             }
 

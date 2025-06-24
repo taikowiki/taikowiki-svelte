@@ -1,11 +1,12 @@
 <script lang="ts" module>
-    import { songAdminRequestor } from "$lib/module/common/song/song.client.js";
+    import { Song } from '$lib/module/song/index.js';
+    import '$lib/module/song/song.client'
 
     async function disapproveSelected(checked: number[]) {
         if (checked.length === 0) {
             return;
         }
-        const response = await songAdminRequestor.disapproveRequest({
+        const response = await Song.Client.adminRequest.disapproveRequest({
             order: checked,
         });
         if (response.status === "success") {

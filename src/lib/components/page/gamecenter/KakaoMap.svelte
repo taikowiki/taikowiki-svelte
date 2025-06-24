@@ -1,7 +1,7 @@
 <script lang="ts" module>
     //오락실 마커 생성
     function createGamecenterMarkers(
-        gamecenterDatas: GameCenterData[],
+        gamecenterDatas: Gamecenter.Gamecenter[],
         gamecenterMarkers: Record<
             number,
             {
@@ -76,14 +76,14 @@
 </script>
 
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
-    import getKakaoMap from "$lib/module/common/gamecenter/kakao.client";
+    import { Gamecenter } from "$lib/module/gamecenter";
+    import "$lib/module/gamecenter/gamecenter.client";
     import { mount, onDestroy, onMount } from "svelte";
     import KakaoMapAside from "./KakaoMapAside.svelte";
     import MarkerInfo from "./MarkerInfo.svelte";
 
     interface Props {
-        gamecenterDatas: GameCenterData[];
+        gamecenterDatas: Gamecenter.Gamecenter[];
         markerLoaded?: boolean;
     }
 
@@ -100,7 +100,7 @@
     > = $state({});
 
     //지도 관련 변수
-    const kakaoMap = getKakaoMap();
+    const kakaoMap = Gamecenter.Client.getKakaoMap();
 
     let mapContainer: HTMLDivElement | undefined = $state();
     let map: kakao.maps.Map | undefined = $state();

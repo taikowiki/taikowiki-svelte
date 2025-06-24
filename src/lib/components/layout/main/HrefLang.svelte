@@ -1,6 +1,8 @@
 <script lang="ts">
-    import i18n from "$lib/module/common/i18n/i18n";
+    import { I18N } from "$lib/module/i18n";
     import { page } from "$app/stores";
+
+    const { i18n } = I18N;
 
     function getAlternativeLink(lang: string) {
         const url = new URL($page.url);

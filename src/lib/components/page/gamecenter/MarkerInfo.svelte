@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import type { Gamecenter } from "$lib/module/gamecenter";
 
     interface Props {
-        gamecenterData: GameCenterData;
+        gamecenterData: Gamecenter.Gamecenter;
     }
 
     let { gamecenterData }: Props = $props();

@@ -1,4 +1,5 @@
-import { diffchartDBController } from "$lib/module/common/diffchart/diffchart.server";
+import { Diffchart } from '$lib/module/diffchart/index.js';
+import '$lib/module/diffchart/diffchart.server.js';
 import { error } from "@sveltejs/kit";
 
 export async function load({ params, locals }) {
@@ -8,7 +9,7 @@ export async function load({ params, locals }) {
         throw error(500);
     }
 
-    const diffChartData = await diffchartDBController.getClearByLevel(level);
+    const diffChartData = await Diffchart.Server.DBController.getClearByLevel(level);
     const diffChart = diffChartData?.data;
     if (!diffChart) {
         throw error(404);

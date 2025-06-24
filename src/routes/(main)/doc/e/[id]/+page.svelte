@@ -3,7 +3,9 @@
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DocEditor from "$lib/components/page/wikidoc/edit/DocEditor.svelte";
     import DocSubmit from "$lib/components/page/wikidoc/edit/DocSubmit.svelte";
-    import { docContext } from "$lib/module/common/wikidoc/util";
+    import { Doc } from "$lib/module/doc";
+
+    const {docContext} = Doc;
 
     let { data } = $props();
     let wikiDoc = $state(data.docData);

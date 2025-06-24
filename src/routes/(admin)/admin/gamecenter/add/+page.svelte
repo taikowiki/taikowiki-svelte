@@ -1,10 +1,10 @@
 <script lang="ts">
     import GamecenterEditor from "$lib/components/page/admin/gamecenter/GamecenterEditor.svelte";
-    import { type GameCenterData, type GameCenterDataWithoutOrder } from "$lib/module/common/gamecenter/types.js";
-    import { gamecenterAdminRequestor } from "$lib/module/common/gamecenter/gamecenter.client.js";
+    import { Gamecenter } from "$lib/module/gamecenter";
+    import "$lib/module/gamecenter/gamecenter.client";
     import { goto } from "$app/navigation";
 
-    const gamecenterData: GameCenterDataWithoutOrder = {
+    const gamecenterData: Gamecenter.GamecenterWithoutOrder = {
         name: "",
         address: "",
         amenity: {
@@ -36,7 +36,7 @@
         }
     };
 
-    async function submit(gamecenterData: GameCenterDataWithoutOrder){
+    async function submit(gamecenterData: Gamecenter.GamecenterWithoutOrder){
         if(!gamecenterData.name){
             alert('이름을 입력해주세요.');
             return;
@@ -50,7 +50,7 @@
             return;
         }
 
-        const response = await gamecenterAdminRequestor.add({gamecenterData});
+        const response = await Gamecenter.Client.adminRequest.add({gamecenterData});
 
         if(response.status === "error"){
             alert('오류가 발생했습니다.');

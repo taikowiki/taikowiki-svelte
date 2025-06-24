@@ -1,4 +1,5 @@
-import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server.js';
+import { Gamecenter } from "$lib/module/gamecenter";
+import '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request, locals}){
@@ -13,7 +14,7 @@ export async function POST({request, locals}){
         throw error(401);
     }
 
-    await gamecenterDBController.addFavorite(userData.UUID, data.gamecenterOrder);
+    await Gamecenter.Server.DBController.addFavorite(userData.UUID, data.gamecenterOrder);
 
     return new Response();
 }

@@ -1,20 +1,15 @@
 <script lang="ts">
-    import type {
-        DifficultyType,
-        Section,
-        SongScore,
-    } from "$lib/module/common/diffchart/types";
+    import type { Diffchart } from '$lib/module/diffchart';
     import DiffchartSectionName from "./DiffchartSectionName.svelte";
     import DiffchartSong from "./DiffchartSong.svelte";
-    import type { Difficulty } from "$lib/module/common/song/types";
-    import type { SongDataPickedForDiffchart } from "$lib/module/common/diffchart/types";
+    import { Song } from '$lib/module/song';
 
     interface Props {
-        section: Section;
-        songs: SongDataPickedForDiffchart[];
+        section: Diffchart.Section;
+        songs: Diffchart.SongDataForDisplay[];
         theme: string;
         useMobile?: boolean;
-        playedSongScores: SongScore[] | null;
+        playedSongScores: Diffchart.Score.SongScore[] | null;
         userCrownCount: {
             clearCount: number;
             fcCount: number;
@@ -40,7 +35,7 @@
      * "ura"를 "oni_ura"로 바꿉니다.
      * @param diff
      */
-     function uraToOniUra(diff: Difficulty): DifficultyType {
+     function uraToOniUra(diff: Song.Difficulty): Diffchart.Score.Difficulty {
         return diff === "ura" ? "oni_ura" : diff;
     }
 </script>

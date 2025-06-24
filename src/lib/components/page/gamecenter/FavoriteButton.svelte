@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { gamecenterRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
+    import { Gamecenter } from "$lib/module/gamecenter";
+    import "$lib/module/gamecenter/gamecenter.client";
     import type { Writable } from "svelte/store";
 
     interface Props {
@@ -13,7 +14,7 @@
     let favorite = $derived($favorites.includes(gamecenterOrder));
 
     async function addFavorite() {
-        const response = await gamecenterRequestor.addFavorite({
+        const response = await Gamecenter.Client.request.addFavorite({
             gamecenterOrder,
         });
 
@@ -26,7 +27,7 @@
     }
 
     async function deleteFavorite() {
-        const response = await gamecenterRequestor.deleteFavorite({
+        const response = await Gamecenter.Client.request.deleteFavorite({
             gamecenterOrder,
         });
 

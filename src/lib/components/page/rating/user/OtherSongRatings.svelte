@@ -1,14 +1,14 @@
 <script lang="ts">
-    import type { SongData } from "$lib/module/common/song/types";
-    import type { UserScoreData } from "$lib/module/common/user/types";
+    import { Song } from "$lib/module/song";
+    import { User } from "$lib/module/user";
     import { getTheme } from "$lib/module/layout/theme";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import type { getRating } from "@taiko-wiki/taiko-rating";
     import SongRatingItem from "../me/SongRatingItem.svelte";
 
     interface Props {
-        songDatas: Pick<SongData, "songNo" | "title">[];
-        scoreData: UserScoreData;
+        songDatas: Pick<Song.SongData, "songNo" | "title">[];
+        scoreData: User.ScoreData;
         ratingData: ReturnType<typeof getRating>["songRatingDatas"];
     }
 

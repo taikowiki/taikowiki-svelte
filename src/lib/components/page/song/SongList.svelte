@@ -1,11 +1,10 @@
 <script lang="ts">
     import SongItem from "./SongItem.svelte";
-    import type { SongLang } from "$lib/module/common/song/types";
-    import type { SongDataPickedForSearch } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
 
     interface Props {
-        songLang: SongLang;
-        songs: SongDataPickedForSearch[];
+        songLang: Song.SongLang;
+        songs: Song.SongDataPickedForSearch[];
     }
 
     let { songLang, songs }: Props = $props();

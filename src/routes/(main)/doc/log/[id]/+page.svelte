@@ -3,7 +3,7 @@
     import { page } from "$app/state";
     import PageSelector from "$lib/components/common/PageSelector.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import type { Doc } from "$lib/module/common/wikidoc/types.js";
+    import type { Doc } from "$lib/module/doc.js";
     import { DateTime } from "luxon";
 
     let { data } = $props();

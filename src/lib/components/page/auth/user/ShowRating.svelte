@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import { userRequestor } from "$lib/module/common/user/user.client";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    import { User } from "$lib/module/user";
+    import '$lib/module/user/user.client';
     import { getTheme } from "$lib/module/layout/theme";
 
     interface Props {
@@ -24,7 +25,7 @@
     let i18n = $derived(getI18N($lang).page.user.showRating);
 
     async function submit() {
-        const response = await userRequestor.changeShowRating(showRating);
+        const response = await User.Client.request.changeShowRating(showRating);
         if (response.status === "success") {
             alert("적용이 완료되었습니다.");
         } else {

@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import type { Course } from "$lib/module/common/song/types";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    import { Song } from "$lib/module/song";
     import { getTheme } from "$lib/module/layout/theme";
     import FumenDisplay from "./FumenDisplay.svelte";
 
     interface Props {
-        course: Course;
+        course: Song.Course;
     }
     let { course }: Props = $props();
 

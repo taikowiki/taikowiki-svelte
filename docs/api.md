@@ -2,6 +2,8 @@
 
 taikowiki-svelte provides various API functionalities.
 
+**See [HERE](https://github.com/taikowiki/taikowiki-api) for NEW api!**
+
 # Publicly Accessible APIs
 
 ## Song Data

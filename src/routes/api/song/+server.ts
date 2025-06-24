@@ -1,4 +1,4 @@
-import { songDBController } from "$lib/module/common/song/song.server";
+import { Song } from '$lib/module/song/song.server';
 
 export async function GET({ url }) {
     let after: string | number | null = url.searchParams.get('after');
@@ -9,14 +9,14 @@ export async function GET({ url }) {
     }
 
     if (after) {
-        return new Response(JSON.stringify(await songDBController.getAfter(after as number)), {
+        return new Response(JSON.stringify(await Song.Server.DBController.getAfter(after as number)), {
             headers: {
                 'Content-Type': 'application/json'
             }
         })
     }
     else {
-        return new Response(JSON.stringify(await songDBController.getAll()), {
+        return new Response(JSON.stringify(await Song.Server.DBController.getAll()), {
             headers: {
                 'Content-Type': 'application/json'
             }

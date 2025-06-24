@@ -1,19 +1,18 @@
 <script lang="ts">
-    // @ts-nocheck
-    import color from "$lib/module/common/color";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import type { Course, Difficulty } from "$lib/module/common/song/types";
+    import { Util } from "$lib/module/util";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    import { Song } from "$lib/module/song";
     import DaniEditor from "./admin-DaniEditor.svelte";
 
     interface Props {
-        difficulty: Difficulty;
-        course: Course | null;
+        difficulty: Song.Difficulty;
+        course: Song.Course | null;
         compare: any;
     }
 
     let { difficulty, course = $bindable(), compare }: Props = $props();
 
-    let init: Course = $state({
+    let init: Song.Course = $state({
         level: 1,
         isBranched: 0,
         maxCombo: 0,
@@ -45,7 +44,7 @@
 </script>
 
 <div
-    style={`${`border: 2px solid ${color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}`}
+    style={`${`border: 2px solid ${Util.Color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}`}
     class:different={compare?.exists === true}
 >
     <table class="wrapper">
@@ -137,6 +136,7 @@
                                         />
                                         <button
                                             onclick={() => {
+                                                if (!course) return;
                                                 if (course.playTime !== 0) {
                                                     course.maxDensity =
                                                         Math.round(
@@ -165,6 +165,7 @@
                                             value={course?.balloon?.join(",") ??
                                                 ""}
                                             onchange={(event) => {
+                                                if (!course) return;
                                                 const text =
                                                     event.currentTarget.value;
 
@@ -202,6 +203,7 @@
                                                 ",",
                                             ) ?? ""}
                                             onchange={(event) => {
+                                                if (!course) return;
                                                 const text =
                                                     event.currentTarget.value;
 
@@ -239,6 +241,7 @@
                                         {#if Boolean(course.daniUsed)}
                                             <button
                                                 onclick={() => {
+                                                    if (!course) return;
                                                     course.dani.push({
                                                         version: "katsudon",
                                                         dan: "senpo",
@@ -253,11 +256,14 @@
                                                 {#each course.dani as dani, i}
                                                     <div class="dani-container">
                                                         <DaniEditor
-                                                            bind:dani={course
-                                                                .dani[i]}
+                                                            bind:dani={
+                                                                course.dani[i]
+                                                            }
                                                         />
                                                         <button
                                                             onclick={() => {
+                                                                if (!course)
+                                                                    return;
                                                                 course.dani =
                                                                     course.dani.filter(
                                                                         (
@@ -284,6 +290,7 @@
                                             >
                                                 <button
                                                     onclick={() => {
+                                                        if (!course) return;
                                                         course.images.push("");
                                                     }}>추가</button
                                                 >
@@ -292,12 +299,14 @@
                                                 <div class="image-container">
                                                     <input
                                                         type="text"
-                                                        bind:value={course
-                                                            .images[i]}
+                                                        bind:value={
+                                                            course.images[i]
+                                                        }
                                                         placeholder="이미지 주소"
                                                     />
                                                     <button
                                                         onclick={() => {
+                                                            if (!course) return;
                                                             course.images =
                                                                 course.images.filter(
                                                                     (

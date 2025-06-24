@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { SongSearchOption } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import SearchBoxDifficulty from "./SearchBox-Difficulty.svelte";
     import SearchBoxGenre from "./SearchBox-Genre.svelte";
     import SearchBoxInput from "./SearchBox-Input.svelte";
 
     interface Props{
-        option: SongSearchOption;
+        option: Song.SongSearchOption;
     }
 
     let {option: _option}: Props = $props();

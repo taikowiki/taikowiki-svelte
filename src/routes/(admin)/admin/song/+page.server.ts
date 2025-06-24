@@ -1,8 +1,7 @@
-import {songDBController} from "$lib/module/common/song/song.server";
-import { type SongData } from "$lib/module/common/song/types";
+import { Song } from '$lib/module/song/song.server';
 
 export async function load() {
     return {
-        songs: await songDBController.getAllColumns(["order", "songNo", "title"]) as Pick<SongData, "songNo" | "title">[]
+        songs: await Song.Server.DBController.getAllColumns(["order", "songNo", "title"]) as Pick<Song.SongData, "songNo" | "title">[]
     }
 }

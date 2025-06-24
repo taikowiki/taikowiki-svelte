@@ -1,5 +1,5 @@
-import { noticeDBController } from '$lib/module/common/notice/notice.server.js';
-import { NoticeTyper, type Notice } from '$lib/module/common/notice/types.js';
+import { Notice } from '$lib/module/notice/index.js';
+import '$lib/module/notice/notice.server.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request}){
@@ -14,11 +14,11 @@ export async function POST({request}){
         writtenDate: new Date()
     }
 
-    if(!NoticeTyper.check(checking)) throw error(400, JSON.stringify({
+    if(!Notice.Schema.Notice.safeParse(checking)) throw error(400, JSON.stringify({
         reason: 'Type Error'
     }));
 
-    const notice: Notice = data.notice;
+    const notice: Notice.Notice = data.notice;
     if(!notice.title || !notice.content) throw error(400, JSON.stringify({
         reason: 'Empty Title or Content'
     }))
@@ -27,7 +27,7 @@ export async function POST({request}){
         reason: 'Empty Official Date'
     }))
 
-    await noticeDBController.writeNotice(data.notice);
+    await Notice.Server.DBController.writeNotice(data.notice);
 
     return new Response();
 }

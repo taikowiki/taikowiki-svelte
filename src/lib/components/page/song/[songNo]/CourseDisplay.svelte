@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { Course } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import CourseDisplayMobile from "./CourseDisplay-mobile.svelte";
     import CourseDisplayPc from "./CourseDisplay-pc.svelte";
 
     interface Props{
-        course: Course | null;
+        course: Song.Course | null;
     }
 
     let {course}: Props = $props();

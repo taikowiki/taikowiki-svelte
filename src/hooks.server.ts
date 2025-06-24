@@ -1,15 +1,8 @@
-import type { Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import auth, { providers } from '@sveltekit-board/oauth'
-import { userDBController } from "$lib/module/common/user/user.server";
 
 import { config } from 'dotenv';
-import checkPermissions from "$lib/module/server/hooks/permissionCheck.server";
-import BanController from "$lib/module/server/hooks/ban-controller.server";
-import allowOrigin from "$lib/module/server/hooks/allow-origin";
-import { dynamicHtmlLang } from "$lib/module/server/hooks/dynamicHtmlLang.server";
-
-//import logger from "$lib/module/server/hooks/logger.server";
+import { Hooks } from "$lib/module/hooks";
 
 config();
 
@@ -31,32 +24,7 @@ const authHandle = auth(Object.values(provider), {
     withCredentials: true
 })
 
-const getUserData: Handle = async ({ event, resolve }) => {
-    if (event.locals.user) {
-        let userData = await userDBController.getDataByProvider(event.locals.user.provider, event.locals.user.providerId);
-        if (!userData) {
-            userData = await userDBController.createData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)
-        }
-        event.locals.userData = userData;
-    }
-    else {
-        event.locals.userData = null;
-    }
-
-    return await resolve(event);
-}
-
-const setAssetsCacheControl: Handle = async({event, resolve}) => {
-    if(event.url.pathname.startsWith('/assets')){
-        event.setHeaders({
-            'Cache-Control': `max-age=${3600 * 24 * 7}`
-        });
-    }
-
-    return await resolve(event);
-}
-
-const checkPermission = checkPermissions([
+const checkPermission = Hooks.checkPermissions([
     {
         path: '/admin/api',
         level: 9,
@@ -76,10 +44,11 @@ const checkPermission = checkPermissions([
     }
 ])
 
-const cors = allowOrigin(["https://donderhiroba.jp"], {credentials: true});
+const cors = Hooks.allowOrigin("https://donderhiroba.jp", "/", { credentials: true });
+const apiCors = Hooks.allowOrigin("*", "/api/v1", {credentials: true});
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission, setAssetsCacheControl, dynamicHtmlLang);
+export const handle = sequence(Hooks.checkIp, cors, apiCors, authHandle, Hooks.getUserData, checkPermission, Hooks.setAssetsCacheControl, Hooks.dynamicHtmlLang);

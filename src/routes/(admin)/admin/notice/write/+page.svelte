@@ -1,10 +1,10 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import AdminNoticeEditor from "$lib/components/page/admin/notice/AdminNoticeEditor.svelte";
-    import { adminNoticeRequestor } from "$lib/module/common/notice/notice.client";
-    import type { Notice } from "$lib/module/common/notice/types";
+    import { Notice } from "$lib/module/notice";
+    import "$lib/module/notice/notice.client";
 
-    let notice: Omit<Notice, "order" | "writtenDate"> = $state({
+    let notice: Omit<Notice.Notice, "order" | "writtenDate"> = $state({
         title: "",
         content: "",
         type: "wiki",
@@ -27,7 +27,7 @@
             alert("공식 공지 날짜가 비어있습니다.");
             return;
         }
-        const result = await adminNoticeRequestor.writeNotice({ notice });
+        const result = await Notice.Client.adminRequest.writeNotice({ notice });
         if (result.status === "success") {
             alert("작성 성공");
             await goto("/admin/notice");

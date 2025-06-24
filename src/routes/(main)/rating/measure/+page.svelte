@@ -1,7 +1,7 @@
 <script lang="ts">
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import MeasureTable from "$lib/components/page/measures/MeasureTable.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     let { data } = $props();
 

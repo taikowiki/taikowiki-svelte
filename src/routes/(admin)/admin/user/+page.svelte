@@ -1,8 +1,9 @@
 <script lang="ts" module>
-    import { userAdminRequestor } from "$lib/module/common/user/user.client.js";
+    import { User } from "$lib/module/user";
+    import '$lib/module/user/user.client';
 
     async function setGrade(UUID: string, from: number, to: number) {
-        const response = await userAdminRequestor.setGrade({
+        const response = await User.Client.adminRequest.setGrade({
             UUID,
             from,
             to,

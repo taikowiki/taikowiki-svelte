@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {Doc} from '$lib/module/common/wikidoc/types';
+    import type {Doc} from '$lib/module/doc';
     import DocParagraphView from "../DocParagraphView.svelte";
 
     interface Props {

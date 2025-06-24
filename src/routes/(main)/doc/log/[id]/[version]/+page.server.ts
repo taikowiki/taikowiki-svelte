@@ -1,11 +1,11 @@
-import { docDBController } from "$lib/module/common/wikidoc/server/dbController.server";
-import { prepareParagraphs, setWikiLinkAvailable } from "$lib/module/common/wikidoc/server/prepare";
-import type { Doc } from "$lib/module/common/wikidoc/types.js";
-import { renderer } from "$lib/module/common/wikidoc/util";
+import { Doc } from "$lib/module/doc/doc.server";
 import { error } from "@sveltejs/kit";
 import { queryBuilder, runQuery, Where } from "@yowza/db-handler";
 import type { QueryFunction } from "@yowza/db-handler/types";
 import type { HTMLElement } from "node-html-parser";
+
+const {renderer} = Doc;
+const {DBController, prepareParagraphs, setWikiLinkAvailable} = Doc.Server;
 
 export async function load({ params, locals }) {
     const id = Number(params.id);
@@ -16,7 +16,7 @@ export async function load({ params, locals }) {
     }
 
     const { docData, editableGrade } = await runQuery(async (run) => {
-        const pastDoc = await docDBController.getPast.getCallback(id, version)(run);
+        const pastDoc = await DBController.getPast.getCallback(id, version)(run);
         if (!pastDoc) {
             return {
                 docData: null

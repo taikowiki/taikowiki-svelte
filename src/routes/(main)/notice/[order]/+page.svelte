@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { convertNoticeMd } from "$lib/module/common/notice/notice.client";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import { DateTime } from "luxon";
+    import { Notice } from "$lib/module/notice/index.js";
+    import "$lib/module/notice/notice.client";
    
     let {data} = $props();
     const {notice} = data;
@@ -27,7 +28,7 @@
     {getTime(notice.officialDate ?? notice.writtenDate)}
 </div>
 <div class="notice-content">
-    {@html convertNoticeMd(notice.content)}
+    {@html Notice.Client.convertNoticeMd(notice.content)}
 </div>
 
 <style>

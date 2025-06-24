@@ -2,17 +2,18 @@
     import { browser } from "$app/environment";
     import { page } from "$app/state";
     import Loading from "$lib/components/common/Loading.svelte";
-    import type { Doc } from "$lib/module/common/wikidoc/types";
-    import { docContext } from "$lib/module/common/wikidoc/util";
+    import { Doc } from "$lib/module/doc";
     import { getTheme } from "$lib/module/layout/theme";
     import DocParagraphView from "./DocParagraphView.svelte";
-    import "$lib/module/common/wikidoc/assets/docview.scss";
+    import "$lib/module/doc/assets/docview.scss";
     import { getContext, onMount } from "svelte";
     import type { Writable } from "svelte/store";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import hljs from "highlight.js";
     import hljsLightStyle from "highlight.js/styles/atom-one-light.min.css?raw";
     import hljsDarkStyle from "highlight.js/styles/atom-one-dark.min.css?raw";
+
+    const { docContext } = Doc;
 
     interface Props {
         contentTree: Doc.Data.ContentTree;
@@ -26,9 +27,10 @@
             if (customElements.get("wiki-link")) {
                 return res();
             }
-            const { defineWikiElements } = await import(
-                "$lib/module/common/wikidoc/client/wikiElements.client"
+            const { Doc } = await import(
+                "$lib/module/doc/doc.client"
             );
+            const {defineWikiElements} = Doc.Client.element;
             defineWikiElements();
             res();
         } else {

@@ -3,12 +3,12 @@
     import KakaoMapAsideSceneSelector from "./KakaoMapAsideSceneSelector.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile.js";
     import { browser } from "$app/environment";
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
+    import type { Gamecenter } from "$lib/module/gamecenter";
     import KakaoMapAsideContent from "./KakaoMapAsideContent.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { writable } from "svelte/store";
     import { setContext } from "svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         map: kakao.maps.Map;
@@ -21,7 +21,7 @@
                 iw: kakao.maps.InfoWindow;
             }
         >;
-        gamecenterDatas: GameCenterData[];
+        gamecenterDatas: Gamecenter.Gamecenter[];
     }
 
     let {

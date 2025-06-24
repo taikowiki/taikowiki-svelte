@@ -1,9 +1,10 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
-    import { wikiDocRequestor } from "$lib/module/common/wikidoc/client/requestor.client";
     import { getTheme } from "$lib/module/layout/theme";
-    import type {Doc} from '$lib/module/common/wikidoc/types';
+    import {Doc} from '$lib/module/doc/doc.client';
+
+    const {request} = Doc.Client;
 
     interface Props {
         wikiDoc: Doc.Data.DocData;
@@ -24,7 +25,7 @@
         }
         disabled = true;
 
-        const response = await wikiDocRequestor.uploadNew({ docData: wikiDoc });
+        const response = await request.uploadNew({ docData: wikiDoc });
         if (response.status === "success") {
             await goto(`/doc/r/${encodeURIComponent(wikiDoc.title)}`);
         } else {
@@ -45,7 +46,7 @@
             return;
         }
 
-        const response = await wikiDocRequestor.update({
+        const response = await request.update({
             id,
             docData: wikiDoc,
         });

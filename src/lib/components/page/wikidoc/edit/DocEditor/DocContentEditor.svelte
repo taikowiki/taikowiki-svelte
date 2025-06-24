@@ -3,7 +3,9 @@
     import WikiDocPreview from "../Preview/DocPreview.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { onMount } from "svelte";
-    import { UndoStack } from "$lib/module/common/wikidoc/util";
+    import { Doc } from "$lib/module/doc";
+
+    const { UndoStack } = Doc;
 
     interface Props {
         content: string;
@@ -13,36 +15,36 @@
 
     let editorType: "raw" | "toast" | "preview" = $state("raw");
 
-    let undoStack = $state<UndoStack>();
+    let undoStack = $state<Doc.UndoStack>();
     let textarea = $state<HTMLTextAreaElement>();
     onMount(() => {
-        if(!textarea) return;
+        if (!textarea) return;
         undoStack = new UndoStack(textarea, {
             cooldown: 500,
             maxStackSize: 50,
             onUndo: (element) => {
-                content = element.value
+                content = element.value;
             },
             onRedo: (element) => {
-                content = element.value
+                content = element.value;
             },
         });
-    })
+    });
     $effect(() => {
-        if(editorType !== "raw" && undoStack){
+        if (editorType !== "raw" && undoStack) {
             content;
             undoStack.pushCurrent();
         }
-    })
+    });
 
     const [theme] = getTheme();
 
-    function textAreaTabEvent(this:HTMLTextAreaElement, event: KeyboardEvent){
-        if(event.key !== "Tab") return;
+    function textAreaTabEvent(this: HTMLTextAreaElement, event: KeyboardEvent) {
+        if (event.key !== "Tab") return;
         event.preventDefault();
         const start = this.selectionStart;
         const end = this.selectionEnd;
-        const tab = '    ';
+        const tab = "    ";
 
         const before = this.value.substring(0, start);
         const after = this.value.substring(end);
@@ -52,7 +54,7 @@
         this.selectionEnd = this.selectionStart;
         this.focus();
         content = this.value;
-        if(undoStack){
+        if (undoStack) {
             undoStack.pushCurrent();
         }
     }
@@ -89,7 +91,11 @@
             placeholder="마크다운 문법으로 작성하세요."
             onkeydown={textAreaTabEvent}
         ></textarea>
-        <ToastEditor bind:mdContent={content} show={editorType === "toast"} {undoStack}/>
+        <ToastEditor
+            bind:mdContent={content}
+            show={editorType === "toast"}
+            {undoStack}
+        />
         {#if editorType === "preview"}
             <WikiDocPreview {content} />
         {/if}

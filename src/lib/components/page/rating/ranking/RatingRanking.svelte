@@ -1,9 +1,7 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import type { UserRatingTierName } from "$lib/module/common/user/types";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    import { User } from "$lib/module/user";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { Action } from "svelte/action";
     import TierImage from "../me/TierImage.svelte";
 
     interface Props {
@@ -15,7 +13,7 @@
                 taikoNumber: string | null;
             };
             tier: {
-                tierName: UserRatingTierName;
+                tierName: User.RatingTierName;
                 detailTierGrade: 1 | 2 | 3 | 5 | 4 | null;
             };
         }[];

@@ -1,5 +1,4 @@
-import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
-import type { Doc } from '$lib/module/common/wikidoc/types.js';
+import { Doc } from "$lib/module/doc/doc.server";
 import { queryBuilder, runQuery, Select, Where } from '@yowza/db-handler';
 
 // 페이지에 20개
@@ -12,7 +11,7 @@ export async function load({ url }) {
     }
 
     const { searchResults, count, titleExactMatched } = await runQuery(async (run) => {
-        const { searchResults, count } = await docDBController.search.getCallback(query, (page - 1) * 20, 20)(run);
+        const { searchResults, count } = await Doc.Server.DBController.search.getCallback(query, (page - 1) * 20, 20)(run);
         const titleExactMatched = await (async() => {
             const query_ = queryBuilder.select('docs', [Select.As(Select.Count(), 'count')]).where(Where.Compare('title', '=', query)).build();
             const r = await run(query_);

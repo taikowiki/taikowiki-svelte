@@ -1,7 +1,9 @@
-import { docDBController } from "$lib/module/common/wikidoc/server/dbController.server";
+import { Doc } from "$lib/module/doc/doc.server";
 
-export async function load(){
-    const {recentlyCreatedDocs, recentlyEditedDocs} = await docDBController.getRecentDocs();
+const { DBController } = Doc.Server;
+
+export async function load() {
+    const { recentlyCreatedDocs, recentlyEditedDocs } = await DBController.getRecentDocs();
 
     return {
         recentlyCreatedDocs,

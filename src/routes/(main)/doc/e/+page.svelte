@@ -4,17 +4,16 @@
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DocEditor from "$lib/components/page/wikidoc/edit/DocEditor.svelte";
     import DocSubmit from "$lib/components/page/wikidoc/edit/DocSubmit.svelte";
-    import {
-        createDefaultDocData,
-        docContext,
-    } from "$lib/module/common/wikidoc/util";
+    import { Doc } from "$lib/module/doc/index.js";
     import { onMount, tick } from "svelte";
+
+    const { createDefaultDocData, docContext } = Doc;
 
     let { data } = $props();
     onMount(async () => {
         await tick();
         if (data.redirect) {
-            goto(`/doc/e/${data.redirect}`, {replaceState: true});
+            goto(`/doc/e/${data.redirect}`, { replaceState: true });
         }
     });
 

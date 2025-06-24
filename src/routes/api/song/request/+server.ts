@@ -1,7 +1,8 @@
-import { songRequestDBController } from '$lib/module/common/song/song.server.js';
-import type { SongData } from '$lib/module/common/song/types.js';
-import { getClientAddress } from '$lib/module/common/util.server.js';
+import { Song } from '$lib/module/song/song.server';
 import { error } from '@sveltejs/kit';
+import { Util } from '$lib/module/util/util.server';
+
+const {getClientAddress} = Util.Server;
 
 export async function POST(event) {
     const { request, locals } = event;
@@ -10,7 +11,7 @@ export async function POST(event) {
     if (locals.userData.grade < 2) throw error(401);
 
     const data = await request.json();
-    const songData = data.songData as SongData;
+    const songData = data.songData as Song.SongData;
     const songNo = data.songNo as string;
     if (!songData || !songNo) throw error(400);
 
@@ -19,7 +20,7 @@ export async function POST(event) {
         course.images = course.images.filter(e => e !== '');
     })
 
-    await songRequestDBController.createRequest({
+    await Song.Server.reqDBController.createRequest({
         UUID: locals.userData.UUID,
         songNo,
         data: songData,

@@ -1,22 +1,22 @@
-import { songDBController } from "$lib/module/common/song/song.server.js";
-import type { SongData } from "$lib/module/common/song/types.js";
-import { userDonderDBController } from "$lib/module/common/user/user.server";
+import { Song } from '$lib/module/song/song.server';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.client';
 
 export async function load({ locals: { userData } }) {
-    const songDatas = (await songDBController.getAllColumns([
+    const songDatas = (await Song.Server.DBController.getAllColumns([
         "title",
         "songNo",
         "genre",
         "courses",
-    ])) as Pick<SongData, "songNo" | "title" | "genre" | "courses">[];
+    ])) as Pick<Song.SongData, "songNo" | "title" | "genre" | "courses">[];
 
     const logined = !!userData;
     const donderData = logined
-        ? await userDonderDBController.getData(userData.UUID)
+        ? await User.Server.donderDBController.getData(userData.UUID)
         : null;
     const ratingDataExists = !!donderData?.scoreData;
     const ranking = ratingDataExists
-        ? await userDonderDBController.getRankByRating(userData!.UUID)
+        ? await User.Server.donderDBController.getRankByRating(userData!.UUID)
         : null;
 
     return {

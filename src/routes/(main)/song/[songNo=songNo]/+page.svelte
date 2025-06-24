@@ -8,9 +8,8 @@
     import CourseContainer from "$lib/components/page/song/[songNo]/CourseContainer.svelte";
     import AddSongButton from "$lib/components/page/song/AddSongButton.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
-    import type { Difficulty } from "$lib/module/common/song/types.js";
-    import { DIFFICULTY } from "$lib/module/common/song/const.js";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    import { Song } from "$lib/module/song/index.js";
     import DocContentView from "$lib/components/page/wikidoc/view/DocContentView.svelte";
     import { page } from "$app/state";
     import DocRedirectFrom from "$lib/components/page/wikidoc/view/DocRedirectFrom.svelte";
@@ -20,14 +19,16 @@
     import { setContext } from "svelte";
     import DocIndex from "$lib/components/page/wikidoc/view/DocIndex.svelte";
 
+    const { DIFFICULTY } = Song.CONST;
+
     let { data } = $props();
     let song = $derived(data.song);
     let docData = $derived(data.docData);
 
     setContext("docReady", writable(false));
 
-    let diff: Difficulty = $derived.by(() => {
-        let diffParam = page.url.searchParams.get("diff") as Difficulty | null;
+    let diff: Song.Difficulty = $derived.by(() => {
+        let diffParam = page.url.searchParams.get("diff") as Song.Difficulty | null;
         if (diffParam && DIFFICULTY.includes(diffParam)) {
             return song?.courses?.[diffParam] ? diffParam : "oni";
         } else {

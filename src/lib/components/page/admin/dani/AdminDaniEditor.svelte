@@ -1,24 +1,23 @@
 <script lang="ts">
-    import type { Dani } from "$lib/module/common/dani/types";
+    import type { Dani } from "$lib/module/dani";
     import AdminDaniEditorDan from "./AdminDaniEditor-Dan.svelte";
     import AdminDaniEditorName from "./AdminDaniEditor-Name.svelte";
     import AdminDaniEditorSong from "./AdminDaniEditor-Song.svelte";
     import AdminDaniEditorCondition from "./AdminDaniEditor-Conditions.svelte";
     import type { MouseEventHandler } from "svelte/elements";
     import AdminDaniEditorQr from "./AdminDaniEditor-Qr.svelte";
-    import { dani } from "$lib/module/common/color";
 
     interface Props {
-        daniData: Dani;
+        daniData: Dani.Dani;
         deleteDani: MouseEventHandler<any>;
     }
 
     let { daniData = $bindable(), deleteDani }: Props = $props();
 
-    function changeDan(dan: Dani["dan"]) {
+    function changeDan(dan: Dani.Dan) {
         daniData.dan = dan;
     }
-    function init(dan: Dani["dan"]) {
+    function init(dan: Dani.Dan) {
         daniData.dan = dan;
         if (daniData.dan === "gaiden") {
             daniData.name = {

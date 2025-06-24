@@ -1,19 +1,17 @@
 <script lang="ts">
-    import color from "$lib/module/common/color";
-    import type { Difficulty } from "$lib/module/common/song/types";
+    import { Util } from "$lib/module/util";
     import { onDestroy, onMount } from "svelte";
-    import type { SongLang } from "$lib/module/common/song/types";
     import { getTheme } from "$lib/module/layout/theme";
-    import type { SongDataPickedForSearch } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
 
     interface Props {
-        song: SongDataPickedForSearch;
-        songLang: SongLang;
+        song: Song.SongDataPickedForSearch;
+        songLang: Song.SongLang;
     }
 
     let { song, songLang }: Props = $props();
 
-    const diffs: Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
+    const diffs: Song.Difficulty[] = ["easy", "normal", "hard", "oni", "ura"];
 
     //let titleContainer: HTMLElement;
     //onMount(resizeHandle);
@@ -52,7 +50,7 @@
         {#each song.genre as genre}
             <div
                 class="genre-item"
-                style={`background-color:${color.genre[genre]};`}
+                style={`background-color:${Util.Color.genre[genre]};`}
                 data-theme={$theme}
             >
                 <!--<span>{genre}</span>-->
@@ -90,7 +88,7 @@
                     {song.courses[diff]?.level}
                     <div
                         class="level-color"
-                        style={`background-color:${color.difficulty[diff]};`}
+                        style={`background-color:${Util.Color.difficulty[diff]};`}
                         data-theme={$theme}
                     ></div>
                 </div>

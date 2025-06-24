@@ -1,21 +1,17 @@
 <script lang="ts">
-    import type {
-        Course,
-        Genre,
-        SongData,
-    } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import type { Measure } from "@taiko-wiki/taiko-rating/types";
     import groupBy from "object.groupby";
     import MeasureGroup from "./MeasureGroup.svelte";
     import styled from "styled-svelte5";
-    import color from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
     import { setContext } from "svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         measures: Measure[];
-        songDatas: (Pick<SongData, "title" | "songNo" | "genre"> & {
-            courses: { oni: Course; ura: Course | null };
+        songDatas: (Pick<Song.SongData, "title" | "songNo" | "genre"> & {
+            courses: { oni: Song.Course; ura: Song.Course | null };
         })[];
     }
 
@@ -23,10 +19,10 @@
 
     const groupedMeasures = groupBy(measures, (measure) => measure.range);
 
-    const GenreDiv = styled<{ genre: Genre[] }, {}>(
+    const GenreDiv = styled<{ genre: Song.Genre[] }, {}>(
         "div",
         ({ genre }) => `
-        background: linear-gradient(${genre.length === 1 ? `${color.genre[genre[0]]}, ${color.genre[genre[0]]}` : genre.map((g, i) => `${color.genre[g]} calc(100% / ${genre.length} * ${i}), ${color.genre[g]} calc(100% / ${genre.length} * ${i + 1})`).join(", ")});`,
+        background: linear-gradient(${genre.length === 1 ? `${Util.Color.genre[genre[0]]}, ${Util.Color.genre[genre[0]]}` : genre.map((g, i) => `${Util.Color.genre[g]} calc(100% / ${genre.length} * ${i}), ${Util.Color.genre[g]} calc(100% / ${genre.length} * ${i + 1})`).join(", ")});`,
         () => `    
         width: 8px;
         height: 100%;
@@ -37,7 +33,7 @@
     const Level = styled<{ diff: "oni" | "ura" }, {}>(
         "div",
         ({ diff }) => `
-        background-color:${color.difficulty[diff]};
+        background-color:${Util.Color.difficulty[diff]};
         `,
         () => `
         color:white;

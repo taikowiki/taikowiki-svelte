@@ -1,4 +1,4 @@
-import { songRequestDBController } from '$lib/module/common/song/song.server.js';
+import { Song } from '$lib/module/song/song.server';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request }) {
@@ -7,7 +7,7 @@ export async function POST({ request }) {
     const order = data.order;
     if (order === undefined) throw error(400);
 
-    await songRequestDBController.disapprove(order);
+    await Song.Server.reqDBController.disapprove(order);
 
     return new Response();
 }

@@ -1,7 +1,7 @@
-import {songDBController} from '$lib/module/common/song/song.server.js';
+import { Song } from '$lib/module/song/song.server';
 
 export async function POST({ request }) {
     const data = await request.json();
-    await songDBController.uploadSong(data.songNo, data.songData);
+    await Song.Server.DBController.uploadSong(data.songNo, data.songData);
     return new Response();
 }

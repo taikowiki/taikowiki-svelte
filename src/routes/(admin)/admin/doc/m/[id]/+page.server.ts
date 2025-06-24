@@ -1,6 +1,8 @@
-import { parseDBData } from '$lib/module/common/wikidoc/util';
 import { error } from '@sveltejs/kit';
 import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { Doc } from '$lib/module/doc/index.js';
+
+const { parseDBData } = Doc;
 
 export async function load({params}){
     const id = Number(params.id);

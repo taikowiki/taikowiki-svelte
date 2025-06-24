@@ -1,12 +1,14 @@
 <script lang="ts">
-    import type { Dani } from "$lib/module/common/dani/types";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
-    import { DAN } from "$lib/module/common/song/const";
+    import type { Dani } from "$lib/module/dani";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    import { Song } from "$lib/module/song";
+
+    const { DAN } = Song.CONST;
 
     interface Props {
-        dan: Dani["dan"];
-        changeDan: (dan: Dani["dan"]) => void;
-        init: (dan: Dani["dan"]) => void;
+        dan: Dani.Dan;
+        changeDan: (dan: Dani.Dan) => void;
+        init: (dan: Dani.Dan) => void;
     }
 
     let {dan, init, changeDan}: Props = $props();

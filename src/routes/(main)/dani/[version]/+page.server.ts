@@ -1,11 +1,12 @@
-import { daniDBController } from "$lib/module/common/dani/dani.server";
-import { songDBController } from "$lib/module/common/song/song.server";
-import type { SongDataPickedForDani } from "$lib/module/common/dani/types";
+import { Dani } from "$lib/module/dani";
+import "$lib/module/dani/dani.server";
+import { Song } from '$lib/module/song/song.server';
 import { error } from "@sveltejs/kit";
-import { DAN } from "$lib/module/common/song/const.js";
+
+const { DAN } = Song.CONST;
 
 export async function load({ params }) {
-    const daniData = await daniDBController.getByVersion(params.version);
+    const daniData = await Dani.Server.DBController.getByVersion(params.version);
 
     if (daniData === null) {
         throw error(404);
@@ -23,10 +24,10 @@ export async function load({ params }) {
     );
     songNos.delete("");
 
-    const songDatas = (await songDBController.getSongsColumnsBySongNo(
+    const songDatas = (await Song.Server.DBController.getSongsColumnsBySongNo(
         [...songNos],
         ["songNo", "genre", "title", "courses"]
-    )) as SongDataPickedForDani[];
+    )) as Dani.SongDataForDisplay[];
 
     return {
         daniData,

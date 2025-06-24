@@ -1,7 +1,9 @@
-import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
-import { WikiError } from '$lib/module/common/wikidoc/util.js';
 import { error } from '@sveltejs/kit';
-import { getClientAddress } from "$lib/module/common/util.server";
+import { Util } from '$lib/module/util/util.server';
+import { Doc } from "$lib/module/doc/doc.server";
+
+const { WikiError } = Doc;
+const {getClientAddress} = Util.Server;
 
 export async function POST(event) {
     const { request, locals } = event;
@@ -15,7 +17,7 @@ export async function POST(event) {
     const requestData = await request.json();
 
     //권한 검사
-    const editableGrade = await docDBController.getEditableGradeById(requestData.id);
+    const editableGrade = await Doc.Server.DBController.getEditableGradeById(requestData.id);
     if(editableGrade === null){
         throw error(404, JSON.stringify({
             reason: 'ID_NOT_EXISTS'
@@ -28,7 +30,7 @@ export async function POST(event) {
     }
 
     try{
-        await docDBController.update(requestData.id, locals.userData.UUID, getClientAddress(event), requestData.docData);
+        await Doc.Server.DBController.update(requestData.id, locals.userData.UUID, getClientAddress(event), requestData.docData);
     }
     catch(err){
         console.log(err);

@@ -5,7 +5,7 @@
 
     let {title = $bindable("")}:Props = $props();
 
-    import {getLang, getI18N} from '$lib/module/common/i18n/i18n';
+    import {getLang, getI18N} from '$lib/module/i18n';
 
     const lang = getLang();
     let i18n = $derived(getI18N($lang).title);

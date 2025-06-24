@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { mainpageDocSearch } from "$lib/module/common/search/search.client";
-    import type { SearchResult } from "$lib/module/common/search/types";
+    import { Search } from "$lib/module/search";
+    import '$lib/module/search/search.client';
     import { getTheme } from "$lib/module/layout/theme";
     import { onDestroy, onMount } from "svelte";
     import MainSearchResult from "../../(index)/MainSearchResult.svelte";
@@ -9,7 +9,7 @@
     let keyword = $state("");
 
     //빠른 검색 관련
-    let searchResults: SearchResult[] = $state([]);
+    let searchResults: Search.Result[] = $state([]);
     let searchInterval = $state<ReturnType<typeof setInterval>>();
     let searchDelay: number | null = $state(null);
     onMount(() => {
@@ -35,7 +35,7 @@
     const [theme] = getTheme();
 
     async function quickSearch(keyword: string) {
-        const response = await mainpageDocSearch(keyword);
+        const response = await Search.Client.request.doc(keyword);
         if (response.status === "success") {
             searchResults = response.data;
         }
@@ -88,7 +88,10 @@
         </button>
         {#if searchResultsOpened}
             <div class="search-result-container">
-                <MainSearchResult {searchResults} opened={searchResultsOpened}/>
+                <MainSearchResult
+                    {searchResults}
+                    opened={searchResultsOpened}
+                />
             </div>
         {/if}
     </div>

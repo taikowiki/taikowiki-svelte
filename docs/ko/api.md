@@ -2,6 +2,8 @@
 
 taikowiki-svelte에서는 여러가지 api 기능을 제공합니다.
 
+**새로운 API는 [여기](https://github.com/taikowiki/taikowiki-api)를 확인하세요!**
+
 # 외부 접근 가능 api
 
 ## 곡 데이터

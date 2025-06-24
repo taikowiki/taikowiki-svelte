@@ -6,7 +6,7 @@ namespace DiffchartServer {
         /**
          * Retrieves the clear difficulty chart data by level.
          */
-        getClearByLevel: defineDBHandler<[number], Diffchart.DiffchartData | null>((level) => {
+        getClearByLevel: defineDBHandler<[number], (Diffchart.DiffchartData & {order: number}) | null>((level) => {
             return async (run) => {
                 const result = await run("SELECT * FROM `diffchart` WHERE `type` = 'clear' AND `level` = ?", [level]);
 
@@ -22,7 +22,7 @@ namespace DiffchartServer {
         /**
          * Retrieves the fullcombo difficulty chart data by level.
          */
-        getFullcomboByLevel: defineDBHandler<[number], Diffchart.DiffchartData | null>((level) => {
+        getFullcomboByLevel: defineDBHandler<[number], (Diffchart.DiffchartData & {order: number}) | null>((level) => {
             return async (run) => {
                 const result = await run("SELECT * FROM `diffchart` WHERE `type` = 'fc' AND `level` = ?", [level]);
 
@@ -38,7 +38,7 @@ namespace DiffchartServer {
         /**
          * Retrieves the donderfullcombo difficulty chart data by level.
          */
-        getDonderfullcomboByLevel: defineDBHandler<[number], Diffchart.DiffchartData | null>((level) => {
+        getDonderfullcomboByLevel: defineDBHandler<[number], (Diffchart.DiffchartData & {order: number}) | null>((level) => {
             return async (run) => {
                 const result = await run("SELECT * FROM `diffchart` WHERE `type` = 'dfc' AND `level` = ?", [level]);
 
@@ -54,7 +54,7 @@ namespace DiffchartServer {
         /**
          * Retrieves all difficulty chart data.
          */
-        getAll: defineDBHandler<[], Diffchart.DiffchartData[]>(() => {
+        getAll: defineDBHandler<[], (Diffchart.DiffchartData & {order: number})[]>(() => {
             return async (run) => {
                 const result = await run("SELECT * FROM `diffchart`;");
 

@@ -44,10 +44,11 @@ const checkPermission = Hooks.checkPermissions([
     }
 ])
 
-const cors = Hooks.allowOrigin(["https://donderhiroba.jp"], {credentials: true});
+const cors = Hooks.allowOrigin("https://donderhiroba.jp", "/", { credentials: true });
+const apiCors = Hooks.allowOrigin("*", "/api/v1", {credentials: true});
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(Hooks.checkIp, cors, authHandle, Hooks.getUserData, checkPermission, Hooks.setAssetsCacheControl, Hooks.dynamicHtmlLang);
+export const handle = sequence(Hooks.checkIp, cors, apiCors, authHandle, Hooks.getUserData, checkPermission, Hooks.setAssetsCacheControl, Hooks.dynamicHtmlLang);

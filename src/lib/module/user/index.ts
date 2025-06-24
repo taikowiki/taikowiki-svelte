@@ -3,6 +3,7 @@ import type { CardData, ClearData as ClearData_, ScoreData as ScoreData_ } from 
 import { I18N } from "$lib/module/i18n";
 import type { RRequestHandler } from "@yowza/rrequestor/types";
 import type { defineDBHandler } from "@yowza/db-handler";
+import type { QueryCallback } from "@yowza/db-handler/types";
 
 export namespace User {
     export const TIER_COLOR = {
@@ -172,6 +173,15 @@ export namespace User {
             count: ReturnType<typeof defineDBHandler<[], number>>;
             getUserRating: ReturnType<typeof defineDBHandler<[string], (DonderData & Pick<User.Data, 'UUID' | 'showRatingNickname' | 'showRatingTaikoNo' | 'showRatingSongs'>) | null>>;
         };
+
+        const apiKeyDBController: {
+            generateKey: ((UUID: string) => Promise<string>) & {
+                getCallback: (UUID: string) => QueryCallback<string>;
+            },
+            checkKey: ((key: string) => Promise<string | null>) & {
+                getCallback: (key: string) => QueryCallback<string | null>;
+            }
+        }
     }
 }
 

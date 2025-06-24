@@ -7,18 +7,6 @@ type SongData = Song.SongData;
 type SongRequest = Song.SongRequest;
 type SongSearchOption = Song.SongSearchOption;
 
-/**
- * Parse songData fetched from the database to match the SongData type
- */
-function parseSongDataFromDB(songDataFromDB: any) {
-    songDataFromDB.courses &&= JSON.parse(songDataFromDB.courses)
-    songDataFromDB.courses && (songDataFromDB.courses.ura ??= null)
-    songDataFromDB.bpm &&= JSON.parse(songDataFromDB.bpm)
-    songDataFromDB.version &&= JSON.parse(songDataFromDB.version)
-    songDataFromDB.genre &&= JSON.parse(songDataFromDB.genre)
-    songDataFromDB.artists &&= JSON.parse(songDataFromDB.artists)
-}
-
 namespace SongServer {
     export const DBController = {
         /**
@@ -437,6 +425,17 @@ namespace SongServer {
                 return await run("DELETE FROM `song/request` WHERE `order` = ?", [order]);
             }
         })
+    }
+    /**
+    * Parse songData fetched from the database to match the SongData type
+    */
+    export function parseSongDataFromDB(songDataFromDB: any) {
+        songDataFromDB.courses &&= JSON.parse(songDataFromDB.courses)
+        songDataFromDB.courses && (songDataFromDB.courses.ura ??= null)
+        songDataFromDB.bpm &&= JSON.parse(songDataFromDB.bpm)
+        songDataFromDB.version &&= JSON.parse(songDataFromDB.version)
+        songDataFromDB.genre &&= JSON.parse(songDataFromDB.genre)
+        songDataFromDB.artists &&= JSON.parse(songDataFromDB.artists)
     }
 }
 

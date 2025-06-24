@@ -1,12 +1,13 @@
 import { fetchMeasures, getRating } from "@taiko-wiki/taiko-rating";
 import { escapeId } from 'mysql2';
-import { defineDBHandler } from "@yowza/db-handler";
+import { defineDBHandler, queryBuilder, Select, Where } from "@yowza/db-handler";
 import type { Badge, CardData, Clear, Crown, Difficulty } from "node-hiroba/types";
-import { randomUUID } from 'node:crypto';
-import groupBy from "object.groupby";
+import { createCipheriv, createHash, randomBytes, randomUUID } from 'node:crypto';
 import { getSongRating } from "@taiko-wiki/taiko-rating";
 import type { Measure } from "@taiko-wiki/taiko-rating/types";
-import { User } from ".";
+import { User } from ".";import { Util } from "../util";
+import { error } from "node:console";
+;
 
 namespace UserServer {
     export const DBController = {
@@ -352,6 +353,41 @@ namespace UserServer {
 
                 result.forEach(parseDonderData);
                 return result[0];
+            }
+        })
+    }
+
+    export const apiKeyDBController = {
+        generateKey: defineDBHandler<[UUID: string], string>((UUID) => {
+            return async(run) => {
+                await run(queryBuilder.delete('user/api_key').where(Where.Compare('UUID', '=', UUID)).build());
+
+                const key = Util.pipe(randomBytes(32).toString('hex'), [
+                    (key: string) => {
+                        const hash = createHash('sha512');
+                        hash.update(key);
+                        return hash.digest('hex');
+                    }
+                ])
+
+                await run(queryBuilder.insert('user/api_key').set({UUID, key}).build());
+
+                return key;
+            }
+        }),
+        checkKey: defineDBHandler<[key: string], string | null>((key) => {
+            const query =
+                queryBuilder.select('user/api_key')
+                .where(
+                    Where.Compare('key', '=', key)
+                )
+                .build();
+            return async(run) => {
+                const result = await run(query);
+                if(result?.[0]?.UUID){
+                    return result[0].UUID;
+                }
+                return null;
             }
         })
     }

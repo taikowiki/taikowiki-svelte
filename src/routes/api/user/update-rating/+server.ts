@@ -1,5 +1,5 @@
-import type { UserDonderData } from '$lib/module/common/user/types.js';
-import { userDonderDBController } from '$lib/module/common/user/user.server.js';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.server';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request, locals}){
@@ -7,11 +7,11 @@ export async function POST({request, locals}){
         throw error(403);
     }
 
-    const requestData: {rating: number, exp:number, ratingData: UserDonderData['ratingData']} = await request.json();
+    const requestData: {rating: number, exp:number, ratingData: User.DonderData['ratingData']} = await request.json();
 
-    await userDonderDBController.updateCurrentRating(locals.userData.UUID, requestData.rating, requestData.exp, requestData.ratingData);
+    await User.Server.donderDBController.updateCurrentRating(locals.userData.UUID, requestData.rating, requestData.exp, requestData.ratingData);
 
     return new Response(JSON.stringify(
-        await userDonderDBController.getRankByRating(locals.userData.UUID)
+        await User.Server.donderDBController.getRankByRating(locals.userData.UUID)
     ))
 }

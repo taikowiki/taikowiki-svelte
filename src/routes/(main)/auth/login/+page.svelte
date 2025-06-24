@@ -2,7 +2,7 @@
     import ProviderLogin from "$lib/components/page/auth/login/ProviderLogin.svelte";
     import { page } from "$app/stores";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
 
     const redirectUri = $page.url.searchParams.toString();
 

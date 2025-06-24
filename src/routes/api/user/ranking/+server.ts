@@ -1,4 +1,5 @@
-import { userDonderDBController } from '$lib/module/common/user/user.server.js';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.server';
 import { error } from '@sveltejs/kit';
 
 export async function GET({locals}){
@@ -7,6 +8,6 @@ export async function GET({locals}){
     }
 
     return new Response(JSON.stringify(
-        await userDonderDBController.getRankByRating(locals.userData.UUID)
+        await User.Server.donderDBController.getRankByRating(locals.userData.UUID)
     ))
 }

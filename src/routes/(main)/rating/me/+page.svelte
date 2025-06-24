@@ -5,7 +5,7 @@
     import DonderSection from "$lib/components/page/rating/me/DonderSection.svelte";
     import SongRatings from "$lib/components/page/rating/me/SongRatings.svelte";
     import MeasureTable from "$lib/components/page/measures/MeasureTable.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 

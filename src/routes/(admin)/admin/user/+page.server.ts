@@ -1,4 +1,5 @@
-import {userDBController} from '$lib/module/common/user/user.server.js';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.server';
 import { error } from '@sveltejs/kit';
 
 export async function load({ locals }) {
@@ -6,7 +7,7 @@ export async function load({ locals }) {
 
     const grade = locals.userData.grade;
 
-    const users = grade === 10 ? await userDBController.getAll() : await userDBController.getAllUnderGrade(grade);
+    const users = grade === 10 ? await User.Server.DBController.getAll() : await User.Server.DBController.getAllUnderGrade(grade);
 
     return {
         users

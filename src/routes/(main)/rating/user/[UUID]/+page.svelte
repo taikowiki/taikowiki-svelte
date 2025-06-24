@@ -5,8 +5,8 @@
     import OtherDonderData from "$lib/components/page/rating/user/OtherDonderData.svelte";
     import OtherDonderRating from "$lib/components/page/rating/user/OtherDonderRating.svelte";
     import OtherSongRatings from "$lib/components/page/rating/user/OtherSongRatings.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n.js";
-    import { getTier } from "$lib/module/common/user/getTier.js";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    import { User } from "$lib/module/user/index.js";
     import { getIsMobile } from "$lib/module/layout/isMobile";
 
     let { data } = $props();
@@ -15,7 +15,7 @@
         nickname: data.otherDonderData.nickname,
         taikoNumber: data.otherDonderData.taikoNumber,
     };
-    const tier = getTier(data.otherDonderData.currentRating);
+    const tier = User.getTier(data.otherDonderData.currentRating);
 
     let loaded = $state(false);
     let songOpened = $state(false);

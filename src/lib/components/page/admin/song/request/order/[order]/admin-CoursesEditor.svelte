@@ -1,12 +1,12 @@
 <script lang="ts">
-    // @ts-nocheck
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import CourseEditor from "./admin-CourseEditor.svelte";
-    import { DIFFICULTY } from "$lib/module/common/song/const";
-    import type { SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
+
+    const { DIFFICULTY } = Song.CONST;
 
     interface Props {
-        courses: SongData["courses"];
+        courses: Song.SongData["courses"];
         compare: any;
     }
 

@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { Dani } from "$lib/module/common/dani/types";
+    import type { Dani } from "$lib/module/dani";
     import DaniCondition from "./DaniCondition.svelte";
 
     interface Props {
-        conditions: Dani["conditions"];
+        conditions: Dani.Condition[];
     }
 
     let { conditions }: Props = $props();

@@ -32,7 +32,7 @@
         }}
     />
     <button
-        class="standardbtn"
+        class="standard-btn"
         data-theme={$theme}
         onclick={() => {
             search($query_);

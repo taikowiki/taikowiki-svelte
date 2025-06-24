@@ -1,15 +1,17 @@
-import {userDBController} from '$lib/module/common/user/user.server';
-import { gamecenterDBController } from '$lib/module/common/gamecenter/gamecenter.server';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.server';
+import { Gamecenter } from "$lib/module/gamecenter";
+import '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';
 
-export async function load({params}){
-    const report = await gamecenterDBController.getReportByOrder(Number(params.order));
+export async function load({ params }) {
+    const report = await Gamecenter.Server.DBController.getReportByOrder(Number(params.order));
 
-    if(!report){
+    if (!report) {
         throw error(404);
     }
 
-    const nickname = await userDBController.getNickname(report.UUID);
+    const nickname = await User.Server.DBController.getNickname(report.UUID);
 
     return {
         report,

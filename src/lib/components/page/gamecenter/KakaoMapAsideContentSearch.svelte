@@ -1,10 +1,6 @@
 <script lang="ts">
-    import {
-        AMENITY,
-        GAMECENTERREGION,
-    } from "$lib/module/common/gamecenter/const";
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { Gamecenter } from "$lib/module/gamecenter";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getTheme } from "$lib/module/layout/theme";
     import type { Writable } from "svelte/store";
     import GamecenterInfo from "./GamecenterInfo.svelte";
@@ -22,9 +18,9 @@
                 iw: kakao.maps.InfoWindow;
             }
         >;
-        gamecenterDatas: GameCenterData[];
+        gamecenterDatas: Gamecenter.Gamecenter[];
         favorites: Writable<number[]>;
-        distanceMap: Map<GameCenterData, number>;
+        distanceMap: Map<Gamecenter.Gamecenter, number>;
     }
 
     let {
@@ -55,8 +51,8 @@
     let filteredGamecenterDatas = $state([...gamecenterDatas]);
     //키워드 검색
     let searchKeyword = $state("");
-    let region: "null" | (typeof GAMECENTERREGION)[number] = $state("null");
-    let amenities: (typeof AMENITY)[number][] = $state([]);
+    let region: "null" | (typeof Gamecenter.CONST.GAMECENTERREGION)[number] = $state("null");
+    let amenities: (typeof Gamecenter.CONST.AMENITY)[number][] = $state([]);
     let input: HTMLInputElement | undefined = $state();
     $effect.pre(() => {
         {
@@ -115,7 +111,7 @@
         <div class="option-name" data-theme={$theme}>{i18n.region}</div>
         <select bind:value={region} style="height: 20px;">
             <option value="null">{i18n.all}</option>
-            {#each GAMECENTERREGION as region}
+            {#each Gamecenter.CONST.GAMECENTERREGION as region}
                 <option value={region}>{region}</option>
             {/each}
         </select>
@@ -127,7 +123,7 @@
             {i18n.amenityText}
         </div>
         <div class="amenity-container">
-            {#each AMENITY as amenity}
+            {#each Gamecenter.CONST.AMENITY as amenity}
                 <label
                     class="amenity"
                     class:selected={amenities.includes(amenity)}

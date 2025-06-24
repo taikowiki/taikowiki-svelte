@@ -1,13 +1,10 @@
 <script lang="ts">
-    import type { GameCenterData } from "$lib/module/common/gamecenter/types";
-    import { getContext, onMount } from "svelte";
+    import { onMount } from "svelte";
     import KakaoMapAsideContentSearch from "./KakaoMapAsideContentSearch.svelte";
     import KakaoMapAsideContentFavorites from "./KakaoMapAsideContentFavorites.svelte";
-    import { getTheme } from "$lib/module/layout/theme";
-    import { getLang } from "$lib/module/common/i18n/i18n";
-    import { gamecenterRequestor } from "$lib/module/common/gamecenter/gamecenter.client";
+    import { Gamecenter } from "$lib/module/gamecenter";
+    import "$lib/module/gamecenter/gamecenter.client";
     import { writable } from "svelte/store";
-    import getKakaoMap from "$lib/module/common/gamecenter/kakao.client";
 
     interface Props {
         map: kakao.maps.Map;
@@ -21,7 +18,7 @@
                 iw: kakao.maps.InfoWindow;
             }
         >;
-        gamecenterDatas: GameCenterData[];
+        gamecenterDatas: Gamecenter.Gamecenter[];
     }
 
     let {
@@ -32,12 +29,12 @@
         gamecenterDatas: gcData,
     }: Props = $props();
 
-    const kakaoMap = getKakaoMap();
+    const kakaoMap = Gamecenter.Client.getKakaoMap();
 
     let container: HTMLDivElement;
     let gamecenterDatas = $state(gcData);
 
-    const distanceMap = new Map<GameCenterData, number>();
+    const distanceMap = new Map<Gamecenter.Gamecenter, number>();
     if (currentPositionMarker) {
         const coords = currentPositionMarker.getPosition();
 
@@ -61,7 +58,7 @@
     let favorites = writable<number[]>([]);
 
     onMount(() => {
-        gamecenterRequestor.getFavorites(null).then((response) => {
+        Gamecenter.Client.request.getFavorites(null).then((response) => {
             if (response.status === "success") {
                 $favorites = response.data;
             }

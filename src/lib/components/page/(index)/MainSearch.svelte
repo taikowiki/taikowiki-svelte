@@ -4,12 +4,8 @@
     import MainSearchTypeSelector from "./MainSearchTypeSelector.svelte";
     import { getTheme } from "$lib/module/layout/theme";
     import { onDestroy, onMount } from "svelte";
-    import {
-        mainpageAllSearch,
-        mainpageDocSearch,
-        mainpageSongSearch,
-    } from "$lib/module/common/search/search.client";
-    import type { SearchResult } from "$lib/module/common/search/types";
+    import { Search } from "$lib/module/search";
+    import '$lib/module/search/search.client';
     import MainSearchResult from "./MainSearchResult.svelte";
     import { goto } from "$app/navigation";
 
@@ -52,26 +48,26 @@
             clearInterval(searchInterval);
         }
     });
-    let searchResults: SearchResult[] = $state([]);
+    let searchResults: Search.Result[] = $state([]);
     async function quickSearch(keyword: string) {
         searchResults = [];
         switch (searchType) {
             case "song": {
-                const response = await mainpageSongSearch(keyword);
+                const response = await Search.Client.request.song(keyword);
                 if (response.status === "success") {
                     searchResults = response.data;
                 }
                 break;
             }
             case "docs": {
-                const response = await mainpageDocSearch(keyword);
+                const response = await Search.Client.request.doc(keyword);
                 if (response.status === "success") {
                     searchResults = response.data;
                 }
                 break;
             }
             case "all": {
-                const response = await mainpageAllSearch(keyword);
+                const response = await Search.Client.request.all(keyword);
                 if (response.status === "success") {
                     searchResults = response.data;
                 }

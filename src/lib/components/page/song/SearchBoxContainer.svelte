@@ -7,7 +7,7 @@
             searchParams = new URLSearchParams(location.search);
         }
 
-        const option: SongSearchOption = {};
+        const option: Song.SongSearchOption = {};
 
         const query = searchParams.get("query");
         if (query) {
@@ -15,12 +15,12 @@
         }
         const genre = searchParams.get("genre");
         if (genre) {
-            option.genre = genre as Genre;
+            option.genre = genre as Song.Genre;
         }
         const difficulty = searchParams.get("difficulty");
         const level = Number(searchParams.get("level"));
         if (difficulty && level && !isNaN(level)) {
-            option.difficulty = difficulty as Difficulty;
+            option.difficulty = difficulty as Song.Difficulty;
             option.level = level;
         }
 
@@ -29,28 +29,22 @@
 </script>
 
 <script lang="ts">
-    import type {
-        Difficulty,
-        Genre,
-        SongData,
-    } from "$lib/module/common/song/types";
-    import filter from "$lib/module/common/song/filter";
-    import type { SongSearchOption } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import SearchBox from "./SearchBox.svelte";
     import { page } from "$app/stores";
 
     interface Props {
-        songs: SongData[];
-        filteredSongs: SongData[] | null;
+        songs: Song.SongData[];
+        filteredSongs: Song.SongData[] | null;
     }
 
     let {songs, filteredSongs}: Props = $props();
 
-    let option: SongSearchOption = $state(getOptionFromUrl($page.url));
+    let option: Song.SongSearchOption = $state(getOptionFromUrl($page.url));
 
     $effect.pre(() => {
         filteredSongs = null;
-        filteredSongs = filter(songs, option);
+        filteredSongs = Song.filter(songs, option);
     });
 </script>
 

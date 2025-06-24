@@ -1,4 +1,5 @@
-import { userDonderDBController } from '$lib/module/common/user/user.server.js';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.server';
 import { error } from '@sveltejs/kit';
 
 export async function GET({locals, url}){
@@ -6,7 +7,7 @@ export async function GET({locals, url}){
         throw error(401);
     }
 
-    const userDonderData = await userDonderDBController.getData(locals.userData.UUID);
+    const userDonderData = await User.Server.donderDBController.getData(locals.userData.UUID);
 
     const loadAll = url.searchParams.get('all') === 'true';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
-    import type { Doc } from "$lib/module/common/wikidoc/types";
+    import type { Doc } from "$lib/module/doc";
     import Error from "../../../../../../../../routes/(main)/+error.svelte";
 
     interface Props {

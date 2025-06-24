@@ -2,7 +2,7 @@
     import { page } from "$app/stores";
     import DiffchartEditor from "$lib/components/common/diffchart/DIffchart-Editor.svelte";
     import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
-    import type { DiffChart } from "$lib/module/common/diffchart/types";
+    import type { Diffchart as D } from "$lib/module/diffchart";
     import { getIsMobile } from "$lib/module/layout/isMobile.js";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
@@ -10,7 +10,7 @@
     let { data } = $props();
     const { donderData, songs } = data;
 
-    let diffChart: DiffChart = $state(getDiffchartFromHash());
+    let diffChart: D.Diffchart = $state(getDiffchartFromHash());
 
     let downloadImage: (() => Promise<void>) | null = $state(null);
     $effect(() => {
@@ -24,7 +24,7 @@
     const isMobile = getIsMobile();
     let editorOpened = $state(false);
 
-    function getDiffchartFromHash(): DiffChart {
+    function getDiffchartFromHash(): D.Diffchart {
         let hash = $page.url.hash;
         if (hash.length === 0) {
             return {

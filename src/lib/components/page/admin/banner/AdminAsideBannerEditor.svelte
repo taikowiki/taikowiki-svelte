@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { bannerAdminRequestor } from "$lib/module/common/banner/banner.client";
-    import type { AsideBanner } from "$lib/module/common/banner/types";
+    import { Banner } from "$lib/module/banner";
+    import "$lib/module/banner/banner.client";
 
     interface Props {
-        banners: AsideBanner[];
+        banners: Banner.AsideBanner[];
     }
 
     let { banners }: Props = $props();
@@ -13,7 +13,7 @@
             return;
         }
 
-        const response = await bannerAdminRequestor.updateAsideBanner({
+        const response = await Banner.Client.adminRequest.updateAsideBanner({
             banners,
         });
 

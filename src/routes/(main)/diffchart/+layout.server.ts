@@ -1,31 +1,25 @@
-import { userDonderDBController } from "$lib/module/common/user/user.server.js";
-import type {
-    BadgeType,
-    CrownType,
-    DifficultyType,
-    SongDataPickedForDiffchart,
-    SongScore,
-    SongScoreDetail,
-} from "$lib/module/common/diffchart/types";
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.server';
+import type { Diffchart } from '$lib/module/diffchart';
 import type { Clear, ClearData, Difficulty } from "node-hiroba/types";
-import { songDBController } from "$lib/module/common/song/song.server.js";
+import { Song } from '$lib/module/song/song.server';
 
 export async function load({ locals }) {
     let donderDataResult = null;
     if (locals.userData) {
-        donderDataResult = await userDonderDBController.getClearData(
+        donderDataResult = await User.Server.donderDBController.getClearData(
             locals.userData.UUID
         );
         donderDataResult &&= parseSongScoreDonderData(donderDataResult);
     }
 
-    const songs = (await songDBController.getAllColumns([
+    const songs = (await Song.Server.DBController.getAllColumns([
         "genre",
         "songNo",
         "title",
         "titleKo",
         "aliasKo",
-    ])) as SongDataPickedForDiffchart[];
+    ])) as Diffchart.SongDataForDisplay[];
 
     return {
         donderData: donderDataResult,
@@ -33,12 +27,12 @@ export async function load({ locals }) {
     };
 }
 
-function parseSongScoreDonderData(clearData: ClearData[]): SongScore[] | null {
+function parseSongScoreDonderData(clearData: ClearData[]): Diffchart.Score.SongScore[] | null {
     try {
         return clearData.map((c) => {
-            const details: Partial<Record<DifficultyType, SongScoreDetail>> =
+            const details: Partial<Record<Diffchart.Score.Difficulty, Diffchart.Score.Detail>> =
                 parseDetail(c.difficulty);
-            const score: SongScore = {
+            const score: Diffchart.Score.SongScore = {
                 title: c.title,
                 songNo: c.songNo,
                 details,
@@ -53,8 +47,8 @@ function parseSongScoreDonderData(clearData: ClearData[]): SongScore[] | null {
 
 function parseDetail(
     data: Partial<Record<Difficulty, Clear>>
-): Partial<Record<DifficultyType, SongScoreDetail>> {
-    const result: Partial<Record<DifficultyType, SongScoreDetail>> = {};
+): Partial<Record<Diffchart.Score.Difficulty, Diffchart.Score.Detail>> {
+    const result: Partial<Record<Diffchart.Score.Difficulty, Diffchart.Score.Detail>> = {};
     if (data.ura) {
         result.oni_ura = {
             crown: crowntoCrownType(data.ura.crown),
@@ -70,7 +64,7 @@ function parseDetail(
     return result;
 }
 
-function crowntoCrownType(crown: string | null): CrownType {
+function crowntoCrownType(crown: string | null): Diffchart.Score.Crown {
     switch (crown) {
         case "silver":
             return "silver";
@@ -83,7 +77,7 @@ function crowntoCrownType(crown: string | null): CrownType {
     return "none";
 }
 
-function badgetoBadgeType(badge: string | null): BadgeType {
+function badgetoBadgeType(badge: string | null): Diffchart.Score.Badge {
     switch (badge) {
         case "rainbow":
             return 8;

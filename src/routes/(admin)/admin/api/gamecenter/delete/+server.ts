@@ -1,4 +1,5 @@
-import { gamecenterDBController } from "$lib/module/common/gamecenter/gamecenter.server";
+import { Gamecenter } from "$lib/module/gamecenter";
+import '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from "@sveltejs/kit";
 
 export async function POST({request}){
@@ -8,7 +9,7 @@ export async function POST({request}){
         throw error(400);
     }
 
-    await gamecenterDBController.deleteGamecenter(requestData.order);
+    await Gamecenter.Server.DBController.deleteGamecenter(requestData.order);
 
     return new Response();
 }

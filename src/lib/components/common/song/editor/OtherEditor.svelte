@@ -1,18 +1,15 @@
 <script lang="ts">
-    import type {
-        Genre,
-        SongData,
-        Version,
-    } from "$lib/module/common/song/types";
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
-    import { GENRE, VERSION } from "$lib/module/common/song/const";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { Song } from "$lib/module/song";
+    import { getI18N, getLang } from "$lib/module/i18n";
+    
+    const { GENRE, VERSION } = Song.CONST;
 
     interface Props {
-        bpm: SongData["bpm"];
+        bpm: Song.SongData["bpm"];
         bpmShiver: 1 | 0;
-        version: Version[];
-        genre: Genre[];
+        version: Song.Version[];
+        genre: Song.Genre[];
         artists: string[];
         isAsiaBanned: 1 | 0;
         isKrBanned: 1 | 0;

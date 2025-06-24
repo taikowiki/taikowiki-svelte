@@ -1,10 +1,17 @@
-import { daniDBController } from '$lib/module/common/dani/dani.server.js';
-import type { DaniUpdateData } from '$lib/module/common/dani/types.js';
+import { Dani } from '$lib/module/dani';
+import '$lib/module/dani/dani.server.js';
+import { error } from '@sveltejs/kit';
 
-export async function POST({request}){
-    const requestData: DaniUpdateData = await request.json();
+export async function POST({ request }) {
+    const requestData: Dani.UpdateData = await request.json();
 
-    await daniDBController.updateVersion(requestData);
+    try {
+        Dani.Schema.UpdateData.parse(requestData);
+    } catch {
+        throw error(400);
+    }
+
+    await Dani.Server.DBController.updateVersion(requestData);
 
     return new Response();
 }

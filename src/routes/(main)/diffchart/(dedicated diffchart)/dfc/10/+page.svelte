@@ -19,8 +19,8 @@
         iF: "#adadad",
     };
 
-    function getCustomedDiffchart(diffChart: DiffChart, i18n: any) {
-        const replica = JSON.parse(JSON.stringify(diffChart)) as DiffChart;
+    function getCustomedDiffchart(diffChart: D.Diffchart, i18n: any) {
+        const replica = JSON.parse(JSON.stringify(diffChart)) as D.Diffchart;
 
         replica.name = i18n[diffChart.name];
         replica.sections.forEach((section) => {
@@ -37,10 +37,10 @@
     import { page } from "$app/stores";
     import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
-    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
+    import { getI18N, getLang } from "$lib/module/i18n";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
-    import type { DiffChart } from "$lib/module/common/diffchart/types";
+    import type { Diffchart as D } from "$lib/module/diffchart";
 
     let { data } = $props();
     const { songs, diffChartData } = data;

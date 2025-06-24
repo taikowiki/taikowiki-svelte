@@ -1,7 +1,7 @@
 <script lang="ts" module>
-    import { dani as daniColor } from "$lib/module/common/color";
+    import { Util } from "$lib/module/util";
 
-    function getColor(dan: Dan, theme: "dark" | "light"): string {
+    function getColor(dan: Dani.Dan, theme: "dark" | "light"): string {
         let d = "kyu";
         if (/^[1-5]dan$/.test(dan) || dan === "senpo") {
             d = "lowdan";
@@ -25,7 +25,7 @@
             d = "gaiden";
         }
 
-        return (daniColor.color?.[theme] as any)?.[d] ?? "";
+        return (Util.Color.dani.color?.[theme] as any)?.[d] ?? "";
     }
 
     function outsideClickHandler(event: MouseEvent) {
@@ -44,16 +44,16 @@
 </script>
 
 <script lang="ts">
-    import type { Dani, Dan } from "$lib/module/common/dani/types";
-    import { getLang } from "$lib/module/common/i18n/i18n";
+    import type { Dani } from "$lib/module/dani";
+    import { getLang } from "$lib/module/i18n";
     import { getTheme } from "$lib/module/layout/theme";
-    import { getI18N } from "$lib/module/common/i18n/i18n";
+    import { getI18N } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import DaniPlate from "./DaniPlate.svelte";
 
     interface Props {
         opened: boolean;
-        dani: Dani;
+        dani: Dani.Dani;
     }
 
     let { opened = $bindable(), dani }: Props = $props();
@@ -170,7 +170,7 @@
 {#if dani.name}
     <div
         class="name"
-        style={`background-color:${daniColor.color.light["gaiden"]};`}
+        style={`background-color:${Util.Color.dani.color.light["gaiden"]};`}
     >
         <span>
             {dani.name[$lang] ?? dani.name.ja}

@@ -1,4 +1,5 @@
-import { userDBController } from '$lib/module/common/user/user.server.js';
+import { User } from "$lib/module/user";
+import '$lib/module/user/user.server';
 import { error } from '@sveltejs/kit';
 
 export async function POST({request, locals}){
@@ -8,7 +9,7 @@ export async function POST({request, locals}){
 
     const requestData = await request.json();
 
-    await userDBController.setShowRating(locals.userData.UUID, requestData);
+    await User.Server.DBController.setShowRating(locals.userData.UUID, requestData);
 
     return new Response();
 }

@@ -1,7 +1,10 @@
 <script lang="ts">
-    import type { Course, SongData } from "$lib/module/common/song/types";
+    import { Song } from "$lib/module/song";
     import { getTheme } from "$lib/module/layout/theme";
     import { getContext, type Component } from "svelte";
+
+    type SongData = Song.SongData;
+    type Course = Song.Course;
 
     interface Props {
         songData: Pick<SongData, "title" | "songNo" | "genre"> & {

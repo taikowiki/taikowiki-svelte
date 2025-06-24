@@ -2,7 +2,7 @@ import { Song } from '$lib/module/song/song.server';
 import { Util } from '$lib/module/util';
 import { QB, queryBuilder, runQuery, Select, Where } from '@yowza/db-handler';
 
-export async function GET({ url, setHeaders }) {
+export async function GET({ url, setHeaders, locals }) {
     const query = url.searchParams.get('query') || undefined;
     const difficulty = url.searchParams.get('difficulty') as (Song.Difficulty | "oniura") || undefined;
     const genre = url.searchParams.get('genre') as Song.Genre || undefined;
@@ -61,8 +61,9 @@ export async function GET({ url, setHeaders }) {
     result.forEach((e: any) => Song.Server.parseSongDataFromDB(e));
 
     setHeaders({
+        ...locals.headers,
         'Content-Type': 'application/json'
-    });
+    })
 
     return new Response(JSON.stringify(result.map((e: any) => ({
         songNo: e.songNo,

@@ -3,7 +3,7 @@ import '$lib/module/diffchart/diffchart.server.js';
 import { Util } from '$lib/module/util/index.js';
 import { error } from '@sveltejs/kit';
 
-export async function GET({ url, setHeaders }) {
+export async function GET({ url, setHeaders, locals }) {
     const type = url.searchParams.get('type');
     let level = Util.pipe(url.searchParams.get('level'), [
         (level: string | undefined) => Number(level),
@@ -39,8 +39,9 @@ export async function GET({ url, setHeaders }) {
     })
 
     setHeaders({
+        ...locals.headers,
         'Content-Type': 'application/json'
-    });
+    })
 
     return new Response(JSON.stringify(diffchartData))
 }

@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { songAdminRequestor } from "$lib/module/common/song/song.client";
     import axios from "axios";
 
     export let data;

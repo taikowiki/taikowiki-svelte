@@ -8,7 +8,8 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			user?: User<any>,
-			userData: UserModule.Data | null
+			userData: UserModule.Data | null,
+			headers: Record<string, any>
 		}
 		// interface PageData {}
 		// interface PageState {}

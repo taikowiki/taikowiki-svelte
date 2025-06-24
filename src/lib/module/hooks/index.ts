@@ -16,17 +16,23 @@ export namespace Hooks {
             const origin = event.request.headers.get('Origin');
             if (!origin) return await resolve(event);
 
+            if (!event.locals.headers) {
+                event.locals.headers = {};
+            }
+
             if ((allowedOrigin === "*" || origin === allowedOrigin) && event.url.pathname.startsWith(allowedPath)) {
-                event.setHeaders({
+                event.locals.headers = {
+                    ...event.locals.headers,
                     "Access-Control-Allow-Origin": origin,
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
                     "Access-Control-Allow-Headers": "Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization"
-                });
+                }
                 if (option) {
                     if (option?.credentials === true) {
-                        event.setHeaders({
+                        event.locals.headers = {
+                            ...event.locals.headers,
                             "Access-Control-Allow-Credentials": "true"
-                        })
+                        }
                     }
                 }
                 if (event.request.method === "OPTIONS") {

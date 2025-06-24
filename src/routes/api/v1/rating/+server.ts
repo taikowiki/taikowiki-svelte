@@ -3,7 +3,7 @@ import '$lib/module/user/user.server.js';
 import { error } from '@sveltejs/kit';
 import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
 
-export async function GET({ url, request, setHeaders }) {
+export async function GET({ url, request, setHeaders, locals }) {
     const ratingdata = url.searchParams.get('ratingdata');
 
     const apiKey = request.headers.get('x-api-key');
@@ -46,6 +46,7 @@ export async function GET({ url, request, setHeaders }) {
     }
 
     setHeaders({
+        ...locals.headers,
         'Content-Type': 'application/json'
     })
 

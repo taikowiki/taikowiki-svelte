@@ -1,5 +1,5 @@
 import { User } from "$lib/module/user";
-import '$lib/module/user/user.client';
+import '$lib/module/user/user.server';
 import { Gamecenter } from "$lib/module/gamecenter";
 import '$lib/module/gamecenter/gamecenter.server.js';
 import { error } from '@sveltejs/kit';

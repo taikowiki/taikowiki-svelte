@@ -1,6 +1,6 @@
 import { Song } from '$lib/module/song/song.server';
 import { User } from "$lib/module/user";
-import '$lib/module/user/user.client';
+import '$lib/module/user/user.server';
 import { Doc } from "$lib/module/doc/doc.server";
 import { redirect } from '@sveltejs/kit';
 import { runQuery } from '@yowza/db-handler';

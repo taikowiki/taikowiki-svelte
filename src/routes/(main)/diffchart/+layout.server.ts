@@ -1,5 +1,5 @@
 import { User } from "$lib/module/user";
-import '$lib/module/user/user.client';
+import '$lib/module/user/user.server';
 import type { Diffchart } from '$lib/module/diffchart';
 import type { Clear, ClearData, Difficulty } from "node-hiroba/types";
 import { Song } from '$lib/module/song/song.server';

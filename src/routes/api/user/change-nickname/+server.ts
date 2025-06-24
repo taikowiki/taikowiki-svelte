@@ -1,5 +1,5 @@
 import { User } from "$lib/module/user";
-import '$lib/module/user/user.client';
+import '$lib/module/user/user.server';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ request, locals }) {

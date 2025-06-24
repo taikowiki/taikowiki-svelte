@@ -1,6 +1,6 @@
 import { Song } from '$lib/module/song/song.server';
 import { User } from "$lib/module/user";
-import '$lib/module/user/user.client';
+import '$lib/module/user/user.server';
 
 export async function load({ locals: { userData } }) {
     const songDatas = (await Song.Server.DBController.getAllColumns([

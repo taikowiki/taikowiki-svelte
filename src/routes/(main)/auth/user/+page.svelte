@@ -12,6 +12,7 @@
 
 <script lang="ts">
     import PageTitle from "$lib/components/common/PageTitle.svelte";
+    import ApiKeyGenerator from "$lib/components/page/auth/user/ApiKeyGenerator.svelte";
 
     import Nickname from "$lib/components/page/auth/user/nickname.svelte";
     import ShowRating from "$lib/components/page/auth/user/ShowRating.svelte";
@@ -41,6 +42,7 @@
     </div>
     <Nickname />
     <ShowRating bind:showRating={data.user.showRating}/>
+    <ApiKeyGenerator/>
     <div class="div-tr">
         <form method="post" action="/api/user/delete" bind:this={withdrawForm}>
             <input

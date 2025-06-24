@@ -11,12 +11,12 @@ export namespace Hooks {
     /**
      * 특정 Origin에서의 요청 허용
      */
-    export function allowOrigin(allowedOrigins: string[], option?: AllowOriginOption) {
+    export function allowOrigin(allowedOrigin: string, allowedPath: string, option?: AllowOriginOption) {
         const handle: Handle = async ({ event, resolve }) => {
             const origin = event.request.headers.get('Origin');
             if (!origin) return await resolve(event);
 
-            if (allowedOrigins.includes(origin)) {
+            if ((allowedOrigin === "*" || origin === allowedOrigin) && event.url.pathname.startsWith(allowedPath)) {
                 event.setHeaders({
                     "Access-Control-Allow-Origin": origin,
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -28,6 +28,9 @@ export namespace Hooks {
                             "Access-Control-Allow-Credentials": "true"
                         })
                     }
+                }
+                if(event.request.method === "OPTIONS"){
+                    return new Response();
                 }
             }
 

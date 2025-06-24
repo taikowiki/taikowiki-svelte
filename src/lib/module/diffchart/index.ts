@@ -117,10 +117,10 @@ export namespace Diffchart {
     }
     export declare namespace Server {
         const DBController: {
-            getClearByLevel: ReturnType<typeof defineDBHandler<[number], Diffchart.DiffchartData | null>>,
-            getFullcomboByLevel: ReturnType<typeof defineDBHandler<[number], Diffchart.DiffchartData | null>>,
-            getDonderfullcomboByLevel: ReturnType<typeof defineDBHandler<[number], Diffchart.DiffchartData | null>>,
-            getAll: ReturnType<typeof defineDBHandler<[], Diffchart.DiffchartData[]>>,
+            getClearByLevel: ReturnType<typeof defineDBHandler<[number], (Diffchart.DiffchartData & { order: number }) | null>>,
+            getFullcomboByLevel: ReturnType<typeof defineDBHandler<[number], (Diffchart.DiffchartData & { order: number }) | null>>,
+            getDonderfullcomboByLevel: ReturnType<typeof defineDBHandler<[number], (Diffchart.DiffchartData & { order: number }) | null>>,
+            getAll: ReturnType<typeof defineDBHandler<[], (Diffchart.DiffchartData & { order: number })[]>>,
             uploadDiffchart: ReturnType<typeof defineDBHandler<[Diffchart.DiffchartData], void>>,
             deleteDiffchart: ReturnType<typeof defineDBHandler<[number, string], void>>
         }

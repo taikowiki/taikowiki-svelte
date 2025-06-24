@@ -6,7 +6,6 @@ export async function GET({ url }) {
     const query = url.searchParams.get('query') || undefined;
     const difficulty = url.searchParams.get('difficulty') as (Song.Difficulty | "oniura") || undefined;
     const genre = url.searchParams.get('genre') as Song.Genre || undefined;
-
     let level: number | undefined = Number(url.searchParams.get('level'));
     if (isNaN(level) || level === 0) level = undefined;
 
@@ -62,6 +61,7 @@ export async function GET({ url }) {
     result.forEach((e: any) => Song.Server.parseSongDataFromDB(e));
 
     return new Response(JSON.stringify(result.map((e: any) => ({
+        songNo: e.songNo,
         title: e.title,
         titleKo: e.titleKo,
         aliasKo: e.aliasKo,
@@ -77,5 +77,9 @@ export async function GET({ url }) {
             oni: e.oni,
             ura: e.ura
         }
-    })), null, 2));
+    }))), {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 }

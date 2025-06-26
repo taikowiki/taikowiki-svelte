@@ -13,6 +13,8 @@
     import ColorTextPopup from "./popup/ColorTextPopup.svelte";
     import BgColorTextPopup from "./popup/BgColorTextPopup.svelte";
     import { Doc } from "$lib/module/doc/doc.client";
+    import textColorIcon from '$lib/module/doc/assets/icon/text-color.svg';
+    import bgColorIcon from '$lib/module/doc/assets/icon/bg-color.svg';
 
     const {
         insertAnnotation,
@@ -256,6 +258,9 @@
         $theme;
         editorOption.initialValue = mdContent;
     });
+
+    textColorIcon;
+    bgColorIcon;
 </script>
 
 {@html `<style>

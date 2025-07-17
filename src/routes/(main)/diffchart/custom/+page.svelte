@@ -1,85 +1,64 @@
 <script lang="ts">
-    import { page } from "$app/stores";
-    import DiffchartEditor from "$lib/components/common/diffchart/DIffchart-Editor.svelte";
-    import Diffchart from "$lib/components/page/diffchart/Diffchart.svelte";
-    import { Diffchart as D } from "$lib/module/diffchart/index.js";
-    import { getIsMobile } from "$lib/module/layout/isMobile.js";
+    import { page } from "$app/state";
+    import DiffchartView from "$lib/components/page/diffchart/Diffchart.svelte";
+    import Diffchart from "$lib/module/diffchart";
     import { getContext } from "svelte";
+    import DiffchartEditor from "$lib/components/common/diffchart/DiffchartEditor.svelte";
     import type { Writable } from "svelte/store";
+    import { getTheme } from "$lib/module/layout/theme";
+    import PageTitle from "$lib/components/common/PageTitle.svelte";
 
-    let {data} = $props();
-    const { donderData, songs } = data;
-
-    let diffChart: D.Diffchart = $state(getDiffchartFromHash());
-
+    let { data } = $props();
+    let diffchart = $state(getDiffchart());
+    let showEditor = $state(false);
     let downloadImage: (() => Promise<void>) | null = $state(null);
     $effect.pre(() => {
-        (getContext("downloadImage") as Writable<(() => Promise<void>) | null>).set(downloadImage);
-    })
+        (
+            getContext("downloadImage") as Writable<
+                (() => Promise<void>) | null
+            >
+        ).set(downloadImage);
+    });
 
-    const isMobile = getIsMobile();
-    let editorOpened = $state(false);
+    const { songs, donderData } = data;
+    const [theme] = getTheme();
 
-    function getDiffchartFromHash(): D.Diffchart {
-        let hash = $page.url.hash;
-        if (hash.length === 0) {
-            return {
-                name: "custom",
-                color: "white",
-                backgroundColor: "gray",
-                sections: [],
-            };
-        }
-
-        hash = hash.slice(1, hash.length);
-        if (hash.length === 0) {
-            return {
-                name: "custom",
-                color: "white",
-                backgroundColor: "gray",
-                sections: [],
-            };
-        }
+    function getDiffchart() {
+        const hash = page.url.hash.slice(1);
 
         try {
-            const diffchart = D.decodeDiffchart(hash);
-            return diffchart;
+            if (hash) {
+                return Diffchart.decodeDiffchart(hash);
+            } else {
+                return Diffchart.createEmptyDiffchart();
+            }
         } catch {
-            try{
-                const diffchart = JSON.parse(decodeURIComponent(atob(hash)));
-                return diffchart;
-            }
-            catch{
-                return {
-                name: "custom",
-                color: "white",
-                backgroundColor: "gray",
-                sections: [],
-            };
-            }
+            return Diffchart.createEmptyDiffchart();
         }
     }
 </script>
 
-<Diffchart {diffChart} {donderData} {songs} bind:downloadImage />
-
-{#if !$isMobile}
-    <div class="editorContainer">
-        <button class="editorOpened" onclick={() => {editorOpened = !editorOpened}}>
-            {#if editorOpened}
-                에디터 닫기
-            {:else}
-                에디터 열기
-            {/if}
-        </button>
-        {#if editorOpened}
-            <DiffchartEditor bind:diffchart={diffChart} />
-        {/if}
-    </div>
+<PageTitle title={diffchart.title ?? '커스텀 서열표'}/>
+<DiffchartView diffChart={diffchart} {songs} {donderData} bind:downloadImage />
+<div class="margin"></div>
+<button class="standard-btn" data-theme={$theme} onclick={() => showEditor = !showEditor}>
+    {#if showEditor}
+        에디터 닫기
+    {:else}
+        에디터 열기
+    {/if}
+</button>
+{#if showEditor}
+    <DiffchartEditor bind:diffchart {songs} canCopyUrl={true} />
 {/if}
 
 <style>
-    .editorContainer {
-        margin-top: 30px;
+    .margin {
+        margin-top: 20px;
+    }
+
+    button{
+        height: 25px;
+        margin-bottom: 10px;
     }
 </style>

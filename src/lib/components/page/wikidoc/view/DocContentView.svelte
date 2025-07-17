@@ -13,6 +13,8 @@
     import hljsLightStyle from "highlight.js/styles/atom-one-light.min.css?raw";
     import hljsDarkStyle from "highlight.js/styles/atom-one-dark.min.css?raw";
 
+    hljsLightStyle && hljsDarkStyle;
+
     const { docContext } = Doc;
 
     interface Props {

@@ -23,8 +23,8 @@
 </script>
 
 <script lang="ts">
-    import DIffchartEditor from "$lib/components/common/diffchart/DIffchart-Editor.svelte";
     import { Diffchart } from "$lib/module/diffchart";
+    import DiffchartEditor from "../../../common/diffchart/DiffchartEditor.svelte";
     import "$lib/module/diffchart/diffchart.client";
 
     interface Props {
@@ -111,8 +111,8 @@
 {/if}
 {#if opened}
     <tr>
-        <td colspan="3" style="border: 3px solid red;">
-            <DIffchartEditor bind:diffchart={diffchartData.data} mode="admin" />
+        <td colspan="3" style="border: 3px solid red; text-align: unset;">
+            <DiffchartEditor bind:diffchart={diffchartData.data} />
         </td>
     </tr>
 {/if}

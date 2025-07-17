@@ -1,6 +1,7 @@
 <script lang="ts" module>
     const sectionColor: Record<string, string> = {
         'SS': "#B93FEA",
+        'iS+': "#f00eac",
         'pS+': "#f00eac",
         'iS': "#ff0000",
         'pS': "#ff0000",

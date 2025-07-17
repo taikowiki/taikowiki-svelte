@@ -279,6 +279,7 @@ const newKo: I18N.RecursiveStringRecord = {
                 '10 level dfc': '★10 전량 서열표',
                 sections: {
                     'SS': "SS",
+                    'iS+': "지력 S+",
                     'pS+': "개인차 S+",
                     'iS': "지력 S",
                     'pS': "개인차 S",

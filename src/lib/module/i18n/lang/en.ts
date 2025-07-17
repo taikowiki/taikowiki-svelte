@@ -272,6 +272,7 @@ const newEn: I18N.RecursiveStringRecord = {
                 '10 level dfc': '★10 Donderful Combo Difficulty Chart',
                 sections: {
                     'SS': "SS",
+                    'iS+': "Competence S+",
                     'pS+': "Individual S+",
                     'iS': "Competence S",
                     'pS': "Individual S",

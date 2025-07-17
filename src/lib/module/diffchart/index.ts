@@ -1,4 +1,5 @@
 import LZUTF8 from "lzutf8";
+import LZString from 'lz-string';
 import { z } from "zod";
 import { Song } from "../song";
 import type { defineRequestHandler } from "@yowza/rrequestor";
@@ -14,9 +15,7 @@ export namespace Diffchart {
      * @returns 
      */
     export function decodeDiffchart(hash: string) {
-        const stringifiedCompressed = decodeURIComponent(atob(hash));
-        const compressed = Uint8Array.from(JSON.parse(stringifiedCompressed));
-        const stringified = LZUTF8.decompress(compressed);
+        const stringified = LZString.decompressFromEncodedURIComponent(hash);
         const diffchart = JSON.parse(stringified);
         if (Array.isArray(diffchart)) { // tuple 형식
             return detuplify(diffchart as Diffchart.Tuple.DiffchartTuple);
@@ -34,11 +33,18 @@ export namespace Diffchart {
     export function encodeDiffchart(diffchart: Diffchart.Diffchart) {
         const diffchartTuple = tuplify(diffchart);
         const stringified = JSON.stringify(diffchartTuple);
-        const compressed = LZUTF8.compress(stringified, {
-            outputEncoding: "ByteArray",
-        });
-        const stringifiedCompressed = JSON.stringify(Array.from(compressed));
-        return btoa(encodeURIComponent(stringifiedCompressed));
+        const compressed = LZString.compressToEncodedURIComponent(stringified);
+        return compressed;
+    }
+
+    export function createEmptyDiffchart(): Diffchart.Diffchart {
+        const diffchart: Diffchart.Diffchart = {
+            name: 'custom',
+            sections: [],
+            color: 'white',
+            backgroundColor: 'gray'
+        };
+        return diffchart;
     }
 
     /**

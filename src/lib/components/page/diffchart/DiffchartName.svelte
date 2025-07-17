@@ -5,7 +5,7 @@
         backgroundColor?: string;
     }
 
-    let { name, color = "black", backgroundColor = "gray" }: Props = $props();
+    let { name, color = "white", backgroundColor = "gray" }: Props = $props();
 </script>
 
 <div class="name" style={`color:${color};background:${backgroundColor};`}>

@@ -224,6 +224,7 @@ const newJa: I18N.RecursiveStringRecord = {
                 '10 level dfc': '★10 全良難易度表',
                 sections: {
                     'SS': "SS",
+                    'iS+': "地力 S+",
                     'pS+': "個人差 S+",
                     'iS': "地力 S",
                     'pS': "個人差 S",

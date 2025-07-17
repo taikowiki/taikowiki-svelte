@@ -59,6 +59,7 @@
 		"kakao.maps.d.ts": "^0.1.40",
 		"lit": "^3.2.1",
 		"luxon": "^3.5.0",
+		"lz-string": "^1.5.0",
 		"lzutf8": "^0.6.3",
 		"markdown-escape": "^2.0.0",
 		"marked": "^15.0.6",

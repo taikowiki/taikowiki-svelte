@@ -3,6 +3,7 @@ import type { Song } from '../song';
 import showdown from 'showdown';
 import sqlString_ from 'sqlstring';
 import styled from 'styled-svelte5';
+import cssColorMap from './data/cssColorMap.json';
 
 type Difficulty = Song.Difficulty;
 type Genre = Song.Genre;
@@ -119,6 +120,19 @@ export namespace Util {
     }
     export function htmlToMd(html: string) {
         return converter.makeMarkdown(html);
+    }
+
+    export function colorToHex(color: string): string | null {
+        color = color.trim()
+        if (color.startsWith('#')) return color;
+        if (color.startsWith('rgb')){
+            const matched = color.match(/\d+/g);
+            if(!matched) return null;
+            const [r, g, b] = matched.map((e) => Number(e));
+            if(Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return null;
+            return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`
+        }
+        return cssColorMap[color as keyof typeof cssColorMap] ?? null;
     }
 
     /*

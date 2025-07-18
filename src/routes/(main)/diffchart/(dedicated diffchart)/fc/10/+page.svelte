@@ -29,6 +29,7 @@
             section.color = "white";
             section.name = i18n.sections[section.name];
         });
+        replica.color = "black";
 
         return replica;
     }

@@ -2,11 +2,13 @@
     import { page } from "$app/state";
     import DiffchartView from "$lib/components/page/diffchart/Diffchart.svelte";
     import Diffchart from "$lib/module/diffchart";
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
     import DiffchartEditor from "$lib/components/common/diffchart/DiffchartEditor.svelte";
     import type { Writable } from "svelte/store";
     import { getTheme } from "$lib/module/layout/theme";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
+    import { browser } from "$app/environment";
+    import { replaceState } from "$app/navigation";
 
     let { data } = $props();
     let diffchart = $state(getDiffchart());
@@ -20,28 +22,51 @@
         ).set(downloadImage);
     });
 
+    $effect(() => {
+        if (browser && !page.url.hash) {
+            window.localStorage.setItem(
+                "latestEditingDiffchart",
+                JSON.stringify(diffchart),
+            );
+        }
+    });
+
     const { songs, donderData } = data;
     const [theme] = getTheme();
 
-    function getDiffchart() {
+    function getDiffchart(): Diffchart.Diffchart {
         const hash = page.url.hash.slice(1);
 
         try {
+            let diffchart: Diffchart.Diffchart;
             if (hash) {
-                return Diffchart.decodeDiffchart(hash);
+                diffchart = Diffchart.decodeDiffchart(hash);
             } else {
-                return Diffchart.createEmptyDiffchart();
+                const latestEditingDiffchart = window.localStorage.getItem(
+                    "latestEditingDiffchart",
+                );
+                if (latestEditingDiffchart) {
+                    diffchart = JSON.parse(latestEditingDiffchart);
+                } else {
+                    diffchart = Diffchart.createEmptyDiffchart();
+                }
             }
+            Diffchart.Schema.Diffchart.parse(diffchart);
+            return diffchart;
         } catch {
             return Diffchart.createEmptyDiffchart();
         }
     }
 </script>
 
-<PageTitle title={diffchart.title ?? '커스텀 서열표'}/>
+<PageTitle title={diffchart.name && diffchart.name !== "custom" ? diffchart.name : "커스텀 서열표"} />
 <DiffchartView diffChart={diffchart} {songs} {donderData} bind:downloadImage />
 <div class="margin"></div>
-<button class="standard-btn" data-theme={$theme} onclick={() => showEditor = !showEditor}>
+<button
+    class="standard-btn"
+    data-theme={$theme}
+    onclick={() => (showEditor = !showEditor)}
+>
     {#if showEditor}
         에디터 닫기
     {:else}
@@ -57,7 +82,7 @@
         margin-top: 20px;
     }
 
-    button{
+    button {
         height: 25px;
         margin-bottom: 10px;
     }

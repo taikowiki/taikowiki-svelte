@@ -3,6 +3,11 @@ import '$lib/module/user/user.server';
 import { error } from '@sveltejs/kit';
 import lzutf8 from 'lzutf8';
 
+/**
+ * 동더히로바 프로필, 클리어 데이터, 점수 데이터를 받음
+ * @param param0 
+ * @returns 
+ */
 export async function POST({request, locals}){
     if(!locals.userData){
         throw error(403);

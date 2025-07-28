@@ -200,6 +200,13 @@ namespace UserServer {
                 const countResult = await run("SELECT COUNT(*) FROM `user/donder_data` WHERE `UUID` = ?", [UUID]);
                 const count = Object.values(countResult[0])[0];
 
+                // 카드 데이터 북 번호 자릿수 맞추기
+                data.donderData.taikoNumber = `${data.donderData.taikoNumber}`;
+                while(true){
+                    if(data.donderData.taikoNumber.length >= 12) break;
+                    data.donderData.taikoNumber = `0${data.donderData.taikoNumber}`;
+                }
+
                 if (count === 0) { //처음 추가한 경우
                     if ("scoreData" in data) {
                         const measures = await fetchMeasures();

@@ -1,10 +1,6 @@
 <script lang="ts">
     import type { getRating } from "@taiko-wiki/taiko-rating";
-    import type {
-        Crown,
-        DifficultyScoreData,
-        ScoreData,
-    } from "node-hiroba/types";
+    import type { Crown, DifficultyScoreData } from "node-hiroba/types";
     import { Util } from "$lib/module/util";
     import { getI18N, getLang } from "$lib/module/i18n";
     import { Song } from "$lib/module/song";
@@ -17,7 +13,7 @@
         songData: Pick<Song.SongData, "songNo" | "title">;
         isTop50: boolean;
         order: number;
-        isDownload?: boolean;
+        forDownload?: boolean;
     }
 
     let {
@@ -26,7 +22,7 @@
         songData,
         isTop50,
         order,
-        isDownload = false,
+        forDownload = false,
     }: Props = $props();
 
     let opened = $state(false);
@@ -49,29 +45,25 @@
     }
 
     function getCrownImage(crown: Crown) {
-        if (isDownload) {
-            return `/api/hirobaimg/crown/${crown}`;
-        } else {
-            switch (crown) {
-                case "played": {
-                    return "https://donderhiroba.jp/image/sp/640/crown_large_0_640.png";
-                }
-                case "silver": {
-                    return "https://donderhiroba.jp/image/sp/640/crown_large_1_640.png";
-                }
-                case "gold": {
-                    return "https://donderhiroba.jp/image/sp/640/crown_large_2_640.png";
-                }
-                case "donderfull": {
-                    return "https://donderhiroba.jp/image/sp/640/crown_large_3_640.png";
-                }
+        switch (crown) {
+            case "played": {
+                return '/assets/icon/crown/played.png';
+            }
+            case "silver": {
+                return '/assets/icon/crown/clear.png';
+            }
+            case "gold": {
+                return '/assets/icon/crown/fc.png';
+            }
+            case "donderfull": {
+                return '/assets/icon/crown/dfc.png';
             }
         }
     }
 </script>
 
 {#snippet orderView()}
-    <div class="order" data-isDownload={isDownload}>
+    <div class="order" data-forDownload={forDownload}>
         {order}
     </div>
 {/snippet}
@@ -100,7 +92,7 @@
         <div
             class="accuracy"
             title={i18n.accuracy}
-            data-isDownload={isDownload}
+            data-forDownload={forDownload}
         >
             {songRatingData.songRating.accuracy.toFixed(2)}%
         </div>
@@ -109,7 +101,7 @@
         <div
             class="measure"
             title={i18n.measureValue}
-            data-isDownload={isDownload}
+            data-forDownload={forDownload}
         >
             {songRatingData.songRating.measureValue.toFixed(1)}
         </div>
@@ -118,13 +110,13 @@
         <div
             class="rating-value"
             title={i18n.rating}
-            data-isDownload={isDownload}
+            data-forDownload={forDownload}
         >
             {songRatingData.songRating.value}
         </div>
     {/snippet}
     {#snippet hirobaLink()}
-        {#if !isDownload}
+        {#if !forDownload}
             <a
                 class="hiroba"
                 href={`https://donderhiroba.jp/score_detail.php?song_no=${songRatingData.songNo}&level=${getDiffNum(songRatingData.difficulty)}`}
@@ -139,7 +131,7 @@
             <div class="detail-head">
                 <div
                     class="detail-preview"
-                    data-isMobile={isDownload ? false : $isMobile}
+                    data-isMobile={forDownload ? false : $isMobile}
                 >
                     {@render title()}
                     <div class="detail-layer2">
@@ -167,7 +159,7 @@
 <div
     class="song"
     class:top50={isTop50}
-    data-theme={isDownload ? "light" : $theme}
+    data-theme={forDownload ? "light" : $theme}
 >
     {@render orderView()}
     {@render detailView()}
@@ -186,39 +178,7 @@
     {/if}
 {/snippet}
 
-<!--
-<td class="song-title">
-        <a
-            style={`color:${color.difficulty[songRatingData.difficulty]} !important;font-weight: bold;`}
-            href={`/song/${songRatingData.songNo}`}
-        >
-            {songData.title}
-        </a>
-    </td>
-    <td>
-        {songRatingData.songRating.measureValue}
-    </td>
-    <td>
-        {Math.round(songRatingData.songRating.accuracy * 100) / 100}%
-    </td>
-    <td>
-        {songScoreData?.difficulty[songRatingData.difficulty]?.crown}
-    </td>
-    <td>
-        {Math.round(songRatingData.songRating.value)}
-    </td>
-    <td>
-        <a
-            href={`https://donderhiroba.jp/score_detail.php?song_no=${songRatingData.songNo}&level=${getDiffNum(songRatingData.difficulty)}`}
-            target="_blank"
-        >
-            {i18n.link}
-        </a>
-    </td>
--->
-
 <style>
-    /*rgb(142, 142, 142);*/
     .song {
         width: 100%;
 
@@ -333,8 +293,9 @@
         align-items: center;
     }
     .crown {
-        width: 34px;
-        height: 25px;
+        width: 25px;
+        height: auto;
+        margin-inline: 3px;
     }
     .detail-preview[data-isMobile="true"] .detail-layer2 {
         width: 100%;
@@ -358,9 +319,6 @@
         width: 100%;
         border-top: 1px solid black;
     }
-    .song[data-theme="dark"] .detail-body {
-        border-color: rgb(142, 142, 142);
-    }
 
     .hiroba {
         width: min-content;
@@ -380,10 +338,10 @@
         border-color: rgb(142, 142, 142);
     }
 
-    .order[data-isdownload="true"],
-    .accuracy[data-isdownload="true"],
-    .measure[data-isDownload="true"],
-    .rating-value[data-isDownload="true"] {
+    .order[data-forDownload="true"],
+    .accuracy[data-forDownload="true"],
+    .measure[data-forDownload="true"],
+    .rating-value[data-forDownload="true"] {
         color: black;
     }
     /*

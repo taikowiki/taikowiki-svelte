@@ -3,7 +3,7 @@
     import DonderData from "$lib/components/page/rating/me/DonderData.svelte";
     import DonderRating from "$lib/components/page/rating/me/DonderRating.svelte";
     import DonderSection from "$lib/components/page/rating/me/DonderSection.svelte";
-    import SongRatings from "$lib/components/page/rating/me/SongRatings.svelte";
+    import SongRatings from "$lib/components/page/rating/me/SongRatings/SongRatings.svelte";
     import MeasureTable from "$lib/components/page/measures/MeasureTable.svelte";
     import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
@@ -31,55 +31,29 @@
     let newI18n = $derived(getI18N($lang).page.donder);
 </script>
 
-{#snippet donder()}
-    {#if data.ratingDataExists}
-        <div class="rating-container" data-isMobile={$isMobile}>
-            <DonderData donderData={data.donderData} bind:loaded />
-            <DonderRating
-                ratings={data.ratings}
-                tier={data.tier}
-                ranking={data.ranking}
-            />
-        </div>
-    {/if}
-{/snippet}
-{#snippet songRatings()}
-    {#if data.ratingDataExists}
-        <DonderSection
-            bind:opened={opened.songRatings}
-            sectionName={newI18n.section.song}
-        >
-            <SongRatings
-                ratings={data.ratings}
-                songDatas={data.songDatas}
-                donderData={data.donderData}
-            />
-        </DonderSection>
-    {/if}
-{/snippet}
-{#snippet measures()}
-    {#if data.ratingDataExists}
-        <DonderSection
-            bind:opened={opened.measureTable}
-            sectionName={newI18n.section.measure}
-        >
-            <MeasureTable measures={data.measures} songDatas={data.songDatas} />
-        </DonderSection>
-    {/if}
-{/snippet}
-{#snippet guide()}
-    <div class="guide" data-theme={$theme}>
-        {@html i18n.uploadGuide}
-    </div>
-{/snippet}
-
 <div class="container">
     {#if data.ratingDataExists}
         <div class="center">
-            {@render donder()}
+            <div class="rating-container" data-isMobile={$isMobile}>
+                <DonderData donderData={data.donderData} bind:loaded />
+                <DonderRating
+                    ratings={data.ratings}
+                    tier={data.tier}
+                    ranking={data.ranking}
+                />
+            </div>
             {#if loaded}
-                {@render songRatings()}
-                {@render measures()}
+                <SongRatings
+                    songRatingDatas={data.ratings.songRatingDatas}
+                    songDatas={data.songDatas}
+                    scoreData={data.donderData.scoreData}
+                    dataForImage={{
+                        donderData: data.donderData,
+                        tier: data.tier,
+                        ranking: data.ranking,
+                        ratings: data.ratings
+                    }}
+                />
             {:else}
                 <Loading />
             {/if}
@@ -88,6 +62,12 @@
         {@render guide()}
     {/if}
 </div>
+
+{#snippet guide()}
+    <div class="guide" data-theme={$theme}>
+        {@html i18n.uploadGuide}
+    </div>
+{/snippet}
 
 <style>
     .center {

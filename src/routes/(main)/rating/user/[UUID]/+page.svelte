@@ -26,32 +26,7 @@
     let i18n = $derived(getI18N($lang).page.rating.user);
 </script>
 
-{#snippet donderView()}
-    <div class="donder-container" data-isMobile={$isMobile}>
-        <OtherDonderData {donder} bind:loaded />
-        <OtherDonderRating
-            currentRating={data.otherDonderData.currentRating}
-            currentExp={data.otherDonderData.currentExp}
-            {tier}
-        />
-    </div>
-{/snippet}
-{#snippet songRatings()}
-    {#if data.otherDonderData.ratingData && data.otherDonderData.scoreData}
-        <DonderSection
-            bind:opened={songOpened}
-            sectionName={newI18n.section.song}
-        >
-            <OtherSongRatings
-                songDatas={data.songDatas}
-                scoreData={data.otherDonderData.scoreData}
-                ratingData={data.otherDonderData.ratingData}
-            />
-        </DonderSection>
-    {/if}
-{/snippet}
-
-<PageTitle title={donder.nickname ?? donder.taikoNumber ?? '동더'}/>
+<PageTitle title={donder.nickname ?? donder.taikoNumber ?? "동더"} />
 <div class="container">
     {@render donderView()}
     {#if data.otherDonderData.ratingData && data.otherDonderData.scoreData}
@@ -66,6 +41,26 @@
         </div>
     {/if}
 </div>
+
+{#snippet donderView()}
+    <div class="donder-container" data-isMobile={$isMobile}>
+        <OtherDonderData {donder} bind:loaded />
+        <OtherDonderRating
+            currentRating={data.otherDonderData.currentRating}
+            currentExp={data.otherDonderData.currentExp}
+            {tier}
+        />
+    </div>
+{/snippet}
+{#snippet songRatings()}
+    {#if data.otherDonderData.ratingData && data.otherDonderData.scoreData}
+        <OtherSongRatings
+            songDatas={data.songDatas}
+            scoreData={data.otherDonderData.scoreData}
+            songRatingDatas={data.otherDonderData.ratingData}
+        />
+    {/if}
+{/snippet}
 
 <style>
     .container {

@@ -26,10 +26,14 @@
         forDownload = false,
     }: Props = $props();
 
-    let opened = $state(false);
+    const isMobileStore = getIsMobile();
+    let isMobile = $derived(forDownload ? false : $isMobileStore);
 
     const targetTier = User.getTier(songRatingData.songRating.value).tierName;
-    const tierColor = targetTier === "omega" ? 'linear-gradient(45deg, #ffa0fe, #56fbb9, #63abf8)' : User.TIER_COLOR[targetTier];
+    const tierColor =
+        targetTier === "omega"
+            ? "linear-gradient(45deg, #ffa0fe, #56fbb9, #63abf8)"
+            : User.TIER_COLOR[targetTier];
 
     const themeStore = getTheme()[0];
     let theme = $derived(forDownload ? "light" : $themeStore);
@@ -59,39 +63,73 @@
     href={`/song/${songData.songNo}`}
     data-theme={theme}
 >
-    <div class="details" data-theme={theme}>
-        <div class="left">
-            <div class="order">#{order}</div>
-        </div>
-        <div class="right">
-            <div
-                class="rating"
-                class:black={targetTier === "pearl" || targetTier === "omega"}
-                style={`background: ${tierColor};`}
-            >
-                {songRatingData.songRating.value}
-            </div>
-        </div>
-    </div>
-    <div class={`title ${songRatingData.difficulty}`} data-theme={theme}>
+    {@render details1()}
+    <div class={`title ${songRatingData.difficulty}`} data-theme={theme} data-isMobile={isMobile}>
         {songData.title}
     </div>
+    {@render details2()}
+</a>
+
+{#snippet details1()}
     <div class="details" data-theme={theme}>
         <div class="left">
-            <div
-                class="measure"
-                style={`background-color: ${getMeasureColor(songRatingData.songRating.measureValue)};`}
-            >
-                {songRatingData.songRating.measureValue}
-            </div>
+            {#if isMobile}
+                <div class="order">#{order}</div>
+                <div
+                    class="rating"
+                    class:black={targetTier === "pearl" ||
+                        targetTier === "omega"}
+                    style={`background: ${tierColor};`}
+                >
+                    {songRatingData.songRating.value}
+                </div>
+            {:else}
+                <div class="order">#{order}</div>
+            {/if}
         </div>
         <div class="right">
-            <div class={`accuracy ${songDifficultyScoreData.crown}`}>
-                {songRatingData.songRating.accuracy.toFixed(2)}%
-            </div>
+            {#if isMobile}
+                <div
+                    class="measure"
+                    style={`background-color: ${getMeasureColor(songRatingData.songRating.measureValue)};`}
+                >
+                    {songRatingData.songRating.measureValue}
+                </div>
+                <div class={`accuracy ${songDifficultyScoreData.crown}`}>
+                    {songRatingData.songRating.accuracy.toFixed(2)}%
+                </div>
+            {:else}
+                <div
+                    class="rating"
+                    class:black={targetTier === "pearl" ||
+                        targetTier === "omega"}
+                    style={`background: ${tierColor};`}
+                >
+                    {songRatingData.songRating.value}
+                </div>
+            {/if}
         </div>
     </div>
-</a>
+{/snippet}
+{#snippet details2()}
+    <div class="details" data-theme={theme}>
+        {#if !isMobile}
+            <div class="left">
+                <div
+                    class="measure"
+                    style={`background-color: ${getMeasureColor(songRatingData.songRating.measureValue)};`}
+                >
+                    {songRatingData.songRating.measureValue}
+                </div>
+            </div>
+            <div class="right">
+                <div class={`accuracy ${songDifficultyScoreData.crown}`}>
+                    {songRatingData.songRating.accuracy.toFixed(2)}%
+                </div>
+            </div>
+        {/if}
+    </div>
+{/snippet}
 
 <style>
     .song {
@@ -140,6 +178,9 @@
         color: black;
         &[data-theme="dark"] {
             color: white;
+        }
+        &[data-isMobile="true"]{
+            padding-bottom: 10px;
         }
     }
 

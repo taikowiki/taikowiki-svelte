@@ -29,7 +29,7 @@
     let opened = $state(false);
 
     const targetTier = User.getTier(songRatingData.songRating.value).tierName;
-    const tierColor = User.TIER_COLOR[targetTier];
+    const tierColor = targetTier === "omega" ? 'linear-gradient(45deg, #ffa0fe, #56fbb9, #63abf8)' : User.TIER_COLOR[targetTier];
 
     const themeStore = getTheme()[0];
     let theme = $derived(forDownload ? "light" : $themeStore);
@@ -66,7 +66,7 @@
         <div class="right">
             <div
                 class="rating"
-                class:pearl={targetTier === "pearl"}
+                class:black={targetTier === "pearl" || targetTier === "omega"}
                 style={`background: ${tierColor};`}
             >
                 {songRatingData.songRating.value}
@@ -165,7 +165,7 @@
         & .rating {
             height: 20px;
             color: white;
-            &.pearl {
+            &.black {
                 color: black;
             }
         }

@@ -340,7 +340,7 @@ const newKo: I18N.RecursiveStringRecord = {
                 top: '상위'
             },
             section: {
-                song: '곡 레이팅',
+                song: '곡 별 레이팅',
                 measure: '상수표',
                 explanation: '레이팅 설명'
             },
@@ -355,7 +355,7 @@ const newKo: I18N.RecursiveStringRecord = {
                 name: '레이팅 프로필 공개',
                 showRatingNick: '동더히로바 닉네임 공개',
                 showRatingTaikoNo: '동더히로바 북번호 공개',
-                showRatingSongs: '곡 레이팅 공개',
+                showRatingSongs: '곡 별 레이팅 공개',
                 submit: '적용',
                 success: '적용이 완료되었습니다.',
                 error: '오류가 발생했습니다.'
@@ -373,7 +373,7 @@ const newKo: I18N.RecursiveStringRecord = {
                 heading: '상수표'
             },
             user:{
-                nondisclosure: '곡 레이팅은 비공개입니다.'
+                nondisclosure: '곡 별 레이팅은 비공개입니다.'
             }
         }
     }
@@ -485,7 +485,7 @@ const ko: I18N.LangFile = {
         noDonderData: '동더히로바 데이터가 없습니다. 동더히로바 데이터를 업로드해주세요.',
         myDon: '마이동',
         lastUpdate: '마지막 업데이트',
-        songRating: '곡 레이팅',
+        songRating: '곡 별 레이팅',
         songTitle: '곡 제목',
         accuracy: '정확도',
         crown: '왕관',

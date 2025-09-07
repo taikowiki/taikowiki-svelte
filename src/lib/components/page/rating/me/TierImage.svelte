@@ -29,6 +29,9 @@
 
     function getDefaultTransform(tierName: User.RatingTierName) {
         if (tierName === "grandmaster") {
+            return "translate(-1px, -7px)";
+        }
+        if (tierName === "master") {
             return "translate(0px, -7px)";
         }
 

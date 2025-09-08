@@ -60,7 +60,7 @@
 
 <a
     class={`song ${songRatingData.difficulty}`}
-    href={`/song/${songData.songNo}`}
+    href={`/song/${songData.songNo}?diff=${songRatingData.difficulty}`}
     data-theme={theme}
 >
     {@render details1()}

@@ -113,7 +113,9 @@
 {/snippet}
 {#snippet details2()}
     <div class="details" data-theme={theme}>
-        {#if !isMobile}
+        {#if isMobile}
+            <div style="height: 20px;"></div>
+        {:else}
             <div class="left">
                 <div
                     class="measure"

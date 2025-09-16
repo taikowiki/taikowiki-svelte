@@ -21,14 +21,13 @@
         style="display:block;height: 100px;"
         data-ad-client="ca-pub-1629193017650416"
         data-ad-slot="7948632303"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
     ></ins>
 </div>
 
 <style>
     .container{
         width: 100%;
+        margin-top: 5px;
         &.invisible{
             display: none;
         }

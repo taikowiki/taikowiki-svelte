@@ -46,6 +46,7 @@
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
     import { Doc } from '$lib/module/doc/index.js';
+    import PcSideAd from "$lib/components/common/advertisement/PCSideAd.svelte";
 
     const { docContext } = Doc;
 
@@ -207,6 +208,9 @@
                     <AsideBanner banners={data.asideBanners} />
                 {/if}
                 <AsideNewSong newSongs={data.newSongs} />
+                <!-- Ad: PcSide -->
+                <PcSideAd/>
+                <!-- Ad: PCSide -->
             </Aside>
         {/snippet}
     </Main>

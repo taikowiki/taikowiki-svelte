@@ -1,9 +1,13 @@
 <script>
     import AsideItem from "$lib/components/layout/main/AsideItem.svelte";
+    import { Ad } from "$lib/module/ad/ad.client";
     import { onMount } from "svelte";
 
     onMount(() => {
-        (adsbygoogle = window.adsbygoogle || []).push({});
+        (async() => {
+            await Ad.adScriptLoaded.promise;
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        })();
     })
 </script>
 

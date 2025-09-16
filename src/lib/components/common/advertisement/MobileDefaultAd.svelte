@@ -15,7 +15,7 @@
         <div class="container">
             <ins
                 class="adsbygoogle"
-                style="display:block;max-height: 100px;"
+                style="display:block;height: 100px;margin-bottom: 15px;"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="4548497241"
             ></ins>
@@ -26,7 +26,6 @@
 <style>
     .container {
         width: 100%;
-        margin-bottom: 15px;
         margin-left: auto;
         margin-right: auto;
     }

@@ -23,13 +23,6 @@
             }
         })();
     });
-
-    getIsMobile().subscribe(async () => {
-        if (browser) {
-            await Ad.adScriptLoaded.promise;
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        }
-    });
 </script>
 
 <svelte:head>

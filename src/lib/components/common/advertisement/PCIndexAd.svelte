@@ -18,7 +18,7 @@
 <div class="container" class:invisible={$isMobile}>
     <ins
         class="adsbygoogle"
-        style="display:block"
+        style="display:block;height: 100px;"
         data-ad-client="ca-pub-1629193017650416"
         data-ad-slot="7948632303"
         data-ad-format="auto"

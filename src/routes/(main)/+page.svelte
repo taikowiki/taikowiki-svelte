@@ -16,9 +16,9 @@
 <Center>
     <MainSearch />
     <MainShortcut />
+    <MainBanner banners={data.mainBanners} />
+    <MainNotice notices={data.recentNotices} />
     <!-- Ad: Pc Index -->
     <PcIndexAd/>
     <!-- Ad: Pc Index -->
-    <MainBanner banners={data.mainBanners} />
-    <MainNotice notices={data.recentNotices} />
 </Center>

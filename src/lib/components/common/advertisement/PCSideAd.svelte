@@ -7,6 +7,7 @@
         (async() => {
             await Ad.adScriptLoaded.promise;
             (adsbygoogle = window.adsbygoogle || []).push({});
+            console.log(Ad.adScriptLoaded.promise);
         })();
     })
 </script>

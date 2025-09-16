@@ -1,9 +1,9 @@
 <div class="center">
     <h1>
-        Donate
+        Support Us!
     </h1>
     <a href="https://www.buymeacoffee.com/hotsixman05" target="_blank">
-        <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a hotsix&emoji=🥤&slug=hotsixman05&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff" />
+        <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=🥤&slug=hotsixman05&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff" />
     </a>
     <a href="https://open.kakao.com/me/hotsixman" target="_blank">
         <img

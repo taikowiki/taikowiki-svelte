@@ -15,7 +15,7 @@
         <div class="container">
             <ins
                 class="adsbygoogle"
-                style="display:block;height: 100px;margin-bottom: 15px;"
+                style="display:block;height: 60px;margin-bottom: 15px;"
                 data-ad-client="ca-pub-1629193017650416"
                 data-ad-slot="4548497241"
             ></ins>

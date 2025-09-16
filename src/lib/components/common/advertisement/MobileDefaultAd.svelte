@@ -10,7 +10,7 @@
 </script>
 
 <!-- Mobile default -->
-{#if $isMobile && page.url.pathname !== "/"}
+{#if $isMobile && page.url.pathname !== "/" && page.url.pathname !== "/gamecenter"}
     <AdContainer>
         <div class="container">
             <ins

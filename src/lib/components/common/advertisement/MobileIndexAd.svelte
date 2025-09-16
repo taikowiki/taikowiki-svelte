@@ -12,7 +12,7 @@
 {#if $isMobile}
     <AdContainer>
         <div class="container">
-            <div style="width: 100%">
+            <div>
                 <ins
                     class="adsbygoogle"
                     style="display:block"

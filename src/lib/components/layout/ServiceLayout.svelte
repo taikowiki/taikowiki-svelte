@@ -3,6 +3,8 @@
     import VercelInject from "./vercel-inject.svelte";
     import { Ad } from "$lib/module/ad/ad.client";
     import { onMount } from "svelte";
+    import { getIsMobile } from "$lib/module/layout/isMobile";
+    import { browser } from "$app/environment";
 
     onMount(() => {
         (async () => {
@@ -20,6 +22,13 @@
                 }
             }
         })();
+    });
+
+    getIsMobile().subscribe(async () => {
+        if (browser) {
+            await Ad.adScriptLoaded.promise;
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
     });
 </script>
 

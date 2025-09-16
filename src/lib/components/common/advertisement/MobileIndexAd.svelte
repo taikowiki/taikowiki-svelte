@@ -12,14 +12,16 @@
 {#if $isMobile}
     <AdContainer>
         <div class="container">
-            <ins
-                class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-1629193017650416"
-                data-ad-slot="9237717146"
-                data-ad-format="auto"
-                data-full-width-responsive="true"
-            ></ins>
+            <div style="width: 100%">
+                <ins
+                    class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-1629193017650416"
+                    data-ad-slot="9237717146"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"
+                ></ins>
+            </div>
         </div>
     </AdContainer>
 {/if}
@@ -28,7 +30,7 @@
     .container {
         width: 100%;
         margin-top: 15px;
-        display:flex;
+        display: flex;
         justify-items: center;
     }
 </style>

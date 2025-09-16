@@ -14,21 +14,23 @@
     });
 </script>
 
-<!-- PC / -->
-<div class="container" class:invisible={$isMobile}>
+<!-- Mobile index -->
+<div class="container" class:invisible={!($isMobile)}>
     <ins
         class="adsbygoogle"
-        style="display:block;height: 100px;"
+        style="display:block"
         data-ad-client="ca-pub-1629193017650416"
-        data-ad-slot="7948632303"
+        data-ad-slot="9237717146"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
     ></ins>
 </div>
 
 <style>
-    .container{
+    .container {
         width: 100%;
         margin-top: 15px;
-        &.invisible{
+        &.invisible {
             display: none;
         }
     }

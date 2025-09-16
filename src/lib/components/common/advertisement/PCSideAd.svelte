@@ -13,12 +13,8 @@
 
 <!-- PC 사이드 -->
 <AsideItem>
-    <ins
-        class="adsbygoogle"
-        style="display:block;width: 100%;"
-        data-ad-client="ca-pub-1629193017650416"
-        data-ad-slot="5138690037"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-    ></ins>
+    <ins class="adsbygoogle"
+     style="display:inline-block;width:220px;max-height:220px;"
+     data-ad-client="ca-pub-1629193017650416"
+     data-ad-slot="5138690037"></ins>
 </AsideItem>

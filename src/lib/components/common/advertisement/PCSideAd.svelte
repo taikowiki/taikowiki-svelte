@@ -14,7 +14,7 @@
 <!-- PC 사이드 -->
 <AsideItem>
     <ins class="adsbygoogle"
-     style="display:inline-block;width:220px;max-height:220px;"
+     style="display:inline-block;width:220px;height:220px;"
      data-ad-client="ca-pub-1629193017650416"
      data-ad-slot="5138690037"></ins>
 </AsideItem>

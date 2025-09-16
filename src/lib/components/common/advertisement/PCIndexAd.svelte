@@ -24,7 +24,6 @@
 
 <style>
     .container {
-        width: 100%;
         margin-top: 15px;
         margin-left: auto;
         margin-right: auto;

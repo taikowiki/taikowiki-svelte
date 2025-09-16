@@ -47,6 +47,7 @@
     import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
     import { Doc } from '$lib/module/doc/index.js';
     import PcSideAd from "$lib/components/common/advertisement/PCSideAd.svelte";
+    import MobileDefaultAd from "$lib/components/common/advertisement/MobileDefaultAd.svelte";
 
     const { docContext } = Doc;
 
@@ -196,6 +197,9 @@
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
+                <!-- Ad: MobileDefault -->
+                <MobileDefaultAd/>
+                <!-- /Ad: MobileDefault -->
                 {@render children?.()}
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />

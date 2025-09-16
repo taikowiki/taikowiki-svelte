@@ -4,21 +4,20 @@
     import { onMount } from "svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import AdContainer from "./AdContainer.svelte";
+    import { page } from "$app/state";
 
     const isMobile = getIsMobile();
 </script>
 
-<!-- Mobile index -->
-{#if $isMobile}
+<!-- Mobile default -->
+{#if $isMobile && page.url.pathname !== "/"}
     <AdContainer>
         <div class="container">
             <ins
                 class="adsbygoogle"
-                style="display:block"
+                style="display:block;max-height: 100px;"
                 data-ad-client="ca-pub-1629193017650416"
-                data-ad-slot="9237717146"
-                data-ad-format="auto"
-                data-full-width-responsive="true"
+                data-ad-slot="4548497241"
             ></ins>
         </div>
     </AdContainer>
@@ -26,7 +25,7 @@
 
 <style>
     .container {
-        margin-top: 15px;
+        margin-bottom: 15px;
         margin-left: auto;
         margin-right: auto;
     }

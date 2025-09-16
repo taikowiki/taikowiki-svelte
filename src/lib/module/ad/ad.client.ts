@@ -1,8 +1,8 @@
-import { writable } from "svelte/store";
-
 export namespace Ad{
+    let res_: () => void = () => {};
     export const adScriptLoaded = {
-        res: () => {},
-        promise: new Promise<void>((res) => adScriptLoaded.res = res)
+        res: res_,
+        promise: new Promise<void>((res) => res_ = res)
     };
+    adScriptLoaded.res = res_;
 }

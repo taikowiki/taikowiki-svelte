@@ -5,18 +5,22 @@
     import { onMount } from "svelte";
 
     onMount(() => {
-        (async() => {
-            while(true){
-                if(window.adsbygoogle){
-                    Ad.adScriptLoaded.res();
+        (async () => {
+            let triedCount = 0;
+            while (true) {
+                if (triedCount > 20) {
                     break;
                 }
-                else{
-                    await new Promise((res) => setTimeout(res, 500));
+                if (window.adsbygoogle) {
+                    Ad.adScriptLoaded.res();
+                    break;
+                } else {
+                    await new Promise((res) => setTimeout(res, 1000));
+                    triedCount++;
                 }
             }
         })();
-    })
+    });
 </script>
 
 <svelte:head>

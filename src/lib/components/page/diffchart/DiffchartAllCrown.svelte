@@ -13,13 +13,13 @@
     function getCrownImage(type: string) {
         switch (type) {
             case "clearCount": {
-                return "/api/hirobaimg/crown/silver";
+                return "/assets/icon/crown/clear.png";
             }
             case "fcCount": {
-                return "/api/hirobaimg/crown/gold";
+                return "/assets/icon/crown/fc.png";
             }
             case "dfcCount": {
-                return "/api/hirobaimg/crown/donderfull";
+                return "/assets/icon/crown/dfc.png";
             }
             default: {
                 return "";

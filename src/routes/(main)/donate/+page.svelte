@@ -5,6 +5,9 @@
     <a href="https://www.buymeacoffee.com/hotsixman05" target="_blank">
         <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=🥤&slug=hotsixman05&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff" />
     </a>
+    <a href="https://ko-fi.com/hotsixman" target="_blank">
+        <img class="kofi" src="/assets/img/kofi-donate.jpg" />
+    </a>
     <a href="https://open.kakao.com/me/hotsixman" target="_blank">
         <img
             src="/assets/img/kakao_donate.png"
@@ -26,5 +29,9 @@
         align-items: center;
 
         row-gap: 10px;
+    }
+
+    .kofi{
+        max-width: 100%;
     }
 </style>

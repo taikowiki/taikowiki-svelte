@@ -52,7 +52,7 @@
 {/snippet}
 
 <div class="container">
-    <TierImage tierName={tier.tierName} grade={tier.detailTierGrade} {isDownload}/>
+    <TierImage tierName={tier.tierName} grade={tier.detailTierGrade} mode="user" {isDownload}/>
     {@render expAndRating()}
     <GradeProgress
         rating={ratings.rating}

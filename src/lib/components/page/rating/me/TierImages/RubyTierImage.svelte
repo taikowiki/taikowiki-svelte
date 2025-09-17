@@ -43,6 +43,7 @@
     <img
         src="/assets/icon/rating/tier/ruby.svg"
         alt="ruby"
+        bind:this={imgElement}
     />
     <span class:ranking={mode === "ranking"}>
         {grade}

@@ -32,6 +32,7 @@
     }
 
     .kofi{
+        width: 250px;
         max-width: 100%;
     }
 </style>

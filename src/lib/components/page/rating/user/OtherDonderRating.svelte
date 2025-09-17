@@ -23,7 +23,7 @@
 </script>
 
 <div class="container">
-    <TierImage tierName={tier.tierName} grade={tier.detailTierGrade} />
+    <TierImage tierName={tier.tierName} grade={tier.detailTierGrade} mode="user"/>
     <div class="exp-rating-container">
         <div class="exp">
             <span> exp </span>

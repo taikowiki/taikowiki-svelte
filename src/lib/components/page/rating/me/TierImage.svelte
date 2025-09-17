@@ -2,31 +2,27 @@
     import { User } from "$lib/module/user";
     import CssFilterConverter from "css-filter-converter";
     import { onMount } from "svelte";
+    import OmegaTierImage from "./TierImages/OmegaTierImage.svelte";
+    import OtherTierImage from "./TierImages/OtherTierImage.svelte";
+    import SapphireTierImage from "./TierImages/SapphireTierImage.svelte";
+    import RubyTierImage from "./TierImages/RubyTierImage.svelte";
+    import MasterTierImage from "./TierImages/MasterTierImage.svelte";
+    import GrandmasterTierImage from "./TierImages/GrandmasterTierImage.svelte";
 
-    interface Props {
-        tierName: User.RatingTierName;
-        grade: number | null;
-        width?: string;
-        height?: string;
-        fontSize?: string;
-        transform?: string;
+    interface Props<T extends User.RatingTierName = User.RatingTierName> {
+        tierName: T;
+        grade: T extends "pearl" | "omega" | "grandmaster" | "master" ? null : number;
+        mode: "user" | "ranking";
         isDownload?: boolean;
     }
 
     let {
         tierName,
         grade,
-        width = "180px",
-        height = "180px",
-        fontSize = "120px",
-        transform,
+        mode,
         isDownload = false,
     }: Props = $props();
-
-    if (!transform) {
-        transform = getDefaultTransform(tierName);
-    }
-
+    
     function getDefaultTransform(tierName: User.RatingTierName) {
         if (tierName === "grandmaster") {
             return "translate(-1px, -7px)";
@@ -37,130 +33,20 @@
 
         return "translate(3px, -7px)";
     }
-
-    let imgElement: HTMLImageElement | null = $state(null);
-    async function generateFilteredImg() {
-        if (!imgElement) return;
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        const widthNumber = parseFloat(width.replace("px", ""));
-        const heightNumber = parseFloat(height.replace("px", ""));
-
-        [canvas.width, canvas.height] = [widthNumber, heightNumber];
-
-        const img = new Image();
-        img.src = "/assets/icon/rating/tier/plate.avif";
-
-        await new Promise((res, rej) => {
-            img.onload = res;
-            img.onerror = rej;
-        });
-
-        const filter = CssFilterConverter.hexToFilter(
-            User.TIER_COLOR[tierName as Exclude<User.RatingTierName, "omega">],
-        ).color;
-        if (filter) {
-            ctx.filter = filter;
-        }
-        ctx.drawImage(img, 0, 0, widthNumber, heightNumber);
-
-        if (isDownload) {
-            imgElement.src = canvas.toDataURL();
-        }
-        canvas.remove();
-    }
-    onMount(() => {
-        generateFilteredImg();
-    });
 </script>
 
 {#if tierName === "omega"}
-    <div
-        class="tier-image omega"
-        style={`width:${width};height:${height};`}
-    ></div>
-{:else if tierName === "pearl"}
-    <div class="tier-image pearl" style={`width:${width};height:${height};`}>
-        <img
-            src="/assets/icon/rating/tier/plate.png"
-            style={`filter:${CssFilterConverter.hexToFilter(User.TIER_COLOR[tierName]).color};width:${width};height:${height};`}
-            alt="pearl"
-            bind:this={imgElement}
-        />
-        <span style={`font-size:${fontSize};transform:${transform};`}> P </span>
-    </div>
+    <OmegaTierImage {mode} {isDownload}/>
 {:else if tierName === "grandmaster"}
-    <div class="tier-image" style={`width:${width};height:${height};`}>
-        <img
-            src="/assets/icon/rating/tier/plate.png"
-            style={`filter:${CssFilterConverter.hexToFilter(User.TIER_COLOR[tierName]).color};width:${width};height:${height};`}
-            alt="grandmaster"
-            bind:this={imgElement}
-        />
-        <span style={`font-size:${fontSize};transform:${transform};`}> G </span>
-    </div>
+    <GrandmasterTierImage {mode}/>
 {:else if tierName === "master"}
-    <div class="tier-image" style={`width:${width};height:${height};`}>
-        <img
-            src="/assets/icon/rating/tier/plate.png"
-            style={`filter:${CssFilterConverter.hexToFilter(User.TIER_COLOR[tierName]).color};width:${width};height:${height};`}
-            alt="master"
-            bind:this={imgElement}
-        />
-        <span style={`font-size:${fontSize};transform:${transform};`}> M </span>
-    </div>
+    <MasterTierImage {mode}/>
+{:else if tierName === "sapphire"}
+    <SapphireTierImage grade={grade as number} {mode} {isDownload}/>
+{:else if tierName === "ruby"}
+    <RubyTierImage grade={grade as number} {mode} {isDownload}/>
+{:else if tierName === "pearl"}
+    <OtherTierImage {tierName} grade="P" {mode} {isDownload}/>
 {:else}
-    <div class="tier-image" style={`width:${width};height:${height};`}>
-        <img
-            src="/assets/icon/rating/tier/plate.png"
-            style={`filter:${CssFilterConverter.hexToFilter(User.TIER_COLOR[tierName]).color};width:${width};height:${height};`}
-            alt={tierName}
-            bind:this={imgElement}
-        />
-        <span style={`font-size:${fontSize};transform:${transform};`}>
-            {grade}
-        </span>
-    </div>
+    <OtherTierImage {tierName} grade={grade as number} {mode} {isDownload}/>
 {/if}
-
-<style>
-    .tier-image {
-        width: 180px;
-        height: 180px;
-        max-width: 100%;
-
-        position: relative;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        color: white;
-    }
-    .tier-image.pearl {
-        color: black;
-    }
-
-    img {
-        width: 100%;
-        height: auto;
-        position: absolute;
-        z-index: 0;
-    }
-
-    span {
-        z-index: 1;
-        font-size: 120px;
-        font-weight: bold;
-        transform: translate(2px, -7px);
-    }
-
-    .omega {
-        background-image: url("/assets/icon/rating/tier/omega.avif");
-        background-position: center center;
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-    }
-</style>

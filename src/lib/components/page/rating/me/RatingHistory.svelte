@@ -24,6 +24,7 @@
 
     function removeDuplicatedHistory(ratingHistory: Props["ratingHistory"]) {
         if (ratingHistory.length === 0) return [];
+        if (ratingHistory.length === 1) return [ratingHistory[0]];
         const refined: Props["ratingHistory"] = [ratingHistory[0]];
 
         let lastData = ratingHistory[0];
@@ -61,7 +62,9 @@
 
     function getPointHeight(rating: number) {
         const ratio = maxRating
-            ? (rating - minRating) / (maxRating - minRating)
+            ? ratingHistory.length === 1
+                ? 0.5
+                : (rating - minRating) / (maxRating - minRating)
             : 0;
         return (1 - ratio) * svgHeight + svgBlockPadding;
     }

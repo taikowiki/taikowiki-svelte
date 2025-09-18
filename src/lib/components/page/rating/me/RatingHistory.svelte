@@ -185,7 +185,7 @@
         position: absolute;
         transform: translateX(calc(-100% - 10px));
         display: none;
-        background-color: white;
+        color:white;
         padding-bottom: 5px;
         border-radius: 5px;
 

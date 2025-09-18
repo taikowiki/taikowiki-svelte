@@ -242,7 +242,7 @@ namespace UserServer {
                                     clearData: JSON.stringify(mergedClearData),
                                     scoreData: JSON.stringify(mergedScoreData),
                                     currentRating: currentRating.rating,
-                                    currentExt: currentRating.exp,
+                                    currentExp: currentRating.exp,
                                     ratingHistory: QB.Raw(`JSON_ARRAY_APPEND(\`ratingHistory\`, '$', JSON_ARRAY(${Date.now()}, ${currentRating.rating}))`),
                                     expHistory: QB.Raw(`JSON_ARRAY_APPEND(\`expHistory\`, '$', JSON_ARRAY(${Date.now()}, ${currentRating.exp}))`),
                                     ratingData: JSON.stringify(currentRating.songRatingDatas),

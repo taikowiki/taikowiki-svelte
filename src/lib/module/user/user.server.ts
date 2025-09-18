@@ -1,11 +1,11 @@
 import { fetchMeasures, getRating } from "@taiko-wiki/taiko-rating";
 import { escapeId } from 'mysql2';
-import { defineDBHandler, queryBuilder, Select, Where } from "@yowza/db-handler";
+import { defineDBHandler, QB, queryBuilder, Select, Where } from "@yowza/db-handler";
 import type { Badge, CardData, Clear, Crown, Difficulty } from "node-hiroba/types";
 import { createCipheriv, createHash, randomBytes, randomUUID } from 'node:crypto';
 import { getSongRating } from "@taiko-wiki/taiko-rating";
 import type { Measure } from "@taiko-wiki/taiko-rating/types";
-import { User } from ".";import { Util } from "../util";
+import { User } from "."; import { Util } from "../util";
 import { error } from "node:console";
 ;
 
@@ -202,8 +202,8 @@ namespace UserServer {
 
                 // 카드 데이터 북 번호 자릿수 맞추기
                 data.donderData.taikoNumber = `${data.donderData.taikoNumber}`;
-                while(true){
-                    if(data.donderData.taikoNumber.length >= 12) break;
+                while (true) {
+                    if (data.donderData.taikoNumber.length >= 12) break;
                     data.donderData.taikoNumber = `0${data.donderData.taikoNumber}`;
                 }
 
@@ -236,10 +236,28 @@ namespace UserServer {
                             );
                         }
                         else {
+                            const sql = queryBuilder
+                                .update('user/donder_data', {
+                                    donder: JSON.stringify(data.donderData),
+                                    clearData: JSON.stringify(mergedClearData),
+                                    scoreData: JSON.stringify(mergedScoreData),
+                                    currentRating: currentRating.rating,
+                                    currentExt: currentRating.exp,
+                                    ratingHistory: QB.Raw(`JSON_ARRAY_APPEND(\`ratingHistory\`, '$', JSON_ARRAY(${Date.now()}, ${currentRating.rating}))`),
+                                    expHistory: QB.Raw(`JSON_ARRAY_APPEND(\`expHistory\`, '$', JSON_ARRAY(${Date.now()}, ${currentRating.exp}))`),
+                                    ratingData: JSON.stringify(currentRating.songRatingDatas),
+                                    lastUpdate: QB.Raw(`CURRENT_TIMESTAMP()`),
+                                    lastRatingCalculate: QB.Raw(`CURRENT_TIMESTAMP()`)
+                                })
+                                .where(Where.Compare('UUID', '=', UUID))
+                                .build();
+                            /*
                             await run(
                                 "UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ?, `currentExp` = ?, `ratingHistory` = JSON_ARRAY_APPEND(`ratingHistory`, '$', ?), `expHistory` = JSON_ARRAY_APPEND(`expHistory`, '$', ?), `ratingData` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `lastRatingCalculate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?",
                                 [JSON.stringify(data.donderData), JSON.stringify(mergedClearData), JSON.stringify(mergedScoreData), currentRating.rating, currentRating.exp, formerData.currentRating, formerData.currentExp, JSON.stringify(currentRating.songRatingDatas), UUID]
                             );
+                            */
+                            await run(sql);
                         }
                     }
                     else {
@@ -366,7 +384,7 @@ namespace UserServer {
 
     export const apiKeyDBController = {
         generateKey: defineDBHandler<[UUID: string], string>((UUID) => {
-            return async(run) => {
+            return async (run) => {
                 await run(queryBuilder.delete('user/api_key').where(Where.Compare('UUID', '=', UUID)).build());
 
                 const key = Util.pipe(randomBytes(32).toString('hex'), [
@@ -377,7 +395,7 @@ namespace UserServer {
                     }
                 ])
 
-                await run(queryBuilder.insert('user/api_key').set({UUID, key}).build());
+                await run(queryBuilder.insert('user/api_key').set({ UUID, key }).build());
 
                 return key;
             }
@@ -385,13 +403,13 @@ namespace UserServer {
         checkKey: defineDBHandler<[key: string], string | null>((key) => {
             const query =
                 queryBuilder.select('user/api_key')
-                .where(
-                    Where.Compare('key', '=', key)
-                )
-                .build();
-            return async(run) => {
+                    .where(
+                        Where.Compare('key', '=', key)
+                    )
+                    .build();
+            return async (run) => {
                 const result = await run(query);
-                if(result?.[0]?.UUID){
+                if (result?.[0]?.UUID) {
                     return result[0].UUID;
                 }
                 return null;
@@ -407,8 +425,8 @@ function parseDonderData(data: any) {
     data.donder &&= JSON.parse(data.donder);
     data.clearData &&= JSON.parse(data.clearData);
     data.scoreData &&= data.scoreData === null ? null : JSON.parse(data.scoreData);
-    data.ratingHistory &&= JSON.parse(data.ratingHistory);
-    data.expHistory &&= JSON.parse(data.expHistory);
+    data.ratingHistory &&= JSON.parse(data.ratingHistory).map(([time, rating]: [number, number]) => [new Date(time), rating]);
+    data.expHistory &&= JSON.parse(data.expHistory).map(([time, rating]: [number, number]) => [new Date(time), rating]);
     data.ratingData &&= JSON.parse(data.ratingData);
 }
 

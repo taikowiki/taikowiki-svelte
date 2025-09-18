@@ -2,12 +2,11 @@
     import Loading from "$lib/components/common/Loading.svelte";
     import DonderData from "$lib/components/page/rating/me/DonderData.svelte";
     import DonderRating from "$lib/components/page/rating/me/DonderRating.svelte";
-    import DonderSection from "$lib/components/page/rating/me/DonderSection.svelte";
     import SongRatings from "$lib/components/page/rating/me/SongRatings/SongRatings.svelte";
-    import MeasureTable from "$lib/components/page/measures/MeasureTable.svelte";
     import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
+    import RatingHistory from "$lib/components/page/rating/me/RatingHistory.svelte";
 
     let { data } = $props();
 
@@ -51,8 +50,11 @@
                         donderData: data.donderData,
                         tier: data.tier,
                         ranking: data.ranking,
-                        ratings: data.ratings
+                        ratings: data.ratings,
                     }}
+                />
+                <RatingHistory
+                    ratingHistory={data.donderData.ratingHistory}
                 />
             {:else}
                 <Loading />

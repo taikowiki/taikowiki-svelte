@@ -209,8 +209,8 @@ export namespace User {
         scoreData: ScoreData | null;
         currentRating: number | null;
         currentExp: number | null;
-        ratingHistory: number[];
-        expHistory: number[];
+        ratingHistory: [Date, number][];
+        expHistory: [Date, number][];
         lastUpdate: Date;
         ratingData: ReturnType<typeof getRating>['songRatingDatas'] | null;
         lastRatingCalculate: Date | null;

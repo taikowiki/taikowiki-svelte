@@ -9,7 +9,7 @@
 
     let { ratingHistory: rawRatingHistory }: Props = $props();
 
-    let ratingHistory = $derived(removeDuplicatedHistory(rawRatingHistory));
+    let ratingHistory: Props["ratingHistory"] = $derived(removeDuplicatedHistory(rawRatingHistory));
     let [minRating, maxRating] = $derived(getMinMaxRating(ratingHistory));
     let pointXDistance = 50;
     let svgWidth = $derived((ratingHistory.length + 1) * pointXDistance);
@@ -100,55 +100,65 @@
 
 {#if ratingHistory.length}
     <h2>히스토리</h2>
-    <div class="container" bind:this={container}>
-        <div class="content">
-            <svg width={svgWidth} height={svgHeight + svgBlockPadding * 2}>
-                {#each ratingHistory as historyElement, i}
-                    {#if i !== ratingHistory.length - 1}
-                        <line
-                            x1={(i + 0.5) * pointXDistance}
-                            x2={(i + 1.5) * pointXDistance}
-                            y1={getPointHeight(ratingHistory[i][1])}
-                            y2={getPointHeight(ratingHistory[i + 1][1])}
-                            stroke={getRatingColor(historyElement[1])}
-                            stroke-width="3"
+    <div class="big-container">
+        <div class="y-axis">
+            <div class="y-axis-max" style={`color: ${getRatingColor(maxRating)};`}>
+                {maxRating}
+            </div>
+            <div class="y-axis-min" style={`color: ${getRatingColor(minRating)};`}>
+                {minRating}
+            </div>
+        </div>
+        <div class="container" bind:this={container}>
+            <div class="content">
+                <svg width={svgWidth} height={svgHeight + svgBlockPadding * 2}>
+                    {#each ratingHistory as historyElement, i}
+                        {#if i !== ratingHistory.length - 1}
+                            <line
+                                x1={(i + 0.5) * pointXDistance}
+                                x2={(i + 1.5) * pointXDistance}
+                                y1={getPointHeight(ratingHistory[i][1])}
+                                y2={getPointHeight(ratingHistory[i + 1][1])}
+                                stroke={getRatingColor(historyElement[1])}
+                                stroke-width="3"
+                            />
+                        {/if}
+                        <circle
+                            cx={(i + 0.5) * pointXDistance}
+                            cy={getPointHeight(ratingHistory[i][1])}
+                            r={svgPointRadius}
+                            fill={getRatingColor(historyElement[1])}
+                            onmouseenter={() => {
+                                showFloating(i);
+                            }}
+                            onmouseleave={() => {
+                                hideFloating(i);
+                            }}
+                            role="presentation"
                         />
-                    {/if}
-                    <circle
-                        cx={(i + 0.5) * pointXDistance}
-                        cy={getPointHeight(ratingHistory[i][1])}
-                        r={svgPointRadius}
-                        fill={getRatingColor(historyElement[1])}
-                        onmouseenter={() => {
-                            showFloating(i);
-                        }}
-                        onmouseleave={() => {
-                            hideFloating(i);
-                        }}
-                        role="presentation"
-                    />
+                    {/each}
+                </svg>
+                {#each ratingHistory as historyElement, i}
+                    <div
+                        class="floating"
+                        style={`left:${getFloatingLeft(i)}px;top:${getPointHeight(ratingHistory[i][1])}px;background-color:${getRatingColor(historyElement[1])};`}
+                        class:omega={User.getTier(historyElement[1])
+                            .tierName === "omega"}
+                        id={`floating-${i}`}
+                    >
+                        <div class="rating">
+                            {historyElement[1]}
+                        </div>
+                        <div class="date">
+                            {historyElement[0].getTime()
+                                ? DateTime.fromJSDate(
+                                      historyElement[0],
+                                  ).toFormat("yyyy-MM-dd HH:mm:ss")
+                                : "???"}
+                        </div>
+                    </div>
                 {/each}
-            </svg>
-            {#each ratingHistory as historyElement, i}
-                <div
-                    class="floating"
-                    style={`left:${getFloatingLeft(i)}px;top:${getPointHeight(ratingHistory[i][1])}px;background-color:${getRatingColor(historyElement[1])};`}
-                    class:omega={User.getTier(historyElement[1]).tierName ===
-                        "omega"}
-                    id={`floating-${i}`}
-                >
-                    <div class="rating">
-                        {historyElement[1]}
-                    </div>
-                    <div class="date">
-                        {historyElement[0].getTime()
-                            ? DateTime.fromJSDate(historyElement[0]).toFormat(
-                                  "yyyy-MM-dd HH:mm:ss",
-                              )
-                            : "???"}
-                    </div>
-                </div>
-            {/each}
+            </div>
         </div>
     </div>
 {/if}
@@ -159,10 +169,33 @@
         margin-bottom: 0;
     }
 
-    .container {
+    .big-container{
         width: 100%;
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .y-axis{
+        width: 50px;
+        height: 330px;
+        margin-bottom: 10px;
+
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        font-weight: bold;
+    }
+
+    .container {
+        width: calc(100% - 50px);
+        height: 365px;
         overflow-x: auto;
         text-align: center;
+
+        box-sizing: border-box;
     }
 
     .content {
@@ -185,7 +218,7 @@
         position: absolute;
         transform: translateX(calc(-100% - 10px));
         display: none;
-        color:white;
+        color: white;
         padding-bottom: 5px;
         border-radius: 5px;
 

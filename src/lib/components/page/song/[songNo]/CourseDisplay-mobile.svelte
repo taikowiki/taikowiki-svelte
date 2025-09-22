@@ -148,11 +148,11 @@
                     {#if daniOpened}
                         <div class="dani">
                             {#each course.dani as dani}
-                                <span>
+                                <a href={`/dani/${dani.version}#${dani.dan}`}>
                                     {daniI18n.version[dani.version]}
                                     {daniI18n.dan[dani.dan]}
                                     {dani.order}{i18n.nthSong}
-                                </span>
+                                </a>
                             {/each}
                         </div>
                     {/if}
@@ -264,7 +264,7 @@
         align-items: center;
         flex-direction: column;
     }
-    .dani > span {
+    .dani > a {
         transform: translateY(-1px);
     }
 </style>

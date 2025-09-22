@@ -54,6 +54,7 @@
     class="container"
     data-isMobile={$isMobile}
     style={`background-color:${getBackgroundColor(dani.dan, $theme)};`}
+    id={`dani-${dani.dan}`}
 >
     <DaniHead bind:opened {dani} />
     {#if opened || !$isMobile}

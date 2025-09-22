@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import DaniDisplay from "$lib/components/page/dani/DaniDisplay.svelte";
     import { getI18N, getLang } from "$lib/module/i18n";
     import { Song } from "$lib/module/song";
+    import { onMount } from "svelte";
 
     const { DAN } = Song.CONST;
 
@@ -18,10 +19,17 @@
     daniData.data.sort((a, b) => {
         return DAN.indexOf(a.dan) - DAN.indexOf(b.dan);
     });
+
+    onMount(() => {
+        if(page.url.hash && page.url.hash !== "#"){
+            console.log(document.getElementById(`dani-${page.url.hash.slice(1)}`));
+            document.getElementById(`dani-${page.url.hash.slice(1)}`)?.scrollIntoView();
+        }
+    })
 </script>
 
 <PageTitle
-    title={versionI18n[$page.url.pathname.split("/")[2]] + " " + titleI18n}
+    title={versionI18n[page.url.pathname.split("/")[2]] + " " + titleI18n}
 />
 
 <div class="container">

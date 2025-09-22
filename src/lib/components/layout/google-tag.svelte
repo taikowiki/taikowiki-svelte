@@ -1,9 +1,9 @@
 <script>
     import { browser } from "$app/environment";
     import { afterNavigate } from "$app/navigation";
-    import { page } from "$app/stores";
-    
-    afterNavigate(() => {
+    import { onMount } from "svelte";
+
+    onMount(() => {
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
@@ -15,14 +15,13 @@
             f.parentNode.insertBefore(j, f);
         })(window, document, "script", "dataLayer", "GTM-PPRX86P3");
     });
-    $: {
-        if (browser && typeof gtag !== "undefined") {
-            gtag("config", "G-S8TRY8QPYG", {
-                page_title: document.title,
-                page_path: $page.url.pathname,
-            });
-        }
-    }
+
+    afterNavigate((nav) => {
+        gtag("config", "G-S8TRY8QPYG", {
+            page_title: document.title,
+            page_path: nav.to.url.pathname,
+        });
+    });
 </script>
 
 <svelte:head>

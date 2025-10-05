@@ -160,6 +160,7 @@ export namespace User {
             setLang: ReturnType<typeof defineDBHandler<[string, string], void>>;
             getLang: ReturnType<typeof defineDBHandler<[string], string | null>>;
             setShowRating: ReturnType<typeof defineDBHandler<[string, Partial<Record<'nickname' | 'taikoNumber' | 'songs', boolean>>], void>>;
+            doesUUIDExists: ReturnType<typeof defineDBHandler<[UUID: string], boolean>>
         };
 
         const donderDBController: {

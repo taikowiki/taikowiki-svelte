@@ -1,19 +1,17 @@
 /*btn*/
-.standard-btn {
-    border: 1px solid #cf4844;
+button.standard {
+    background-color: #cf4844;
+    border: 1px solid gray;
     outline: 0;
-    color: black;
+    color: white;
 
     border-radius: 5px;
-
-    height: 22px;
-
     cursor: pointer;
-}
 
-.standard-btn[data-theme="dark"] {
+    padding: 4px 8px 5px 8px;
+}
+button.standard[data-theme="dark"] {
     background-color: black;
-    color: white;
 
     box-sizing: border-box;
     border-color: rgb(145, 145, 145);

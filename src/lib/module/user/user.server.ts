@@ -187,6 +187,13 @@ namespace UserServer {
                     await run("UPDATE `user/data` SET " + setQuery.join(',') + " WHERE `UUID` = ?", [UUID]);
                 }
             }
+        }),
+        doesUUIDExists: defineDBHandler<[UUID: string], boolean>((UUID) => {
+            return async(run) => {
+                const result = await run("SELECT COUNT(*) AS `count` FROM `user/data` WHERE `UUID` = ?", [UUID]);
+                if(result?.[0]?.count) return true;
+                return false;
+            }
         })
     }
 

@@ -7,7 +7,7 @@
     const redirectUri = $page.url.searchParams.toString();
 
     const lang = getLang();
-    $: i18n = getI18N('other', $lang).title['/auth/login']
+    let i18n = $derived(getI18N('other', $lang).title['/auth/login']);
 </script>
 
 <PageTitle title={i18n}/>

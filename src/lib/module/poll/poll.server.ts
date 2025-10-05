@@ -138,6 +138,43 @@ namespace PollServer {
             }
         }),
         /**
+         * 닫힌 설문을 가져옴
+         */
+        getClosedPolls: defineDBHandler<[page: number], {datas: Poll.Data[], length: number}>((page) => {
+            return async (run) => {
+                const dataRows: Poll.DBDataRow[] = await run(
+                    queryBuilder.select('poll/data')
+                        .where(
+                            Where.Compare('until', '<=', Where.Raw('CURRENT_TIMESTAMP()'))
+                        )
+                        .orderby('id', 'desc')
+                        .limit(page - 1, 20).build()
+                );
+
+                if (dataRows.length === 0) return {datas: [], length: 0};
+
+                const datas: Poll.Data[] = [];
+                for (const dataRow of dataRows) {
+                    const data: Poll.Data = {
+                        id: dataRow.id,
+                        sections: [],
+                        until: dataRow.until
+                    };
+                    await completeData(data, run);
+                    datas.push(data);
+                }
+
+                const length: number = await run(
+                    queryBuilder.select('poll/data', [Select.As(Select.Count(), 'count')])
+                        .where(
+                            Where.Compare('until', '<=', Where.Raw('CURRENT_TIMESTAMP()'))
+                        ).build()
+                ).then((v) => v[0].count);
+
+                return { datas, length };
+            }
+        }),
+        /**
          * 설문을 삭제
          */
         deletePoll: defineDBHandler<[id: number], boolean>((id) => {

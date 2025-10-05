@@ -1,8 +1,7 @@
 <script lang="ts">
-    import OpenedPollList from "$lib/components/page/poll/OpenedPollList.svelte";
-    import { DateTime } from "luxon";
+    import PollList from "$lib/components/page/poll/PollList.svelte";
 
     let { data } = $props();
 </script>
 
-<OpenedPollList polls={data.openedPolls} answers={data.answers} />
+<PollList polls={data.openedPolls} answers={data.answers} />

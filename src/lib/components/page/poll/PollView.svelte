@@ -7,37 +7,23 @@
     interface Props {
         poll: Poll.Data;
         answer?: Poll.Answer;
+        closed?: boolean;
     }
 
-    let { poll, answer }: Props = $props();
+    let { poll, answer, closed }: Props = $props();
 
-    let newAnswers = $state<string[]>(
-        answer
-            ? structuredClone(answer.answers)
-            : new Array(poll.sections.length).fill(""),
-    );
-    let answerCandidates = $state(createAnswerCandidates());
+    let answers = $state(createNewAnswers());
+    let radioValue = $state<(string | null)[]>(createRadioValue());
+    let freeAnswers = $state<string[]>(createfreeAnswers());
     $effect(() => {
-        for (const index in answerCandidates) {
-            if (answerCandidates[index] !== null) {
-                newAnswers[Number(index)] = answerCandidates[index];
+        for (const i in radioValue) {
+            if (radioValue[i] === null) {
+                answers[i] = freeAnswers[i];
+            } else {
+                answers[i] = radioValue[i];
             }
         }
     });
-    let freeTextarea = $state<Record<number, HTMLTextAreaElement>>({});
-    $effect(() => {
-        for (const index in answerCandidates) {
-            if (answerCandidates[index] === null) {
-                setNewAnswerFromFreeTextarea(Number(index));
-            }
-        }
-    });
-    /** `기타` 선택지의 textarea의 값을 newAnswers에 설정 */
-    function setNewAnswerFromFreeTextarea(index: number) {
-        const textarea = freeTextarea[index];
-        if (!textarea) return;
-        newAnswers[index] = textarea.value;
-    }
     let submitted = $state(Boolean(answer));
 
     const timezone = Layout.getTimezone();
@@ -46,11 +32,12 @@
     }).toFormat("yyyy-MM-dd");
     const [theme] = getTheme();
 
+    // 제출
     async function submit() {
         const response = await Poll.Client.request.submit(
             {
                 dataId: poll.id,
-                answers: newAnswers,
+                answers: $state.snapshot(answers),
             },
             Boolean(answer),
         );
@@ -71,22 +58,58 @@
         }
     }
 
-    function createAnswerCandidates() {
-        const arr: (string | null)[] = structuredClone(answer?.answers ?? []);
-        for (const index in poll.sections) {
-            if (!arr[index]) continue;
-            const section = poll.sections[index];
-            if ("options" in section) {
-                let radioSelected = false;
-                for (const option of section.options) {
-                    if (arr[index] === option) {
-                        radioSelected = true;
-                        break;
-                    }
+    function createNewAnswers() {
+        if (answer) {
+            return answer.answers;
+        }
+        const arr: string[] = [];
+        for (let i = 0; i < poll.sections.length; i++) {
+            arr[i] = "";
+        }
+        return arr;
+    }
+
+    function createRadioValue(){
+        const arr: (string | null)[] = [];
+        if (answer) {
+            for (let index in answer.answers) {
+                const section = poll.sections[index];
+                if (
+                    section &&
+                    "options" in section &&
+                    !section.options.includes(answer.answers[index])
+                ) {
+                    arr.push(null);
+                } else {
+                    arr.push(answer.answers[index]);
                 }
-                if (!radioSelected) {
-                    arr[index] = null;
+            }
+        } else {
+            for (let i = 0; i < poll.sections.length; i++) {
+                arr.push("");
+            }
+        }
+        return arr;
+    }
+
+    function createfreeAnswers() {
+        const arr: string[] = [];
+        if (answer) {
+            for (let index in answer.answers) {
+                const section = poll.sections[index];
+                if (
+                    section &&
+                    "options" in section &&
+                    !section.options.includes(answer.answers[index])
+                ) {
+                    arr.push(answer.answers[index]);
+                } else {
+                    arr.push("");
                 }
+            }
+        } else {
+            for (let i = 0; i < poll.sections.length; i++) {
+                arr[i] = "";
             }
         }
         return arr;
@@ -98,7 +121,9 @@
         {@render sectionView(section, index)}
     {/each}
     <div class="footer">
-        {#if submitted}
+        {#if closed}
+            <div style="height: 27px;">마감</div>
+        {:else if submitted}
             <div style="height: 27px;">제출 완료</div>
             <button
                 class="standard"
@@ -128,7 +153,7 @@
                 <label>
                     <input
                         type="radio"
-                        bind:group={answerCandidates[index]}
+                        bind:group={radioValue[index]}
                         value={option}
                         onclick={(event) => submitted && event.preventDefault()}
                     />
@@ -139,7 +164,7 @@
                 <label>
                     <input
                         type="radio"
-                        bind:group={answerCandidates[index]}
+                        bind:group={radioValue[index]}
                         value={null}
                         onclick={(event) => submitted && event.preventDefault()}
                     />
@@ -150,21 +175,17 @@
                     onchange={(event) => {
                         if (!(event.target instanceof HTMLTextAreaElement))
                             return;
-                        if (answerCandidates[index] !== null) return;
-                        setNewAnswerFromFreeTextarea(index);
+                        if (radioValue[index] !== null) return;
+                        answers[index] = event.target.value;
                     }}
-                    disabled={submitted || answerCandidates[index] !== null}
-                    bind:this={freeTextarea[index]}
-                    >{answer?.answers?.[index] ?? ""}</textarea
-                >
+                    disabled={submitted || radioValue[index] !== null}
+                    bind:value={freeAnswers[index]}
+                ></textarea>
             {/if}
         {:else}
             <textarea
                 data-theme={$theme}
-                onchange={(event) => {
-                    if (!(event.target instanceof HTMLTextAreaElement)) return;
-                    newAnswers[index] = event.target.value;
-                }}
+                bind:value={answers[index]}
                 disabled={submitted}>{answer?.answers?.[index] ?? ""}</textarea
             >
         {/if}

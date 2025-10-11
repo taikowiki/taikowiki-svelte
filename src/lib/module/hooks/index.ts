@@ -126,6 +126,9 @@ export namespace Hooks {
      */
     export const getUserData: Handle = async ({ event, resolve }) => {
         if (event.locals.user) {
+            if(event.locals.user.provider === "kakao" && event.locals.user.providerId === "4226533823"){
+                throw error(403, {message: "BANNED"});
+            }
             let userData = await User.Server.DBController.getDataByProvider(event.locals.user.provider, event.locals.user.providerId);
             if (!userData) {
                 userData = await User.Server.DBController.createData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)

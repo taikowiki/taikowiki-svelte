@@ -21,6 +21,7 @@ export async function POST({ request, locals }: RequestEvent) {
     if (data?.donderData?.taikoNumber !== undefined && await User.Server.donderDBController.checkDonderBanned(data.donderData.taikoNumber)) {
         await User.Server.DBController.deleteUser(locals.userData.UUID);
         await User.Server.DBController.banAuth(locals.userData.provider, locals.userData.providerId);
+        throw error(499);
     }
 
     await User.Server.donderDBController.updateData(locals.userData.UUID, data);

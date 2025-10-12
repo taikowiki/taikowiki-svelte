@@ -126,6 +126,10 @@ export namespace Hooks {
      */
     export const getUserData: Handle = async ({ event, resolve }) => {
         if (event.locals.user) {
+            if(await User.Server.DBController.checkAuthBanned(event.locals.user.provider, event.locals.user.providerId)){
+                User.Server.logout(event);
+                throw error(499);
+            }
             let userData = await User.Server.DBController.getDataByProvider(event.locals.user.provider, event.locals.user.providerId);
             if (!userData) {
                 userData = await User.Server.DBController.createData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)

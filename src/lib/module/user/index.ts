@@ -4,6 +4,7 @@ import { I18N } from "$lib/module/i18n";
 import type { RRequestHandler } from "@yowza/rrequestor/types";
 import type { defineDBHandler } from "@yowza/db-handler";
 import type { QueryCallback } from "@yowza/db-handler/types";
+import type { UserServer } from "./user.server";
 
 export namespace User {
     export const TIER_COLOR = {
@@ -146,43 +147,7 @@ export namespace User {
             setGrade: RRequestHandler<{ UUID: string; from: number; to: number; }, void>
         }
     }
-    export declare namespace Server {
-        const DBController: {
-            createData: ReturnType<typeof defineDBHandler<[string, string, object], Data>>;
-            getDataByProvider: ReturnType<typeof defineDBHandler<[string, string], Data | null>>;
-            getData: ReturnType<typeof defineDBHandler<[string], Data | null>>;
-            getNickname: ReturnType<typeof defineDBHandler<[string], string | null>>;
-            changeNickname: ReturnType<typeof defineDBHandler<[string, string], void>>;
-            deleteUser: ReturnType<typeof defineDBHandler<[string], void>>;
-            getAll: ReturnType<typeof defineDBHandler<[], (Data & { order: number })[]>>;
-            getAllUnderGrade: ReturnType<typeof defineDBHandler<[number], (Data & { order: number })[]>>;
-            setGrade: ReturnType<typeof defineDBHandler<[string, number], void>>;
-            setLang: ReturnType<typeof defineDBHandler<[string, string], void>>;
-            getLang: ReturnType<typeof defineDBHandler<[string], string | null>>;
-            setShowRating: ReturnType<typeof defineDBHandler<[string, Partial<Record<'nickname' | 'taikoNumber' | 'songs', boolean>>], void>>;
-        };
-
-        const donderDBController: {
-            updateData: ReturnType<typeof defineDBHandler<[string, { donderData: CardData; clearData: ClearData; scoreData?: ScoreData }]>>;
-            getData: ReturnType<typeof defineDBHandler<[string], DonderData | null>>;
-            getDataColumns: ReturnType<typeof defineDBHandler<[string, (keyof DonderData)[]], Partial<DonderData> | null>>;
-            getClearData: ReturnType<typeof defineDBHandler<[string], ClearData>>;
-            updateCurrentRating: ReturnType<typeof defineDBHandler<[string, number, number, DonderData['ratingData']], void>>;
-            getRankByRating: ReturnType<typeof defineDBHandler<[string], { count: number; ranking: number }>>;
-            getRanking: ReturnType<typeof defineDBHandler<[number], (Pick<User.DonderData, 'UUID' | 'currentRating' | 'donder'> & Pick<User.Data, 'UUID' | 'showRatingNickname' | 'showRatingTaikoNo'> & { currentRating: number; })[]>>;
-            count: ReturnType<typeof defineDBHandler<[], number>>;
-            getUserRating: ReturnType<typeof defineDBHandler<[string], (DonderData & Pick<User.Data, 'UUID' | 'showRatingNickname' | 'showRatingTaikoNo' | 'showRatingSongs'>) | null>>;
-        };
-
-        const apiKeyDBController: {
-            generateKey: ((UUID: string) => Promise<string>) & {
-                getCallback: (UUID: string) => QueryCallback<string>;
-            },
-            checkKey: ((key: string) => Promise<string | null>) & {
-                getCallback: (key: string) => QueryCallback<string | null>;
-            }
-        }
-    }
+    export declare let Server: typeof UserServer;
 }
 
 export namespace User {

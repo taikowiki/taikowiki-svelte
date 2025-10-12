@@ -1,4 +1,6 @@
 <script lang="ts">
+    import MobileIndexAd from "$lib/components/common/advertisement/MobileIndexAd.svelte";
+    import PcIndexAd from "$lib/components/common/advertisement/PCIndexAd.svelte";
     import PageTitle from "$lib/components/common/PageTitle.svelte";
     import MainBanner from "$lib/components/page/(index)/MainBanner.svelte";
     import MainNotice from "$lib/components/page/(index)/MainNotice.svelte";
@@ -17,4 +19,10 @@
     <MainShortcut />
     <MainBanner banners={data.mainBanners} />
     <MainNotice notices={data.recentNotices} />
+    <!-- Ad: Pc Index -->
+    <PcIndexAd/>
+    <!-- /Ad: Pc Index -->
+    <!-- Ad: Mobile Index -->
+    <MobileIndexAd/>
+    <!-- /Ad: Mobile Index -->
 </Center>

@@ -198,6 +198,17 @@ export namespace Hooks {
             return await input.resolve(input.event);
         }
     }
+
+    export const docRedirect: Handle = async ({ event, resolve }) => {
+        if (event.url.pathname === '/api/doc/create') {
+            throw redirect(308, 'https://file.taiko.wiki/doc/create');
+        }
+        else if (event.url.pathname === "/api/doc/update") {
+            throw redirect(308, 'https://file.taiko.wiki/doc/update');
+        }
+
+        return await resolve(event);
+    }
 }
 
 export namespace Hooks {

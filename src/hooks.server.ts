@@ -14,14 +14,20 @@ const provider = {
     kakao: new providers.Kakao({
         clientId: process.env.KAKAO_CLIENT_ID ?? "",
         clientSecret: process.env.KAKAO_CLIENT_SECRET ?? ""
-    })
+    }),
+    line: new providers.Line({
+        clientId: process.env.LINE_CLIENT_ID ?? "",
+        clientSecret: process.env.LINE_CLIENT_SECRET ?? ""
+    }, ['profile'])
 }
 
 const authHandle = auth(Object.values(provider), {
     key: process.env.AUTH_KEY ?? '',
     maxAge: 3600 * 24 * 7,
     autoRefreshMaxAge: true,
-    withCredentials: true
+    withCredentials: true,
+    useSubdomain: true,
+    absoluteMaxAge: 3600 * 24 * 30
 })
 
 const checkPermission = Hooks.checkPermissions([
@@ -45,10 +51,10 @@ const checkPermission = Hooks.checkPermissions([
 ])
 
 const cors = Hooks.allowOrigin("https://donderhiroba.jp", "/", { credentials: true });
-const apiCors = Hooks.allowOrigin("*", "/api/v1", {credentials: true});
+const apiCors = Hooks.allowOrigin("*", "/api/v1", { credentials: true });
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(Hooks.checkIp, cors, apiCors, authHandle, Hooks.getUserData, checkPermission, Hooks.setAssetsCacheControl, Hooks.dynamicHtmlLang);
+export const handle = sequence(Hooks.checkIp, cors, apiCors, authHandle, Hooks.getUserData, Hooks.logger, checkPermission, Hooks.setAssetsCacheControl, Hooks.dynamicHtmlLang, Hooks.docRedirect);

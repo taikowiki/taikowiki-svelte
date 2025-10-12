@@ -58,8 +58,9 @@
     const lang = getLang();
     let i18n = $derived(getI18N($lang).page.diffchart.dfc);
     let titleI18n = $derived(getI18N($lang).title["/diffchart/dfc"]);
-    let customedDiffchart = $derived(getCustomedDiffchart(diffChartData.data, i18n));
-
+    let customedDiffchart = $derived(
+        getCustomedDiffchart(diffChartData.data, i18n),
+    );
 
     const donderData = data.donderData;
 </script>

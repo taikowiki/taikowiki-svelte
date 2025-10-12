@@ -17,6 +17,7 @@
 </script>
 
 <script lang="ts">
+    import ServiceLayout from "$lib/components/layout/ServiceLayout.svelte";
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
@@ -45,6 +46,8 @@
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
     import { Doc } from '$lib/module/doc/index.js';
+    import PcSideAd from "$lib/components/common/advertisement/PCSideAd.svelte";
+    import MobileDefaultAd from "$lib/components/common/advertisement/MobileDefaultAd.svelte";
 
     const { docContext } = Doc;
 
@@ -182,6 +185,11 @@
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />
+            <HeaderItem
+                icon="/assets/icon/donate.svg"
+                href="/donate"
+                mobileHideSlot
+            />
         </svelte:fragment>
     </Header>
     <Main>
@@ -189,6 +197,9 @@
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
+                <!-- Ad: MobileDefault -->
+                <MobileDefaultAd/>
+                <!-- /Ad: MobileDefault -->
                 {@render children?.()}
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />
@@ -201,11 +212,16 @@
                     <AsideBanner banners={data.asideBanners} />
                 {/if}
                 <AsideNewSong newSongs={data.newSongs} />
+                <!-- Ad: PcSide -->
+                <PcSideAd/>
+                <!-- /Ad: PCSide -->
             </Aside>
         {/snippet}
     </Main>
     <Footer version={data.version} />
 </div>
+
+<ServiceLayout />
 
 <style>
     .logo {

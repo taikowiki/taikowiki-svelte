@@ -210,15 +210,6 @@ namespace UserServer {
                 )
             }
         })
-        // 1.4.0
-        ,
-        doesUUIDExists: defineDBHandler<[UUID: string], boolean>((UUID) => {
-            return async(run) => {
-                const result = await run("SELECT COUNT(*) AS `count` FROM `user/data` WHERE `UUID` = ?", [UUID]);
-                if(result?.[0]?.count) return true;
-                return false;
-            }
-        })
     }
 
     // 동더 데이터 DB

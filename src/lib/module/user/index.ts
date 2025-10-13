@@ -4,6 +4,7 @@ import { I18N } from "$lib/module/i18n";
 import type { RRequestHandler } from "@yowza/rrequestor/types";
 import type { defineDBHandler } from "@yowza/db-handler";
 import type { QueryCallback } from "@yowza/db-handler/types";
+import type { UserServer } from "./user.server";
 
 export namespace User {
     export const TIER_COLOR = {

@@ -2,12 +2,11 @@ import { fetchMeasures, getRating } from "@taiko-wiki/taiko-rating";
 import { escapeId } from 'mysql2';
 import { defineDBHandler, QB, queryBuilder, Select, Where } from "@yowza/db-handler";
 import type { Badge, CardData, Clear, Crown, Difficulty } from "node-hiroba/types";
-import { createCipheriv, createHash, randomBytes, randomUUID } from 'node:crypto';
+import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { getSongRating } from "@taiko-wiki/taiko-rating";
 import type { Measure } from "@taiko-wiki/taiko-rating/types";
 import { User } from "."; import { Util } from "../util";
-import { error } from "node:console";
-;
+import type { RequestEvent } from "@sveltejs/kit";
 
 namespace UserServer {
     export const DBController = {
@@ -94,7 +93,7 @@ namespace UserServer {
         /**
          * Delete a user by specific UUID.
          */
-        deleteUser: defineDBHandler<[string], void>((UUID) => {
+        deleteUser: defineDBHandler<[UUID: string], void>((UUID) => {
             return async (run) => {
                 const data = await DBController.getData.getCallback(UUID)(run);
 
@@ -401,6 +400,16 @@ namespace UserServer {
                 result.forEach(parseDonderData);
                 return result[0];
             }
+        }),
+        /**
+         * 동더가 밴되었는지 확인
+         */
+        checkDonderBanned: defineDBHandler<[taikoNumber: string], boolean>((taikoNumber) => {
+            return async (run) => {
+                const rows = await run("SELECT COUNT(*) as `count` FROM `ban/donder` WHERE `taikoNumber` = ?", [taikoNumber]);
+
+                return rows[0].count > 0;
+            }
         })
     }
 
@@ -438,8 +447,13 @@ namespace UserServer {
             }
         })
     }
+
+    export function logout(event: RequestEvent){
+        event.cookies.delete('auth-user', {path: '/'});
+    }
 }
 
+export type { UserServer };
 User.Server = UserServer;
 
 // db 동더 데이터 파싱

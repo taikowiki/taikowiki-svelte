@@ -6,10 +6,12 @@
     import PageAside from "$lib/components/layout/main/PageAside.svelte";
     import { getI18N, getLang } from "$lib/module/i18n";
     import { getIsMobile } from "$lib/module/layout/isMobile";
+    import { getTheme } from "$lib/module/layout/theme";
 
     const lang = getLang();
     $: i18n = getI18N("layout", $lang)["/auth/user"];
 
+    const [theme] = getTheme();
     const isMobile = getIsMobile();
 </script>
 
@@ -23,23 +25,13 @@
 </PageAside>
 
 {#if $isMobile}
-    <div class="left">
-        <a href="/auth/user">
+    <nav class="standard">
+        <a class="standard" href="/auth/user" data-theme={$theme}>
             {i18n.myData}
         </a>
-        <a href="/rating">
+        <a class="standard" href="/rating" data-theme={$theme}>
             {i18n.donderData}
         </a>
-    </div>
+    </nav>
 {/if}
 <slot />
-
-<style>
-    .left {
-        display: flex;
-        column-gap: 10px;
-        flex-wrap: wrap;
-
-        margin-bottom: 10px;
-    }
-</style>

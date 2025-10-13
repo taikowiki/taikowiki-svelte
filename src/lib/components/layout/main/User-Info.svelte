@@ -37,6 +37,11 @@
             {i18n.donderData}
         </div>
     </UserItem>
+    <UserItem href="/poll" isButton height="30px">
+        <div class="container" onclick={close} role="presentation">
+            설문
+        </div>
+    </UserItem>
 {:else}
     <UserItem>
         <div class="container" onclick={close} role="presentation">

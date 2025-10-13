@@ -210,6 +210,7 @@ namespace UserServer {
                 )
             }
         })
+        // 1.4.0
         ,
         doesUUIDExists: defineDBHandler<[UUID: string], boolean>((UUID) => {
             return async(run) => {

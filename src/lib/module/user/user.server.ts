@@ -188,6 +188,28 @@ namespace UserServer {
                 }
             }
         }),
+        /**
+         * 인증 정보가 밴되었는지 확인
+         */
+        checkAuthBanned: defineDBHandler<[provider: string, providerId: string], boolean>((provider, providerId) => {
+            return async (run) => {
+                const rows = await run("SELECT COUNT(*) as `count` FROM `ban/auth` WHERE `provider` = ? AND `providerId` = ?", [provider, providerId]);
+
+                return rows[0].count > 0;
+            }
+        }),
+        /**
+         * 인증 정보를 밴
+         */
+        banAuth: defineDBHandler<[provider: string, providerId: string], void>((provider, providerId) => {
+            return async (run) => {
+                await run(
+                    queryBuilder.insert('ban/auth')
+                        .set({ provider, providerId })
+                        .build()
+                )
+            }
+        }),
         doesUUIDExists: defineDBHandler<[UUID: string], boolean>((UUID) => {
             return async(run) => {
                 const result = await run("SELECT COUNT(*) AS `count` FROM `user/data` WHERE `UUID` = ?", [UUID]);

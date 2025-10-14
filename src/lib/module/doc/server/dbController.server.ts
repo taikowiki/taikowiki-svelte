@@ -1,12 +1,14 @@
-import { defineDBHandler, QB, queryBuilder, Select, Where } from "@yowza/db-handler";
+import { defineDBHandler } from "@yowza/db-handler";
 import type { Doc } from '$lib/module/doc';
 import { WikiError, validateDocData, parseDBData } from "../util.js";
 import { renderer } from "../util.js";
 import { Song } from '$lib/module/song/song.server';
 import { Util } from "$lib/module/util/index.js";
+import '$lib/module/util/util.server.js';
 import * as Diff from 'diff';
 import { Search } from "$lib/module/search/index.js";
 
+const queryBuilder = Util.Server.queryBuilder;
 export const docDBController = {
     /**
      * @throws `DUPLICATED_TITLE` 제목이 중복됨.
@@ -398,30 +400,51 @@ export const docDBController = {
     }),
     search: defineDBHandler<[query: string, offset: number, limit: number], { count: number, searchResults: Pick<Doc.DB.DocDBData, 'title' | 'flattenedContent' | 'type' | 'songNo' | 'redirectTo'>[] }>((query, offset, limit) => {
         if (query) {
-            var countQuery =
-                queryBuilder.union([
-                    //@ts-expect-error
-                    queryBuilder
-                        .select('docs', [Select.Count()])
-                        .where(
-                            Where.Compare('title', '=', query),
-                            Where.Compare('isDeleted', '=', 0)
-                        ),
-                    //@ts-expect-error
-                    queryBuilder
-                        .select('docs', [Select.Count()])
-                        .where(
-                            Where.Like('title', `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
-                            Where.Compare('isDeleted', '=', 0)
-                        ),
-                    //@ts-expect-error
-                    queryBuilder
-                        .select('docs', [Select.Count()])
-                        .where(
-                            Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
-                            Where.Compare('isDeleted', '=', 0)
-                        )
-                ]).build()
+            var countQuery = [
+                queryBuilder
+                    .select('docs', '*')
+                    .where(({compare, column, value}) => [
+                        compare(column('title'), '=', value(query)),
+                        compare(column('isDeleted'), '=', value(0))
+                    ]),
+                queryBuilder
+                    .select('docs', '*')
+                    .where(({compare, column, value, like}) => [
+                        like(column('title'), `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
+                        compare(column('isDeleted'), '=', value(0))
+                    ]),
+                queryBuilder
+                    .select('docs', '*')
+                    .where(({compare, column, value, like}) => [
+                        like(column('flattenedContent'), `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
+                        compare(column('isDeleted'), '=', value(0))
+                    ]),
+            ]
+            /*
+            queryBuilder.union([
+                //@ts-expect-error
+                queryBuilder
+                    .select('docs', [Select.Count()])
+                    .where(
+                        Where.Compare('title', '=', query),
+                        Where.Compare('isDeleted', '=', 0)
+                    ),
+                //@ts-expect-error
+                queryBuilder
+                    .select('docs', [Select.Count()])
+                    .where(
+                        Where.Like('title', `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
+                        Where.Compare('isDeleted', '=', 0)
+                    ),
+                //@ts-expect-error
+                queryBuilder
+                    .select('docs', [Select.Count()])
+                    .where(
+                        Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
+                        Where.Compare('isDeleted', '=', 0)
+                    )
+            ]).build()
+            */
 
             var searchQuery =
                 queryBuilder.union([

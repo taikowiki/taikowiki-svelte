@@ -1,5 +1,9 @@
-import { defineDBHandler, queryBuilder, Where } from "@yowza/db-handler";
+import { defineDBHandler } from "@yowza/db-handler";
 import { Notice } from ".";
+import { Util } from "../util";
+import '../util/util.server';
+
+const { queryBuilder } = Util.Server;
 
 namespace NoticeServer {
     export const DBController = {
@@ -7,13 +11,21 @@ namespace NoticeServer {
         getNoticeList: defineDBHandler<[{ page?: number; type?: 'wiki' | 'official' }?], Omit<Notice.Notice, 'content'>[]>((param) => {
             return async (run) => {
                 const { page, type } = param ?? {};
-                let selectBuilder: any = queryBuilder.select('notice', ['order', 'title', 'type', 'writtenDate', 'officialDate']);
+                let selectBuilder = queryBuilder
+                    .select('notice', () => ({
+                        order: 'order',
+                        title: 'title',
+                        type: 'type',
+                        writtenDate: 'writtenDate',
+                        officialDate: 'officialDate'
+                    }));
                 if (type === "wiki" || type === "official") {
-                    selectBuilder = selectBuilder.where(Where.Compare('type', '=', type))
+                    selectBuilder.where(({ compare, column, value }) => [compare(column('type'), '=', value(type))])
                 }
-                selectBuilder = selectBuilder.orderby('order', 'desc');
+                //@ts-expect-error
+                selectBuilder.orderby('order', 'desc');
                 if (page) {
-                    selectBuilder = selectBuilder.limit((page - 1) * 30, 30)
+                    selectBuilder.limit(30, (page - 1) * 30)
                 }
 
                 return await run(selectBuilder.build())

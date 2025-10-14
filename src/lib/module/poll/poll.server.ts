@@ -1,10 +1,13 @@
-import { defineDBHandler, Insert, queryBuilder, Select, Where } from "@yowza/db-handler";
+import { defineDBHandler } from "@yowza/db-handler";
 import { Poll } from "."
 import { WikiError } from "../doc/util";
 import type { QueryFunction } from "@yowza/db-handler/types";
 import { User } from "../user";
 import '../user/user.server';
 import { DateTime } from "luxon";
+import { Util } from "../util";
+import '../util/util.server';
+const { queryBuilder } = Util.Server;
 
 namespace PollServer {
     export const DBController = {
@@ -19,14 +22,11 @@ namespace PollServer {
                     second: 59
                 });
 
-                const dataResponse = await run(
-                    queryBuilder
-                        .insert('poll/data')
-                        .set({
-                            until: until.toJSDate()
-                        })
-                        .build()
-                );
+                const dataResponse = await queryBuilder
+                    .insert('poll/data')
+                    .set(() => ({
+                        until: until.toJSDate()
+                    })).execute(run);
 
                 const dataId: number = dataResponse.insertId;
                 if (!dataId) {
@@ -39,12 +39,12 @@ namespace PollServer {
                     await run(
                         queryBuilder
                             .insert('poll/section')
-                            .set({
+                            .set(() => ({
                                 dataId,
                                 question: section.question,
-                                sectionIndex: i,
+                                sectionIndex: Number(i),
                                 useFree: Number("options" in section ? section.useFree ?? false : false)
-                            })
+                            }))
                             .build()
                     );
 
@@ -53,26 +53,26 @@ namespace PollServer {
                             const option = section.options[ii];
                             await run(
                                 queryBuilder.insert('poll/option')
-                                    .set({
+                                    .set(() => ({
                                         dataId,
-                                        sectionIndex: i,
-                                        optionIndex: ii,
+                                        sectionIndex: Number(i),
+                                        optionIndex: Number(ii),
                                         type: 1,
                                         value: option
-                                    }).build()
+                                    })).build()
                             )
                         }
                     }
                     else {
                         await run(
                             queryBuilder.insert('poll/option')
-                                .set({
+                                .set(() => ({
                                     dataId,
-                                    sectionIndex: i,
+                                    sectionIndex: Number(i),
                                     optionIndex: null,
                                     type: 0,
                                     value: null
-                                }).build()
+                                })).build()
                         )
                     }
                 }
@@ -85,12 +85,10 @@ namespace PollServer {
          */
         getPoll: defineDBHandler<[id: number], Poll.Data | null>((id) => {
             return async (run) => {
-                const dataRows = await run(
-                    queryBuilder.select('poll/data')
-                        .where(
-                            Where.Compare('id', '=', id)
-                        ).build()
-                );
+                const dataRows = await queryBuilder
+                    .select('poll/data', '*')
+                    .where(({ column, compare, value }) => [compare(column('id'), '=', value(id))])
+                    .execute(run);
 
                 if (dataRows.length === 0) {
                     return null;
@@ -113,13 +111,11 @@ namespace PollServer {
          */
         getOpenedPolls: defineDBHandler<[], Poll.Data[]>(() => {
             return async (run) => {
-                const dataRows: Poll.DBDataRow[] = await run(
-                    queryBuilder.select('poll/data')
-                        .where(
-                            Where.Compare('until', '>', Where.Raw('CURRENT_TIMESTAMP()'))
-                        )
-                        .orderby('id', 'desc').build()
-                );
+                const dataRows: Poll.DBDataRow[] = await queryBuilder
+                    .select('poll/data', '*')
+                    .where(({ compare, column, now }) => [compare(column('until'), '>', now())])
+                    .orderBy('poll/data.id', 'desc')
+                    .execute(run);
 
                 if (dataRows.length === 0) return [];
 
@@ -140,18 +136,15 @@ namespace PollServer {
         /**
          * 닫힌 설문을 가져옴
          */
-        getClosedPolls: defineDBHandler<[page: number], {datas: Poll.Data[], length: number}>((page) => {
+        getClosedPolls: defineDBHandler<[page: number], { datas: Poll.Data[], length: number }>((page) => {
             return async (run) => {
-                const dataRows: Poll.DBDataRow[] = await run(
-                    queryBuilder.select('poll/data')
-                        .where(
-                            Where.Compare('until', '<=', Where.Raw('CURRENT_TIMESTAMP()'))
-                        )
-                        .orderby('id', 'desc')
-                        .limit(page - 1, 20).build()
-                );
+                const dataRows: Poll.DBDataRow[] = await queryBuilder
+                    .select('poll/data', '*')
+                    .where(({ column, compare, now }) => [compare(column('until'), '<=', now())])
+                    .limit(20, page - 1)
+                    .execute(run);
 
-                if (dataRows.length === 0) return {datas: [], length: 0};
+                if (dataRows.length === 0) return { datas: [], length: 0 };
 
                 const datas: Poll.Data[] = [];
                 for (const dataRow of dataRows) {
@@ -164,12 +157,13 @@ namespace PollServer {
                     datas.push(data);
                 }
 
-                const length: number = await run(
-                    queryBuilder.select('poll/data', [Select.As(Select.Count(), 'count')])
-                        .where(
-                            Where.Compare('until', '<=', Where.Raw('CURRENT_TIMESTAMP()'))
-                        ).build()
-                ).then((v) => v[0].count);
+                const length: number = await queryBuilder
+                    .select('poll/data', ({ count }) => ({
+                        count: count()
+                    }))
+                    .where(({ column, compare, now }) => [compare(column('until'), '<=', now())])
+                    .execute(run)
+                    .then((v) => v[0].count)
 
                 return { datas, length };
             }
@@ -179,42 +173,39 @@ namespace PollServer {
          */
         deletePoll: defineDBHandler<[id: number], boolean>((id) => {
             return async (run) => {
-                const result = await run(
-                    queryBuilder
-                        .delete('poll/data')
-                        .where(Where.Compare('id', '=', id)).build()
-                );
+                const result = await queryBuilder
+                    .delete('poll/data')
+                    .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                    .execute(run)
 
                 if (!result.affectedRows) return false;
 
-                await run(
-                    queryBuilder
-                        .delete('poll/section')
-                        .where(Where.Compare('dataId', '=', 'id')).build()
-                );
-                await run(
-                    queryBuilder
-                        .delete('poll/option')
-                        .where(Where.Compare('dataId', '=', 'id')).build()
-                );
-                await run(
-                    queryBuilder
-                        .delete('poll/answer')
-                        .where(Where.Compare('dataId', '=', 'id')).build()
-                );
+                await queryBuilder
+                    .delete('poll/section')
+                    .where(({ compare, column, value }) => [compare(column('dataId'), '=', value(id))])
+                    .execute(run);
+                await queryBuilder
+                    .delete('poll/option')
+                    .where(({ compare, column, value }) => [compare(column('dataId'), '=', value(id))])
+                    .execute(run);
+                await queryBuilder
+                    .delete('poll/answer')
+                    .where(({ compare, column, value }) => [compare(column('dataId'), '=', value(id))])
+                    .execute(run);
                 return true;
             }
         }),
         doesPollExists: defineDBHandler<[id: number], boolean>((id) => {
             return async (run) => {
-                const rows = await run(
-                    queryBuilder.select('poll/data', [Select.As(Select.Count(), 'count')])
-                        .where(
-                            Where.Compare('id', '=', id)
-                        ).build()
-                );
+                const count = await queryBuilder
+                    .select('poll/data', ({ count }) => ({
+                        count: count()
+                    }))
+                    .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                    .execute(run)
+                    .then(r => r[0].count)
 
-                if (!rows?.[0]?.count) return false;
+                if (!count) return false;
                 return true;
             }
         }),
@@ -239,12 +230,12 @@ namespace PollServer {
                 for (const i in answerData.answers) {
                     await run(
                         queryBuilder.insert('poll/answer')
-                            .set({
+                            .set(() => ({
                                 dataId: answerData.dataId,
                                 responserUUID: UUID,
-                                sectionIndex: i,
+                                sectionIndex: Number(i),
                                 value: answerData.answers[i]
-                            }).build()
+                            })).build()
                     )
                 };
             }
@@ -265,20 +256,18 @@ namespace PollServer {
                 }
 
                 for (const i in answerData.answers) {
-                    await run(
-                        queryBuilder.update('poll/answer')
-                            .set({
-                                dataId: answerData.dataId,
-                                responserUUID: UUID,
-                                sectionIndex: i,
-                                value: answerData.answers[i]
-                            })
-                            .where(
-                                Where.Compare('dataId', '=', answerData.dataId),
-                                Where.Compare('sectionIndex', '=', i)
-                            )
-                            .build()
-                    )
+                    await queryBuilder
+                        .update('poll/answer', () => ({
+                            dataId: answerData.dataId,
+                            responserUUID: UUID,
+                            sectionIndex: Number(i),
+                            value: answerData.answers[i]
+                        }))
+                        .where(({ compare, column, value }) => [
+                            compare(column(''), '=', value(answerData.dataId)),
+                            compare(column('sectionIndex'), '=', value(Number(i)))
+                        ])
+                        .execute(run);
                 };
             }
         }),
@@ -287,13 +276,15 @@ namespace PollServer {
          */
         didAnswer: defineDBHandler<[UUID: string, id: number], boolean>((UUID, id) => {
             return async (run) => {
-                const rows = await run(
-                    queryBuilder.select('poll/answer', [Select.As(Select.Count(), 'count')])
-                        .where(
-                            Where.Compare('dataId', '=', id),
-                            Where.Compare('responserUUID', '=', UUID)
-                        ).build()
-                );
+                const rows = await queryBuilder
+                    .select('poll/answer', ({ count }) => ({
+                        count: count()
+                    }))
+                    .where(({ column, compare, value }) => [
+                        compare(column('dataId'), '=', value(id)),
+                        compare(column('responserUUID'), '=', value(UUID))
+                    ])
+                    .execute(run)
 
                 if (!rows?.[0]?.count) return false;
                 return true;
@@ -304,13 +295,13 @@ namespace PollServer {
          */
         getAnswer: defineDBHandler<[UUID: string, id: number], Poll.Answer | null>((UUID, id) => {
             return async (run) => {
-                const rows: Poll.DBAnswerRow[] = await run(
-                    queryBuilder.select('poll/answer')
-                        .where(
-                            Where.Compare('dataId', '=', id),
-                            Where.Compare('responserUUID', '=', UUID)
-                        ).build()
-                );
+                const rows: Poll.DBAnswerRow[] = await queryBuilder
+                    .select('poll/answer', '*')
+                    .where(({ compare, column, value }) => [
+                        compare(column('dataId'), '=', value(id)),
+                        compare(column('responserUUID'), '=', value(UUID))
+                    ])
+                    .execute(run)
 
                 if (rows.length === 0) return null;
 
@@ -326,18 +317,15 @@ namespace PollServer {
     }
 
     async function completeData(data: Poll.Data, run: QueryFunction) {
-        const sectionRows: Poll.DBSectionRow[] = await run(
-            queryBuilder.select('poll/section')
-                .where(
-                    Where.Compare('dataId', '=', data.id)
-                ).build()
-        );
-        const optionRows: Poll.DBOptionRow[] = await run(
-            queryBuilder.select('poll/option').
-                where(
-                    Where.Compare('dataId', '=', data.id)
-                ).build()
-        );
+        const sectionRows: Poll.DBSectionRow[] = await queryBuilder
+            .select('poll/section', '*')
+            .where(({ compare, column, value }) => [compare(column('dataId'), '=', value(data.id))])
+            .execute(run);
+
+        const optionRows: Poll.DBOptionRow[] = await queryBuilder
+            .select('poll/option', '*')
+            .where(({ compare, column, value }) => [compare(column('dataId'), '=', value(data.id))])
+            .execute(run) as Poll.DBOptionRow[];
 
         sectionRows.forEach((sectionRow) => {
             const useFree = Boolean(sectionRow.useFree)

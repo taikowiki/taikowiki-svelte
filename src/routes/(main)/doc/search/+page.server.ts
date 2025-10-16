@@ -1,8 +1,13 @@
 import { Doc } from "$lib/module/doc/doc.server";
-import { queryBuilder, runQuery, Select, Where } from '@yowza/db-handler';
+import { runQuery } from '@yowza/db-handler';
+import { Util } from "$lib/module/util/util.server";
+import { escape } from "sqlstring";
+import type { RequestEvent } from "../$types";
+
+const { queryBuilder } = Util.Server;
 
 // 페이지에 20개
-export async function load({ url }) {
+export async function load({ url }: RequestEvent) {
     const query = url.searchParams.get("query") ?? '';
 
     let page = parseInt(url.searchParams.get("page") || '1');
@@ -12,10 +17,12 @@ export async function load({ url }) {
 
     const { searchResults, count, titleExactMatched } = await runQuery(async (run) => {
         const { searchResults, count } = await Doc.Server.DBController.search.getCallback(query, (page - 1) * 20, 20)(run);
-        const titleExactMatched = await (async() => {
-            const query_ = queryBuilder.select('docs', [Select.As(Select.Count(), 'count')]).where(Where.Compare('title', '=', query)).build();
-            const r = await run(query_);
-            return (r[0]?.count ?? 0) > 0;
+        const titleExactMatched = await (async () => {
+            const rows = await queryBuilder
+                .select('docs', ({ count }) => ({ count: count() }))
+                .where(({ compare, column, value }) => [compare(column('time'), '=', value(query))])
+                .execute(run);
+            return rows[0].count > 0;
         })();
         type P = typeof searchResults[number]
 
@@ -31,9 +38,9 @@ export async function load({ url }) {
                 rArr.push(r);
                 return;
             }
-            if(r.redirectTo){
+            if (r.redirectTo) {
                 let rArr = docIdMap.get(r.redirectTo);
-                if(!rArr){
+                if (!rArr) {
                     rArr = [];
                     docIdMap.set(r.redirectTo, rArr);
                 }
@@ -42,9 +49,10 @@ export async function load({ url }) {
             }
         })
         if (songNoMap.size > 0) {
-            const getSongTitleQuery = queryBuilder.select('song', ['title', 'songNo'])
-                .where(Where.In('songNo', Array.from(songNoMap.keys())))
-                .build() as string;
+            const getSongTitleQuery = queryBuilder
+                .select('song', () => ({ title: 'title', songNo: 'songNo' }))
+                .where(({ raw, column }) => [raw(`${column('songNo')} IN (${Array.from(songNoMap.keys()).map(e => escape(e)).join(', ')})`)])
+                .build();
             const songTitles = await run(getSongTitleQuery);
             songTitles.forEach(({ title, songNo }: Record<string, string>) => {
                 const rArr = songNoMap.get(songNo);
@@ -57,11 +65,13 @@ export async function load({ url }) {
             })
         }
         if (docIdMap.size > 0) {
-            const getDocTitleQuery = queryBuilder.select('docs', ['title', 'id'])
-                .where(Where.In('id', Array.from(docIdMap.keys())))
-                .build() as string;
+            const getDocTitleQuery = queryBuilder
+                .select('docs', () => ({ title: 'title', id: 'id' }))
+                .where(({ raw, column }) => [raw(`${column('id')} IN (${Array.from(docIdMap.keys()).map(e => escape(e)).join(', ')})`)])
+                .build();
+
             const docTitles = await run(getDocTitleQuery);
-            docTitles.forEach(({ title, id }: {title: string, id: number;}) => {
+            docTitles.forEach(({ title, id }: { title: string, id: number; }) => {
                 const rArr = docIdMap.get(id);
                 if (!rArr) return;
 

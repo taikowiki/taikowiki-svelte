@@ -1,20 +1,28 @@
-import { Util } from '$lib/module/util/index.js';
+import { Util } from '$lib/module/util/util.server';
 import type { Search } from '$lib/module/search/index.js';
 import { error } from '@sveltejs/kit';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { runQuery } from '@yowza/db-handler';
+import type { RequestEvent } from './$types';
 
-export async function _searchSong(keyword: string, run: any){
+const { queryBuilder } = Util.Server;
+
+export async function _searchSong(keyword: string, run: any) {
     const likeQuery = `%${keyword.split(' ').map(e => Util.sqlEscapeLike(e)).join('%')}%`
-    const query = queryBuilder.select('song', ['title', 'songNo']).where(Where.OR(
-        Where.Like('title', likeQuery),
-        Where.Like('titleKo', likeQuery),
-        Where.Like('aliasKo', likeQuery),
-        Where.Like('titleEn', likeQuery),
-        Where.Like('aliasEn', likeQuery),
-        Where.Like('romaji', likeQuery)
-    )).limit(20).build();
+    const query = queryBuilder
+        .select('song', () => ({ title: 'title', songNo: 'songNo' }))
+        .where(({ or, column, like }) => [or(
+            like(column('title'), likeQuery),
+            like(column('titleKo'), likeQuery),
+            like(column('aliasKo'), likeQuery),
+            like(column('titleEn'), likeQuery),
+            like(column('aliasEn'), likeQuery),
+            like(column('romaji'), likeQuery),
+        )])
+        .limit(20)
+        .build();
+
     const result = await run(query);
-    const responseData: Search.Result[] = result.map(({title, songNo}: any) => {
+    const responseData: Search.Result[] = result.map(({ title, songNo }: any) => {
         return {
             title,
             type: 'song',
@@ -24,7 +32,7 @@ export async function _searchSong(keyword: string, run: any){
     return responseData;
 }
 
-export async function GET({ request }) {
+export async function GET({ request }: RequestEvent) {
     const keyword = new URL(request.url).searchParams.get('keyword');
     if (!keyword) {
         throw error(400, JSON.stringify({
@@ -32,7 +40,7 @@ export async function GET({ request }) {
         }))
     }
 
-    const responseData = await runQuery(async(run) => {
+    const responseData = await runQuery(async (run) => {
         return await _searchSong(keyword, run);
     })
 

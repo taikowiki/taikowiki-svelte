@@ -1,9 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { runQuery } from '@yowza/db-handler';
-import { Doc } from '$lib/module/doc/index.js';
+import { Doc } from '$lib/module/doc/doc.server';
 import type { RequestEvent } from './$types';
-
-const { parseDBData } = Doc;
 
 export async function POST({locals, params, request}: RequestEvent){
     const id = Number(params.id);
@@ -28,19 +26,15 @@ export async function POST({locals, params, request}: RequestEvent){
                 throw error(403);
             }
 
-            const query1 = queryBuilder.select('docs', ['editableGrade']).where(Where.Compare('id', '=', id)).build();
-            const r1 = await run(query1);
-            if(r1.length === 0){
+            const editableGrade = await Doc.Server.DBController.getEditableGrade.getCallback(id)(run);
+            if(editableGrade === null){
                 throw error(404);
             }
-            const {editableGrade} = parseDBData(r1[0]);
-
             if(locals.userData.grade < editableGrade){
                 throw error(403);
             }
 
-            const query2 = queryBuilder.update('docs').set('editableGrade', grade).where(Where.Compare('id', '=', id)).build();
-            await run(query2);
+            await Doc.Server.DBController.setEditableGrade.getCallback(id, grade)(run);
         })
     }
     catch(err){

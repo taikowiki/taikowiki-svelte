@@ -1,13 +1,14 @@
 import { Doc } from "$lib/module/doc/doc.server";
 import { error } from "@sveltejs/kit";
-import { queryBuilder, runQuery, Where } from "@yowza/db-handler";
+import { runQuery } from "@yowza/db-handler";
 import type { QueryFunction } from "@yowza/db-handler/types";
 import type { HTMLElement } from "node-html-parser";
+import type { RequestEvent } from "./$types";
 
 const {renderer} = Doc;
 const {DBController, prepareParagraphs, setWikiLinkAvailable} = Doc.Server;
 
-export async function load({ params, locals }) {
+export async function load({ params, locals }: RequestEvent) {
     const id = Number(params.id);
     const version = Number(params.version);
 
@@ -24,10 +25,7 @@ export async function load({ params, locals }) {
         }
 
         const preparedContent: Doc.Data.ContentTree = await getPreparedContent(pastDoc, run);
-
-        const query = queryBuilder.select('docs', ['editableGrade']).where(Where.Compare('id', '=', id)).build();
-        const r = await run(query);
-        const editableGrade = r[0]?.editableGrade ?? 10;
+        const editableGrade = await DBController.getEditableGrade(id) ?? 10;
 
         return {
             docData: {

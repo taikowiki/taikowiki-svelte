@@ -1,10 +1,11 @@
 import { Doc } from "$lib/module/doc/doc.server";
 import { error } from '@sveltejs/kit';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { runQuery } from '@yowza/db-handler';
+import type { RequestEvent } from "./$types";
 
 const {DBController} = Doc.Server;
 
-export async function load({ params, locals, url }) {
+export async function load({ params, locals, url }: RequestEvent) {
     if (!locals.userData) {
         throw error(401);
     }
@@ -22,9 +23,7 @@ export async function load({ params, locals, url }) {
     const { docDBData, redirectTo, editableGrade } = await runQuery(async (run) => {
         if(version){
             var docDBData: any = await DBController.getPast.getCallback(id, version)(run);
-            const query = queryBuilder.select('docs', ['editableGrade']).where(Where.Compare('id', '=', id)).build();
-            const r =  await run(query);
-            var editableGrade: number = r[0]?.editableGrade ?? 10;
+            var editableGrade: number = await DBController.getEditableGrade(id) ?? 10;
         }
         else{
             var docDBData: any = await DBController.getDocDataById.getCallback(id)(run);

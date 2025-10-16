@@ -506,6 +506,28 @@ export const docDBController = {
         }
     }),
     /**
+     * 문서를 삭제
+     */
+    delete: defineDBHandler<[docId: number]>((id) => {
+        return async (run) => {
+            return await queryBuilder
+                .update('docs', () => ({ isDeleted: 1 }))
+                .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                .execute(run);
+        }
+    }),
+    /**
+     * 문서를 복원
+     */
+    restore: defineDBHandler<[docId: number]>((id) => {
+        return async(run) => {
+            return await queryBuilder
+                .update('docs', () => ({ isDeleted: 0 }))
+                .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                .execute(run);
+        }
+    }),
+    /**
      * 문서를 완전히 삭제함
      */
     hardDelete: defineDBHandler<[docId: number], boolean>((id) => {
@@ -618,6 +640,26 @@ export const docDBController = {
                 recentlyCreatedDocs,
                 recentlyEditedDocs
             }
+        }
+    }),
+    getEditableGrade: defineDBHandler<[id: number], number | null>((id) => {
+        return async (run) => {
+            const rows = await queryBuilder
+                .select('docs', () => ({ editableGrade: 'editableGrade' }))
+                .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                .execute(run);
+
+            if (rows.length === 0) return null;
+            return rows[0].editableGrade;
+        }
+    }),
+    setEditableGrade: defineDBHandler<[id: number, grade: number]>((id, grade) => {
+        return async (run) => {
+            const result = await queryBuilder
+                .update('docs', () => ({ editableGrade: grade }))
+                .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                .execute(run);
+            return result;
         }
     })
 } as const;

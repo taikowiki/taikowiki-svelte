@@ -1,10 +1,11 @@
 import { error } from '@sveltejs/kit';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { runQuery } from '@yowza/db-handler';
 import { Doc } from '$lib/module/doc/index.js';
+import type { RequestEvent } from './$types';
 
 const { parseDBData } = Doc;
 
-export async function POST({locals, params, request}){
+export async function POST({locals, params, request}: RequestEvent){
     const id = Number(params.id);
     if(Number.isNaN(id)){
         throw error(404);

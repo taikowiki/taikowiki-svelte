@@ -5,7 +5,9 @@ import type { User as UserModule } from '$lib/module/user'
 
 declare global {
 	namespace App {
-		// interface Error {}
+		interface Error {
+			reason?: string;
+		}
 		interface Locals {
 			user?: User<any>,
 			userData: UserModule.Data | null,

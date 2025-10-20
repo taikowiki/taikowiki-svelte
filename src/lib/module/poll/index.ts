@@ -29,7 +29,8 @@ export namespace Poll {
         export const Section = z.union([OptionedSection, FreeSection]);
         export const DataWithoutId = z.object({
             sections: z.array(Section),
-            until: z.date()
+            until: z.date(),
+            memo: z.optional(z.string())
         });
         export const Data = z.intersection(DataWithoutId, z.object({ id: z.number() }));
 
@@ -43,7 +44,8 @@ export namespace Poll {
 
         export const DBDataRow = z.object({
             id: z.number(),
-            until: z.date()
+            until: z.date(),
+            memo: z.union([z.string(), z.null()])
         });
         export const DBSectionRow = z.object({
             dataId: z.number(),

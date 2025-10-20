@@ -1,7 +1,7 @@
 import { defineDBHandler } from "@yowza/db-handler";
 import { Poll } from "."
 import { WikiError } from "../doc/util";
-import type { QueryFunction } from "@yowza/db-handler/types";
+import type { InferDBSchema, QueryFunction } from "@yowza/db-handler/types";
 import { User } from "../user";
 import '../user/user.server';
 import { DateTime } from "luxon";
@@ -25,7 +25,8 @@ namespace PollServer {
                 const dataResponse = await queryBuilder
                     .insert('poll/data')
                     .set(() => ({
-                        until: until.toJSDate()
+                        until: until.toJSDate(),
+                        memo: dataWithoutId?.memo ?? null
                     })).execute(run);
 
                 const dataId: number = dataResponse.insertId;
@@ -104,6 +105,41 @@ namespace PollServer {
                 await completeData(data, run);
 
                 return data;
+            }
+        }),/**
+         * 설문들을 가져옴
+         */
+        getPolls: defineDBHandler<[page: number], { polls: (Poll.Data & { memo: string | null })[], length: number }>((page) => {
+            return async (run) => {
+                const dataRows: Poll.DBDataRow[] = await queryBuilder
+                    .select('poll/data', '*')
+                    .orderBy('poll/data.id', 'desc')
+                    .limit(20, page - 1)
+                    .execute(run);
+
+                if (dataRows.length === 0) return {polls: [], length: 0};
+
+                const datas: (Poll.Data & { memo: string | null })[] = [];
+                for (const dataRow of dataRows) {
+                    const data: (Poll.Data & { memo: string | null }) = {
+                        id: dataRow.id,
+                        sections: [],
+                        until: dataRow.until,
+                        memo: dataRow.memo
+                    };
+                    await completeData(data, run);
+                    datas.push(data);
+                }
+
+                const length = await queryBuilder
+                    .select('poll/data', ({ count }) => ({ length: count() }))
+                    .execute(run)
+                    .then(r => r[0].length);
+
+                return {
+                    polls: datas,
+                    length
+                };
             }
         }),
         /**

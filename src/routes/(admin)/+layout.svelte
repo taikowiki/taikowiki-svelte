@@ -10,6 +10,7 @@
     import { useLang } from "$lib/module/i18n";
     import { User as UserModule } from "$lib/module/user";
     import '$lib/module/user/user.client';
+    import { Layout } from "$lib/module/layout/index.js";
 
     let { data, children } = $props();
 
@@ -23,6 +24,9 @@
 
     //lang
     useLang();
+
+    //timezone
+    Layout.useTimezone(data.timezone);
 
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);

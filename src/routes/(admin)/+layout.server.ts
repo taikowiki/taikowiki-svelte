@@ -4,6 +4,7 @@ export async function load({fetch, locals}){
     const user = JSON.parse(await (await fetch('/api/user')).text());
     return {
         user,
-        grade: locals.userData?.grade
+        grade: locals.userData?.grade,
+        timezone: process.env.TIMEZONE
     }
 }

@@ -131,7 +131,8 @@ namespace UtilServer {
         },
         'poll/data': {
             id: ['number'],
-            until: ['date']
+            until: ['date'],
+            memo: ['string', 'null']
         },
         'poll/option': {
             dataId: ['number'],

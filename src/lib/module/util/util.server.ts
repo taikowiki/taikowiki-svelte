@@ -226,7 +226,8 @@ namespace UtilServer {
     })
 }
 
-export type {UtilServer};
+type P = typeof UtilServer;
+export type {P as UtilServer};
 Util.Server = UtilServer;
 
 export { Util };

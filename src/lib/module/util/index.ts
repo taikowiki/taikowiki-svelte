@@ -279,6 +279,22 @@ export namespace Util {
             `
         )
     }
+
+    export function toCSV(data: Record<string, string | number>[]) {
+        let csv = "";
+        const keys = Object.keys(data[0]);
+        csv += keys.map((key) => escapeString(key)).join(', ') + '\n';
+
+        data.forEach((data) => {
+            csv += keys.map((key) => typeof(data[key]) === "string" ? escapeString(data[key]) : data[key]).join(', ') + '\n';
+        });
+
+        return csv;
+
+        function escapeString(str: string) {
+            return `"${str.replaceAll('"', '""')}"`;
+        }
+    }
 }
 
 export namespace Util {

@@ -7,6 +7,7 @@ import '../user/user.server';
 import { DateTime } from "luxon";
 import { Util } from "../util";
 import '../util/util.server';
+import groupBy from "object.groupby";
 const { queryBuilder } = Util.Server;
 
 namespace PollServer {
@@ -117,7 +118,7 @@ namespace PollServer {
                     .limit(20, page - 1)
                     .execute(run);
 
-                if (dataRows.length === 0) return {polls: [], length: 0};
+                if (dataRows.length === 0) return { polls: [], length: 0 };
 
                 const datas: (Poll.Data & { memo: string | null })[] = [];
                 for (const dataRow of dataRows) {
@@ -125,7 +126,7 @@ namespace PollServer {
                         id: dataRow.id,
                         sections: [],
                         until: dataRow.until,
-                        memo: dataRow.memo
+                        memo: dataRow.memo ?? ''
                     };
                     await completeData(data, run);
                     datas.push(data);
@@ -348,6 +349,29 @@ namespace PollServer {
                 };
 
                 return answer;
+            }
+        }),
+        getAllAnswer: defineDBHandler<[id: number], { [UUID: string]: Poll.Answer }>((id) => {
+            return async (run) => {
+                const rows = await queryBuilder
+                    .select('poll/answer', '*')
+                    .where(({ compare, column, value }) => [
+                        compare(column('dataId'), '=', value(id))
+                    ])
+                    .execute(run);
+
+                const answerRowMap = groupBy(rows, (r) => r.responserUUID) as { [UUID: string]: Poll.DBAnswerRow[] };
+                const answerMap: { [UUID: string]: Poll.Answer } = {};
+
+                for (const [UUID, rows] of Object.entries(answerRowMap)) {
+                    answerMap[UUID] = {
+                        dataId: id,
+                        responderUUID: UUID,
+                        answers: rows.toSorted((a, b) => a.sectionIndex - b.sectionIndex).map((row) => row.value)
+                    }
+                }
+
+                return answerMap;
             }
         })
     }

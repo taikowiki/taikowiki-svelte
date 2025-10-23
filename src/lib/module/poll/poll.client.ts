@@ -53,7 +53,7 @@ namespace PollClient {
         async deletePoll(id: number): Promise<RResponse<void>> {
             const response = await fetch(`/admin/api/poll`, {
                 method: 'DELETE',
-                body: JSON.stringify({id})
+                body: JSON.stringify({ id })
             });
 
             const data = await response.json().catch(() => ({}));
@@ -72,6 +72,32 @@ namespace PollClient {
                 }
             }
         },
+        /**
+         * 특정 id의 설문의 모든 응답 데이터를 요청
+         * @param id 
+         * @returns 
+         */
+        async fetchAllAnswer(id: number): Promise<RResponse<{ [UUID: string]: Poll.Answer }>> {
+            const response = await fetch(`/admin/api/poll/answer?id=${encodeURIComponent(id)}`, {
+                method: 'get'
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (response.status >= 200 && response.status < 300) {
+                return {
+                    status: 'success',
+                    data
+                }
+            }
+            else {
+                return {
+                    status: 'error',
+                    statusCode: response.status,
+                    reason: data.reason
+                }
+            }
+        }
     }
 };
 

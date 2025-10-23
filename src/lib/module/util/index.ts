@@ -3,7 +3,6 @@ import type { Song } from '../song';
 import showdown from 'showdown';
 import sqlString_ from 'sqlstring';
 import cssColorMap from './data/cssColorMap.json';
-import type { UtilServer } from './util.server';
 const styled = await import('styled-svelte5')
     .then((module) => module.default)
     .catch(() => {
@@ -298,7 +297,7 @@ export namespace Util {
 }
 
 export namespace Util {
-    export declare let Server: typeof UtilServer;
+    export declare let Server: import('./util.server').UtilServer;
 }
 
 export namespace Util {

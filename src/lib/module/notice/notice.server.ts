@@ -22,8 +22,7 @@ namespace NoticeServer {
                 if (type === "wiki" || type === "official") {
                     selectBuilder.where(({ compare, column, value }) => [compare(column('type'), '=', value(type))])
                 }
-                //@ts-expect-error
-                selectBuilder.orderby('order', 'desc');
+                selectBuilder.orderBy('notice.order', 'desc');
                 if (page) {
                     selectBuilder.limit(30, (page - 1) * 30)
                 }

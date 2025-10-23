@@ -21,7 +21,7 @@ export async function load({ url }: RequestEvent) {
         const titleExactMatched = await (async () => {
             const rows = await queryBuilder
                 .select('docs', ({ count }) => ({ count: count() }))
-                .where(({ compare, column, value }) => [compare(column('time'), '=', value(query))])
+                .where(({ compare, column, value }) => [compare(column('title'), '=', value(query))])
                 .execute(run);
             return rows[0].count > 0;
         })();

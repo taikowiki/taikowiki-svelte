@@ -77,6 +77,7 @@ export async function PATCH({ request, locals }: RequestEvent) {
         return new Response();
     }
     catch (err) {
+        console.error(err);
         return new Response(
             JSON.stringify({
                 reason: "INVALID_REQUEST_DATA"

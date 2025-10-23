@@ -301,7 +301,7 @@ namespace PollServer {
                             value: answerData.answers[i]
                         }))
                         .where(({ compare, column, value }) => [
-                            compare(column(''), '=', value(answerData.dataId)),
+                            compare(column('dataId'), '=', value(answerData.dataId)),
                             compare(column('sectionIndex'), '=', value(Number(i)))
                         ])
                         .execute(run);

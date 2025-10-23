@@ -1,6 +1,5 @@
-import { Poll } from "$lib/module/poll";
+import { Poll } from "$lib/module/poll/poll.server";
 import type { RequestEvent } from "./$types";
-await Poll.importServer();
 
 export async function POST({ request, locals }: RequestEvent) {
     if (!locals.userData) {

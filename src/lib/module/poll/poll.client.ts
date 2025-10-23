@@ -103,5 +103,6 @@ namespace PollClient {
 
 Poll.Client = PollClient;
 
-export type { PollClient };
+type P = typeof PollClient;
+export type { P as PollClient };
 export { Poll }

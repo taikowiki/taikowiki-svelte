@@ -1,18 +1,9 @@
 import { z } from "zod";
-import type { PollClient } from "./poll.client";
-import type { PollServer } from "./poll.server";
 
 // client/server
 export namespace Poll {
-    export declare let Client: Readonly<typeof PollClient>;
-    export declare let Server: Readonly<typeof PollServer>;
-
-    export async function importClient(){
-        await import('./poll.client');
-    }
-    export async function importServer(){
-        await import('./poll.server');
-    }
+    export declare let Client: Readonly<import('./poll.client').PollClient>;
+    export declare let Server: Readonly<import('./poll.server').PollServer>;
 }
 
 // types

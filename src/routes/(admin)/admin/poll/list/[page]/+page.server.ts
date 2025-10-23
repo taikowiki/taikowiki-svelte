@@ -1,8 +1,6 @@
 import { error } from "@sveltejs/kit";
 import type { RequestEvent } from "./$types";
-import { Poll } from "$lib/module/poll";
-
-await Poll.importServer();
+import { Poll } from "$lib/module/poll/poll.server";
 
 export async function load({ params }: RequestEvent) {
     const page = Number(params.page);

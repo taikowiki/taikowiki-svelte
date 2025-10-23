@@ -1,10 +1,11 @@
 import { Doc } from "$lib/module/doc/doc.server";
 import { runQuery } from '@yowza/db-handler';
 import { Util } from "$lib/module/util/util.server";
-import { escape } from "sqlstring";
+import sqlString from 'sqlstring';
 import type { RequestEvent } from "../$types";
 
 const { queryBuilder } = Util.Server;
+const escape = sqlString.escape;
 
 // 페이지에 20개
 export async function load({ url }: RequestEvent) {

@@ -3,7 +3,7 @@ import { Poll } from ".";
 
 namespace PollClient {
     export const request = {
-        async submit(answerReqData: Poll.AnswerReqData, updating: boolean = true): Promise<RResponse<void>> {
+        async submit(answerReqData: Poll.AnswerReqData, updating: boolean): Promise<RResponse<void>> {
             const response = await fetch(`/api/poll/submit`, {
                 method: updating ? 'PATCH' : 'POST',
                 body: JSON.stringify(answerReqData)

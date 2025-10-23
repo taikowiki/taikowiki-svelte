@@ -10,14 +10,15 @@ button.standard {
 
     padding: 4px 8px 5px 8px;
 }
+
 button.standard[data-theme="dark"] {
     background-color: black;
 
     box-sizing: border-box;
     border-color: rgb(145, 145, 145);
-}   
+}
 
-nav.standard{
+nav.standard {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -26,18 +27,19 @@ nav.standard{
     margin-block: 5px;
 }
 
-nav.standard a.standard{
-    display:flex;
+nav.standard a.standard {
+    display: flex;
     justify-content: center;
     align-items: center;
     color: white;
     border-radius: 10px;
     padding: 5px 7px;
 
-    &[data-theme="light"]{
+    &[data-theme="light"] {
         background-color: #cf4844;
     }
-    &[data-theme="dark"]{
-    background-color: #1c1c1c;
-}
+
+    &[data-theme="dark"] {
+        background-color: #1c1c1c;
+    }
 }

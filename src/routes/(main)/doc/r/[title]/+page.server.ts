@@ -3,12 +3,15 @@ import { User } from "$lib/module/user";
 import '$lib/module/user/user.server';
 import { Doc } from "$lib/module/doc/doc.server";
 import { error, redirect } from '@sveltejs/kit';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { runQuery } from '@yowza/db-handler';
+import type { RequestEvent } from './$types';
+import { Util } from '$lib/module/util/util.server';
 
+const { queryBuilder } = Util.Server;
 const { parseDBData, renderer } = Doc;
 const { DBController, prepareParagraphs, setWikiLinkAvailable } = Doc.Server;
 
-export async function load({ params, locals }) {
+export async function load({ params, locals }: RequestEvent) {
     const columns: (keyof Doc.DB.DocDBData)[] = ['id', 'contentTree', 'editedTime', 'editableGrade', 'editorUUID', 'id', 'isDeleted', 'renderedContentTree', 'songNo', 'title', 'redirectTo', 'type'] as const;
     type DocData = Pick<Doc.DB.DocDBData, (typeof columns)[number]> & { editor: string } & { contentTree: Doc.Data.ContentTree };
 
@@ -16,10 +19,12 @@ export async function load({ params, locals }) {
         const docData = await runQuery(async (run) => {
             // db View Data 가져오기
             const docData = await (async () => {
-                const query = queryBuilder.select('docs', columns).where(Where.Compare('title', '=', params.title)).build();
-                const result = await run(query);
-                if (result[0]) {
-                    return parseDBData(result[0]);
+                const rows = await queryBuilder
+                    .select('docs', '*')
+                    .where(({ compare, column, value }) => [compare(column('title'), '=', value(params.title))])
+                    .execute(run);
+                if (rows.length > 0) {
+                    return parseDBData(rows[0]);
                 }
                 else {
                     return null;

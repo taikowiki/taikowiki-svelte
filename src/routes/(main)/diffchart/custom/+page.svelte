@@ -63,7 +63,7 @@
 <DiffchartView diffChart={diffchart} {songs} {donderData} bind:downloadImage />
 <div class="margin"></div>
 <button
-    class="standard-btn"
+    class="standard"
     data-theme={$theme}
     onclick={() => (showEditor = !showEditor)}
 >

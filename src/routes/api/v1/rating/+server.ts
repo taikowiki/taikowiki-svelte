@@ -1,9 +1,13 @@
 import { User } from '$lib/module/user/index.js';
 import '$lib/module/user/user.server.js';
 import { error } from '@sveltejs/kit';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { runQuery } from '@yowza/db-handler';
+import { Util } from '$lib/module/util/util.server';
+import type { RequestEvent } from './$types';
 
-export async function GET({ url, request, setHeaders, locals }) {
+const {queryBuilder} = Util.Server;
+
+export async function GET({ url, request, setHeaders, locals }: RequestEvent) {
     const ratingdata = url.searchParams.get('ratingdata');
 
     const apiKey = request.headers.get('x-api-key');
@@ -14,14 +18,25 @@ export async function GET({ url, request, setHeaders, locals }) {
 
     if (ratingdata === 'top50' || ratingdata === 'all') {
         var query = queryBuilder
-            .select('user/donder_data', ['donder', 'currentRating', 'ratingData'])
-            .where(Where.Compare('UUID', '=', UUID))
+            .select('user/donder_data', () => ({
+                donder: 'donder',
+                currentRating: 'currentRating',
+                ratingData: 'ratingData'
+            }))
+            .where(({ compare, column, value }) => [
+                compare(column('UUID'), '=', value(UUID))
+            ])
             .build();
     }
     else {
         var query = queryBuilder
-            .select('user/donder_data', ['donder', 'currentRating'])
-            .where(Where.Compare('UUID', '=', UUID))
+            .select('user/donder_data', () => ({
+                donder: 'donder',
+                currentRating: 'currentRating'
+            }))
+            .where(({ compare, column, value }) => [
+                compare(column('UUID'), '=', value(UUID))
+            ])
             .build();
     }
 

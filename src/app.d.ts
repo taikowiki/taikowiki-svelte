@@ -5,7 +5,9 @@ import type { User as UserModule } from '$lib/module/user'
 
 declare global {
 	namespace App {
-		// interface Error {}
+		interface Error {
+			reason?: string;
+		}
 		interface Locals {
 			user?: User<any>,
 			userData: UserModule.Data | null,
@@ -15,6 +17,19 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+	declare namespace NodeJS {
+		interface ProcessEnv {
+			DB_HOST: string;
+			DB_DATABASE: string;
+			DB_USER: string;
+			DB_PASSWORD: string;
+			DB_SERVICE: string;
+			DB_TIMEZONE: string;
+			KAKAO_JAVASCRIPT_KEY: string;
+			AUTH_KEY: string;
+			TIMEZONE: string;
+		}
+	}
 }
 
-export {};
+export { };

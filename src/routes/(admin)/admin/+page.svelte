@@ -31,6 +31,11 @@
             name: "단위도장 관리",
             href: "/admin/dani",
         },
+
+        {
+            name: "설문 관리",
+            href: "/admin/poll",
+        },
     ];
 </script>
 

@@ -45,6 +45,7 @@
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
     import { Doc } from '$lib/module/doc/index.js';
+    import { Layout } from "$lib/module/layout/index.js";
 
     const { docContext } = Doc;
 
@@ -56,6 +57,9 @@
 
     //usemobile
     const isMobile = useIsMobile(data.isMobile);
+
+    //timezone
+    Layout.useTimezone(data.timezone);
 
     //lang
     const lang = useLang();

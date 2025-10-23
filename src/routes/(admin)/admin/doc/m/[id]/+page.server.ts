@@ -1,27 +1,41 @@
 import { error } from '@sveltejs/kit';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { runQuery } from '@yowza/db-handler';
 import { Doc } from '$lib/module/doc/index.js';
+import type { RequestEvent } from './$types';
+import { Util } from '$lib/module/util/util.server';
 
 const { parseDBData } = Doc;
+const { queryBuilder } = Util.Server;
 
-export async function load({params}){
+export async function load({ params }: RequestEvent) {
     const id = Number(params.id);
-    if(Number.isNaN(id)){
+    if (Number.isNaN(id)) {
         throw error(404);
     }
 
-    const docData = await runQuery(async(run) => {
-        const columns = ['id', 'title', 'type', 'songNo', 'redirectTo', 'editableGrade', 'createdTime', 'editedTime', 'isDeleted', 'version'] as const;
-        const query = queryBuilder.select('docs', [...columns]).where(Where.Compare('id', '=', id)).build();
-        const r = await run(query);
-        if(r.length === 0){
+    const docData = await runQuery(async (run) => {
+        const rows = await queryBuilder
+            .select('docs', () => ({
+                'id': 'id',
+                'title': 'title',
+                'type': 'type',
+                'songNo': 'songNo',
+                'redirectTo': 'redirectTo',
+                'editableGrade': 'editableGrade',
+                'createdTime': 'createdTime',
+                'editedTime': 'editedTime',
+                'isDeleted': 'isDeleted',
+                'version': 'version'
+            }))
+            .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+            .execute(run);
+        if (rows.length === 0) {
             return null;
         }
-        
-        return parseDBData<typeof columns[number]>(r[0])
+        return parseDBData<'id' | 'title' | 'type' | 'songNo' | 'redirectTo' | 'editableGrade' | 'createdTime' | 'editedTime' | 'isDeleted' | 'version'>(rows[0]);
     })
 
-    if(!docData){
+    if (!docData) {
         throw error(404);
     }
 

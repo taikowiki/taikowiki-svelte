@@ -1,11 +1,10 @@
 import { error } from '@sveltejs/kit';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { runQuery } from '@yowza/db-handler';
 import { Doc } from '$lib/module/doc/doc.server';
+import type { RequestEvent } from './$types';
 
-const { parseDBData } = Doc;
-const {DBController} = Doc.Server;
 
-export async function DELETE(event){
+export async function DELETE(event: RequestEvent){
     const {locals, params} = event;
     const id = Number(params.id);
     if(Number.isNaN(id)){
@@ -18,18 +17,15 @@ export async function DELETE(event){
                 throw error(403);
             }
 
-            const query1 = queryBuilder.select('docs', ['editableGrade']).where(Where.Compare('id', '=', id)).build();
-            const r1 = await run(query1);
-            if(r1.length === 0){
+            const editableGrade = await Doc.Server.DBController.getEditableGrade.getCallback(id)(run);
+            if(editableGrade === null){
                 throw error(404);
             }
-            const {editableGrade} = parseDBData(r1[0]);
-
             if(locals.userData.grade < editableGrade){
                 throw error(403);
             }
 
-            await DBController.hardDelete.getCallback(id)(run);
+            await Doc.Server.DBController.hardDelete.getCallback(id)(run);
         })
     }
     catch(err){

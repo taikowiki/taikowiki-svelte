@@ -1,8 +1,10 @@
 import type { HTMLElement } from "node-html-parser";
 import type { Doc } from "..";
 import { renderer } from "../util";
-import { queryBuilder, Select, Where } from "@yowza/db-handler";
 import type { QueryFunction } from '@yowza/db-handler/types';
+import { Util } from "$lib/module/util/util.server";
+
+const { queryBuilder } = Util.Server;
 
 export async function setWikiLinkAvailable(dom: HTMLElement, run: QueryFunction) {
     for (const wikiLinkElement of dom.querySelectorAll('wiki-link')) {
@@ -12,18 +14,21 @@ export async function setWikiLinkAvailable(dom: HTMLElement, run: QueryFunction)
             continue;
         }
 
-        const query = queryBuilder.select('docs', [Select.As(Select.Count(), 'COUNT')])
-                        .where(
-                            Where.Compare('title', '=', docTitle), 
-                            Where.Compare('isDeleted', '=', 0)
-                        )
-                        .build();
-        const result = await run(query);
+        const count = await queryBuilder
+            .select('docs', ({ count }) => ({
+                count: count()
+            }))
+            .where(({ compare, column, value }) => [
+                compare(column('title'), '=', value(docTitle)),
+                compare(column('isDeleted'), '=', value(0))
+            ])
+            .execute(run)
+            .then((r) => r[0].count);
 
-        if((result?.[0]?.COUNT ?? 0) === 0){
+        if (count === 0) {
             var exists = false;
         }
-        else{
+        else {
             var exists = true;
         }
 

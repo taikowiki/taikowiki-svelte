@@ -1,12 +1,14 @@
-import { defineDBHandler, QB, queryBuilder, Select, Where } from "@yowza/db-handler";
+import { defineDBHandler } from "@yowza/db-handler";
 import type { Doc } from '$lib/module/doc';
 import { WikiError, validateDocData, parseDBData } from "../util.js";
 import { renderer } from "../util.js";
 import { Song } from '$lib/module/song/song.server';
 import { Util } from "$lib/module/util/index.js";
+import '$lib/module/util/util.server.js';
 import * as Diff from 'diff';
 import { Search } from "$lib/module/search/index.js";
 
+const queryBuilder = Util.Server.queryBuilder;
 export const docDBController = {
     /**
      * @throws `DUPLICATED_TITLE` 제목이 중복됨.
@@ -398,64 +400,97 @@ export const docDBController = {
     }),
     search: defineDBHandler<[query: string, offset: number, limit: number], { count: number, searchResults: Pick<Doc.DB.DocDBData, 'title' | 'flattenedContent' | 'type' | 'songNo' | 'redirectTo'>[] }>((query, offset, limit) => {
         if (query) {
-            var countQuery =
-                queryBuilder.union([
-                    //@ts-expect-error
+            var countQuery = queryBuilder
+                .union([
                     queryBuilder
-                        .select('docs', [Select.Count()])
-                        .where(
-                            Where.Compare('title', '=', query),
-                            Where.Compare('isDeleted', '=', 0)
-                        ),
-                    //@ts-expect-error
+                        .select('docs', '*')
+                        .where(({ compare, column, value }) => [
+                            compare(column('title'), '=', value(query)),
+                            compare(column('isDeleted'), '=', value(0))
+                        ]),
                     queryBuilder
-                        .select('docs', [Select.Count()])
-                        .where(
-                            Where.Like('title', `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
-                            Where.Compare('isDeleted', '=', 0)
-                        ),
-                    //@ts-expect-error
+                        .select('docs', '*')
+                        .where(({ compare, column, value, like }) => [
+                            like(column('title'), `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
+                            compare(column('isDeleted'), '=', value(0))
+                        ]),
                     queryBuilder
-                        .select('docs', [Select.Count()])
-                        .where(
-                            Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
-                            Where.Compare('isDeleted', '=', 0)
-                        )
-                ]).build()
+                        .select('docs', '*')
+                        .where(({ compare, column, value, like }) => [
+                            like(column('flattenedContent'), `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
+                            compare(column('isDeleted'), '=', value(0))
+                        ]),
+                ])
+                .build();
 
-            var searchQuery =
-                queryBuilder.union([
-                    //@ts-expect-error
+            var searchQuery = queryBuilder
+                .union([
                     queryBuilder
-                        .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime'])
-                        .where(
-                            Where.Compare('title', '=', query),
-                            Where.Compare('isDeleted', '=', 0)
-                        ),
-                    //@ts-expect-error
+                        .select('docs', () => ({
+                            title: 'title',
+                            flattenedContent: 'flattenedContent',
+                            type: 'type',
+                            songNo: 'songNo',
+                            redirectTo: 'redirectTo',
+                            editedTime: 'editedTime'
+                        }))
+                        .where(({ compare, column, value }) => [
+                            compare(column('title'), '=', value(query)),
+                            compare(column('isDeleted'), '=', value(0))
+                        ]),
                     queryBuilder
-                        .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime'])
-                        .where(
-                            Where.Like('title', `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
-                            Where.Compare('isDeleted', '=', 0)
-                        ),
-                    //@ts-expect-error
+                        .select('docs', () => ({
+                            title: 'title',
+                            flattenedContent: 'flattenedContent',
+                            type: 'type',
+                            songNo: 'songNo',
+                            redirectTo: 'redirectTo',
+                            editedTime: 'editedTime'
+                        }))
+                        .where(({ compare, column, value, like }) => [
+                            like(column('title'), `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
+                            compare(column('isDeleted'), '=', value(0))
+                        ]),
                     queryBuilder
-                        .select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime'])
-                        .where(
-                            Where.Like('flattenedContent', `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
-                            Where.Compare('isDeleted', '=', 0)
-                        )
-                ]).build() + ` ORDER BY \`editedTime\` DESC LIMIT ${offset}, ${limit}`;
+                        .select('docs', () => ({
+                            title: 'title',
+                            flattenedContent: 'flattenedContent',
+                            type: 'type',
+                            songNo: 'songNo',
+                            redirectTo: 'redirectTo',
+                            editedTime: 'editedTime'
+                        }))
+                        .where(({ compare, column, value, like }) => [
+                            like(column('flattenedContent'), `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
+                            compare(column('isDeleted'), '=', value(0))
+                        ]),
+                ])
+                .orderBy('editedTime', 'desc')
+                .limit(limit, offset)
+                .build();
         }
         else {
-            var countQuery = queryBuilder.select('docs', [Select.Count()]).where(Where.Compare('isDeleted', '=', 0)).build();
-            var searchQuery = queryBuilder.select('docs', ['title', 'flattenedContent', 'type', 'songNo', 'redirectTo', 'editedTime']).where(Where.Compare('isDeleted', '=', 0)).orderby('id', 'desc').limit(offset, limit).build();
+            var countQuery = queryBuilder
+                .select('docs', ({ count }) => ({ count: count() }))
+                .where(({ compare, value, column }) => [compare(column('isDeleted'), '=', value(0))])
+                .build();
+            var searchQuery = queryBuilder
+                .select('docs', () => ({
+                    title: 'title',
+                    flattenedContent: 'flattenedContent',
+                    type: 'type',
+                    songNo: 'songNo',
+                    redirectTo: 'redirectTo',
+                    editedTime: 'editedTime'
+                }))
+                .where(({ compare, column, value }) => [compare(column('isDeleted'), '=', value(0))])
+                .orderBy('docs.id', 'desc')
+                .limit(limit, offset)
+                .build();
         }
 
         return async (run) => {
-            const r1 = await run(countQuery)
-            const count = Object.values(r1[0])[0] as number;
+            const count = await run(countQuery).then((v) => v[0].count as number);
             if (count === 0) {
                 return {
                     count,
@@ -463,11 +498,33 @@ export const docDBController = {
                 }
             }
 
-            const r2 = await run(searchQuery)
-            const searchResults = r2.map((e: any) => parseDBData(e));
+            const rows = await run(searchQuery);
+            const searchResults = rows.map((e: any) => parseDBData(e));
             return {
                 count, searchResults
             }
+        }
+    }),
+    /**
+     * 문서를 삭제
+     */
+    delete: defineDBHandler<[docId: number]>((id) => {
+        return async (run) => {
+            return await queryBuilder
+                .update('docs', () => ({ isDeleted: 1 }))
+                .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                .execute(run);
+        }
+    }),
+    /**
+     * 문서를 복원
+     */
+    restore: defineDBHandler<[docId: number]>((id) => {
+        return async(run) => {
+            return await queryBuilder
+                .update('docs', () => ({ isDeleted: 0 }))
+                .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                .execute(run);
         }
     }),
     /**
@@ -475,21 +532,40 @@ export const docDBController = {
      */
     hardDelete: defineDBHandler<[docId: number], boolean>((id) => {
         return async (run) => {
-            const result = await run(queryBuilder.select('docs', [Select.As(Select.Count(), 'COUNT')]).where(Where.Compare('id', '=', id)).build());
-            if (result[0].COUNT === 0) {
+            const result = await queryBuilder
+                .select('docs', ({ count }) => ({ count: count() }))
+                .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                .execute(run);
+            if (result[0].count === 0) {
                 return false;
             }
 
-            const moveQuery =
-                queryBuilder
-                    .insert('docs/log')
-                    .from(
-                        ['id', 'title', 'type', 'editableGrade', 'editorUUID', 'editorIp', 'comment', 'contentTree', 'renderedContentTree', 'flattenedContent', 'songNo', 'redirectTo', 'createdTime', 'editedTime', 'isDeleted', 'version', 'diffIncrease', 'diffDecrease'],
-                        queryBuilder.select('docs').where(Where.Compare('id', '=', id))
-                    )
-                    .build()
+            await queryBuilder
+                .insert('docs/log')
+                .from(queryBuilder
+                    .select('docs', () => ({
+                        id: 'id',
+                        title: 'title',
+                        type: 'type',
+                        editableGrade: 'editableGrade',
+                        editorUUID: 'editorUUID',
+                        editorIp: 'editorIp',
+                        comment: 'comment',
+                        contentTree: 'contentTree',
+                        renderedContentTree: 'renderedContentTree',
+                        flattenedContent: 'flattenedContent',
+                        songNo: 'songNo',
+                        redirectTo: 'redirectTo',
+                        createdTime: 'createdTime',
+                        editedTime: 'editedTime',
+                        isDeleted: 'isDeleted',
+                        version: 'version',
+                        diffIncrease: 'diffIncrease',
+                        diffDecrease: 'diffDecrease'
+                    }))
+                )
+                .execute(run)
 
-            await run(moveQuery);
             await run("DELETE FROM `docs` WHERE `id` = ?", [id]);
             return true;
         }
@@ -499,10 +575,14 @@ export const docDBController = {
      */
     quickSearch: defineDBHandler<[keyword: string]>((keyword) => {
         return async (run) => {
-            const query = queryBuilder.select('docs', ['title']).where(
-                Where.Like('title', `%${keyword.split(' ').map(e => Util.sqlEscapeLike(e)).join('%')}%`),
-                Where.Compare('isDeleted', '=', 0)
-            ).limit(20).build()
+            const query = queryBuilder
+                .select('docs', () => ({ title: 'title' }))
+                .where(({ compare, column, value, like }) => [
+                    like(column('title'), `%${keyword.split(' ').map(e => Util.sqlEscapeLike(e)).join('%')}%`),
+                    compare(column('isDeleted'), '=', value(0))
+                ])
+                .limit(20)
+                .build();
 
             const searchResult: Search.Result[] = (await run(query)).map((e: any) => ({
                 title: e.title as string,
@@ -514,30 +594,72 @@ export const docDBController = {
     }),
     getRecentDocs: defineDBHandler<[], Record<'recentlyEditedDocs' | 'recentlyCreatedDocs', (Pick<Doc.DB.DocDBData, 'id' | 'title' | 'editorUUID' | 'editorIp' | 'createdTime' | 'editedTime'> & { nickname: string | null })[]>>(() => {
         return async (run) => {
-            const query1 = queryBuilder
-                .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
-                .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
-                .where(Where.NotNull('docs.id'), Where.Compare('docs.version', '=', 1))
-                .orderby('createdTime', 'desc')
-                .limit(0, 5)
-                .build();
-            const result1 = await run(query1);
-            const recentlyCreatedDocs = result1.map((e: any) => parseDBData(e));
+            const result1 = await queryBuilder
+                .select('docs', () => ({
+                    id: 'id',
+                    title: 'title',
+                    editorUUID: 'editorUUID',
+                    editorIp: 'editorIp',
+                    createdTime: 'createdTime',
+                    editedTime: 'editedTime'
+                }))
+                .join('user/data', () => ({
+                    nickname: 'nickname'
+                }), 'right', ({ compare, column }) => [compare(column('docs.editorUUID'), '=', column('user/data.UUID'))])
+                .where(({ column, isNotNull, compare, value }) => [
+                    isNotNull(column('docs.id')),
+                    compare(column('docs.version'), '=', value(1))
+                ])
+                .orderBy('docs.createdTime', 'desc')
+                .limit(5, 0)
+                .execute(run);
+            const recentlyCreatedDocs = result1.map((e: any) => parseDBData(e)) as unknown as (Pick<Doc.DB.DocDBData, 'id' | 'title' | 'editorUUID' | 'editorIp' | 'createdTime' | 'editedTime'> & { nickname: string | null })[];
 
-            const query2 = queryBuilder
-                .select('docs', ['id', 'title', 'editorUUID', 'editorIp', 'createdTime', 'editedTime', Where.Column('user/data.nickname')])
-                .join('user/data', 'right', ['on', 'editorUUID', 'UUID'])
-                .where(...recentlyCreatedDocs.map((e: any) => Where.Raw(`\`id\` != ${e.id}`)), Where.NotNull('docs.id'))
-                .orderby('editedTime', 'desc')
-                .limit(0, 5)
-                .build();
-            const result2 = await run(query2);
-            const recentlyEditedDocs = result2.map((e: any) => parseDBData(e));
+            const result2 = await queryBuilder
+                .select('docs', () => ({
+                    id: 'id',
+                    title: 'title',
+                    editorUUID: 'editorUUID',
+                    editorIp: 'editorIp',
+                    createdTime: 'createdTime',
+                    editedTime: 'editedTime'
+                }))
+                .join('user/data', () => ({
+                    nickname: 'nickname'
+                }), 'right', ({ compare, column }) => [compare(column('docs.editorUUID'), '=', column('user/data.UUID'))])
+                .where(({ column, isNotNull, compare, value }) => [
+                    isNotNull(column('docs.id')),
+                    ...recentlyCreatedDocs.map((e: any) => compare(column('docs.id'), '!=', value(e.id)))
+                ])
+                .orderBy('docs.createdTime', 'desc')
+                .limit(5, 0)
+                .execute(run);
+            const recentlyEditedDocs = result2.map((e: any) => parseDBData(e)) as unknown as (Pick<Doc.DB.DocDBData, 'id' | 'title' | 'editorUUID' | 'editorIp' | 'createdTime' | 'editedTime'> & { nickname: string | null })[];
 
             return {
                 recentlyCreatedDocs,
                 recentlyEditedDocs
             }
+        }
+    }),
+    getEditableGrade: defineDBHandler<[id: number], number | null>((id) => {
+        return async (run) => {
+            const rows = await queryBuilder
+                .select('docs', () => ({ editableGrade: 'editableGrade' }))
+                .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                .execute(run);
+
+            if (rows.length === 0) return null;
+            return rows[0].editableGrade;
+        }
+    }),
+    setEditableGrade: defineDBHandler<[id: number, grade: number]>((id, grade) => {
+        return async (run) => {
+            const result = await queryBuilder
+                .update('docs', () => ({ editableGrade: grade }))
+                .where(({ compare, column, value }) => [compare(column('id'), '=', value(id))])
+                .execute(run);
+            return result;
         }
     })
 } as const;

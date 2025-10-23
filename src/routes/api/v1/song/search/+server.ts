@@ -1,57 +1,64 @@
 import { Song } from '$lib/module/song/song.server';
-import { Util } from '$lib/module/util';
-import { QB, queryBuilder, runQuery, Select, Where } from '@yowza/db-handler';
+import { Util } from '$lib/module/util/util.server';
+import { runQuery } from '@yowza/db-handler';
+import type { RequestEvent } from './$types';
+import type { Query } from '@yowza/db-handler/types';
 
-export async function GET({ url, setHeaders, locals }) {
+const { queryBuilder } = Util.Server;
+
+export async function GET({ url, setHeaders, locals }: RequestEvent) {
     const query = url.searchParams.get('query') || undefined;
     const difficulty = url.searchParams.get('difficulty') as (Song.Difficulty | "oniura") || undefined;
     const genre = url.searchParams.get('genre') as Song.Genre || undefined;
     let level: number | undefined = Number(url.searchParams.get('level'));
     if (isNaN(level) || level === 0) level = undefined;
 
-    let sqlQuery: QB = queryBuilder.select('song', [
-        "songNo",
-        "genre",
-        "title",
-        "titleKo",
-        "aliasKo",
-        "titleEn",
-        "aliasEn",
-        "artists",
-        "romaji",
-        Select.As(Select.Raw("JSON_EXTRACT(`courses`, '$.easy.level')"), 'easy'),
-        Select.As(Select.Raw("JSON_EXTRACT(`courses`, '$.normal.level')"), 'normal'),
-        Select.As(Select.Raw("JSON_EXTRACT(`courses`, '$.hard.level')"), 'hard'),
-        Select.As(Select.Raw("JSON_EXTRACT(`courses`, '$.oni.level')"), 'oni'),
-        Select.As(Select.Raw("JSON_UNQUOTE(JSON_EXTRACT(`courses`, '$.ura.level'))"), 'ura')
-    ]);
+    let sqlQuery = queryBuilder.select('song', ({ raw }) => ({
+        songNo: 'songNo',
+        genre: 'genre',
+        title: 'title',
+        titleKo: 'titleKo',
+        aliasKo: 'aliasKo',
+        titleEn: 'titleEn',
+        aliasEn: 'aliasEn',
+        artists: 'artists',
+        romaji: 'romaji',
+        easy: raw("JSON_EXTRACT(`courses`, '$.easy.level')"),
+        normal: raw("JSON_EXTRACT(`courses`, '$.normal.level')"),
+        hard: raw("JSON_EXTRACT(`courses`, '$.hard.level')"),
+        oni: raw("JSON_EXTRACT(`courses`, '$.oni.level')"),
+        ura: raw("JSON_UNQUOTE(JSON_EXTRACT(`courses`, '$.ura.level'))")
+    }));
 
-    const whereConditions: any[] = [];
+    const whereConditions: ((expr: any) => any)[] = [];
     if (query) {
-        const whereClause = `%${query.split(' ').map(e => Util.sqlEscapeString(e)).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`;
-        whereConditions.push(Where.OR(
-            Where.Like('title', whereClause),
-            Where.Like('titleKo', whereClause),
-            Where.Like('aliasKo', whereClause),
-            Where.Like('titleEn', whereClause),
-            Where.Like('aliasEn', whereClause),
-            Where.Like('romaji', whereClause)
+        const likeQuery = `%${query.split(' ').map(e => Util.sqlEscapeString(e)).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`;
+        whereConditions.push(({ or, like, column }) => or(
+            like(column('title'), likeQuery),
+            like(column('titleKo'), likeQuery),
+            like(column('aliasKo'), likeQuery),
+            like(column('titleEn'), likeQuery),
+            like(column('aliasEn'), likeQuery),
+            like(column('romaji'), likeQuery)
         ));
     }
     if (genre) {
-        whereConditions.push(Where.Raw(`JSON_CONTAINS(\`genre\`, '"${genre}"')`))
+        whereConditions.push(({ raw }) => raw(`JSON_CONTAINS(\`genre\`, '"${genre}"')`));
     }
     if (difficulty && level) {
         if (difficulty === "oniura") {
-            whereConditions.push(Where.Raw(`(JSON_EXTRACT(\`courses\`, '$.oni.level') = ${level} OR JSON_EXTRACT(\`courses\`, '$.ura.level') = ${level})`));
+            whereConditions.push(({ raw }) => raw(`(JSON_EXTRACT(\`courses\`, '$.oni.level') = ${level} OR JSON_EXTRACT(\`courses\`, '$.ura.level') = ${level})`));
         }
         else {
-            whereConditions.push(Where.Raw(`JSON_EXTRACT(\`courses\`, '$.${difficulty}.level') = ${level}`));
+            whereConditions.push(({ raw }) => raw(`JSON_EXTRACT(\`courses\`, '$.${difficulty}.level') = ${level}`));
         }
     }
 
     if (whereConditions.length > 0) {
-        sqlQuery = (sqlQuery as Select).where(...whereConditions);
+        //@ts-expect-error
+        sqlQuery = sqlQuery.where((expr) => [...whereConditions.map(c => {
+            return c(expr);
+        })]);
     }
 
     const result = await runQuery(async (run) => {

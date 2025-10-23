@@ -1,12 +1,16 @@
 import { fetchMeasures, getRating } from "@taiko-wiki/taiko-rating";
 import { escapeId } from 'mysql2';
-import { defineDBHandler, QB, queryBuilder, Select, Where } from "@yowza/db-handler";
+import { defineDBHandler } from "@yowza/db-handler";
 import type { Badge, CardData, Clear, Crown, Difficulty } from "node-hiroba/types";
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { getSongRating } from "@taiko-wiki/taiko-rating";
 import type { Measure } from "@taiko-wiki/taiko-rating/types";
-import { User } from "."; import { Util } from "../util";
+import { User } from ".";
+import { Util } from "../util/util.server";
 import type { RequestEvent } from "@sveltejs/kit";
+import type { InferDBSchema } from "@yowza/db-handler/types";
+
+const { queryBuilder } = Util.Server;
 
 namespace UserServer {
     export const DBController = {
@@ -16,7 +20,7 @@ namespace UserServer {
         createData: defineDBHandler<[string, string, object], User.Data>((provider, providerId, providerUserData) => {
             return async (run) => {
                 const UUID = randomUUID();
-                const userData: Partial<User.Data> = {
+                const userData = {
                     provider,
                     providerId,
                     nickname: UUID,
@@ -24,11 +28,18 @@ namespace UserServer {
                     registerTime: Date.now(),
                     grade: 2,
                     providerUserData: JSON.stringify(providerUserData)
-                }
+                } satisfies Partial<User.Data>;
 
-                const r = await run(`INSERT INTO \`user/data\` (\`provider\`, \`providerId\`, \`nickname\`, \`UUID\`, \`registerTime\`, \`grade\`, \`providerUserData\`) VALUES (?, ?, ?, ?, ?, ?, ?)`, [userData.provider, userData.providerId, userData.nickname, userData.UUID, userData.registerTime, userData.grade, userData.providerUserData]);
+                const result = await queryBuilder
+                    .insert('user/data')
+                    .set(() => (userData))
+                    .execute(run);
 
-                return (await run(`SELECT * FROM \`user/data\` WHERE \`order\` = ?`, [r.insertId]) as User.Data[])[0]
+                return await queryBuilder
+                    .select('user/data', '*')
+                    .where(({ compare, column, value }) => [compare(column('order'), '=', value(result.insertId))])
+                    .execute(run)
+                    .then((rows) => rows[0] as User.Data);
             }
         }),
 
@@ -37,15 +48,18 @@ namespace UserServer {
          */
         getDataByProvider: defineDBHandler<[string, string], User.Data | null>((provider, providerId) => {
             return async (run) => {
-                const result = await run(`SELECT * FROM \`user/data\` WHERE \`provider\` = ? AND \`providerId\` = ?`, [provider, providerId]);
+                const rows = await queryBuilder
+                    .select('user/data', '*')
+                    .where(({ compare, column, value }) => [
+                        compare(column('provider'), '=', value(provider)),
+                        compare(column('providerId'), '=', value(providerId))
+                    ])
+                    .execute(run);
 
-                if (result.length !== 0) {
-                    const userData = result[0];
-                    if (userData.providerUserData) {
-                        userData.providerUserData = JSON.parse(userData.providerUserData);
-                    }
-                    return userData;
-                }// 유저 존재
+                if (rows.length !== 0) {
+                    // 유저 존재
+                    return parseUserData(rows[0]);
+                }
 
                 return null;
             }
@@ -56,15 +70,15 @@ namespace UserServer {
          */
         getData: defineDBHandler<[string], User.Data | null>((UUID) => {
             return async (run) => {
-                const result = await run(`SELECT * FROM \`user/data\` WHERE \`UUID\` = ?`, [UUID]);
+                const rows = await queryBuilder
+                    .select('user/data', '*')
+                    .where(({ compare, column, value }) => [compare(column('UUID'), '=', value(UUID))])
+                    .limit(1)
+                    .execute(run);
 
-                if (result.length !== 0) {
-                    const userData = result[0];
-                    if (userData.providerUserData) {
-                        userData.providerUserData = JSON.parse(userData.providerUserData);
-                    }
-                    return userData;
-                }// 유저 존재
+                if (rows.length !== 0) {// 유저 존재
+                    return parseUserData(rows[0]);
+                }
 
                 return null;
             }
@@ -75,7 +89,13 @@ namespace UserServer {
          */
         getNickname: defineDBHandler<[string], string | null>((UUID) => {
             return async (run) => {
-                return (await run("SELECT `nickname` FROM `user/data` WHERE `UUID` = ?", [UUID]))[0]?.nickname ?? null
+                return await queryBuilder
+                    .select('user/data', () => ({
+                        nickname: 'nickname'
+                    }))
+                    .where(({ compare, column, value }) => [compare(column('UUID'), '=', value(UUID))])
+                    .execute(run)
+                    .then((rows) => rows[0]?.nickname ?? null);
             }
         }),
 
@@ -85,8 +105,19 @@ namespace UserServer {
         changeNickname: defineDBHandler<[string, string], void>((UUID, newNickname) => {
             if (!/^([a-zA-Z가-힣0-9\-]*)$/.test(newNickname)) throw new Error('New nickname is not in the correct format');
             return async (run) => {
-                if ((await run(`SELECT \`order\` FROM \`user/data\` WHERE \`nickname\` = ?`, [newNickname])).length !== 0) throw new Error('Duplicated Nickname');
-                return await run(`UPDATE \`user/data\` SET \`nickname\` = ? WHERE \`UUID\` = ?`, [newNickname, UUID])
+                const duplicated = await queryBuilder
+                    .select('user/data', ({ count }) => ({ count: count() }))
+                    .where(({ compare, column, value }) => [compare(column('nickname'), '=', value(newNickname))])
+                    .execute(run)
+                    .then((rows) => rows[0].count > 0);
+                if (duplicated) throw new Error('Duplicated Nickname');
+                await queryBuilder
+                    .update('user/data', ({ value }) => ({
+                        nickname: value(newNickname)
+                    }))
+                    .where(({ compare, column, value }) => [compare(column('UUID'), '=', value(UUID))])
+                    .execute(run);
+                return;
             }
         }),
 
@@ -162,28 +193,32 @@ namespace UserServer {
          */
         setShowRating: defineDBHandler<[string, Partial<Record<'nickname' | 'taikoNumber' | 'songs', boolean>>], void>((UUID, options) => {
             return async (run) => {
-                const setQuery: string[] = [];
-                if (options.nickname === true) {
-                    setQuery.push('showRatingNickname = 1');
+                const set: Partial<Record<'showRatingNickname' | 'showRatingTaikoNo' | 'showRatingSongs', 1 | 0>> = {}
+                if (options.nickname) {
+                    set.showRatingNickname = 1;
                 }
                 else if (options.nickname === false) {
-                    setQuery.push('showRatingNickname = 0');
+                    set.showRatingNickname = 0;
                 }
-                if (options.taikoNumber === true) {
-                    setQuery.push('showRatingTaikoNo = 1');
+                if (options.taikoNumber) {
+                    set.showRatingTaikoNo = 1;
                 }
                 else if (options.taikoNumber === false) {
-                    setQuery.push('showRatingTaikoNo = 0');
+                    set.showRatingTaikoNo = 0;
                 }
-                if (options.songs === true) {
-                    setQuery.push('showRatingSongs = 1');
+                if (options.songs) {
+                    set.showRatingSongs = 1;
                 }
                 else if (options.songs === false) {
-                    setQuery.push('showRatingSongs = 0');
+                    set.showRatingSongs = 0;
                 }
 
-                if (setQuery.length !== 0) {
-                    await run("UPDATE `user/data` SET " + setQuery.join(',') + " WHERE `UUID` = ?", [UUID]);
+
+                if (Object.keys(set).length > 0) {
+                    await queryBuilder
+                        .update('user/data', () => set)
+                        .where(({ compare, column, value }) => [compare(column('UUID'), '=', value(UUID))])
+                        .execute(run)
                 }
             }
         }),
@@ -202,11 +237,14 @@ namespace UserServer {
          */
         banAuth: defineDBHandler<[provider: string, providerId: string], void>((provider, providerId) => {
             return async (run) => {
-                await run(
-                    queryBuilder.insert('ban/auth')
-                        .set({ provider, providerId })
-                        .build()
-                )
+                await queryBuilder.insert('ban/auth').set(() => ({ provider, providerId })).execute(run)
+            }
+        }),
+        doesUUIDExists: defineDBHandler<[UUID: string], boolean>((UUID) => {
+            return async (run) => {
+                const result = await run("SELECT COUNT(*) AS `count` FROM `user/data` WHERE `UUID` = ?", [UUID]);
+                if (result?.[0]?.count) return true;
+                return false;
             }
         })
     }
@@ -257,28 +295,21 @@ namespace UserServer {
                             );
                         }
                         else {
-                            const sql = queryBuilder
-                                .update('user/donder_data', {
+                            await queryBuilder
+                                .update('user/donder_data', ({ raw }) => ({
                                     donder: JSON.stringify(data.donderData),
                                     clearData: JSON.stringify(mergedClearData),
                                     scoreData: JSON.stringify(mergedScoreData),
                                     currentRating: currentRating.rating,
                                     currentExp: currentRating.exp,
-                                    ratingHistory: QB.Raw(`JSON_ARRAY_APPEND(\`ratingHistory\`, '$', JSON_ARRAY(${Date.now()}, ${currentRating.rating}))`),
-                                    expHistory: QB.Raw(`JSON_ARRAY_APPEND(\`expHistory\`, '$', JSON_ARRAY(${Date.now()}, ${currentRating.exp}))`),
+                                    ratingHistory: raw(`JSON_ARRAY_APPEND(\`ratingHistory\`, '$', JSON_ARRAY(${Date.now()}, ${currentRating.rating}))`),
+                                    expHistory: raw(`JSON_ARRAY_APPEND(\`expHistory\`, '$', JSON_ARRAY(${Date.now()}, ${currentRating.exp}))`),
                                     ratingData: JSON.stringify(currentRating.songRatingDatas),
-                                    lastUpdate: QB.Raw(`CURRENT_TIMESTAMP()`),
-                                    lastRatingCalculate: QB.Raw(`CURRENT_TIMESTAMP()`)
-                                })
-                                .where(Where.Compare('UUID', '=', UUID))
-                                .build();
-                            /*
-                            await run(
-                                "UPDATE `user/donder_data` SET `donder` = ?, `clearData` = ?, `scoreData` = ?, `currentRating` = ?, `currentExp` = ?, `ratingHistory` = JSON_ARRAY_APPEND(`ratingHistory`, '$', ?), `expHistory` = JSON_ARRAY_APPEND(`expHistory`, '$', ?), `ratingData` = ?, `lastUpdate` = CURRENT_TIMESTAMP(), `lastRatingCalculate` = CURRENT_TIMESTAMP() WHERE `UUID` = ?",
-                                [JSON.stringify(data.donderData), JSON.stringify(mergedClearData), JSON.stringify(mergedScoreData), currentRating.rating, currentRating.exp, formerData.currentRating, formerData.currentExp, JSON.stringify(currentRating.songRatingDatas), UUID]
-                            );
-                            */
-                            await run(sql);
+                                    lastUpdate: raw(`CURRENT_TIMESTAMP()`),
+                                    lastRatingCalculate: raw(`CURRENT_TIMESTAMP()`)
+                                }))
+                                .where(({ compare, column, value }) => [compare(column('UUID'), '=', value(UUID))])
+                                .execute(run);
                         }
                     }
                     else {
@@ -416,7 +447,10 @@ namespace UserServer {
     export const apiKeyDBController = {
         generateKey: defineDBHandler<[UUID: string], string>((UUID) => {
             return async (run) => {
-                await run(queryBuilder.delete('user/api_key').where(Where.Compare('UUID', '=', UUID)).build());
+                await queryBuilder
+                    .delete('user/api_key')
+                    .where(({ compare, column, value }) => [compare(column('UUID'), '=', value(UUID))])
+                    .execute(run);
 
                 const key = Util.pipe(randomBytes(32).toString('hex'), [
                     (key: string) => {
@@ -426,18 +460,20 @@ namespace UserServer {
                     }
                 ])
 
-                await run(queryBuilder.insert('user/api_key').set({ UUID, key }).build());
+                await queryBuilder
+                    .insert('user/api_key')
+                    .set(() => ({
+                        UUID, key
+                    }))
+                    .execute(run);
 
                 return key;
             }
         }),
         checkKey: defineDBHandler<[key: string], string | null>((key) => {
-            const query =
-                queryBuilder.select('user/api_key')
-                    .where(
-                        Where.Compare('key', '=', key)
-                    )
-                    .build();
+            const query = queryBuilder.select('user/api_key', '*')
+                .where(({ column, value, compare }) => [compare(column('key'), '=', value(key))])
+                .build();
             return async (run) => {
                 const result = await run(query);
                 if (result?.[0]?.UUID) {
@@ -448,13 +484,31 @@ namespace UserServer {
         })
     }
 
-    export function logout(event: RequestEvent){
-        event.cookies.delete('auth-user', {path: '/'});
+    export function logout(event: RequestEvent) {
+        event.cookies.delete('auth-user', { path: '/' });
     }
 }
 
 export type { UserServer };
 User.Server = UserServer;
+
+// 유저 데이터 파싱
+function parseUserData<const T extends Partial<InferDBSchema<typeof queryBuilder.dbSchema>['user/data']>>(data: T) {
+    type Return = T extends Partial<InferDBSchema<typeof queryBuilder.dbSchema>['user/data']> ? Pick<User.Data, Extract<keyof T, keyof User.Data>> : never;
+
+    const userData: Partial<User.Data> = {};
+    for (const key in data) {
+        if (key === "registerTimeStamp") continue;
+        if (key === "providerUserData") {
+            userData.providerUserData = JSON.parse(data[key] as string)
+        }
+        else {
+            userData[key as keyof User.Data] = data[key] as any;
+        }
+    }
+
+    return userData as Return;
+}
 
 // db 동더 데이터 파싱
 function parseDonderData(data: any) {

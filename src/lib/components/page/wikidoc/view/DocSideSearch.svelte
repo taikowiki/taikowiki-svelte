@@ -49,6 +49,9 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        &[data-isMobile="false"]{
+            column-gap: 5px;
+        }
 
         &[data-isMobile="true"] {
             column-gap: 5px;
@@ -79,7 +82,7 @@
             }
         }
         & input {
-            width: 170px;
+            flex: 1 0 auto;
         }
         & input[data-isMobile="true"] {
             flex: 1 0 auto;

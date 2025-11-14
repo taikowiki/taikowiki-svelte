@@ -403,19 +403,19 @@ export const docDBController = {
             var countQuery = queryBuilder
                 .union([
                     queryBuilder
-                        .select('docs', '*')
+                        .select('docs', ({count}) => ({count: count()}))
                         .where(({ compare, column, value }) => [
                             compare(column('title'), '=', value(query)),
                             compare(column('isDeleted'), '=', value(0))
                         ]),
                     queryBuilder
-                        .select('docs', '*')
+                        .select('docs', ({count}) => ({count: count()}))
                         .where(({ compare, column, value, like }) => [
                             like(column('title'), `%${query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%')}%`),
                             compare(column('isDeleted'), '=', value(0))
                         ]),
                     queryBuilder
-                        .select('docs', '*')
+                        .select('docs', ({count}) => ({count: count()}))
                         .where(({ compare, column, value, like }) => [
                             like(column('flattenedContent'), `%${renderer.sharpConverter.escapeSharp(query.split(' ').filter(e => e).map(e => Util.sqlEscapeLike(e)).join('%'))}%`),
                             compare(column('isDeleted'), '=', value(0))

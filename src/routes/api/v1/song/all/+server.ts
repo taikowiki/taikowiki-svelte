@@ -8,7 +8,6 @@ export async function GET({ url, setHeaders, locals }) {
     ]);
 
     setHeaders({
-        ...locals.headers,
         'Content-Type': 'application/json'
     })
 

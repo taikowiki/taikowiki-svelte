@@ -20,7 +20,6 @@ export async function GET({ url, setHeaders, locals }) {
     const songDatas = await Song.Server.DBController.getSongsBySongNo(songNos);
 
     setHeaders({
-        ...locals.headers,
         'Content-Type': 'application/json'
     })
 

@@ -61,7 +61,6 @@ export async function GET({ url, request, setHeaders, locals }: RequestEvent) {
     }
 
     setHeaders({
-        ...locals.headers,
         'Content-Type': 'application/json'
     })
 

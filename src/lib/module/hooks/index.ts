@@ -18,21 +18,15 @@ export namespace Hooks {
 
             const response = await resolve(event);
             if ((allowedOrigin === "*" || origin === allowedOrigin) && event.url.pathname.startsWith(allowedPath)) {
-
-                event.setHeaders({
-                    "Access-Control-Allow-Origin": origin,
-                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                    "Access-Control-Allow-Headers": "Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization"
-                })
-                if (option) {
-                    if (option?.credentials === true) {
-                        event.setHeaders({
-                            "Access-Control-Allow-Credentials": "true"
-                        })
-                    }
+                response.headers.set("Access-Control-Allow-Origin", origin);
+                response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+                response.headers.set("Access-Control-Allow-Headers", "Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization");
+                if (option?.credentials) {
+                    response.headers.set("Access-Control-Allow-Credentials", "true");
                 }
                 if (event.request.method === "OPTIONS") {
-                    return new Response(null, {
+                    return new Response(response.body, {
+                        ...response,
                         status: 204
                     });
                 }

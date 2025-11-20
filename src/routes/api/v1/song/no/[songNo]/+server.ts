@@ -11,7 +11,6 @@ export async function GET({ params, setHeaders, locals }) {
     }
 
     setHeaders({
-        ...locals.headers,
         'Content-Type': 'application/json'
     })
 

@@ -16,30 +16,22 @@ export namespace Hooks {
             const origin = event.request.headers.get('Origin');
             if (!origin) return await resolve(event);
 
-            if (!event.locals.headers) {
-                event.locals.headers = {};
-            }
-
             if ((allowedOrigin === "*" || origin === allowedOrigin) && event.url.pathname.startsWith(allowedPath)) {
-                event.locals.headers = {
-                    ...event.locals.headers,
+                event.setHeaders({
                     "Access-Control-Allow-Origin": origin,
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
                     "Access-Control-Allow-Headers": "Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization"
-                }
+                })
                 if (option) {
                     if (option?.credentials === true) {
-                        event.locals.headers = {
-                            ...event.locals.headers,
+                        event.setHeaders({
                             "Access-Control-Allow-Credentials": "true"
-                        }
+                        })
                     }
                 }
                 if (event.request.method === "OPTIONS") {
-                    event.setHeaders(event.locals.headers);
                     return new Response(null, {
-                        status: 204,
-                        headers: event.locals.headers
+                        status: 204
                     });
                 }
             }
@@ -126,7 +118,7 @@ export namespace Hooks {
      */
     export const getUserData: Handle = async ({ event, resolve }) => {
         if (event.locals.user) {
-            if(await User.Server.DBController.checkAuthBanned(event.locals.user.provider, event.locals.user.providerId)){
+            if (await User.Server.DBController.checkAuthBanned(event.locals.user.provider, event.locals.user.providerId)) {
                 User.Server.logout(event);
                 throw error(499);
             }

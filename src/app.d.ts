@@ -11,7 +11,7 @@ declare global {
 		interface Locals {
 			user?: User<any>,
 			userData: UserModule.Data | null,
-			headers: Record<string, any>
+			//headers: Record<string, any>
 		}
 		// interface PageData {}
 		// interface PageState {}

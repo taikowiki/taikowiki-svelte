@@ -14,7 +14,6 @@ export async function GET({ params, setHeaders, locals }) {
     let { order, ...others } = daniData as Dani.DB & { order: number };
 
     setHeaders({
-        ...locals.headers,
         'Content-Type': 'application/json'
     })
 

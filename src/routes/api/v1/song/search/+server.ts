@@ -68,7 +68,6 @@ export async function GET({ url, setHeaders, locals }: RequestEvent) {
     result.forEach((e: any) => Song.Server.parseSongDataFromDB(e));
 
     setHeaders({
-        ...locals.headers,
         'Content-Type': 'application/json'
     })
 

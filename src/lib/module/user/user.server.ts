@@ -549,7 +549,7 @@ function mergeScoreData(oldData: User.ScoreData | undefined, newData: User.Score
         const oldSongRating = getSongRating(oldScoreData, measure.notes, measure.measureValue);
         const newSongRating = getSongRating(newScoreData, measure.notes, measure.measureValue);
 
-        if (oldSongRating.value < newSongRating.value) {
+        if (oldSongRating.value <= newSongRating.value) {
             data[measure.songno].difficulty[measure.diff] = newData[measure.songno].difficulty[measure.diff];
         }
     });

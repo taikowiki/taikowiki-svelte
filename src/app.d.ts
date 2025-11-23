@@ -28,6 +28,8 @@ declare global {
 			KAKAO_JAVASCRIPT_KEY: string;
 			AUTH_KEY: string;
 			TIMEZONE: string;
+			INTERNAL_API_KEY: string;
+			INTERNAL_RATING_ADDRESS: string;
 		}
 	}
 }

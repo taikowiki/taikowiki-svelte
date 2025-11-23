@@ -285,7 +285,7 @@ export namespace Util {
         csv += keys.map((key) => escapeString(key)).join(', ') + '\n';
 
         data.forEach((data) => {
-            csv += keys.map((key) => typeof(data[key]) === "string" ? escapeString(data[key]) : data[key]).join(', ') + '\n';
+            csv += keys.map((key) => typeof (data[key]) === "string" ? escapeString(data[key]) : data[key]).join(', ') + '\n';
         });
 
         return csv;
@@ -306,5 +306,14 @@ export namespace Util {
         TupleSplit<[...R], N, [...O, F]> : [O, T];
 
     export type Last<T extends readonly any[]> = T extends readonly [...any, infer R] ? R : never;
-    export type MakePromise<T> = T extends Promise<any> ? T : Promise<T>
+    export type MakePromise<T> = T extends Promise<any> ? T : Promise<T>;
+    export type RequestorResponse<T> = (T extends (void | undefined) ? {
+        status: 'success';
+    } : {
+        status: 'success';
+        data: T;
+    }) | {
+        status: 'error';
+        reason?: string;
+    }
 }

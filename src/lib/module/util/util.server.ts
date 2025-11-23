@@ -223,11 +223,36 @@ namespace UtilServer {
             UUID: ['string'],
             favorites: ['string']
         }
-    })
+    });
+
+    export const internalRequestor = {
+        async deleteUserRating(UUID: string): Promise<Util.RequestorResponse<void>> {
+            const response = await fetch(new URL('/api/internal/delete-user', process.env.INTERNAL_RATING_ADDRESS), {
+                method: 'post',
+                headers: {
+                    'X-Internal-Key': process.env.INTERNAL_API_KEY
+                },
+                body: JSON.stringify({
+                    UUID
+                })
+            });
+
+            if (200 <= response.status && response.status < 300) {
+                return {
+                    status: 'success'
+                }
+            }
+            else {
+                return {
+                    status: 'error'
+                }
+            }
+        }
+    }
 }
 
 type P = typeof UtilServer;
-export type {P as UtilServer};
+export type { P as UtilServer };
 Util.Server = UtilServer;
 
 export { Util };

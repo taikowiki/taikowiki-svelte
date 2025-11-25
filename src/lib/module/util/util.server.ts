@@ -230,7 +230,8 @@ namespace UtilServer {
             const response = await fetch(new URL('/api/internal/delete-user', process.env.INTERNAL_RATING_ADDRESS), {
                 method: 'post',
                 headers: {
-                    'X-Internal-Key': process.env.INTERNAL_API_KEY
+                    'X-Internal-Key': process.env.INTERNAL_API_KEY,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     UUID

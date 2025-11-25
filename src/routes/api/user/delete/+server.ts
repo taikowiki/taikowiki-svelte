@@ -12,14 +12,14 @@ export async function POST(event: RequestEvent) {
 
         try {
             await User.Server.DBController.deleteUser(locals.userData.UUID);
-            await Util.Server.internalRequestor.deleteUserRating(locals.userData.UUID);
+            await Util.Server.internalRequestor.deleteUserRating(locals.userData.UUID).catch(() => {});
             User.Server.logout(event);
+            throw redirect(302, '/');
         }
         catch (err: any) {
             console.error(err);
             throw redirect(302, '/auth/user');
         }
-        throw redirect(302, '/');
     }
 
     throw redirect(302, '/auth/user');

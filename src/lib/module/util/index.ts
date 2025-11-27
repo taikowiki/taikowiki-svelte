@@ -280,6 +280,7 @@ export namespace Util {
     }
 
     export function toCSV(data: Record<string, string | number>[]) {
+        if(data.length === 0) return "";
         let csv = "";
         const keys = Object.keys(data[0]);
         csv += keys.map((key) => escapeString(key)).join(', ') + '\n';

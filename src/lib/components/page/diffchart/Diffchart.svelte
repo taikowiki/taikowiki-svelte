@@ -22,6 +22,7 @@
     import { getI18N, getLang } from "$lib/module/i18n";
     import { Song } from "$lib/module/song";
     import DiffchartAllCrown from "./DiffchartAllCrown.svelte";
+    import { onMount } from "svelte";
 
     interface Props {
         diffChart: Diffchart.Diffchart;
@@ -40,6 +41,13 @@
         backgroundColor = undefined,
         downloadImage = $bindable(null),
     }: Props = $props();
+
+    onMount(() => {
+        //@ts-expect-error
+        window['__getDiffchartJson__'] = function(){
+            return $state.snapshot(diffChart);
+        }
+    })
 
     const [theme] = getTheme();
     let colorValue = $derived(color ?? diffChart.color);

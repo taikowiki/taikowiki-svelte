@@ -1,5 +1,7 @@
 <script lang="ts" module>
-    function parseSongScoreJSON(json: string): Diffchart.Score.SongScore[] | null {
+    function parseSongScoreJSON(
+        json: string,
+    ): Diffchart.Score.SongScore[] | null {
         try {
             let result = JSON.parse(json);
             if (Array.isArray(result)) {
@@ -44,10 +46,14 @@
 
     onMount(() => {
         //@ts-expect-error
-        window['__getDiffchartJson__'] = function(){
+        window["__getDiffchartJson__"] = function () {
             return $state.snapshot(diffChart);
-        }
-    })
+        };
+        //@ts-expect-error
+        window["__setDiffchartJson__"] = function (s) {
+            diffChart = s;
+        };
+    });
 
     const [theme] = getTheme();
     let colorValue = $derived(color ?? diffChart.color);
@@ -87,7 +93,10 @@
      * 플레이한 곡 기록 데이터
      */
     let playedSongScoreMap = $derived.by(() => {
-        const map = new Map<Diffchart.Section, Diffchart.Score.SongScore[] | null>();
+        const map = new Map<
+            Diffchart.Section,
+            Diffchart.Score.SongScore[] | null
+        >();
         sortedDifferChartSections.forEach((section) => {
             map.set(section, getPlayedSongScores(userScoreData, section.songs));
         });
@@ -97,7 +106,10 @@
      * 플레이한 곡 왕관 개수
      */
     let userCrownCountMap = $derived.by(() => {
-        const map = new Map<Diffchart.Section, ReturnType<typeof countUserCrown>>();
+        const map = new Map<
+            Diffchart.Section,
+            ReturnType<typeof countUserCrown>
+        >();
         sortedDifferChartSections.forEach((section) => {
             const playedScoreData = playedSongScoreMap.get(section);
             if (typeof playedScoreData === "undefined") return;

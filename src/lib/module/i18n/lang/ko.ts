@@ -569,6 +569,7 @@ const ko: I18N.LangFile = {
         sections: {
             'SSS': '졸업+',
             'SS': '졸업',
+            'S+': '최상+',
             'S': '최상',
             'A': '상',
             'B': '중상',

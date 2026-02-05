@@ -558,6 +558,7 @@ const en: I18N.LangFile = {
         sections: {
             'SSS': 'SSS',
             'SS': 'SS',
+            'S+': 'S+',
             'S': 'S',
             'A': 'A',
             'B': 'B',

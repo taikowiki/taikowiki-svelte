@@ -2,6 +2,7 @@
     const sectionColor: Record<string, string> = {
         SSS: "#B93FEA",
         SS: "#E8348F",
+        "S+": "#db1f00",
         S: "#EF3059",
         A: "#EB7535",
         B: "#E6B439",
@@ -33,7 +34,7 @@
     import { getI18N, getLang } from "$lib/module/i18n";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
-    import type { Diffchart as D } from '$lib/module/diffchart';
+    import type { Diffchart as D } from "$lib/module/diffchart";
 
     let { data } = $props();
     const { songs, diffChartData } = data;
@@ -50,7 +51,9 @@
     const lang = getLang();
     let i18n = $derived(getI18N("/diffchart/clear/[level]", $lang));
     let titleI18n = $derived(getI18N("other", $lang).title["/diffchart/clear"]);
-    let customedDiffchart = $derived(getCustomedDiffchart(diffChartData.data, i18n));
+    let customedDiffchart = $derived(
+        getCustomedDiffchart(diffChartData.data, i18n),
+    );
 
     const donderData = data.donderData;
 </script>

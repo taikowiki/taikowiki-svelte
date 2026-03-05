@@ -6,7 +6,7 @@ import { z } from "zod";
 // module
 export namespace Gamecenter {
     export namespace CONST {
-        export const GAMECENTERREGION = ["서울", "경기", "대전", "인천", "충남", "강원", "부산", "울산", "경남", "대구", "경북", "광주", "전남", "전북", "제주"] as const;
+        export const GAMECENTERREGION = ["서울", "경기", "대전", "인천", "충북", "충남", "강원", "부산", "울산", "경남", "대구", "경북", "광주", "전남", "전북", "제주"] as const;
         export const AMENITY = ['water', 'toilet', 'park', 'capture', 'rental', 'night', 'atm', 'fan', 'mybachi'] as const;
     }
 }

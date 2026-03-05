@@ -568,8 +568,9 @@ const zhtw: I18N.LangFile = {
         '7 level clear': '★7 通過難易度表',
         '6 level clear': '★6 通過難易度表',
         sections: {
-            'SSS': '畢業+',
-            'SS': '畢業',
+            'SSS': '超難關',
+            'SS': '難關',
+            'S+': '最上+',
             'S': '最上',
             'A': '上',
             'B': '中上',

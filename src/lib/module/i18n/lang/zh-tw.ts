@@ -52,6 +52,57 @@ const newZhtw: I18N.RecursiveStringRecord = {
                 hard: '困難',
                 oni: '魔鬼',
                 ura: '魔鬼(裏)'
+            },
+            BasicEditor: {
+                songNo: '曲目編號'
+            },
+            TitleEditor: {
+                title: '標題',
+                songTitle: '曲目名稱',
+                titleKo: '韓文',
+                aliasKo: '韓文(非官方)',
+                titleEn: '英文',
+                aliasEn: '英文(非官方)',
+                titleZhCN: '簡體中文',
+                romaji: '羅馬字'
+            },
+            OtherEditor: {
+                other: '其他',
+                genre: '類型',
+                bpmShiver: 'BPM 抖動',
+                version: '收錄版本',
+                artist: '作者',
+                commaPlz: '請以逗號分隔。',
+                included: '收錄狀態',
+                deleted: '刪除',
+                asiaBanned: '亞洲版禁曲',
+                krBanned: '韓國版禁曲',
+                addedDate: '上架日期',
+                use: '使用'
+            },
+            CoursesEditor: {
+                course: '譜面'
+            },
+            CourseEditor: {
+                level: '等級',
+                branched: '譜面分歧',
+                maxCombo: '最大連段數',
+                playTime: '最大演奏時間(秒)',
+                playTimeSub: '從第一顆音符到最後一顆音符的時間。',
+                density: '最大密度(打/秒)',
+                calculate: '計算',
+                maxBalloon: '最大風船數',
+                commaPlz: '請用逗號分隔。',
+                maxRoll: '最大連打時間(秒)',
+                dani: '段位',
+                add: '新增',
+                img: '譜面圖片',
+                imgLink: '圖片連結'
+            },
+            DaniEditor: {
+                first: '第一首',
+                second: '第二首',
+                third: '第三首'
             }
         },
         DaniDisplay: {
@@ -95,9 +146,9 @@ const newZhtw: I18N.RecursiveStringRecord = {
         '/gamecenter': '街機分佈地圖',
         '/gamecenter/report': '街機回報',
         '/measures': '譜面評級表',
-        '/song': '曲目',
+        '/song': '曲目搜尋',
         '/song/[songNo]': '查無結果',
-        '/song/[songNo]/edit': '提交編輯',
+        '/song/[songNo]/edit': '曲目編輯',
         '/song/add': '新增曲目',
         '/rating/me': '我的評級',
         '/rating/ranking': '排位',
@@ -108,8 +159,8 @@ const newZhtw: I18N.RecursiveStringRecord = {
             "senpo": "先鋒",
             "jiho": "次鋒",
             "chiuken": "中堅",
-            "fukusho": "副将",
-            "taisho": "大将",
+            "fukusho": "副將",
+            "taisho": "大將",
             "beginner": "初級",
             "10kyu": "十級",
             "9kyu": "九級",
@@ -138,7 +189,7 @@ const newZhtw: I18N.RecursiveStringRecord = {
             'gaiden': '外傳'
         },
         version: {
-            'katsudon': 'K-D',
+            'katsudon': 'Katsudon',
             'sorairo': '天藍色',
             'momoiro': '桃色',
             'kimidori': '黃綠色',
@@ -178,8 +229,8 @@ const newZhtw: I18N.RecursiveStringRecord = {
                 doc: '文件',
                 diffchart: '難易度表',
                 dani: '段位道場',
-                gamecenter: '街機地圖',
-                rating: '評分'
+                gamecenter: '街機分佈',
+                rating: '評級'
             },
             notice: '公告'
         },
@@ -190,11 +241,12 @@ const newZhtw: I18N.RecursiveStringRecord = {
                 asiaBanned: '此曲未在亞洲上架'
             },
             multipleTitle: {
-                translatedTitle: '翻譯名',
+                translatedTitle: '翻譯名稱',
                 ko: '韓文',
                 aliasKo: '韓文(非官方)',
                 en: '英文',
                 aliasEn: '英文(非官方)',
+                zhCN: '簡體中文',
                 romaji: '羅馬字'
             },
             songData: {
@@ -213,8 +265,8 @@ const newZhtw: I18N.RecursiveStringRecord = {
                 sec: '秒',
                 total: '總',
                 count: '個',
-                daniList: '段位表',
-                nthSong: '曲目',
+                daniList: '段位收錄清單',
+                nthSong: '第幾首',
                 noDani: '段位收錄',
                 fumenImage: '譜面圖'
             }
@@ -297,28 +349,28 @@ const newZhtw: I18N.RecursiveStringRecord = {
         },
         user: {
             showRating: {
-                name: '顯示評分',
+                name: '顯示評級個人檔案',
                 showRatingNick: '顯示鼓眾廣場暱稱',
                 showRatingTaikoNo: '顯示鼓眾號碼',
-                showRatingSongs: '顯示歌曲評分',
-                submit: '提交',
-                success: '提交成功',
-                error: '發生錯誤'
+                showRatingSongs: '顯示個別曲目評級',
+                submit: '套用',
+                success: '套用成功。',
+                error: '發生錯誤。'
             }
         },
         rating: {
             ranking: {
                 heading: '排位',
-                ranking: '排位',
+                ranking: '排名',
                 tier: '線級',
-                rating: '評分',
+                rating: '評級',
                 nickname: '暱稱'
             },
             measures: {
                 heading: '評分表'
             },
             user: {
-                nondisclosure: '曲目評分未公開'
+                nondisclosure: '個別曲目評級未公開。'
             }
         }
     }
@@ -339,9 +391,9 @@ const zhtw: I18N.LangFile = {
             '/gamecenter': '街機分佈地圖',
             '/gamecenter/report': '街機回報',
             '/measures': '譜面評級表',
-            '/song': '曲目',
+            '/song': '曲目搜尋',
             '/song/[songNo]': '查無結果',
-            '/song/[songNo]/edit': '提交編輯',
+            '/song/[songNo]/edit': '曲目編輯',
             '/song/add': '新增曲目',
             '/rating/me': '我的評級',
             '/rating/ranking': '排位',
@@ -352,8 +404,8 @@ const zhtw: I18N.LangFile = {
                 "senpo": "先鋒",
                 "jiho": "次鋒",
                 "chiuken": "中堅",
-                "fukusho": "副将",
-                "taisho": "大将",
+                "fukusho": "副將",
+                "taisho": "大將",
                 "beginner": "初級",
                 "10kyu": "十級",
                 "9kyu": "九級",
@@ -382,7 +434,7 @@ const zhtw: I18N.LangFile = {
                 'gaiden': '外傳'
             },
             version: {
-                'katsudon': 'K-D',
+                'katsudon': 'Katsudon',
                 'sorairo': '天藍色',
                 'momoiro': '桃色',
                 'kimidori': '黃綠色',
@@ -416,36 +468,36 @@ const zhtw: I18N.LangFile = {
     },
     //path
     '/auth/login': {
-        forLogin: 'からログイン'
+        forLogin: '登入自'
     },
     '/auth/user': {
-        nickname: 'ニックネーム',
-        change: '変更',
-        nickRule: `ニックネームには英語、数字、'-'、ハングルのみ対応しております.`,
-        nickChangeSuccess: '変更完了',
-        provider: 'ログイン提供者',
-        delete: 'アカウントを削除',
+        nickname: '暱稱',
+        change: '變更',
+        nickRule: `暱稱僅限使用英文字母、韓文、數字及 '-'，不支援空格。`,
+        nickChangeSuccess: '變更成功',
+        provider: '登入提供者',
+        delete: '註銷帳號',
         error: {
-            'New nickname is not in the correct format': '有効な名前の形式ではありません.',
-            'Duplicated Nickname': 'この名前はすでに使用中です.'
+            'New nickname is not in the correct format': '暱稱格式不正確。',
+            'Duplicated Nickname': '此暱稱已被使用。'
         }
     },
     '/auth/user/donder': {
-        noDonderData: 'ドンだーひろばのデータがありません. ドンだーひろばのデータをアップロードしてください.',
-        myDon: 'マイどん',
-        lastUpdate: '最新更新日',
-        songRating: '曲のレーティング',
+        noDonderData: '查無鼓眾廣場資料。請上傳鼓眾廣場資料。',
+        myDon: '我的小咚',
+        lastUpdate: '最後更新日',
+        songRating: '個別曲目評級',
         songTitle: '曲名',
-        accuracy: '精度',
-        crown: '冠',
-        rating: 'レーティング',
-        hiroba: 'ひろば',
-        measureValue: 'レーティング',
+        accuracy: '精準度',
+        crown: '王冠',
+        rating: '評級',
+        hiroba: '廣場',
+        measureValue: '譜面定數',
         uploadGuide: Util.mdToHtml(ratingUploadGuide),
         explanation: Util.mdToHtml(ratingExplanation)
     },
     '/song': {
-        placeholder: 'キーワード',
+        placeholder: '關鍵字',
         difficulty: '難易度',
         easy: '簡單',
         normal: '普通',
@@ -453,49 +505,49 @@ const zhtw: I18N.LangFile = {
         oni: '魔鬼',
         omote: '魔鬼(表)',
         ura: '魔鬼(裏)',
-        genre: 'ジャンル',
+        genre: '類型',
         genres: {
-            pops: 'ポップス',
-            anime: 'アニメ',
-            kids: 'キッズ',
-            vocaloid: 'ボーカロイド',
-            game: 'ゲームミュージック',
-            namco: 'ナムコオリジナル',
-            variety: 'バラエティ',
-            classic: 'クラシック'
+            pops: '流行音樂',
+            anime: '動畫',
+            kids: '兒童',
+            vocaloid: 'VOCALOID™',
+            game: '遊戲音樂',
+            namco: '南科原創',
+            variety: '綜藝',
+            classic: '古典'
         },
         languages: {
-            ja: '日本語',
-            ko: '韓国語',
-            ako: '韓国語(非公式)',
-            en: '英語',
-            aen: '英語(非公式)',
-            rom: 'ローマ字'
+            ja: '日文',
+            ko: '韓文',
+            ako: '韓文(非官方)',
+            en: '英文',
+            aen: '英文(非官方)',
+            rom: '羅馬字'
         }
     },
     '/song/[songNo]': {
-        noSong: '曲が存在しません.',
+        noSong: '查無此曲。',
         genres: {
-            pops: 'ポップス',
-            anime: 'アニメ',
-            kids: 'キッズ',
-            vocaloid: 'ボーカロイド',
-            game: 'ゲームミュージック',
-            namco: 'ナムコオリジナル',
-            variety: 'バラエティ',
-            classic: 'クラシック'
+            pops: '流行音樂',
+            anime: '動畫',
+            kids: '兒童',
+            vocaloid: 'VOCALOID™',
+            game: '遊戲音樂',
+            namco: '南科原創',
+            variety: '綜藝',
+            classic: '古典'
         }
     },
     '/song/add': {
         genres: {
-            pops: 'ポップス',
-            anime: 'アニメ',
-            kids: 'キッズ',
-            vocaloid: 'ボーカロイド',
-            game: 'ゲームミュージック',
-            namco: 'ナムコオリジナル',
-            variety: 'バラエティ',
-            classic: 'クラシック'
+            pops: '流行音樂',
+            anime: '動畫',
+            kids: '兒童',
+            vocaloid: 'VOCALOID™',
+            game: '遊戲音樂',
+            namco: '南科原創',
+            variety: '綜藝',
+            classic: '古典'
         }
     },
     //서열표
@@ -505,9 +557,9 @@ const zhtw: I18N.LangFile = {
             fc: '全連段',
             dfc: '全良'
         },
-        download: "ダウンロード",
+        download: "下載",
         go: "移動",
-        custom: 'カスタム'
+        custom: '自定義'
     },
     '/diffchart/clear/[level]': {
         '10 level clear': '★10 通過難易度表',
@@ -516,18 +568,18 @@ const zhtw: I18N.LangFile = {
         '7 level clear': '★7 通過難易度表',
         '6 level clear': '★6 通過難易度表',
         sections: {
-            'SSS': 'SSS',
-            'SS': 'SS',
-            'S': 'S',
-            'A': 'A',
-            'B': 'B',
-            'C': 'C',
-            'D': 'D',
-            'E': 'E',
-            'F': 'F',
+            'SSS': '畢業+',
+            'SS': '畢業',
+            'S': '最上',
+            'A': '上',
+            'B': '中上',
+            'C': '中',
+            'D': '中下',
+            'E': '下',
+            'F': '最下',
             'X': '個人差'
         },
-        subname: "🔴 個人差デカい&nbsp;&nbsp;&nbsp;🟢 初見注意&nbsp;&nbsp;&nbsp;🟣 クリアに比べて全連段むずい"
+        subname: "🔴 個人差極大&nbsp;&nbsp;&nbsp;🟢 注意初見&nbsp;&nbsp;&nbsp;🟣 全連段難度遠高於通過難度"
     },
     '/diffchart/clear/[fc]': {
         '10 level fc': '★10 全連段難易度表',
@@ -557,48 +609,48 @@ const zhtw: I18N.LangFile = {
         }
     },
     '/gamecenter': {
-        koreanGamecenterAlert: '韓国で太鼓の達人があるゲームセンターの地図です.',
+        koreanGamecenterAlert: '這是韓國境內設有太鼓達人機台的街機地圖。',
         amenity: {
-            'water': '浄水器',
-            'toilet': 'トイレ',
-            'park': '駐車場',
-            'capture': 'キャプチャー',
-            'rental': '貸切',
-            'night': '哲也',
+            'water': '飲水機',
+            'toilet': '廁所',
+            'park': '停車場',
+            'capture': '側錄設備',
+            'rental': '租借/包台',
+            'night': '通宵營運',
             'atm': 'ATM',
-            'fan': '扇風機',
-            'mybachi': 'マイバチ'
+            'fan': '電風扇',
+            'mybachi': 'My Bachi'
         },
         date: {
             "0": "日",
-            "1": "月",
-            "2": "火",
-            "3": "水",
-            "4": "木",
-            "5": "金",
-            "6": "土"
+            "1": "一",
+            "2": "二",
+            "3": "三",
+            "4": "四",
+            "5": "五",
+            "6": "六"
         },
-        report: '報告する',
-        favorites: '気に入り',
-        keyword: 'キーワード',
-        region: '地域',
-        all: '全体',
-        amenityText: '便益施設',
-        machineData: '筐体情報',
-        price: '値段',
-        tunes: '曲数',
-        count: '台',
-        login: 'ログイン',
-        needed: 'が必要です.'
+        report: '回報資訊',
+        favorites: '收藏夾',
+        keyword: '關鍵字',
+        region: '區域',
+        all: '全部',
+        amenityText: '便利設施',
+        machineData: '機台資訊',
+        price: '價格',
+        tunes: '曲數',
+        count: '台數',
+        login: '登入',
+        needed: '是必需的。'
     },
     '/measures': {
-        measureTable: '譜面レーティング表',
-        donderData: 'ドンだーデータ'
+        measureTable: '譜面定數表',
+        donderData: '鼓眾資料'
     },
     '/notice': {
         type: {
-            wiki: 'ウィキ',
-            official: '公式'
+            wiki: '維基',
+            official: '官方'
         }
     },
     ...newZhtw

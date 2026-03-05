@@ -30,7 +30,7 @@
 
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import AdminRequestEditor from "$lib/components/page/admin/song/request/order/[order]/admin-RequestEditor.svelte";
+    import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import { Song } from "$lib/module/song/song.client";
 
     let { data } = $props();
@@ -67,7 +67,7 @@
     </tbody>
 </table>
 
-<AdminRequestEditor bind:songData={request.data} {compare} />
+<SongEditor bind:songData={request.data} {compare} />
 
 <div class="button-container">
     <button

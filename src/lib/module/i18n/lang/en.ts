@@ -62,6 +62,7 @@ const newEn: I18N.RecursiveStringRecord = {
                 aliasKo: 'Korean (unofficial)',
                 titleEn: 'English',
                 aliasEn: 'English (unofficial)',
+                titleZhCN: 'Chinese',
                 romaji: 'Romaji'
             },
             OtherEditor: {
@@ -243,6 +244,7 @@ const newEn: I18N.RecursiveStringRecord = {
                 aliasKo: 'Korean(Unofficial)',
                 en: 'English',
                 aliasEn: 'English(Unofficial)',
+                zhCN: 'Chinese',
                 romaji: 'Romaji'
             },
             songData: {

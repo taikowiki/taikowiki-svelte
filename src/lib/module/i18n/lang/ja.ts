@@ -52,6 +52,57 @@ const newJa: I18N.RecursiveStringRecord = {
                 hard: 'むずかしい',
                 oni: 'おに',
                 ura: 'おに(裏)'
+            },
+            BasicEditor: {
+                songNo: '曲番号'
+            },
+            TitleEditor: {
+                title: 'タイトル',
+                songTitle: '曲タイトル',
+                titleKo: '韓国語',
+                aliasKo: '韓国語(非公式)',
+                titleEn: '英語',
+                aliasEn: '英語(非公式)',
+                titleZhCN: '中国語',
+                romaji: 'ローマ字'
+            },
+            OtherEditor: {
+                other: 'その他',
+                genre: 'ジャンル',
+                bpmShiver: 'BPM揺れ',
+                version: '収録バージョン',
+                artist: 'アーティスト',
+                commaPlz: 'カンマで区切って入力してください。',
+                included: '収録可否',
+                deleted: '削除',
+                asiaBanned: 'アジア版制限',
+                krBanned: '韓国版制限',
+                addedDate: '追加日',
+                use: '使用'
+            },
+            CoursesEditor: {
+                course: '譜面'
+            },
+            CourseEditor: {
+                level: 'レベル',
+                branched: '分岐あり',
+                maxCombo: '最大コンボ数',
+                playTime: '最大演奏時間(秒)',
+                playTimeSub: '最初のドン/カッから最後のドン/カッまでの時間です。',
+                density: '最大密度(打/秒)',
+                calculate: '計算する',
+                maxBalloon: '最大風船数',
+                commaPlz: 'カンマで区切ってください。',
+                maxRoll: '最大連打時間(秒)',
+                dani: '段位',
+                add: '追加',
+                img: '譜面イメージ',
+                imgLink: 'イメージURL'
+            },
+            DaniEditor: {
+                first: '1曲目',
+                second: '2曲目',
+                third: '3曲目'
             }
         },
         DaniDisplay: {

@@ -3,122 +3,118 @@
     import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
-        title: string;
-        titleKo: string | null;
-        aliasKo: string | null;
-        titleEn: string | null;
-        aliasEn: string | null;
-        romaji: string | null;
+        titleRecord: {
+            title: string;
+            titleKo: string | null;
+            aliasKo: string | null;
+            titleEn: string | null;
+            aliasEn: string | null;
+            titleZhCN: string | null;
+            romaji: string | null;
+        };
+        compare?: any;
     }
 
-    let { title = $bindable(), titleKo = $bindable(), aliasKo = $bindable(), titleEn = $bindable(), aliasEn = $bindable(), romaji = $bindable() }: Props = $props();
+    let { titleRecord = $bindable(), compare }: Props = $props();
 
-    let titleKoChecked = $state(titleKo !== null);
+    let checked = $state(checkedInit());
     $effect.pre(() => {
-        if (titleKoChecked) {
-            titleKo = titleKo || "";
-        } else {
-            titleKo = null;
-        }
-    });
-    let aliasKoChecked = $state(aliasKo !== null);
-    $effect.pre(() => {
-        if (aliasKoChecked) {
-            aliasKo = aliasKo || "";
-        } else {
-            aliasKo = null;
-        }
-    });
-    let titleEnChecked = $state(titleEn !== null);
-    $effect.pre(() => {
-        if (titleEnChecked) {
-            titleEn = titleEn || "";
-        } else {
-            titleEn = null;
-        }
-    });
-    let aliasEnChecked = $state(aliasEn !== null);
-    $effect.pre(() => {
-        if (aliasEnChecked) {
-            aliasEn = aliasEn || "";
-        } else {
-            aliasEn = null;
-        }
-    });
-    let romajiChecked = $state(romaji !== null);
-    $effect.pre(() => {
-        if (romajiChecked) {
-            romaji = romaji || "";
-        } else {
-            romaji = null;
+        for (const k in checked) {
+            const key = k as keyof Props["titleRecord"];
+            if (key === "title") continue;
+            if (checked[key]) {
+                titleRecord[key] = titleRecord[key] || "";
+            } else {
+                titleRecord[key] = null;
+            }
         }
     });
 
     const lang = getLang();
     let i18n = $derived(getI18N($lang).component.SongEditor.TitleEditor);
+
+    function checkedInit() {
+        const record: Record<string, boolean> = {};
+        for (const key in $state.snapshot(titleRecord)) {
+            record[key] =
+                titleRecord[key as keyof Props["titleRecord"]] !== null;
+        }
+        return record as Record<keyof Props["titleRecord"], boolean>;
+    }
 </script>
 
 <TitledContainer title={i18n.title} color="#cf4844">
     <table>
         <tbody>
-            <tr>
+            <tr class:different={compare?.title === true}>
                 <td> {i18n.songTitle} </td>
                 <td class="title">
-                    <input type="text" bind:value={title} />
+                    <input type="text" bind:value={titleRecord.title} />
                 </td>
             </tr>
-            <tr>
+            <tr class:different={compare?.titleKo === true}>
                 <td> {i18n.titleKo} </td>
                 <td>
-                    <input type="checkbox" bind:checked={titleKoChecked} />
+                    <input type="checkbox" bind:checked={checked.titleKo} />
                     <input
                         type="text"
-                        bind:value={titleKo}
-                        disabled={titleKo === null}
+                        bind:value={titleRecord.titleKo}
+                        disabled={titleRecord.titleKo === null}
                     />
                 </td>
             </tr>
-            <tr>
+            <tr class:different={compare?.aliasKo === true}>
                 <td> {i18n.aliasKo} </td>
                 <td>
-                    <input type="checkbox" bind:checked={aliasKoChecked} />
+                    <input type="checkbox" bind:checked={checked.aliasKo} />
                     <input
                         type="text"
-                        bind:value={aliasKo}
-                        disabled={aliasKo === null}
+                        bind:value={titleRecord.aliasKo}
+                        disabled={titleRecord.aliasKo === null}
                     />
                 </td>
             </tr>
-            <tr>
+            <tr class:different={compare?.titleEn === true}>
                 <td> {i18n.titleEn} </td>
                 <td>
-                    <input type="checkbox" bind:checked={titleEnChecked} />
+                    <input type="checkbox" bind:checked={checked.titleEn} />
                     <input
                         type="text"
-                        bind:value={titleEn}
-                        disabled={titleEn === null}
+                        bind:value={titleRecord.titleEn}
+                        disabled={titleRecord.titleEn === null}
                     />
                 </td>
             </tr>
-            <tr>
+            <tr class:different={compare?.aliasEn === true}>
                 <td> {i18n.aliasEn} </td>
                 <td>
-                    <input type="checkbox" bind:checked={aliasEnChecked} />
+                    <input type="checkbox" bind:checked={checked.aliasEn} />
                     <input
                         type="text"
-                        bind:value={aliasEn}
-                        disabled={aliasEn === null}
+                        bind:value={titleRecord.aliasEn}
+                        disabled={titleRecord.aliasEn === null}
                     />
                 </td>
             </tr>
-            <tr>
-                <td> {i18n.romaji} </td>
+            <tr class:different={compare?.titleZhCN === true}>
+                <td> {i18n.titleZhCN}</td>
                 <td>
-                    <input type="checkbox" bind:checked={romajiChecked} />
+                    <input type="checkbox" bind:checked={checked.titleZhCN} />
                     <input
                         type="text"
-                        bind:value={romaji}
-                        disabled={romaji === null}
+                        bind:value={titleRecord.titleZhCN}
+                        disabled={titleRecord.titleZhCN === null}
+                    />
+                </td>
+            </tr>
+            <tr class:different={compare?.romaji === true}>
+                <td> {i18n.romaji} </td>
+                <td>
+                    <input type="checkbox" bind:checked={checked.romaji} />
+                    <input
+                        type="text"
+                        bind:value={titleRecord.romaji}
+                        disabled={titleRecord.romaji === null}
                     />
                 </td>
             </tr>
@@ -150,5 +146,9 @@
 
         height: 20px;
         font-size: 17px;
+    }
+
+    .different {
+        background-color: #ff9999;
     }
 </style>

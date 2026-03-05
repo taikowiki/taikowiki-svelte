@@ -168,7 +168,7 @@ export namespace I18N {
     }
 
     export function getI18N(): Writable<any>;
-    export function getI18N(lang: string): any;
+    export function getI18N(lang: string): typeof ko;
     export function getI18N(key: string, lang: string): any;
     export function getI18N(key?: string, lang?: string) {
         if (key === undefined) {

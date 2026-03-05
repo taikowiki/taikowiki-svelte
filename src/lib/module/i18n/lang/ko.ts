@@ -4,7 +4,7 @@ import type { I18N } from '..';
 import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
 import ratingExplanation from '../md/ko/ratingExplanation.md?raw'
 
-const newKo: I18N.RecursiveStringRecord = {
+const newKo = {
     //레이아웃
     layout: {
         main: {
@@ -65,6 +65,7 @@ const newKo: I18N.RecursiveStringRecord = {
                 aliasKo: '한국어 비공식',
                 titleEn: '영어',
                 aliasEn: '영어 비공식',
+                titleZhCN: '중국어',
                 romaji: '로마자'
             },
             OtherEditor: {
@@ -250,6 +251,7 @@ const newKo: I18N.RecursiveStringRecord = {
                 aliasKo: '한국어(비공식)',
                 en: '영어',
                 aliasEn: '영어(비공식)',
+                zhCN: '중국어',
                 romaji: '로마자'
             },
             songData: {
@@ -377,9 +379,9 @@ const newKo: I18N.RecursiveStringRecord = {
             }
         }
     }
-}
+} as const satisfies I18N.RecursiveStringRecord;
 
-const ko: I18N.LangFile = {
+const oldKo = {
     other: {
         //페이지 제목
         title: {
@@ -626,6 +628,11 @@ const ko: I18N.LangFile = {
         }
     },
     ...newKo
+} as const satisfies I18N.LangFile;
+
+const ko = {
+    ...newKo,
+    ...oldKo
 } as const;
 
 export default ko;

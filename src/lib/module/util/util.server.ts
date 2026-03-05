@@ -155,6 +155,7 @@ namespace UtilServer {
             aliasKo: ['string', 'null'],
             titleEn: ['string', 'null'],
             aliasEn: ['string', 'null'],
+            titleZhCN: ['string', 'null'],
             romaji: ['string', 'null'],
             bpm: ['string'],
             bpmShiver: ['number'],

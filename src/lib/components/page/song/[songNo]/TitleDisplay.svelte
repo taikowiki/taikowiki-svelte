@@ -4,6 +4,8 @@
     import DocEditBtn from "../../wikidoc/view/DocView/DocEditBtn.svelte";
     import DocLogBtn from "../../wikidoc/view/DocView/DocLogBtn.svelte";
     import { getIsMobile } from "$lib/module/layout/isMobile";
+    import previewBtn from "$lib/assets/preview.png";
+    import { Layout } from "$lib/module/layout";
 
     interface Props {
         title: string;
@@ -20,6 +22,7 @@
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
+    const experimentalFlag = Layout.getExperimentalFlag();
 </script>
 
 {#snippet docEdit()}
@@ -62,6 +65,20 @@
         <img class="icon" src="/assets/icon/pen.svg" alt="edit" />
     </a>
 {/snippet}
+{#snippet preview()}
+    <a
+        class="icon-anchor"
+        href={`/song/${encodeURIComponent(songNo)}/preview`}
+        data-theme={$theme}
+    >
+        <img
+            class="icon"
+            style="filter: invert(0%)"
+            src={previewBtn}
+            alt="preview"
+        />
+    </a>
+{/snippet}
 
 <h1 class="container">
     <div class="title">
@@ -73,6 +90,11 @@
             {@render edit()}
             {@render docEdit()}
         </div>
+        {#if $experimentalFlag}
+            <div class="icon-container">
+                {@render preview()}
+            </div>
+        {/if}
         {@render docDataView()}
     </div>
 </h1>
@@ -105,12 +127,12 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+        padding-top: 13px;
+        row-gap: 5px;
     }
     .icon-container {
         display: flex;
         flex-direction: row;
-        margin-top: 13px;
-
         column-gap: 4px;
     }
 

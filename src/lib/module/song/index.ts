@@ -255,29 +255,8 @@ export namespace Song {
 }
 
 export namespace Song {
-    export declare namespace Client {
-        const request: {
-            submitSong: RRequestHandler<{
-                songNo: string;
-                songData: Song.SongData;
-            }, void>;
-        }
-        const adminRequest: {
-            uploadSong: RRequestHandler<{
-                songNo: string;
-                songData: Partial<Song.SongData>;
-            }, void>;
-            disapproveRequest: RRequestHandler<{
-                order: number[];
-            }, void>;
-            approve: RRequestHandler<{
-                order: number;
-                songData: Song.SongData;
-            }, void>
-        }
-        function submit(songNo: string, songData: Song.SongData, redirectPath: string): Promise<void>
-    }
-    export declare let Server: Readonly<import('./song.server').SongServer>
+    export declare let Client: Readonly<import('./song.client').SongClient>;
+    export declare let Server: Readonly<import('./song.server').SongServer>;
 }
 
 export namespace Song {

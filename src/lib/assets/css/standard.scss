@@ -43,3 +43,18 @@ nav.standard a.standard {
         background-color: #1c1c1c;
     }
 }
+
+/*select*/
+select.standard{
+    border-radius: 5px;
+    padding-block: 3px;
+    padding-inline: 1px;
+
+    background-color: #e8e8e8;
+    color: #3d3d3d;
+    border-color: white;
+}
+body[data-theme="dark"] select.standard{
+    color: white;
+    background-color: #1c1c1c;
+}

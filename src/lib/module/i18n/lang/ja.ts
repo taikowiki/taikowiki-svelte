@@ -21,7 +21,8 @@ const newJa: I18N.RecursiveStringRecord = {
                 login: 'ログイン',
                 logout: 'ログアウト',
                 theme: 'テーマ',
-                lang: '言語'
+                lang: '言語',
+                experimental: '実験機能'
             }
         },
         'dedicated diffchart': {
@@ -37,7 +38,7 @@ const newJa: I18N.RecursiveStringRecord = {
             myData: 'マイページ',
             donderData: 'レーティング'
         },
-        rating:{
+        rating: {
             title: 'レーティング',
             me: 'マイ·レーティング',
             ranking: 'ランキング',
@@ -268,6 +269,21 @@ const newJa: I18N.RecursiveStringRecord = {
                 nthSong: '曲目',
                 noDani: '段位収録',
                 fumenImage: '譜面イメージ'
+            },
+            preview: {
+                branch: '分岐',
+                branches: {
+                    normal: '普通譜面',
+                    advanced: '玄人譜面',
+                    master: '達人譜面'
+                },
+                mode: 'モード',
+                modes: {
+                    normal: '一般',
+                    fixedScroll: 'HS固定',
+                    fixedBPM: 'BPM固定'
+                },
+                isAnnotationMode: '注釈を使用'
             }
         },
         diffchart: {
@@ -332,10 +348,10 @@ const newJa: I18N.RecursiveStringRecord = {
             machineInfo: '機体情報'
         },
         donder: {
-            rating:{
+            rating: {
                 top: '上位'
             },
-            section:{
+            section: {
                 song: '曲レーティング',
                 measure: '定数表',
                 explanation: 'レーティング説明'
@@ -365,10 +381,10 @@ const newJa: I18N.RecursiveStringRecord = {
                 rating: 'レーティング',
                 nickname: '名前'
             },
-            measures:{
+            measures: {
                 heading: '定数表'
             },
-            user:{
+            user: {
                 nondisclosure: '曲のレーティングは非公開です。'
             }
         }

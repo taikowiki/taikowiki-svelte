@@ -30,6 +30,7 @@ declare global {
 			TIMEZONE: string;
 			INTERNAL_API_KEY: string;
 			INTERNAL_RATING_ADDRESS: string;
+			TJA_FETCH_URL: string;
 		}
 	}
 }

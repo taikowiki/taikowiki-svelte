@@ -7,6 +7,7 @@
     import { page } from "$app/stores";
     import { getI18N, getLang } from "$lib/module/i18n";
     import { getContext } from "svelte";
+    import { Layout } from "$lib/module/layout";
 
     let opened = $state(false);
     function close() {
@@ -31,6 +32,7 @@
 
     const usingLangParam = getContext("usingLangParam");
     const lang = getLang();
+    const experimentalFlag = Layout.getExperimentalFlag();
     let i18n = $derived(getI18N($lang).layout.main.user);
 
     $effect(() => {
@@ -80,12 +82,20 @@
                 <span>{i18n.theme}</span>
             {/snippet}
             {#snippet right()}
-                <ThemeToggler/>
+                <ThemeToggler />
             {/snippet}
         </UserItem>
         {#if !(usingLangParam && $page.data.isBot)}
             <LanguageItem />
         {/if}
+        <UserItem separated height="30px">
+            {#snippet left()}
+                {i18n.experimental}
+            {/snippet}
+            {#snippet right()}
+                <input type="checkbox" bind:checked={$experimentalFlag} />
+            {/snippet}
+        </UserItem>
     </div>
 </div>
 

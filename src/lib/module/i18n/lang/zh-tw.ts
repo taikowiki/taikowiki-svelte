@@ -269,6 +269,21 @@ const newZhtw: I18N.RecursiveStringRecord = {
                 nthSong: '第幾首',
                 noDani: '段位收錄',
                 fumenImage: '譜面圖'
+            },
+            preview: {
+                branch: '分歧',
+                branches: {
+                    normal: '普通譜面',
+                    advanced: '玄人譜面',
+                    master: '達人譜面'
+                },
+                mode: '模式',
+                modes: {
+                    normal: '一般',
+                    fixedScroll: 'HS固定',
+                    fixedBPM: 'BPM固定'
+                },
+                isAnnotationMode: '使用註釋'
             }
         },
         diffchart: {

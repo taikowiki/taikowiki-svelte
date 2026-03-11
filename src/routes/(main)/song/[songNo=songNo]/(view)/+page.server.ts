@@ -61,7 +61,6 @@ export async function load({ params, url, locals }) {
     }
 
     return {
-        song,
         docData: docData ? {
             ...docData,
             canEditable

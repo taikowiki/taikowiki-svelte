@@ -21,7 +21,8 @@ const newEn: I18N.RecursiveStringRecord = {
                 login: 'Login',
                 logout: 'Logout',
                 theme: 'Theme',
-                lang: 'Lang'
+                lang: 'Lang',
+                experimental: 'Experimental'
             }
         },
         'dedicated diffchart': {
@@ -62,6 +63,7 @@ const newEn: I18N.RecursiveStringRecord = {
                 aliasKo: 'Korean (unofficial)',
                 titleEn: 'English',
                 aliasEn: 'English (unofficial)',
+                titleZhCN: 'Chinese',
                 romaji: 'Romaji'
             },
             OtherEditor: {
@@ -243,6 +245,7 @@ const newEn: I18N.RecursiveStringRecord = {
                 aliasKo: 'Korean(Unofficial)',
                 en: 'English',
                 aliasEn: 'English(Unofficial)',
+                zhCN: 'Chinese',
                 romaji: 'Romaji'
             },
             songData: {
@@ -265,6 +268,21 @@ const newEn: I18N.RecursiveStringRecord = {
                 nthSong: 'th',
                 noDani: 'Dan-i Contained',
                 fumenImage: 'Course Image'
+            },
+            preview: {
+                branch: 'Branch',
+                branches: {
+                    normal: 'Normal',
+                    advanced: 'Professional',
+                    master: 'Master'
+                },
+                mode: 'Mode',
+                modes: {
+                    normal: 'Normal',
+                    fixedScroll: 'Fixed HS',
+                    fixedBPM: 'Fixed BPM'
+                },
+                isAnnotationMode: 'Use Annotations'
             }
         },
         diffchart: {

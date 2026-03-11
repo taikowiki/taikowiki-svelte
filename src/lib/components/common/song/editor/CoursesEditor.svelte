@@ -8,9 +8,10 @@
 
     interface Props {
         courses: Song.SongData["courses"];
+        compare: any;
     }
 
-    let { courses = $bindable() }: Props = $props();
+    let { courses = $bindable(), compare }: Props = $props();
 
     const lang = getLang();
     let i18n = $derived(getI18N($lang).component.SongEditor.CoursesEditor);
@@ -19,7 +20,11 @@
 <TitledContainer title={i18n.course} color="#cf4844">
     <div>
         {#each DIFFICULTY as difficulty}
-            <CourseEditor {difficulty} bind:course={courses[difficulty]} />
+            <CourseEditor
+                {difficulty}
+                bind:course={courses[difficulty]}
+                compare={compare?.courses?.[difficulty]}
+            />
         {/each}
     </div>
 </TitledContainer>

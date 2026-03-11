@@ -1,12 +1,13 @@
 import type { RequestEvent } from "@sveltejs/kit";
 import { Util } from ".";
 import { QueryBuilder } from "@yowza/db-handler";
+import type { RRequestData, RResponse } from "@yowza/rrequestor/types";
+import ndJson from 'ndjson-parser'
 
 namespace UtilServer {
     export function getClientAddress(event: RequestEvent) {
         return event.request.headers.get('x-forwarded-for') || event.getClientAddress();
     }
-
 
     export const queryBuilder = new QueryBuilder({
         'ban/auth': {
@@ -155,6 +156,7 @@ namespace UtilServer {
             aliasKo: ['string', 'null'],
             titleEn: ['string', 'null'],
             aliasEn: ['string', 'null'],
+            titleZhCN: ['string', 'null'],
             romaji: ['string', 'null'],
             bpm: ['string'],
             bpmShiver: ['number'],
@@ -227,7 +229,7 @@ namespace UtilServer {
 
     export const internalRequestor = {
         async deleteUserRating(UUID: string): Promise<Util.RequestorResponse<void>> {
-            const response = await fetch(new URL('/api/internal/delete-user', process.env.INTERNAL_RATING_ADDRESS), {
+            const response = await fetch(new URL('/api/internal/delete-user', process.env.RATING_URL), {
                 method: 'post',
                 headers: {
                     'X-Internal-Key': process.env.INTERNAL_API_KEY,
@@ -250,6 +252,127 @@ namespace UtilServer {
             }
         }
     }
+
+    export const dbMaster = {
+        async query<T = any>(dbName: string, query: string, args?: any[]): Promise<RResponse<T[]>> {
+            const url = new URL(process.env.DB_MASTER_URL);
+            url.pathname = '/query';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'x-api-key': process.env.DB_MASTER_KEY
+                },
+                body: JSON.stringify({
+                    name: dbName,
+                    query,
+                    args: args ?? []
+                })
+            });
+
+            if (200 <= response.status && response.status < 300) {
+                return {
+                    status: 'success',
+                    data: response.body ? await ndJson.parseStream(response.body) : []
+                }
+            }
+            else {
+                return {
+                    status: 'error',
+                    statusCode: response.status
+                }
+            }
+        },
+        func: {
+            async taikoProfiles(UUIDs: string[]): Promise<RResponse<any[]>> {
+                const url = new URL(process.env.DB_MASTER_URL);
+                url.pathname = '/func';
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'x-api-key': process.env.DB_MASTER_KEY
+                    },
+                    body: JSON.stringify({
+                        name: "rating.taiko-profiles",
+                        params: {
+                            uuids: UUIDs
+                        }
+                    })
+                });
+
+                if (200 <= response.status && response.status < 300) {
+                    return {
+                        status: 'success',
+                        data: response.body ? await ndJson.parseStream(response.body) : []
+                    }
+                }
+                else {
+                    return {
+                        status: 'error',
+                        statusCode: response.status
+                    }
+                }
+            },
+            async simpleProfile(UUID: string): Promise<RResponse<any[]>> {
+                const url = new URL(process.env.DB_MASTER_URL);
+                url.pathname = '/func';
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'x-api-key': process.env.DB_MASTER_KEY
+                    },
+                    body: JSON.stringify({
+                        name: "rating.simple-profile",
+                        params: {
+                            uuid: UUID
+                        }
+                    })
+                });
+
+                if (200 <= response.status && response.status < 300) {
+                    return {
+                        status: 'success',
+                        data: response.body ? await ndJson.parseStream(response.body) : []
+                    }
+                }
+                else {
+                    return {
+                        status: 'error',
+                        statusCode: response.status
+                    }
+                }
+            },
+            async songRatingDatas(UUID: string, all: boolean): Promise<RResponse<any[]>> {
+                const url = new URL(process.env.DB_MASTER_URL);
+                url.pathname = '/func';
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'x-api-key': process.env.DB_MASTER_KEY
+                    },
+                    body: JSON.stringify({
+                        name: "rating.song-rating-datas",
+                        params: {
+                            uuid: UUID,
+                            all
+                        }
+                    })
+                });
+
+                if (200 <= response.status && response.status < 300) {
+                    return {
+                        status: 'success',
+                        data: response.body ? await ndJson.parseStream(response.body) : []
+                    }
+                }
+                else {
+                    return {
+                        status: 'error',
+                        statusCode: response.status
+                    }
+                }
+            }
+        }
+    } as const;
 }
 
 type P = typeof UtilServer;

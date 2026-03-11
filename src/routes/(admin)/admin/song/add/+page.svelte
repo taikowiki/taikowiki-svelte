@@ -27,6 +27,7 @@
         title: "",
         titleEn: null,
         titleKo: null,
+        titleZhCN: null,
         aliasEn: null,
         aliasKo: null,
         romaji: null,

@@ -8,9 +8,10 @@
     interface Props {
         difficulty: Song.Difficulty;
         course: Song.Course | null;
+        compare: any;
     }
 
-    let { difficulty, course = $bindable() }: Props = $props();
+    let { difficulty, course = $bindable(), compare }: Props = $props();
 
     const init: Song.Course = {
         level: 1,
@@ -67,7 +68,7 @@
 {/snippet}
 {#snippet courseData(course: Song.Course)}
     {#snippet level()}
-        <tr>
+        <tr class:different={compare?.level === true}>
             <td> {i18n.level} </td>
             <td>
                 <input
@@ -80,7 +81,7 @@
         </tr>
     {/snippet}
     {#snippet branched()}
-        <tr>
+        <tr class:different={compare?.isBranched === true}>
             <td> {i18n.branched} </td>
             <td>
                 <input type="checkbox" bind:checked={isBranched} />
@@ -88,7 +89,7 @@
         </tr>
     {/snippet}
     {#snippet maxCombo()}
-        <tr>
+        <tr class:different={compare?.maxCombo === true}>
             <td> {i18n.maxCombo} </td>
             <td>
                 <input type="number" min="1" bind:value={course.maxCombo} />
@@ -96,7 +97,7 @@
         </tr>
     {/snippet}
     {#snippet playTime()}
-        <tr>
+        <tr class:different={compare?.playTime === true}>
             <td>
                 <div>{i18n.playTime}</div>
                 <div class="sub">
@@ -117,7 +118,7 @@
                 course.maxDensity = 0;
             }
         }}
-        <tr>
+        <tr class:different={compare?.maxDensity === true}>
             <td> {i18n.density} </td>
             <td>
                 <input type="number" min="1" bind:value={course.maxDensity} />
@@ -129,7 +130,7 @@
     {/snippet}
     {#snippet balloon()}
         {@const setBalloon = (event: Event) => {
-            if(!event.currentTarget) return;
+            if (!event.currentTarget) return;
             const text = (event.currentTarget as HTMLTextAreaElement).value;
             course.balloon = text
                 .split(",")
@@ -142,7 +143,7 @@
                 })
                 .filter((e) => e !== null);
         }}
-        <tr>
+        <tr class:different={compare?.balloon === true}>
             <td>
                 <div>{i18n.maxBalloon}</div>
                 <div class="sub">
@@ -172,7 +173,7 @@
                 })
                 .filter((e) => e !== null);
         }}
-        <tr>
+        <tr class:different={compare?.rollTime === true}>
             <td>
                 <div>{i18n.maxRoll}</div>
                 <div class="sub">
@@ -195,7 +196,10 @@
                 order: 1,
             });
         }}
-        <tr>
+        <tr
+            class:different={compare?.dani === true ||
+                compare?.daniUsed === true}
+        >
             <td>
                 {i18n.dani}
                 <input type="checkbox" bind:checked={daniUsed} />
@@ -224,7 +228,7 @@
         {@const push = () => {
             course?.images.push("");
         }}
-        <tr>
+        <tr class:different={compare?.images === true}>
             <td> {i18n.img} </td>
             <td>
                 <div class="image-container-container">
@@ -269,6 +273,7 @@
 
 <div
     style={`${`border: 2px solid ${Util.Color.difficulty[difficulty]};width:100%;box-sizing:border-box;border-radius:2px;`}`}
+    class:different={compare?.exists === true}
 >
     <table class="wrapper">
         <tbody>
@@ -385,5 +390,9 @@
     .image-container-container input {
         max-width: 300px;
         width: 100%;
+    }
+
+    .different {
+        background-color: #ff9999;
     }
 </style>

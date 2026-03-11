@@ -1,4 +1,3 @@
-import { Util } from '$lib/module/util';
 import type { I18N } from '..';
 
 import ratingUploadGuide from '../md/zh-tw/ratingUploadGuide.md?raw';
@@ -508,8 +507,6 @@ const zhtw: I18N.LangFile = {
         rating: '評級',
         hiroba: '廣場',
         measureValue: '譜面定數',
-        uploadGuide: Util.mdToHtml(ratingUploadGuide),
-        explanation: Util.mdToHtml(ratingExplanation)
     },
     '/song': {
         placeholder: '關鍵字',

@@ -1,4 +1,3 @@
-import { Util } from '$lib/module/util';
 import type { I18N } from '..';
 
 import ratingUploadGuide from '../md/ja/ratingUploadGuide.md?raw';
@@ -504,8 +503,6 @@ const ja: I18N.LangFile = {
         rating: 'レーティング',
         hiroba: 'ひろば',
         measureValue: 'レーティング',
-        uploadGuide: Util.mdToHtml(ratingUploadGuide),
-        explanation: Util.mdToHtml(ratingExplanation)
     },
     '/song': {
         placeholder: 'キーワード',

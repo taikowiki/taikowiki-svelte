@@ -1,4 +1,3 @@
-import { Util } from '$lib/module/util';
 import type { I18N } from '..';
 
 import ratingUploadGuide from '../md/en/ratingUploadGuide.md?raw';
@@ -500,9 +499,7 @@ const en: I18N.LangFile = {
         crown: 'Crown',
         rating: 'Ratings',
         hiroba: 'Hiroba',
-        measureValue: 'Mesurement',
-        uploadGuide: Util.mdToHtml(ratingUploadGuide),
-        explanation: Util.mdToHtml(ratingExplanation)
+        measureValue: 'Mesurement'
     },
     '/song': {
         placeholder: 'Keywords',

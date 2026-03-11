@@ -1,8 +1,4 @@
-import { Util } from '$lib/module/util';
 import type { I18N } from '..';
-
-import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
-import ratingExplanation from '../md/ko/ratingExplanation.md?raw'
 
 const newKo = {
     //레이아웃
@@ -510,8 +506,6 @@ const oldKo = {
         rating: '레이팅',
         hiroba: '히로바',
         measureValue: '상수',
-        uploadGuide: Util.mdToHtml(ratingUploadGuide),
-        explanation: Util.mdToHtml(ratingExplanation)
     },
     '/song': {
         placeholder: '검색어',

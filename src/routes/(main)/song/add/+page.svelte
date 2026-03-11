@@ -12,6 +12,7 @@
         titleKo: null,
         aliasEn: null,
         aliasKo: null,
+        titleZhCN: null,
         romaji: null,
         bpm: {
             min: 0,

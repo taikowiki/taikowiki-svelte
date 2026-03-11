@@ -228,7 +228,7 @@ namespace UtilServer {
 
     export const internalRequestor = {
         async deleteUserRating(UUID: string): Promise<Util.RequestorResponse<void>> {
-            const response = await fetch(new URL('/api/internal/delete-user', process.env.INTERNAL_RATING_ADDRESS), {
+            const response = await fetch(new URL('/api/internal/delete-user', process.env.RATING_URL), {
                 method: 'post',
                 headers: {
                     'X-Internal-Key': process.env.INTERNAL_API_KEY,

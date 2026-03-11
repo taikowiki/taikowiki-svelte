@@ -6,6 +6,7 @@
     interface Props {
         titleKo?: string | null;
         titleEn?: string | null;
+        titleZhCN: string | null;
         aliasKo?: string | null;
         aliasEn?: string | null;
         romaji?: string | null;
@@ -14,6 +15,7 @@
     let {
         titleKo = null,
         titleEn = null,
+        titleZhCN = null,
         aliasKo = null,
         aliasEn = null,
         romaji = null,
@@ -71,6 +73,14 @@
             <td> {i18n.aliasEn} </td>
             <td>
                 {aliasEn}
+            </td>
+        </tr>
+    {/if}
+    {#if titleZhCN}
+        <tr>
+            <td> {i18n.zhCN} </td>
+            <td>
+                {titleZhCN}
             </td>
         </tr>
     {/if}

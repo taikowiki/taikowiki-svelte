@@ -60,10 +60,10 @@
 
     //theme
     let [theme, _] = useTheme(data.theme);
-
     //usemobile
     const isMobile = useIsMobile(data.isMobile);
-
+    //experimental flag
+    Layout.useExperimentalFlag()
     //timezone
     Layout.useTimezone(data.timezone);
 

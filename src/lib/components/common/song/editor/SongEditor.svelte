@@ -10,25 +10,40 @@
         songData: Song.SongData;
         type?: "edit" | "new";
         isAdmin?: boolean;
+        compare?: any;
     }
 
     let {
         songData = $bindable(),
         type = "new",
         isAdmin = false,
+        compare
     }: Props = $props();
+
+    let titleRecord = $state({
+        title: songData.title,
+        titleKo: songData.titleKo,
+        titleEn: songData.titleEn,
+        titleZhCN: songData.titleZhCN,
+        aliasKo: songData.aliasKo,
+        aliasEn: songData.aliasEn,
+        romaji: songData.romaji,
+    });
+    $effect(() => {
+        for (const k in titleRecord) {
+            const key = k as keyof typeof titleRecord;
+            if (key === "title") {
+                songData[key] = titleRecord[key];
+            } else {
+                songData[key] = titleRecord[key];
+            }
+        }
+    });
 </script>
 
 <div class="container">
     <BasicEditor bind:songNo={songData.songNo} {type} {isAdmin} />
-    <TitleEditor
-        bind:title={songData.title}
-        bind:titleKo={songData.titleKo}
-        bind:aliasKo={songData.aliasKo}
-        bind:titleEn={songData.titleEn}
-        bind:aliasEn={songData.aliasEn}
-        bind:romaji={songData.romaji}
-    />
+    <TitleEditor bind:titleRecord {compare}/>
     <OtherEditor
         bind:bpm={songData.bpm}
         bind:bpmShiver={songData.bpmShiver}
@@ -39,8 +54,9 @@
         bind:isDeleted={songData.isDeleted}
         bind:isKrBanned={songData.isKrBanned}
         bind:addedDate={songData.addedDate}
+        {compare}
     />
-    <CoursesEditor bind:courses={songData.courses} />
+    <CoursesEditor bind:courses={songData.courses} {compare}/>
 </div>
 
 <style>

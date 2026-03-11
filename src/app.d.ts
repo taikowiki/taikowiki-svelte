@@ -36,6 +36,8 @@ declare global {
 			INTERNAL_API_KEY: string;
 			RATING_URL: string;
 			TJA_FETCH_URL: string;
+			DB_MASTER_URL: string;
+			DB_MASTER_KEY: string;
 		}
 	}
 }

@@ -64,6 +64,7 @@
 		"lzutf8": "^0.6.3",
 		"markdown-escape": "^2.0.0",
 		"marked": "^15.0.6",
+		"ndjson-parser": "1.0.1",
 		"node-hiroba": "^1.7.5",
 		"object.groupby": "^1.0.3",
 		"path-browserify": "^1.0.1",

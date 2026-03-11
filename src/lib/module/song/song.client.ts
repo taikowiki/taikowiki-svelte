@@ -34,15 +34,15 @@ namespace SongClient {
             songNo,
             songData
         });
-        if(result.status === 'success'){
+        if (result.status === 'success') {
             alert('제출 성공');
             await goto(redirectPath)
         }
-        else{
-            if(result.statusCode === 403){
+        else {
+            if (result.statusCode === 403) {
                 alert('제출 실패: 권한 없음');
             }
-            else{
+            else {
                 alert('제출 실패');
             }
         }
@@ -50,5 +50,8 @@ namespace SongClient {
 }
 
 Song.Client = SongClient;
+
+type C = typeof SongClient;
+export type { C as SongClient };
 
 export { Song };

@@ -2,7 +2,7 @@
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import { Song } from "$lib/module/song";
     import { getI18N, getLang } from "$lib/module/i18n";
-    
+
     const { GENRE, VERSION } = Song.CONST;
 
     interface Props {
@@ -15,6 +15,7 @@
         isKrBanned: 1 | 0;
         isDeleted: 1 | 0;
         addedDate: number | null;
+        compare?: any;
     }
 
     let {
@@ -27,6 +28,7 @@
         isKrBanned = $bindable(),
         isDeleted = $bindable(),
         addedDate = $bindable(),
+        compare,
     }: Props = $props();
 
     $effect.pre(() => {
@@ -37,7 +39,9 @@
 
     let artistsString = $state(artists.join(", "));
     $effect.pre(() => {
-        artists = artistsString.split(",").map((e) => e.trim().replaceAll("\n", ""));
+        artists = artistsString
+            .split(",")
+            .map((e) => e.trim().replaceAll("\n", ""));
     });
 
     let addedDATE = $state(
@@ -57,7 +61,7 @@
 <TitledContainer title={i18n.other} color="#cf4844">
     <table>
         <tbody>
-            <tr>
+            <tr class:different={compare?.genre === true}>
                 <td> {i18n.genre} </td>
                 <td>
                     <div class="genre">
@@ -74,7 +78,10 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr
+                class:different={compare?.bpm === true ||
+                    compare?.bpmShiver === true}
+            >
                 <td> BPM </td>
                 <td>
                     <div>
@@ -100,9 +107,9 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr class:different={compare?.version === true}>
                 <td>
-                    <div>{i18n.versoin}</div>
+                    <div>{i18n.version}</div>
                 </td>
                 <td>
                     <div class="version">
@@ -123,7 +130,7 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr class:different={compare?.artists === true}>
                 <td>
                     <div>{i18n.artist}</div>
                     <div class="sub">{i18n.commaPlz}</div>
@@ -132,7 +139,11 @@
                     <textarea bind:value={artistsString}></textarea>
                 </td>
             </tr>
-            <tr>
+            <tr
+                class:different={compare?.isDeleted === true ||
+                    compare?.isKrBanned === true ||
+                    compare?.isAsiaBanned === true}
+            >
                 <td>
                     <div>{i18n.included}</div>
                 </td>
@@ -183,7 +194,7 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr class:different={compare?.addedDate === true}>
                 <td> <div>{i18n.addedDate}</div> </td>
                 <td>
                     <div>
@@ -274,5 +285,9 @@
         border: 1px solid black;
         width: calc(100% - 5px);
         resize: vertical;
+    }
+
+    .different {
+        background-color: #ff9999;
     }
 </style>

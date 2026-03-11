@@ -4,7 +4,7 @@ import type { I18N } from '..';
 import ratingUploadGuide from '../md/ko/ratingUploadGuide.md?raw';
 import ratingExplanation from '../md/ko/ratingExplanation.md?raw'
 
-const newKo: I18N.RecursiveStringRecord = {
+const newKo = {
     //레이아웃
     layout: {
         main: {
@@ -22,7 +22,8 @@ const newKo: I18N.RecursiveStringRecord = {
                 login: '로그인',
                 logout: '로그아웃',
                 theme: '테마',
-                lang: '언어'
+                lang: '언어',
+                experimental: '실험실'
             }
         },
         'dedicated diffchart': {
@@ -65,6 +66,7 @@ const newKo: I18N.RecursiveStringRecord = {
                 aliasKo: '한국어 비공식',
                 titleEn: '영어',
                 aliasEn: '영어 비공식',
+                titleZhCN: '중국어',
                 romaji: '로마자'
             },
             OtherEditor: {
@@ -250,6 +252,7 @@ const newKo: I18N.RecursiveStringRecord = {
                 aliasKo: '한국어(비공식)',
                 en: '영어',
                 aliasEn: '영어(비공식)',
+                zhCN: '중국어',
                 romaji: '로마자'
             },
             songData: {
@@ -272,6 +275,21 @@ const newKo: I18N.RecursiveStringRecord = {
                 nthSong: '번째 곡',
                 noDani: '단위 수록',
                 fumenImage: '보면 이미지'
+            },
+            preview: {
+                branch: '분기',
+                branches: {
+                    normal: '보통 보면',
+                    advanced: '현인 보면',
+                    master: '달인 보면'
+                },
+                mode: '모드',
+                modes: {
+                    normal: '일반',
+                    fixedScroll: 'HS 고정',
+                    fixedBPM: 'BPM 고정'
+                },
+                isAnnotationMode: '주석 사용'
             }
         },
         diffchart: {
@@ -377,9 +395,9 @@ const newKo: I18N.RecursiveStringRecord = {
             }
         }
     }
-}
+} as const satisfies I18N.RecursiveStringRecord;
 
-const ko: I18N.LangFile = {
+const oldKo = {
     other: {
         //페이지 제목
         title: {
@@ -627,6 +645,11 @@ const ko: I18N.LangFile = {
         }
     },
     ...newKo
+} as const satisfies I18N.LangFile;
+
+const ko = {
+    ...newKo,
+    ...oldKo
 } as const;
 
 export default ko;

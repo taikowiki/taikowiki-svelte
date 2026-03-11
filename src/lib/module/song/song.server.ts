@@ -2,43 +2,17 @@ import { escape, escapeId } from 'mysql2';
 import { Song } from '$lib/module/song';
 import { defineDBHandler } from "@yowza/db-handler";
 import { Util } from '$lib/module/util';
+import '$lib/module/util/util.server.js';
 
 type SongData = Song.SongData;
 type SongRequest = Song.SongRequest;
 type SongSearchOption = Song.SongSearchOption;
 
+const titleColumns = ['title', 'titleKo', 'titleEn', 'titleZhCN', 'romaji'] as const;
+const aliasColumns = ['aliasKo', 'aliasEn'] as const;
+
 namespace SongServer {
     export const DBController = {
-        /**
-         * Function to create the song table
-         */
-        createTable: defineDBHandler<[], void>(() => {
-            return async (run) => {
-                await run(`CREATE TABLE \`song\` (
-                \`songNo\` tinytext NOT NULL,
-                \`order\` int(11) NOT NULL,
-                \`title\` text NOT NULL,
-                \`titleKo\` text DEFAULT NULL,
-                \`aliasKo\` text DEFAULT NULL,
-                \`titleEn\` text DEFAULT NULL,
-                \`aliasEn\` text DEFAULT NULL,
-                \`bpm\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`bpm\`)),
-                \`bpmShiver\` tinyint(1) NOT NULL,
-                \`version\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`version\`)),
-                \`isAsiaBanned\` tinyint(1) NOT NULL,
-                \`isKrBanned\` tinyint(1) NOT NULL,
-                \`genre\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`genre\`)),
-                \`artists\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`artists\`)),
-                \`addedDate\` bigint(20) NOT NULL,
-                \`courses\` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(\`courses\`)),
-                \`isDeleted\` tinyint(1) NOT NULL DEFAULT 0
-              ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-            `);
-                await run(`ALTER TABLE \`song\` ADD PRIMARY KEY (\`order\`);`);
-                await run("ALTER TABLE `song` MODIFY `order` int(11) NOT NULL AUTO_INCREMENT;");
-            }
-        }),
-
         /**
          * Retrieve data of all songs.
          */
@@ -151,7 +125,7 @@ namespace SongServer {
             }
             if (option?.query) {
                 const query = `%${option.query.split(' ').map(Util.sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
-                sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)} OR \`romaji\` LIKE ${escape(query)})`;
+                sqlWhereQuery += `AND (${[...titleColumns, ...aliasColumns].map((column) => `\`${column}\` LIKE ${escape(query)}`).join(' OR ')})`;
             }
 
             const columnsQuery = '*';
@@ -185,7 +159,7 @@ namespace SongServer {
             }
             if (option?.query) {
                 const query = `%${option.query.split(' ').map(Util.sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
-                sqlWhereQuery += `AND (\`title\` LIKE ${escape(query)} OR \`titleKo\` LIKE ${escape(query)} OR \`aliasKo\` LIKE ${escape(query)} OR \`titleEn\` LIKE ${escape(query)} OR \`aliasEn\` LIKE ${escape(query)} OR \`romaji\` LIKE ${escape(query)})`;
+                sqlWhereQuery += `AND (${[...titleColumns, ...aliasColumns].map((column) => `\`${column}\` LIKE ${escape(query)}`).join(' OR ')})`;
             }
 
             const columnsQuery = columns.map((e) => escapeId(e)).join(', ')
@@ -199,49 +173,6 @@ namespace SongServer {
                     count
                 }
             };
-        }),
-
-        /**
-         * Adds a song.
-         */
-        addSong: defineDBHandler<[SongData], void>((data) => {
-            return async (run) => {
-                return await run(`INSERT INTO \`song\` (
-                \`songNo\`, 
-                \`title\`,
-                \`titleKo\`,
-                \`aliasKo\`,
-                \`titleEn\`,
-                \`aliasEn\`,
-                \`bpm\`,
-                \`bpmShiver\`,
-                \`version\`,
-                \`isAsiaBanned\`,
-                \`isKrBanned\`,
-                \`genre\`,
-                \`artists\`,
-                \`addedDate\`,
-                \`courses\`
-            ) VALUES (
-                ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
-            )`, [
-                    data.songNo,
-                    data.title,
-                    data.titleKo,
-                    data.aliasKo,
-                    data.titleEn,
-                    data.aliasEn,
-                    JSON.stringify(data.bpm),
-                    data.bpmShiver,
-                    JSON.stringify(data.version),
-                    data.isAsiaBanned,
-                    data.isKrBanned,
-                    JSON.stringify(data.genre),
-                    JSON.stringify(data.artists),
-                    data.addedDate || 0,
-                    JSON.stringify(data.courses)
-                ])
-            }
         }),
 
         /**
@@ -280,21 +211,65 @@ namespace SongServer {
         }),
 
         /**
-         * Updates a song.
+         * Adds or updates a song.
          */
         uploadSong: defineDBHandler<[string, SongData], void>((songNo, songData) => {
             return async (run) => {
                 const song = await DBController.getSongBySongNo.getCallback(songNo)(run);
+                const setObject = {
+                    songNo: (songData.songNo),
+                    title: (songData.title),
+                    titleKo: (songData.titleKo),
+                    aliasKo: (songData.aliasKo),
+                    titleEn: (songData.titleEn),
+                    aliasEn: (songData.aliasEn),
+                    titleZhCN: songData.titleZhCN,
+                    romaji: (songData.romaji),
+                    bpm: (JSON.stringify(songData.bpm)),
+                    bpmShiver: (songData.bpmShiver),
+                    version: (JSON.stringify(songData.version)),
+                    isAsiaBanned: (songData.isAsiaBanned),
+                    isKrBanned: (songData.isKrBanned),
+                    genre: (JSON.stringify(songData.genre)),
+                    artists: (JSON.stringify(songData.artists)),
+                    addedDate: (songData.addedDate),
+                    courses: (JSON.stringify(songData.courses)),
+                    isDeleted: (songData.isDeleted),
+                } as const;
                 if (song === null) {
-                    await run("INSERT INTO `song` (`songNo`, `title`, `titleKo`, `aliasKo`, `titleEn`, `aliasEn`, `romaji`, `bpm`, `bpmShiver`, `version`, `isAsiaBanned`, `isKrBanned`, `genre`, `artists`, `addedDate`, `courses`, `isDeleted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, songData.romaji, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted])
+                    await Util.Server.queryBuilder
+                        .insert('song')
+                        .set(() => setObject)
+                        .execute(run);
                 }
                 else {
-                    await run("UPDATE `song` SET `songNo` = ?, `title` = ?, `titleKo` = ?, `aliasKo` = ?, `titleEn` = ?, `aliasEn` = ?, `romaji` = ?, `bpm` = ?, `bpmShiver` = ?, `version` = ?, `isAsiaBanned` = ?, `isKrBanned` = ?, `genre` = ?, `artists` = ?, `addedDate` = ?, `courses` = ?, `isDeleted` = ? WHERE `songNo` = ?", [songData.songNo, songData.title, songData.titleKo, songData.aliasKo, songData.titleEn, songData.aliasEn, songData.romaji, JSON.stringify(songData.bpm), songData.bpmShiver, JSON.stringify(songData.version), songData.isAsiaBanned, songData.isKrBanned, JSON.stringify(songData.genre), JSON.stringify(songData.artists), songData.addedDate, JSON.stringify(songData.courses), songData.isDeleted, songNo]);
+                    await Util.Server.queryBuilder
+                        .update('song', () => setObject)
+                        .where(({ compare, column, value }) => [
+                            compare(column('songNo'), '=', value(songNo))
+                        ])
+                        .execute(run);
+
                     // 곡에 연결된 문서의 `songNo` 수정
-                    await run("UPDATE `docs` SET `songNo` = ? WHERE `songNo` = ?", [songData.songNo, songNo]);
+                    await Util.Server.queryBuilder
+                        .update('docs', ({ value }) => ({
+                            songNo: value(songData.songNo)
+                        }))
+                        .where(({ compare, column, value }) => [
+                            compare(column('songNo'), '=', value(songNo))
+                        ])
+                        .execute(run);
                 }
 
-                await run("INSERT INTO `song/log` (`songNo`, `before`, `after`, `updatedTime`) VALUES (?, ?, ?, ?)", [songData.songNo, song ? JSON.stringify(song) : null, JSON.stringify(songData), Date.now()]);
+                await Util.Server.queryBuilder
+                    .insert('song/log')
+                    .set(({ value }) => ({
+                        songNo: value(songData.songNo),
+                        before: value(song ? JSON.stringify(song) : null),
+                        after: value(JSON.stringify(songData)),
+                        updatedTime: value(Date.now())
+                    }))
+                    .execute(run);
             }
         }),
 
@@ -439,6 +414,8 @@ namespace SongServer {
     }
 }
 
+type T = typeof SongServer;
+export type { T as SongServer };
 Song.Server = SongServer;
 
 export { Song }

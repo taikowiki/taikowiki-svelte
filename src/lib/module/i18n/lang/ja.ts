@@ -21,7 +21,8 @@ const newJa: I18N.RecursiveStringRecord = {
                 login: 'ログイン',
                 logout: 'ログアウト',
                 theme: 'テーマ',
-                lang: '言語'
+                lang: '言語',
+                experimental: '実験機能'
             }
         },
         'dedicated diffchart': {
@@ -37,7 +38,7 @@ const newJa: I18N.RecursiveStringRecord = {
             myData: 'マイページ',
             donderData: 'レーティング'
         },
-        rating:{
+        rating: {
             title: 'レーティング',
             me: 'マイ·レーティング',
             ranking: 'ランキング',
@@ -52,6 +53,57 @@ const newJa: I18N.RecursiveStringRecord = {
                 hard: 'むずかしい',
                 oni: 'おに',
                 ura: 'おに(裏)'
+            },
+            BasicEditor: {
+                songNo: '曲番号'
+            },
+            TitleEditor: {
+                title: 'タイトル',
+                songTitle: '曲タイトル',
+                titleKo: '韓国語',
+                aliasKo: '韓国語(非公式)',
+                titleEn: '英語',
+                aliasEn: '英語(非公式)',
+                titleZhCN: '中国語',
+                romaji: 'ローマ字'
+            },
+            OtherEditor: {
+                other: 'その他',
+                genre: 'ジャンル',
+                bpmShiver: 'BPM揺れ',
+                version: '収録バージョン',
+                artist: 'アーティスト',
+                commaPlz: 'カンマで区切って入力してください。',
+                included: '収録可否',
+                deleted: '削除',
+                asiaBanned: 'アジア版制限',
+                krBanned: '韓国版制限',
+                addedDate: '追加日',
+                use: '使用'
+            },
+            CoursesEditor: {
+                course: '譜面'
+            },
+            CourseEditor: {
+                level: 'レベル',
+                branched: '分岐あり',
+                maxCombo: '最大コンボ数',
+                playTime: '最大演奏時間(秒)',
+                playTimeSub: '最初のドン/カッから最後のドン/カッまでの時間です。',
+                density: '最大密度(打/秒)',
+                calculate: '計算する',
+                maxBalloon: '最大風船数',
+                commaPlz: 'カンマで区切ってください。',
+                maxRoll: '最大連打時間(秒)',
+                dani: '段位',
+                add: '追加',
+                img: '譜面イメージ',
+                imgLink: 'イメージURL'
+            },
+            DaniEditor: {
+                first: '1曲目',
+                second: '2曲目',
+                third: '3曲目'
             }
         },
         DaniDisplay: {
@@ -217,6 +269,21 @@ const newJa: I18N.RecursiveStringRecord = {
                 nthSong: '曲目',
                 noDani: '段位収録',
                 fumenImage: '譜面イメージ'
+            },
+            preview: {
+                branch: '分岐',
+                branches: {
+                    normal: '普通譜面',
+                    advanced: '玄人譜面',
+                    master: '達人譜面'
+                },
+                mode: 'モード',
+                modes: {
+                    normal: '一般',
+                    fixedScroll: 'HS固定',
+                    fixedBPM: 'BPM固定'
+                },
+                isAnnotationMode: '注釈を使用'
             }
         },
         diffchart: {
@@ -281,10 +348,10 @@ const newJa: I18N.RecursiveStringRecord = {
             machineInfo: '機体情報'
         },
         donder: {
-            rating:{
+            rating: {
                 top: '上位'
             },
-            section:{
+            section: {
                 song: '曲レーティング',
                 measure: '定数表',
                 explanation: 'レーティング説明'
@@ -314,10 +381,10 @@ const newJa: I18N.RecursiveStringRecord = {
                 rating: 'レーティング',
                 nickname: '名前'
             },
-            measures:{
+            measures: {
                 heading: '定数表'
             },
-            user:{
+            user: {
                 nondisclosure: '曲のレーティングは非公開です。'
             }
         }

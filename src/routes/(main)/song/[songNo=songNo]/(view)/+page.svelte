@@ -56,6 +56,7 @@
         <MultipleTitleDisplay
             titleKo={song.titleKo}
             titleEn={song.titleEn}
+            titleZhCN={song.titleZhCN}
             aliasKo={song.aliasKo}
             aliasEn={song.aliasEn}
             romaji={song.romaji}

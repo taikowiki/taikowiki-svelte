@@ -30,7 +30,7 @@
 <SongEditor bind:songData type="edit" isAdmin={true}/>
 <button
     onclick={() => {
-        upload($page.params.songNo, songData).then(() => {
+        upload($page.params.songNo as string, songData).then(() => {
             goto("/admin/song");
         });
     }}

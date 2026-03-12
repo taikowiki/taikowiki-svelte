@@ -25,9 +25,6 @@
     //lang
     useLang();
 
-    //timezone
-    Layout.useTimezone(data.timezone);
-
     //user
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);

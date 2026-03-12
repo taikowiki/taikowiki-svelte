@@ -239,7 +239,7 @@ const newEn: I18N.RecursiveStringRecord = {
                 asiaBanned: 'This song is not available to play in the Asian version.'
             },
             multipleTitle: {
-                translatedTitle: 'Transalted Title',
+                translatedTitle: 'Translated Title',
                 ko: 'Korean',
                 aliasKo: 'Korean(Unofficial)',
                 en: 'English',

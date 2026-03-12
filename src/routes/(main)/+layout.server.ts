@@ -56,7 +56,6 @@ export async function load(event) {
         isBot,
         theme,
         asideBanners,
-        isAdmin,
-        timezone: process.env.TIMEZONE
+        isAdmin
     };
 }

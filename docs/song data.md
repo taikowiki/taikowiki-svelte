@@ -22,9 +22,9 @@
 - The Korean / English title is based on the **arcade version**.
 - If the song is not in the **arcade version**, use **latest console version** title.
 
-### Korean / English Alias (Unoffical Transalted Title)
+### Korean / English Alias (Unoffical Translated Title)
 
-- The official translations of titles are unsatisfactory, so we can use `aliases`(unoffical transalted titles).
+- The official translations of titles are unsatisfactory, so we can use `aliases`(unoffical translated titles).
 - Examples
     | Title | Korean | Korean(Unofficial) |
     | :-: | :-: | :-: |

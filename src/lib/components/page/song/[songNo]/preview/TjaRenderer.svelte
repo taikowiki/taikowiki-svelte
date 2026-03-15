@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Difficulty } from "tja-parser";
-    import { Private as Renderer } from "tja-analyzer/renderer-package";
+    import { Private as Renderer } from "tja-renderer";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/i18n";
 
@@ -40,9 +40,9 @@
 
         const judgementMap =
             new Renderer.JudgementMap<Renderer.JudgementValue>();
-        const annotations = new Renderer.LocationMap<Renderer.Annotation>();
-        let viewOptions: Renderer.ViewOptions = {
-            ...Renderer.DEFAULT_VIEW_OPTIONS,
+        const annotations = new Renderer.NoteLocationMap<Renderer.Annotation>();
+        let viewOptions: Renderer.RenderOptions = {
+            ...Renderer.DEFAULT_RENDER_OPTIONS,
             showAttribution: true,
             annotations,
             annotationToolType: "hand",
@@ -76,11 +76,7 @@
             if (hoveredNote) {
                 viewOptions = {
                     ...viewOptions,
-                    hoveredNote: {
-                        barIndex: hoveredNote.originalBarIndex,
-                        charIndex: hoveredNote.charIndex,
-                        branch: hoveredNote.branch,
-                    },
+                    hoveredNote: hoveredNote.location,
                 };
                 canvas_.style.cursor = "pointer";
             } else {
@@ -108,10 +104,7 @@
             );
             if (!hoveredNote) return;
 
-            const positionKey = {
-                barIndex: hoveredNote.originalBarIndex,
-                charIndex: hoveredNote.charIndex,
-            };
+            const positionKey = hoveredNote.location;
             let annot: Renderer.Annotation | undefined =
                 annotations.get(positionKey);
             if (annot?.hand === Renderer.HandType.L) {
@@ -139,7 +132,7 @@
 
     const [theme] = getTheme();
     const lang = getLang();
-    const i18n = $derived(getI18N($lang).page.songNo.preview)
+    const i18n = $derived(getI18N($lang).page.songNo.preview);
 </script>
 
 <label data-theme={$theme}>
@@ -160,7 +153,7 @@
         border-radius: 5px;
         border: 1px solid white;
 
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
         padding-inline: 5px;
@@ -171,14 +164,14 @@
 
         margin-bottom: 5px;
 
-        &[data-theme="light"]{
+        &[data-theme="light"] {
             background-color: #cf4844;
         }
-        &[data-theme="dark"]{
+        &[data-theme="dark"] {
             background-color: #1c1c1c;
         }
 
-        &:has(input:checked){
+        &:has(input:checked) {
             opacity: 1;
         }
         & input {
@@ -186,7 +179,7 @@
         }
     }
 
-    canvas{
+    canvas {
         width: 100% !important;
         height: auto !important;
     }

@@ -13,3 +13,4 @@ bun.lock
 tests
 
 scripts
+pnpm-lock.yaml

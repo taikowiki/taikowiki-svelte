@@ -31,7 +31,6 @@
 <PageTitle
     title={versionI18n[page.url.pathname.split("/")[2]] + " " + titleI18n}
 />
-
 <div class="container">
     {#each daniData.data as dani}
         <DaniDisplay {dani} {songDatas} />

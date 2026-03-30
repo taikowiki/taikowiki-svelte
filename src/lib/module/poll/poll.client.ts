@@ -1,4 +1,4 @@
-import type { RRequestData, RRequestHandler, RResponse } from "@yowza/rrequestor/types";
+import type { RResponse } from "@yowza/rrequestor/types";
 import { Poll } from ".";
 
 namespace PollClient {

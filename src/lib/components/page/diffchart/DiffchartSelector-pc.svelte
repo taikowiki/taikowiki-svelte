@@ -16,7 +16,7 @@
             goto('/diffchart/custom');
         } else {
             const url = `/diffchart/${type}/${level}`;
-            preloadData(url).then(() => goto(url));
+            goto(url);
         }
     };
 </script>

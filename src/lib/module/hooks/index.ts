@@ -186,6 +186,27 @@ export namespace Hooks {
             return await input.resolve(input.event);
         }
     }
+
+    export const docRedirect: Handle = async ({ event, resolve }) => {
+        if (event.url.pathname === '/api/doc/create') {
+            throw redirect(308, 'https://file.taiko.wiki/doc/create');
+        }
+        else if (event.url.pathname === "/api/doc/update") {
+            throw redirect(308, 'https://file.taiko.wiki/doc/update');
+        }
+
+        return await resolve(event);
+    }
+
+    /**
+     * rating.taiko.wiki 사용
+     */
+    export const ratingRedirect: Handle = async ({ event, resolve }) => {
+        if (event.url.pathname.startsWith('/rating')){
+            throw redirect(301, 'https://rating.taiko.wiki')
+        }
+        return await resolve(event);
+    }
 }
 
 export namespace Hooks {

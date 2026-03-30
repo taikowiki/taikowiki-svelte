@@ -44,8 +44,9 @@
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
-    import { Doc } from '$lib/module/doc/index.js';
+    import { Doc } from "$lib/module/doc/index.js";
     import { Layout } from "$lib/module/layout/index.js";
+    import LanguageItem from "$lib/components/layout/main/LanguageItem.svelte";
 
     const { docContext } = Doc;
 
@@ -59,9 +60,11 @@
 
     //lang
     const lang = useLang();
-    const {i18n} = I18N;
+    const { i18n } = I18N;
     let i18nLayout = $derived(i18n[$lang].layout.main);
-    const i18nPage = writable<I18N.PathLangFile>(setI18N($lang, $page.url.pathname));
+    const i18nPage = writable<I18N.PathLangFile>(
+        setI18N($lang, $page.url.pathname),
+    );
     setContext("i18n", i18nPage);
     $effect.pre(() => {
         $i18nPage = setI18N($lang, $page.url.pathname);
@@ -182,6 +185,13 @@
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />
+            <select bind:value={$lang} class="lang">
+                <option value="ko"> 한국어 </option>
+                <option value="ja"> 日本語 </option>
+                <option value="en"> English </option>
+                <option value="zh-tw"> 中文(繁体) </option>
+                <option value="zh-cn"> 中文(简体) </option>
+            </select>
         </svelte:fragment>
     </Header>
     <Main>
@@ -219,5 +229,8 @@
     }
     span.header-text {
         transform: translateY(-1px);
+    }
+    .lang{
+        width: 60px;
     }
 </style>

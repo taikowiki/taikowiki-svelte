@@ -1,17 +1,36 @@
+<script lang="ts" module>
+    import { Private as Renderer } from "tja-renderer";
+
+    class AnnotationMap extends Renderer.NoteLocationMap<Renderer.Annotation>{
+        static fromJSON(json: string){
+            const arr = JSON.parse(json) as [Renderer.NoteLocation, Renderer.Annotation][];
+            const map = new AnnotationMap();
+            arr.forEach(([key, value]) => {
+                map.set(key, value);
+            });
+            return map;
+        }
+
+        toJSON(){
+            return Array.from(this.entries())
+        }
+    }
+</script>
+
 <script lang="ts">
     import type { Difficulty } from "tja-parser";
-    import { Private as Renderer } from "tja-renderer";
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/i18n";
 
     interface Props {
         tja: string;
+        songNo: string;
         difficulty: Difficulty;
         branch: "normal" | "advanced" | "master";
         load: () => Promise<void>;
     }
 
-    let { tja, difficulty, load = $bindable(), branch: br }: Props = $props();
+    let { tja, difficulty, load = $bindable(), branch: br, songNo }: Props = $props();
 
     let isAnnotationMode = $state(false);
     let parsed: Record<string, Renderer.ParsedChart>;
@@ -40,7 +59,7 @@
 
         const judgementMap =
             new Renderer.JudgementMap<Renderer.JudgementValue>();
-        const annotations = new Renderer.NoteLocationMap<Renderer.Annotation>();
+        const annotations = AnnotationMap.fromJSON(window.localStorage.getItem(`annot:${songNo}:${difficulty}`) ?? '[]');
         let viewOptions: Renderer.RenderOptions = {
             ...Renderer.DEFAULT_RENDER_OPTIONS,
             showAttribution: true,
@@ -120,6 +139,7 @@
             } else {
                 annotations.delete(positionKey);
             }
+            window.localStorage.setItem(`annot:${songNo}:${difficulty}`, JSON.stringify(annotations))
             render?.();
         };
         canvas.addEventListener("mousemove", moveEventListener);

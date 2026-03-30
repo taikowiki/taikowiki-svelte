@@ -76,6 +76,7 @@
     difficulty={courseDiff}
     bind:load={loadRenderer}
     {branch}
+    songNo={data.song.songNo}
 />
 <Modal bind:show={loading}>Loading...</Modal>
 <Modal bind:show={hasError}>

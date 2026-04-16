@@ -33,12 +33,12 @@ const authHandle = auth(Object.values(provider), {
 const checkPermission = Hooks.checkPermissions([
     {
         path: '/admin/api',
-        level: 9,
+        level: 8,
         rule: 'startsWith',
     },
     {
         path: '/admin',
-        level: 9,
+        level: 8,
         rule: 'startsWith',
         redirectPath: '/auth/login'
     },

@@ -145,7 +145,7 @@ export namespace Hooks {
         if(rule === "match" && url.pathname !== path){
             return 0;
         }
-        if(rule == "startsWith" && !url.pathname.startsWith(path)){
+        if(rule === "startsWith" && !url.pathname.startsWith(path)){
             return 0;
         }
 

@@ -1,23 +1,23 @@
 <script lang="ts" module>
     const sectionColor: Record<string, string> = {
-        'SS': "#B93FEA",
-        'S+': "#f00eac",
-        'pS+': "#f00eac",
-        'S': "#ff0000",
-        'pS': "#ff0000",
-        'A+': '#EF3059',
-        'pA+': '#EF3059',
-        'A': "#ef3030",
-        'pA': "#ef3030",
-        'B+': '#ff5a00',
-        'B': "#EB7535",
-        'pB': "#EB7535",
-        'C+': '#E6B439',
-        'C': '#60CE37',
-        'pC': '#60CE37',
-        'D': '#37B0CB',
-        'E': '#4161D8',
-        'F': '#adadad'
+        SS: "#B93FEA",
+        "S+": "#f00eac",
+        "pS+": "#f00eac",
+        S: "#ff0000",
+        pS: "#ff0000",
+        "A+": "#EF3059",
+        "pA+": "#EF3059",
+        A: "#ef3030",
+        pA: "#ef3030",
+        "B+": "#ff5a00",
+        B: "#EB7535",
+        pB: "#EB7535",
+        "C+": "#E6B439",
+        C: "#60CE37",
+        pC: "#60CE37",
+        D: "#37B0CB",
+        E: "#4161D8",
+        F: "#adadad",
     };
 
     function getCustomedDiffchart(diffChart: D.Diffchart, i18n: any) {
@@ -59,13 +59,14 @@
     const lang = getLang();
     let i18n = $derived(getI18N($lang).page.diffchart.fc);
     let titleI18n = $derived(getI18N("other", $lang).title["/diffchart/fc"]);
-    let customedDiffchart = $derived(getCustomedDiffchart(diffChartData.data, i18n));
-
+    let customedDiffchart = $derived(
+        getCustomedDiffchart(diffChartData.data, i18n),
+    );
 
     const donderData = data.donderData;
 </script>
 
-<PageTitle title={`★${$page.url.pathname.split('/')[3]} ${titleI18n}`}/>
+<PageTitle title={`★${$page.url.pathname.split("/")[3]} ${titleI18n}`} />
 
 <Diffchart
     diffChart={customedDiffchart}
@@ -81,8 +82,8 @@
 {/if}
 
 <style>
-    .comment-container{
-        display:flex;
+    .comment-container {
+        display: flex;
         flex-direction: column;
         align-items: center;
     }

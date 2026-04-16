@@ -8,9 +8,13 @@
 
 <div class="container">
     <div>
-        <a href="https://github.com/taikowiki/taikowiki-svelte" target="_blank">
-            Taikowiki-Svelte{version ? `@${version}` : ""}
-        </a>
+        © 2024 <a href="https://github.com/hotsixman">Hotsixman</a>
+    </div>
+    <div>
+        <a href="https://github.com/taikowiki/taikowiki-svelte">Taikowiki-Svelte{version ? `@${version}` : ""}</a>
+    </div>
+    <div>
+        <a href="https://github.com/taikowiki">Github</a>
     </div>
 </div>
 

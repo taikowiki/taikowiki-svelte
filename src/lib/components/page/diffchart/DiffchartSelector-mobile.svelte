@@ -4,8 +4,8 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { goto, preloadData } from "$app/navigation";
 
-    let type = $page.url.pathname.split("/")[2] || 'custom';
-    let level = $page.params.level || '10';
+    let type = $page.url.pathname.split("/")[2] || "custom";
+    let level = $page.params.level || "10";
 
     const lang = getLang();
     $: i18n = getI18N("/diffchart", $lang);
@@ -13,10 +13,10 @@
     const [theme] = getTheme();
     const handleDiffChart = () => {
         if (type === "custom") {
-            goto('/diffchart/custom');
+            goto("/diffchart/custom");
         } else {
             const url = `/diffchart/${type}/${level}`;
-            preloadData(url).then(() => goto(url));
+            goto(url);
         }
     };
 </script>
@@ -42,7 +42,7 @@
             data-theme={$theme}
             on:change={handleDiffChart}
         >
-            {#each [ 6, 7, 8, 9, 10] as lev}
+            {#each [6, 7, 8, 9, 10] as lev}
                 <option value={lev.toString()}>★{lev}</option>
             {/each}
         </select>

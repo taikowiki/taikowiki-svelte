@@ -7,6 +7,9 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
+    import { navigating } from "$app/state";
+
+    let { children } = $props();
 
     const downloadImage = writable<(() => any) | null>(null);
     setContext("downloadImage", downloadImage);
@@ -16,15 +19,26 @@
     const isMobile = getIsMobile();
 
     const lang = getLang();
-    $: i18n = getI18N('/diffchart', $lang);
+    let i18n = $derived(getI18N("/diffchart", $lang));
 </script>
 
 <PageAside>
     <DiffchartSelectorPc />
     {#if $downloadImage}
-        <button style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;" on:click={$downloadImage}>
-            <span class="download-text" data-theme={$theme}>{i18n.download}</span>
-            <img class="download" data-theme={$theme} src="/assets/icon/download.svg" alt="다운로드" role="presentation"/>
+        <button
+            style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;"
+            onclick={$downloadImage}
+        >
+            <span class="download-text" data-theme={$theme}
+                >{i18n.download}</span
+            >
+            <img
+                class="download"
+                data-theme={$theme}
+                src="/assets/icon/download.svg"
+                alt="다운로드"
+                role="presentation"
+            />
         </button>
     {/if}
 </PageAside>
@@ -33,15 +47,26 @@
     <div class="mobile">
         <DiffchartSelectorMobile />
         {#if $downloadImage}
-            <button on:click={$downloadImage} style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;">
-                <span class="download-text" data-theme={$theme}>{i18n.download}</span>
-                <img class="download" data-theme={$theme} src="/assets/icon/download.svg" alt="다운로드" role="presentation"/>
+            <button
+                onclick={$downloadImage}
+                style="cursor: pointer;display:flex;align-items:center;column-gap:5px;padding: 0;border: none;background: none;"
+            >
+                <span class="download-text" data-theme={$theme}
+                    >{i18n.download}</span
+                >
+                <img
+                    class="download"
+                    data-theme={$theme}
+                    src="/assets/icon/download.svg"
+                    alt="다운로드"
+                    role="presentation"
+                />
             </button>
         {/if}
     </div>
 {/if}
 
-<slot />
+{@render children?.()}
 
 <style>
     .mobile {
@@ -53,7 +78,7 @@
         align-items: center;
         column-gap: 5px;
         margin-bottom: 10px;
-      justify-content: space-between;
+        justify-content: space-between;
     }
 
     .download {

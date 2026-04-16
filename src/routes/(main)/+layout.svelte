@@ -17,6 +17,7 @@
 </script>
 
 <script lang="ts">
+    import ServiceLayout from "$lib/components/layout/ServiceLayout.svelte";
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
@@ -47,6 +48,11 @@
     import { Doc } from "$lib/module/doc/index.js";
     import { Layout } from "$lib/module/layout/index.js";
     import LanguageItem from "$lib/components/layout/main/LanguageItem.svelte";
+
+    // for service
+    import PcSideAd from "$lib/components/common/advertisement/PCSideAd.svelte";
+    import MobileDefaultAd from "$lib/components/common/advertisement/MobileDefaultAd.svelte";
+    import SupportAside from "$lib/components/common/advertisement/SupportAside.svelte";
 
     const { docContext } = Doc;
 
@@ -192,6 +198,11 @@
                 <option value="zh-tw"> 中文(繁体) </option>
                 <option value="zh-cn"> 中文(简体) </option>
             </select>
+            <HeaderItem
+                icon="/assets/icon/donate.svg"
+                href="/donate"
+                mobileHideSlot
+            />
         </svelte:fragment>
     </Header>
     <Main>
@@ -199,6 +210,9 @@
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
+                <!-- Ad: MobileDefault -->
+                <MobileDefaultAd/>
+                <!-- /Ad: MobileDefault -->
                 {@render children?.()}
                 {#if $page.url.pathname !== "/song"}
                     <ScrollSetter />
@@ -207,15 +221,23 @@
         {/snippet}
         {#snippet aside()}
             <Aside>
+                <!-- Ad: Suppport -->
+                <SupportAside/>
+                <!-- /Ad: Suppport -->
                 {#if data.asideBanners}
                     <AsideBanner banners={data.asideBanners} />
                 {/if}
                 <AsideNewSong newSongs={data.newSongs} />
+                <!-- Ad: PcSide -->
+                <PcSideAd/>
+                <!-- /Ad: PCSide -->
             </Aside>
         {/snippet}
     </Main>
     <Footer version={data.version} />
 </div>
+
+<ServiceLayout />
 
 <style>
     .logo {

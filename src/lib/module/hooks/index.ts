@@ -109,21 +109,24 @@ export namespace Hooks {
         return async ({ event, resolve }) => {
             const { locals, url } = event;
 
-            let passed = false;
+            let flag = 0;
             let path: string | undefined;
             let redirectPath: string | undefined;
             for (const option of options) {
-                if (checkPermission(option.path, option.level, option.rule, url, locals.userData)) {
-                    passed = true;
+                const result = checkPermission(option.path, option.level, option.rule, url, locals.userData);
+                if(flag === 0 && result === 1){
+                    flag = 1;
                     break;
                 }
-                else {
+                if(flag === 0 && result === 2){
+                    flag = 2;
                     path = option.path ?? path;
-                    redirectPath = option.redirectPath ?? redirectPath
+                    redirectPath = option.redirectPath ?? redirectPath;
+                    break;
                 }
             }
 
-            if (passed) {
+            if (flag === 0 || flag === 1) {
                 return await resolve(event)
             }
             else if (redirectPath) {
@@ -138,22 +141,22 @@ export namespace Hooks {
         }
     }
 
-    function checkPermission(path: string, level: number, rule: 'match' | 'startsWith', url: URL, userData: User.Data | null): boolean {
+    function checkPermission(path: string, level: number, rule: 'match' | 'startsWith', url: URL, userData: User.Data | null): number {
         if(rule === "match" && url.pathname !== path){
-            return true;
+            return 0;
         }
         if(rule == "startsWith" && !url.pathname.startsWith(path)){
-            return true;
+            return 0;
         }
 
         if(!userData){
-            return false;
+            return 2;
         }
         if(userData.grade < level){
-            return false;
+            return 2;
         }
 
-        return true;
+        return 1;
     }
 
     /**

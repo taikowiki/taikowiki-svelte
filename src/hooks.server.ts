@@ -31,12 +31,17 @@ const checkPermission = Hooks.checkPermissions([
         rule: 'match'
     },
     {
+        path: '/admin/song/request',
+        level: 9,
+        rule: 'startsWith'
+    },
+    {
         path: '/admin/song',
         level: 7,
         rule: 'startsWith',
     },
     {
-        path: '/admin/api/song',
+        path: '/admin/api/song/upload',
         level: 7,
         rule: 'startsWith',
     },

@@ -26,6 +26,11 @@ const authHandle = auth(Object.values(provider), {
 
 const checkPermission = Hooks.checkPermissions([
     {
+        path: '/admin',
+        level: 7,
+        rule: 'match'
+    },
+    {
         path: '/admin/song',
         level: 7,
         rule: 'startsWith',
@@ -43,8 +48,7 @@ const checkPermission = Hooks.checkPermissions([
     {
         path: '/admin',
         level: 9,
-        rule: 'startsWith',
-        redirectPath: '/auth/login'
+        rule: 'startsWith'
     },
     {
         path: '/auth/user',

@@ -52,7 +52,7 @@
 		"cookie-store": "^3.0.0",
 		"css-filter-converter": "^1.0.109",
 		"cssom": "^0.5.0",
-		"diff": "^7.0.0",
+		"diff": "8.0.3",
 		"highlight.js": "^11.11.1",
 		"html2canvas": "^1.4.1",
 		"isbot": "^5.1.17",

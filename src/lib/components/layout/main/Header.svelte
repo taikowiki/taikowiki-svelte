@@ -1,15 +1,17 @@
 <script lang="ts">
+    import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
     const [theme] = getTheme();
+    const isMobile = getIsMobile();
 </script>
 
 <header data-theme={$theme}>
     <div class="header-container">
-        <div class="left">
+        <div class="left" data-isMobile={$isMobile}>
             <slot name="left" />
         </div>
-        <div class="right">
+        <div class="right" data-isMobile={$isMobile}>
             <slot name="right" />
         </div>
     </div>
@@ -52,6 +54,10 @@
         display: flex;
         column-gap: 10px;
         align-items: center;
+
+        &[data-isMobile="true"]{
+            column-gap: 5px;
+        }
     }
     .left {
         flex-direction: row;

@@ -26,6 +26,26 @@ const authHandle = auth(Object.values(provider), {
 
 const checkPermission = Hooks.checkPermissions([
     {
+        path: '/admin',
+        level: 7,
+        rule: 'match'
+    },
+    {
+        path: '/admin/song/request',
+        level: 9,
+        rule: 'startsWith'
+    },
+    {
+        path: '/admin/song',
+        level: 7,
+        rule: 'startsWith',
+    },
+    {
+        path: '/admin/api/song/upload',
+        level: 7,
+        rule: 'startsWith',
+    },
+    {
         path: '/admin/api',
         level: 9,
         rule: 'startsWith',
@@ -33,8 +53,7 @@ const checkPermission = Hooks.checkPermissions([
     {
         path: '/admin',
         level: 9,
-        rule: 'startsWith',
-        redirectPath: '/auth/login'
+        rule: 'startsWith'
     },
     {
         path: '/auth/user',
@@ -45,7 +64,7 @@ const checkPermission = Hooks.checkPermissions([
 ])
 
 const cors = Hooks.allowOrigin("https://donderhiroba.jp", "/", { credentials: true });
-const apiCors = Hooks.allowOrigin("*", "/api/v1", {credentials: true});
+const apiCors = Hooks.allowOrigin("*", "/api/v1", { credentials: true });
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);

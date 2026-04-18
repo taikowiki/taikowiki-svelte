@@ -2,6 +2,8 @@
 
 This project is an wiki project for 太鼓の達人(Taiko no Tatsujin). This is open sourced project, so you can contribute to this project. Not only codes, but also translation, design, etc.
 
+**[Important Notice about Site operation and update roadmap](https://taiko.wiki/notice/58)**
+
 - [한국어](/docs/ko/readme.md)
 
 ## Contribution

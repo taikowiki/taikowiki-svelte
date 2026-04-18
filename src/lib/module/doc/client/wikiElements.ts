@@ -3,9 +3,8 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { property } from 'lit/decorators.js';
 import { Task } from '@lit/task';
 import { get, type Unsubscriber, type Writable } from 'svelte/store';
-import { docContext } from '../util.js';
 import { defineRequestHandler } from '@yowza/rrequestor';
-import type { Doc } from '$lib/module/doc';
+import { Doc } from '$lib/module/doc';
 import { CSSStyleDeclaration } from 'cssom';
 
 // custom elements
@@ -23,6 +22,7 @@ export function defineWikiElements() {
     defineElement(WikiAnnotationElement, 'wiki-annot');
     defineElement(WikiRoot, 'wiki-root', { extends: 'div' });
     defineElement(WikiLink, 'wiki-link');
+    defineElement(WikiSong, 'wiki-song');
     defineElement(WikiFloat, 'wiki-float', { extends: 'div' });
     defineElement(WikiYoutube, 'wiki-yt');
 }
@@ -43,7 +43,7 @@ export class WikiFrameViewElement extends LitElement {
         task: async ([frameTitle]) => {
             if (!frameTitle) return null;
 
-            const frameFromWindowContext = docContext.getContext().get('wikiDocFrames')?.get(frameTitle);
+            const frameFromWindowContext = Doc.docContext.getContext().get('wikiDocFrames')?.get(frameTitle);
             if (frameFromWindowContext) {
                 return frameFromWindowContext;
             }
@@ -254,7 +254,7 @@ export class WikiAnnotationElement extends LitElement {
      * `__window__context__.wikiDocAnnotations`에 해당 주석의 내용을 저장하는 함수.
      */
     assignAnnotationContent() {
-        const windowContext = docContext.getContext();
+        const windowContext = Doc.docContext.getContext();
         if (!windowContext) return;
         if (typeof (this.key) === "undefined") return;
 
@@ -275,7 +275,7 @@ export class WikiAnnotationElement extends LitElement {
     connectedCallback(): void {
         super.connectedCallback();
 
-        const windowContext = docContext.getContext();
+        const windowContext = Doc.docContext.getContext();
         if (!windowContext) return;
 
         //`theme` property를 theme 스토어와 동기화.
@@ -379,7 +379,7 @@ export class WikiAnnotationElement extends LitElement {
      * - 모바일 아님 -> 하단 주석으로 이동.
      */
     clickHandler() {
-        const isMobile = docContext.getContext().get('isMobile');
+        const isMobile = Doc.docContext.getContext().get('isMobile');
         if (!isMobile) return;
         const isMobileValue = get(isMobile);
         if (isMobileValue) {
@@ -425,7 +425,7 @@ export class WikiAnnotationElement extends LitElement {
             return html``;
         }
 
-        const annotationContent: string | undefined = docContext.getContext().get('wikiDocAnnotations')?.get(this.key);
+        const annotationContent: string | undefined = Doc.docContext.getContext().get('wikiDocAnnotations')?.get(this.key);
         if (!annotationContent) {
             return html``;
         }
@@ -458,22 +458,19 @@ export class WikiAnnotationElement extends LitElement {
     }
 }
 
-export class WikiLink extends LitElement {
-    @property({ attribute: 'doctitle', type: String })
-    docTitle?: string;
-
+abstract class WikiLinkBase extends LitElement {
     // 사용 가능/불가능 여부는 미리보기 렌더링과 문서 열람 전처리 때 결정합니다.
     // 문서를 작성/수정할 때는 available을 사용하지 않습니다.
     @property({ attribute: 'available', type: String })
     available: string = "false";
 
+    @property({ attribute: false })
+    theme?: "light" | "dark";
+
     @property({ attribute: 'test', type: String })
     forTest: string = "false";
 
     unsubscriber?: Unsubscriber;
-
-    @property({ attribute: false })
-    theme?: "light" | "dark";
 
     static get styles() {
         return css`
@@ -504,7 +501,7 @@ export class WikiLink extends LitElement {
     connectedCallback(): void {
         super.connectedCallback();
 
-        const windowContext = docContext.getContext();
+        const windowContext = Doc.docContext.getContext();
         if (!windowContext) return;
 
         //`theme` property를 theme 스토어와 동기화.
@@ -520,16 +517,46 @@ export class WikiLink extends LitElement {
         this.unsubscriber?.();
     }
 
+    abstract getUrl(): string;
+    abstract getDefaultText(): string;
+
+    render() {
+        if (this.available === "true") {
+            return html`
+                <a href="${this.getUrl()}" class="available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : ""}">
+                    ${this.innerHTML?.trim() || this.getDefaultText()}
+                </a>
+            `
+        }
+        else {
+            return html`
+                <a href="${this.getUrl()}" class="not-available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : ""}">
+                    ${this.innerHTML?.trim() || this.getDefaultText()}
+                </a>
+            `
+        }
+    }
+}
+
+/**
+ * `<wiki-link>`
+ * 
+ * 문서 링크
+ */
+export class WikiLink extends WikiLinkBase {
+    @property({ attribute: 'doctitle', type: String })
+    docTitle?: string;
+
     /**
      * 문서 제목에 해당하는 문서의 주소를 반환합니다.
      */
-    getDocUrl() {
+    getUrl() {
         if (typeof (this.docTitle) === "undefined") {
             return '';
         }
 
         // window context의 `urlBase`
-        const urlBaseString = docContext.getContext().get('wikiDocURLBase');
+        const urlBaseString = Doc.docContext.getContext().get('wikiDocURLBase');
         if (!urlBaseString) {
             return `/${encodeURIComponent(this.docTitle)}`;
         }
@@ -539,24 +566,45 @@ export class WikiLink extends LitElement {
         return path;
     }
 
-    render() {
-        if (this.available === "true") {
-            return html`
-                <a href="${this.getDocUrl()}" class="available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : ""}">
-                    ${this.innerHTML?.trim() || this.docTitle}
-                </a>
-            `
-        }
-        else {
-            return html`
-                <a href="${this.getDocUrl()}" class="not-available" data-theme="${this.theme}" target="${this.forTest === "true" ? "_blank" : ""}">
-                    ${this.innerHTML?.trim() || this.docTitle}
-                </a>
-            `
-        }
+    getDefaultText(): string {
+        return this.docTitle ?? '';
     }
 }
 
+/**
+ * `<wiki-song>`
+ * 
+ * 곡 링크
+ */
+export class WikiSong extends WikiLinkBase {
+    @property({ attribute: 'songno', type: String })
+    songNo?: string;
+    @property({ attribute: 'songtitle', type: String })
+    songtitle?: string;
+
+    getUrl(): string {
+        if (typeof (this.songNo) === "undefined") {
+            return '';
+        }
+
+        const url = new URL(location.href);
+        url.pathname = `/song/${encodeURIComponent(this.songNo)}`;
+        for(const key of url.searchParams.keys()){
+            url.searchParams.delete(key)
+        }
+        return url.href;
+    }
+
+    getDefaultText(): string {
+        return this.songtitle ?? `song: ${this.songNo}`
+    }
+}
+
+/**
+ * `<wiki-yt>`
+ * 
+ * 유튜브 삽입
+ */
 export class WikiYoutube extends LitElement {
     @property()
     v?: string;

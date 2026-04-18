@@ -1,6 +1,5 @@
 import { defineDBHandler } from "@yowza/db-handler";
 import { Poll } from "."
-import { WikiError } from "../doc/util";
 import type { InferDBSchema, QueryFunction } from "@yowza/db-handler/types";
 import { User } from "../user";
 import '../user/user.server';
@@ -8,7 +7,10 @@ import { DateTime } from "luxon";
 import { Util } from "../util";
 import '../util/util.server';
 import groupBy from "object.groupby";
+import { Doc } from "../doc";
 const { queryBuilder } = Util.Server;
+
+const { WikiError } = Doc;
 
 namespace PollServer {
     export const DBController = {
@@ -417,5 +419,5 @@ namespace PollServer {
 Poll.Server = PollServer;
 
 type P = typeof PollServer;
-export type { P  as PollServer };
+export type { P as PollServer };
 export { Poll };

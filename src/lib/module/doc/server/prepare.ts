@@ -1,10 +1,10 @@
 import type { HTMLElement } from "node-html-parser";
-import type { Doc } from "..";
-import { renderer } from "../util";
+import { Doc } from "..";
 import type { QueryFunction } from '@yowza/db-handler/types';
 import { Util } from "$lib/module/util/util.server";
 
 const { queryBuilder } = Util.Server;
+const { renderer } = Doc;
 
 export async function setWikiLinkAvailable(dom: HTMLElement, run: QueryFunction) {
     for (const wikiLinkElement of dom.querySelectorAll('wiki-link')) {
@@ -38,6 +38,37 @@ export async function setWikiLinkAvailable(dom: HTMLElement, run: QueryFunction)
         else {
             wikiLinkElement.setAttribute('available', 'false');
         }
+    }
+
+    const songNoTitleMap = new Map<string, string>();
+    for (const wikiSongElement of dom.querySelectorAll('wiki-song')) {
+        const songNo = wikiSongElement.getAttribute('songno');
+        if (!songNo) {
+            wikiSongElement.setAttribute('available', 'false');
+            continue;
+        }
+
+        let title = songNoTitleMap.get(songNo);
+        if (title) {
+            wikiSongElement.setAttribute('songtitle', title);
+            wikiSongElement.setAttribute('available', 'true');
+            continue;
+        }
+
+        const rows = await queryBuilder
+            .select('song', ({ column }) => ({ title: column('title') }))
+            .where(({ compare, column, value }) => [compare(column('songNo'), '=', value(songNo))])
+            .execute(run);
+
+        if (rows.length === 0) {
+            wikiSongElement.setAttribute('available', 'false');
+            continue;
+        }
+
+        title = rows[0].title;
+        songNoTitleMap.set(songNo, title as string);
+        wikiSongElement.setAttribute('songtitle', title as string);
+        wikiSongElement.setAttribute('available', 'true');
     }
 }
 export async function prepareParagraphs(subParagraphs: Doc.Data.DocParagraph[], run: QueryFunction) {

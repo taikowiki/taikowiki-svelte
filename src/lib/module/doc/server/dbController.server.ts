@@ -1,12 +1,12 @@
 import { defineDBHandler } from "@yowza/db-handler";
-import type { Doc } from '$lib/module/doc';
-import { WikiError, validateDocData, parseDBData } from "../util.js";
-import { renderer } from "../util.js";
+import { Doc } from '$lib/module/doc';
 import { Song } from '$lib/module/song/song.server';
 import { Util } from "$lib/module/util/index.js";
 import '$lib/module/util/util.server.js';
 import * as Diff from 'diff';
 import { Search } from "$lib/module/search/index.js";
+
+const { WikiError, validateDocData, parseDBData, renderer } = Doc;
 
 const queryBuilder = Util.Server.queryBuilder;
 export const docDBController = {

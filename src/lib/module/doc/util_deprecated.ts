@@ -492,6 +492,8 @@ export const renderer = {
                 e.setAttribute('target', '_blank')
             }
         })
+
+        console.log(dom);
     },
     /**
      * `<style-table>`과 `<style-cell>` 태그로 테이블의 스타일 적용

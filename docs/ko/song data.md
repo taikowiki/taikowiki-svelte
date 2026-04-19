@@ -2,7 +2,7 @@
 
 ## 타입스크립트 타입
 
-`SongData` 타입은 `src/lib/module/song/types.ts` 파일에 있습니다.
+`SongData` 타입은 `src/lib/module/song/index.ts` 파일에 있습니다.
 
 ## 규칙칙
 

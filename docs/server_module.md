@@ -1,61 +1,104 @@
-# Server Module
+# server module
 
-These are modules used on the server (backend) side.
+Modules used on the server (backend) side.
 
 ## hooks
 
-### allow-origin
+All hooks are defined in the `Hooks` namespace in `$lib/module/hooks`.
+
+### allowOrigin
 ```ts
 // /src/hooks.server.ts
-import allowOrigin from '$lib/module/server/hooks/allow-origin'
+import { Hooks } from "$lib/module/hooks";
 
-const cors = allowOrigin(["https://donderhiroba.jp", "https://google.com"], {credentials: true});
+const cors = Hooks.allowOrigin("https://donderhiroba.jp", "/", { credentials: true });
+const apiCors = Hooks.allowOrigin("*", "/api/v1", { credentials: true });
 
-export const handle = sequence(cors);
+export const handle = sequence(cors, apiCors);
 ```
 
-Allows CORS requests from specific origins. However, for methods `post, put, patch, delete` requests with `Content-Type` headers of `application/x-www-form-urlencoded, multipart/form-data, text/plain` cannot be allowed. To receive data, you must use the `application/json` format.
+Allows CORS requests from specific origins.
 
-When the `credentials` property in the second parameter is set to `true`, cookies are allowed to be sent with CORS requests. See options like `credentials: 'include'` for the fetch API or `withCredentials: true` for axios.
+- `allowedOrigin`: Origin to allow (e.g., `"https://google.com"`, `"*"` etc.)
+- `allowedPath`: Path prefix to allow (e.g., `"/api"`)
+- `option`:
+    - `credentials`: If `true`, allows sending cookies with CORS requests.
 
-### ban-controller
+### checkIp
 ```ts
 // /src/hooks.server.ts
-import BanController from '$lib/module/server/hooks/ban-controller'
+import { Hooks } from "$lib/module/hooks";
 
-export const handle = sequence(BanController.checkIp);
+export const handle = sequence(Hooks.checkIp);
 ```
 
-Block requests from IPs on the ban list in database.
+Blocks requests from IPs in the ban list (`ban/ip` table) in integration with MySQL.
 
-### logger `experimental`
+### dynamicHtmlLang
 ```ts
 // /src/hooks.server.ts
-import logger from '$lib/module/server/hooks/logger'
+import { Hooks } from "$lib/module/hooks";
 
-export const handle = sequence(logger);
+export const handle = sequence(Hooks.dynamicHtmlLang);
 ```
 
-Logs requests to the server in the database.
+Checks URL parameters (`?lang=`) or cookies (`language`) and replaces the `%lang%` part of the HTML with the current language.
 
-### permissionCheck
+### logger
 ```ts
 // /src/hooks.server.ts
-import checkPermissions from '$lib/module/server/hooks/permissionCheck'
+import { Hooks } from "$lib/module/hooks";
 
-const permission = checkPermissions([
-    { // Prevents users with a grade lower than 9 from accessing pages starting with '/admin'.
+export const handle = sequence(Hooks.logger);
+```
+
+Logs requests (UUID, IP, Path) to the `log` table.
+
+### checkPermissions
+```ts
+// /src/hooks.server.ts
+import { Hooks } from "$lib/module/hooks";
+
+const permission = Hooks.checkPermissions([
+    {
         path: '/admin',
-        level: 9,
-        rule: 'startsWith', // Using 'startsWith' blocks access to all pages starting with this path.
-        redirectPath: '/login' // Redirects users who are not logged in to this path.
+        level: 7,
+        rule: 'match'
     },
-    { // Blocks access to '/special' for users who are not logged in.
-        path: '/special',
-        level: 1, // The minimum grade for logged-in users is 1. Therefore, setting it to 1 blocks only users who are not logged in.
-        rule: 'match' // Using 'match' blocks access to the page that exactly matches this path.
+    {
+        path: '/auth/user',
+        level: 1,
+        rule: 'startsWith',
+        redirectPath: '/auth/login'
     }
 ])
 
 export const handle = sequence(permission);
 ```
+
+Checks the user's permission level for specific paths.
+
+- `path`: Target path
+- `level`: Minimum required level (logged-in users are 1 or higher)
+- `rule`: `'match'` (exact match) or `'startsWith'` (starts with the path)
+- `redirectPath`: Path to redirect if unauthorized.
+
+### getUserData
+```ts
+// /src/hooks.server.ts
+import { Hooks } from "$lib/module/hooks";
+
+export const handle = sequence(Hooks.getUserData);
+```
+
+If `locals.user` exists, retrieves additional user data (`locals.userData`) from the database.
+
+### setAssetsCacheControl
+```ts
+// /src/hooks.server.ts
+import { Hooks } from "$lib/module/hooks";
+
+export const handle = sequence(Hooks.setAssetsCacheControl);
+```
+
+Sets a 7-day cache header for requests starting with `/assets`.

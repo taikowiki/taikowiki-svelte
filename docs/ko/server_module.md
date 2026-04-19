@@ -4,58 +4,101 @@
 
 ## hooks
 
-### allow-origin
+모든 훅은 `$lib/module/hooks`의 `Hooks` 네임스페이스에 정의되어 있습니다.
+
+### allowOrigin
 ```ts
 // /src/hooks.server.ts
-import allowOrigin from '$lib/module/server/hooks/allow-origin'
+import { Hooks } from "$lib/module/hooks";
 
-const cors = allowOrigin(["https://donderhiroba.jp", "https://google.com"], {credentials: true});
+const cors = Hooks.allowOrigin("https://donderhiroba.jp", "/", { credentials: true });
+const apiCors = Hooks.allowOrigin("*", "/api/v1", { credentials: true });
 
-export const handle = sequence(cors);
+export const handle = sequence(cors, apiCors);
 ```
 
-특정 origin으로부터의 cors 요청을 허용합니다. 단, `post, put, patch, delete` 메소드의 경우 `Content-Type` 헤더가`application/x-www-form-urlencoded, multipart/form-data, text/plain`인 요청은 허용할 수 없습니다. 데이터를 받아야 할 경우 `application/json` 형식을 사용해야합니다.
+특정 origin으로부터의 cors 요청을 허용합니다.
 
-두번째 파라미터에서 `credentials` 프로퍼티가 `true`인 경우 cors 요청을 할 때 쿠키를 같이 보내는 것을 허용합니다. `fetch API`의 `credentials: 'include'`나 `axios`의 `withCredentials: true` 옵션 등을 찾아보세요.
+- `allowedOrigin`: 허용할 origin (예: `"https://google.com"`, `"*"` 등)
+- `allowedPath`: 허용할 경로 시작 부분 (예: `"/api"`)
+- `option`:
+    - `credentials`: `true`인 경우 cors 요청을 할 때 쿠키를 같이 보내는 것을 허용합니다.
 
-### ban-controller
+### checkIp
 ```ts
 // /src/hooks.server.ts
-import BanController from '$lib/module/server/hooks/ban-controller'
+import { Hooks } from "$lib/module/hooks";
 
-export const handle = sequence(BanController.checkIp);
+export const handle = sequence(Hooks.checkIp);
 ```
 
-mysql과 연동하여 밴 리스트에 있는 ip들의 요청을 차단합니다.
+mysql과 연동하여 밴 리스트(`ban/ip` 테이블)에 있는 ip들의 요청을 차단합니다.
 
-### logger `experimental`
+### dynamicHtmlLang
 ```ts
 // /src/hooks.server.ts
-import logger from '$lib/module/server/hooks/logger'
+import { Hooks } from "$lib/module/hooks";
 
-export const handle = sequence(logger);
+export const handle = sequence(Hooks.dynamicHtmlLang);
 ```
 
-db에 서버로의 요청을 기록합니다.
+URL 파라미터(`?lang=`)나 쿠키(`language`)를 확인하여 HTML의 `%lang%` 부분을 현재 언어로 치환합니다.
 
-### permissionCheck
+### logger
 ```ts
 // /src/hooks.server.ts
-import checkPermissions from '$lib/module/server/hooks/permissionCheck'
+import { Hooks } from "$lib/module/hooks";
 
-const permission = checkPermissions([
-    { // '/admin' 으로 시작하는 페이지로의 9등급 미만의 사용자가 접근하는 것을 차단할 수 있습니다.
+export const handle = sequence(Hooks.logger);
+```
+
+`log` 테이블에 서버로의 요청(UUID, IP, Path)을 기록합니다.
+
+### checkPermissions
+```ts
+// /src/hooks.server.ts
+import { Hooks } from "$lib/module/hooks";
+
+const permission = Hooks.checkPermissions([
+    {
         path: '/admin',
-        level: 9,
-        rule: 'startsWith', //'startsWith'를 사용하면 해당 경로로 시작하는 모든 페이지로의 접근을 차단합니다.
-        redirectPath: '/login' //로그인하지 않은 사용자의 경우 이곳으로 리다이렉트 시킵니다.
+        level: 7,
+        rule: 'match'
     },
-    { // '/special' 로의 로그인하지 않은 사용자의 접근을 차단합니다.
-        path: '/special',
-        level: 1, //로그인한 사용자의 최소 등급은 1입니다. 따라서 1로 설정하면 로그인하지 않은 유저의 접근만 차단할 수 있습니다.
-        rule: 'match' //'match'를 사용하면 정확히 해당 경로에 해당하는 페이지로의 접근을 차단합니다.
+    {
+        path: '/auth/user',
+        level: 1,
+        rule: 'startsWith',
+        redirectPath: '/auth/login'
     }
 ])
 
 export const handle = sequence(permission);
 ```
+
+특정 경로에 대한 유저의 권한 등급을 체크합니다.
+
+- `path`: 대상 경로
+- `level`: 필요한 최소 등급 (로그인 유저는 1 이상)
+- `rule`: `'match'` (정확히 일치) 또는 `'startsWith'` (해당 경로로 시작)
+- `redirectPath`: 권한이 없을 경우 리다이렉트할 경로
+
+### getUserData
+```ts
+// /src/hooks.server.ts
+import { Hooks } from "$lib/module/hooks";
+
+export const handle = sequence(Hooks.getUserData);
+```
+
+`locals.user`가 존재할 경우 DB에서 해당 유저의 추가 데이터(`locals.userData`)를 가져옵니다.
+
+### setAssetsCacheControl
+```ts
+// /src/hooks.server.ts
+import { Hooks } from "$lib/module/hooks";
+
+export const handle = sequence(Hooks.setAssetsCacheControl);
+```
+
+`/assets`로 시작하는 요청에 대해 7일간의 캐시 헤더를 설정합니다.

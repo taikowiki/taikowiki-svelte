@@ -5,7 +5,7 @@
 <h1 align="center">Taikowiki-svelte</h1>
 
 <p align="center">
-  <strong>An open-source wiki project for 太鼓の達인 (Taiko no Tatsujin)</strong>
+  <strong>An open-source wiki project for 太鼓の達人 (Taiko no Tatsujin)</strong>
 </p>
 
 <p align="center">

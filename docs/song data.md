@@ -1,41 +1,41 @@
-# Song data
+# Song Data
 
-## Type
+## TypeScript Type
 
-`SongData` type is in `src/lib/module/song/types.ts`
+The `SongData` type is located in the `src/lib/module/song/index.ts` file.
 
 ## Rules
 
 ### Title
 
-- `Title` means original Japanese title of a song.
-- If the song is in the **arcade version** and can be found in **Donder Hiroba**, the `Title` must be the same as the title written on **Donder Hiroba**.
+- `Title` refers to the original Japanese title of the song.
+- If the song is included in the **arcade version** and can be found on **Donder-Hiroba**, the song title must be exactly the same as written on **Donder-Hiroba**.
 
-### Song No.
+### Song Number (songNo)
 
-- `Song No.` is used to specify the song.
-- If the song is in the **arcade version** and can be found in **Donder Hiroba**, the `Song No.` must be the same as the song No. written on **Donder Hiroba**.
-- If the song is not in the **arcade version**, use a string.
+- `Song Number` is used to identify a song.
+- If the song is included in the **arcade version** and can be found on **Donder-Hiroba**, the song number must be exactly the same as written on **Donder-Hiroba**.
+- If the song is not included in the **arcade version**, an arbitrary string is used.
 
 ### Korean / English Title
 
-- The Korean / English title is based on the **arcade version**.
-- If the song is not in the **arcade version**, use **latest console version** title.
+- Korean / English titles are based on the **arcade version**.
+- If the song is not included in the **arcade version**, they are based on the **latest console version**.
 
-### Korean / English Alias (Unoffical Translated Title)
+### Korean / English Alias (Unofficial Translation)
 
-- The official translations of titles are unsatisfactory, so we can use `aliases`(unoffical translated titles).
-- Examples
-    | Title | Korean | Korean(Unofficial) |
+- Since official translations of songs may sometimes be unsatisfactory, aliases (unofficial translations) can be used.
+- Example
+    | Title | Official Korean Translation | Unofficial Korean Translation |
     | :-: | :-: | :-: |
     | 六兆年と一夜物語 | 로쿠쵸넨토이치야모노가타리 | 육조년과 하룻밤 이야기 |
     | 魑魅魍魎 | Chimi Moryo | 이매망량 |
 
 ### Romaji
-- `Romaji` is the Romanized version of the pronunciation of a Japanese title.
-- If the title is written in Kana for English, we use the English pronunciation instead of the Romanized version of Japanese pronunciation.
-- Examples
+- `Romaji` is the pronunciation of the original Japanese title written in Latin characters.
+- If the original Japanese title is English written in Kana, use English instead of transcribing the Japanese pronunciation into Romaji.
+- Example
     | Title | Romaji |
     | :-: | :-: |
     | 束ね糸 | Tabaneito |
-    | シカ色デイズ | Shikairo Days |
+    | シ카色デイズ | Shikairo Days |

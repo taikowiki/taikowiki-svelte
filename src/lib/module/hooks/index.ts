@@ -106,19 +106,32 @@ export namespace Hooks {
      * 특정 경로 요청 권한 체크
      */
     export function checkPermissions(options: PermissionCheckerOption[]): Handle {
+        const sorted = options.toSorted((a, b) => {
+            if (a.rule === "match" && b.rule !== "match") {
+                return -1;
+            }
+            if (a.rule !== "match" && b.rule === "match") {
+                return 1;
+            }
+
+            const aLength = a.path.split('/').filter(e => e).length;
+            const bLength = b.path.split('/').filter(e => e).length;
+
+            return aLength - bLength;
+        });
         return async ({ event, resolve }) => {
             const { locals, url } = event;
 
             let flag = 0;
             let path: string | undefined;
             let redirectPath: string | undefined;
-            for (const option of options) {
+            for (const option of sorted) {
                 const result = checkPermission(option.path, option.level, option.rule, url, locals.userData);
-                if(flag === 0 && result === 1){
+                if (flag === 0 && result === 1) {
                     flag = 1;
                     break;
                 }
-                if(flag === 0 && result === 2){
+                if (flag === 0 && result === 2) {
                     flag = 2;
                     path = option.path ?? path;
                     redirectPath = option.redirectPath ?? redirectPath;
@@ -142,17 +155,17 @@ export namespace Hooks {
     }
 
     function checkPermission(path: string, level: number, rule: 'match' | 'startsWith', url: URL, userData: User.Data | null): number {
-        if(rule === "match" && url.pathname !== path){
+        if (rule === "match" && url.pathname !== path) {
             return 0;
         }
-        if(rule === "startsWith" && !url.pathname.startsWith(path)){
+        if (rule === "startsWith" && !url.pathname.startsWith(path)) {
             return 0;
         }
 
-        if(!userData){
+        if (!userData) {
             return 2;
         }
-        if(userData.grade < level){
+        if (userData.grade < level) {
             return 2;
         }
 

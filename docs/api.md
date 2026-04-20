@@ -2,7 +2,7 @@
 
 taikowiki-svelte provides various API functionalities.
 
-**See [HERE](https://github.com/taikowiki/taikowiki-api) for NEW api!**
+**Check [HERE](https://github.com/taikowiki/taikowiki-api) for NEW API!**
 
 # Publicly Accessible APIs
 
@@ -23,13 +23,14 @@ method: "GET"
 responseType: SongData[]
 ```
 - params
-    - `after` can be used to retrieve song data updated after a specific time.
+    - `after`: Used to retrieve song data updated after a specific time (Unix time in milliseconds).
+
 
 ### /api/song/[songNo]
 
 ```ts
 method: "GET"
-responseType: SongData || {}
+responseType: SongData | {}
 ```
 
 Sends the song data corresponding to the songNo in JSON format. If the song does not exist, an empty object (`{}`) is sent.
@@ -38,30 +39,57 @@ Sends the song data corresponding to the songNo in JSON format. If the song does
 
 ```ts
 method: "GET"
-responseType: string
+responseType: number
 ```
 
-Sends the latest update time (UPDATE_TIME) of the \`song\` table in the database as a Unix time in milliseconds.
+Sends the latest update time (UPDATE_TIME) of the `song` table in the database as a Unix time in milliseconds.
+
+## Search
+
+### /api/search/song
+
+```ts
+method: "GET"
+responseType: { title: string, type: 'song', songNo: string }[]
+```
+- params
+    - `keyword`: Search keyword
+
+Searches song titles, aliases, etc. Returns up to 20 results.
+
+### /api/search/doc
+
+```ts
+method: "GET"
+responseType: { title: string, type: 'doc', songNo: string }[]
+```
+- params
+    - `keyword`: Search keyword
+
+Searches document titles.
+
 ## User
 
-### /user
+### /api/user
 ```ts
 method: "GET"
 responseType: {
     logined: boolean,
-    nickname: string //user nickname or ip address
+    nickname: string, //user nickname or ip address
+    UUID: string | null
 }
 ```
-Retrieves the login status and the user's nickname or IP address.
 
-### /user/rating
+Retrieves the login status and the user's nickname or IP address, and UUID.
+
+### /api/user/rating
 ```ts
 method: "GET"
 responseType: {
     currentRating: number,
     currentExp: number | null,
     ratingDataWithScoreData: { 
-        songNo: number,
+        songNo: string,
         difficulty: 'oni' | 'ura', 
         songRating: {
             value: number,
@@ -87,24 +115,23 @@ responseType: {
         } | null
     }[]
 }
-params: {
-    all?: ['true'] // If "true", server will send all song rating datas. If not, server will only send top 50 song rating datas.
-}
 ```
+- params
+    - `all`: If `true`, retrieves all data. Otherwise, only top 50.
 
-###
+Retrieves the user's rating data.
 
 # Internal Use APIs
 
 ## Song Data
 
-### /api/request
+### /api/song/request
 
 ```ts
 method: "POST"
 data: {
     songNo: string,
-    songData: SongData // /src/lib/module/song/types.ts
+    songData: SongData // /src/lib/module/song/index.ts
 }
 minimumGrade: 2
 ```
@@ -149,7 +176,7 @@ Retrieves the user's favorite game centers.
 ```ts
 method: "POST"
 data: {
-    gamecenterData: GameCenterDataWithoutOrderAndFavoriteCount // src/lib/module/common/gamecenter/types.ts
+    gamecenterData: GameCenterDataWithoutOrderAndFavoriteCount // src/lib/module/gamecenter/types.ts
 }
 minimumGrade: 2
 ```

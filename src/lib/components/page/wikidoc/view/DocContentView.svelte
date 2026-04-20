@@ -49,7 +49,7 @@
     );
     $effect(() => {
         if (contentLoaded && paragraphLoaded.every((e) => e)) {
-            docReady.set(true);
+            docReady?.set(true);
         }
     });
     wikiElementsDefined.then(() => {

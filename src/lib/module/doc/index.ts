@@ -1,20 +1,46 @@
 import { CSSStyleDeclaration } from 'cssom';
-import { lexer, Marked, parser, walkTokens, type Token, type TokenizerExtensionFunction, type TokenizerObject } from 'marked';
+import { Marked, type TokenizerExtensionFunction } from 'marked';
 import { HTMLElement, parse as parseHTML_ } from 'node-html-parser';
 import markdownEscape from 'markdown-escape';
 import { SvelteMap } from "svelte/reactivity";
 import type { Writable } from "svelte/store";
 import type { RResponse } from '@yowza/rrequestor/types';
 import type * as wikiElement from './client/wikiElements';
-import type {docDBController} from './server/dbController.server';
+import type { docDBController } from './server/dbController.server';
 import type * as prepare from './server/prepare';
 
 export namespace Doc {
+    const allowedTags: string[] = [
+        'p', 'a', 'img', 'strong', 'em', 'del',
+        'table', 'thead', 'tbody', 'tr', 'th', 'td', 'ul', 'ol', 'li',
+        'hr', 'blockquote', 'pre', 'code', 'text', 'br',
+        'wiki-annot', 'wiki-link', 'wiki-song', 'wiki-yt', 'wiki-float',
+        'style-table', 'style-cell', 'style-row', 'style-col'
+    ];
+    const allowedAttributes = {
+        'a': ['href'],
+        'img': ['src', 'alt', 'width', 'height'],
+        'th': ['align', 'colspan', 'rowspan'],
+        'td': ['colspan', 'rowspan'],
+        'text': ['color', 'bgcolor', 'size'],
+        'wiki-annot': ['key'],
+        'wiki-link': ['doctitle'],
+        'wiki-song': ['songno'],
+        'wiki-yt': ['v', 'width', 'height'],
+        'wiki-float': ['float'],
+        'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float', 'align', 'overflow'],
+        'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align', 'colspan', 'rowspan', 'disable'],
+        'style-row': ['bgcolor', 'textcolor', 'height', 'minheight', 'maxheight', 'align'],
+        'style-col': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align'],
+        'code': ['class']
+    };
+
+
     /**
- * 올바른 `docData` 인지 검사 
- * @param docData 
- * @returns 
- */
+    * 올바른 `docData` 인지 검사 
+    * @param docData 
+    * @returns 
+    */
     export function validateDocData(docData: Doc.Data.DocData) {
         function validateParagraph(paragraph: Doc.Data.DocParagraph) {
             if (!paragraph.title) return false;
@@ -435,26 +461,9 @@ export namespace Doc {
          */
         purifyHTML(dom: HTMLElement): void {
             //허용되지 않은 태그 제거
-            const allowedTags: string[] = ['p', 'a', 'img', 'strong', 'em', 'del', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'ul', 'ol', 'li', 'hr', 'blockquote', 'pre', 'code', 'text', 'br', 'wiki-annot', 'wiki-link', 'wiki-yt', 'wiki-float', 'style-table', 'style-cell', 'style-row', 'style-col'];
             dom.querySelectorAll(`:not(${allowedTags.join(', ')})`).forEach(e => e.remove());
 
             //허용되지 않은 속성 제거
-            const allowedAttributes = {
-                'a': ['href'],
-                'img': ['src', 'alt', 'width', 'height'],
-                'th': ['align', 'colspan', 'rowspan'],
-                'td': ['colspan', 'rowspan'],
-                'text': ['color', 'bgcolor', 'size'],
-                'wiki-annot': ['key'],
-                'wiki-link': ['doctitle'],
-                'wiki-yt': ['v', 'width', 'height'],
-                'wiki-float': ['float'],
-                'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float', 'align', 'overflow'],
-                'style-cell': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align', 'colspan', 'rowspan', 'disable'],
-                'style-row': ['bgcolor', 'textcolor', 'height', 'minheight', 'maxheight', 'align'],
-                'style-col': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'align'],
-                'code': ['class']
-            };
             dom.querySelectorAll('*').forEach((element) => {
                 const tag = element.tagName.toLowerCase();
                 const allowed = allowedAttributes[tag as keyof typeof allowedAttributes] ?? [];
@@ -918,6 +927,10 @@ export namespace Doc {
          */
         makePreviewLinkAvailable(dom: HTMLElement) {
             dom.querySelectorAll('wiki-link').forEach((element) => {
+                element.setAttribute('available', 'true');
+                element.setAttribute('test', 'true');
+            })
+            dom.querySelectorAll('wiki-song').forEach((element) => {
                 element.setAttribute('available', 'true');
                 element.setAttribute('test', 'true');
             })

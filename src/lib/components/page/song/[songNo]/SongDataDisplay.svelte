@@ -47,13 +47,14 @@
 
     interface Props {
         bpm: Song.SongData["bpm"];
+        keybpm: Song.SongData['keybpm'];
         bpmShiver: Song.SongData["bpmShiver"];
         version: string[];
         artists: string[];
         addedDate: number | null;
     }
 
-    let { bpm, bpmShiver, version, artists, addedDate }: Props = $props();
+    let { bpm, keybpm, bpmShiver, version, artists, addedDate }: Props = $props();
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
@@ -77,6 +78,9 @@
             {/if}
             {#if bpmShiver}
                 ※
+            {/if}
+            {#if keybpm && keybpm.length}
+                ({keybpm.join(', ')})
             {/if}
         </div>
     </div>

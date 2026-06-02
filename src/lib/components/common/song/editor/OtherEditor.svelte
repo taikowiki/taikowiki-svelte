@@ -2,13 +2,14 @@
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import { Song } from "$lib/module/song";
     import { getI18N, getLang } from "$lib/module/i18n";
+    import { z } from "zod";
 
     const { GENRE, VERSION } = Song.CONST;
 
     interface Props {
         bpm: Song.SongData["bpm"];
         bpmShiver: 1 | 0;
-        keybpm: number[] | null;
+        keybpm: (number | [number, number])[] | null;
         version: Song.Version[];
         genre: Song.Genre[];
         artists: string[];
@@ -48,14 +49,19 @@
         if (str == "") {
             keybpm = null;
         } else {
-            const k = str
-                .split(",")
-                .map((e) => Number(e))
-                .filter((e) => !Number.isNaN(e) && e);
-            if (k.length === 0) {
+            try {
+                const k = JSON.parse(`[${str}]`);
+                z.array(z.union([
+                    z.number(),
+                    z.tuple([z.number(), z.number()])
+                ])).parse(k)
+                if (k.length === 0) {
+                    keybpm = null;
+                } else {
+                    keybpm = k;
+                }
+            } catch(err) {
                 keybpm = null;
-            } else {
-                keybpm = k;
             }
         }
     }

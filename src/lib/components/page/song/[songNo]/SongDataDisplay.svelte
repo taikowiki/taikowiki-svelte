@@ -80,7 +80,13 @@
                 ※
             {/if}
             {#if keybpm && keybpm.length}
-                ({keybpm.join(', ')})
+                ({keybpm.map(e => {
+                    if(typeof(e) === "number"){
+                        return `${e}`
+                    } else {
+                        return e.join('→')
+                    }
+                }).join(', ')})
             {/if}
         </div>
     </div>

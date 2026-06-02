@@ -275,7 +275,7 @@ export namespace Song {
         romaji: string | null;
         bpm: Record<'min' | 'max', number>;
         bpmShiver: 1 | 0;
-        keybpm: number[] | null;
+        keybpm: (number | [number, number])[] | null;
         version: Version[];
         isAsiaBanned: 1 | 0;
         isKrBanned: 1 | 0;

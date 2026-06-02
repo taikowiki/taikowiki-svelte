@@ -36,6 +36,7 @@
             max: 0,
         },
         bpmShiver: 0,
+        keybpm: null,
         version: [],
         isAsiaBanned: 0,
         isKrBanned: 0,

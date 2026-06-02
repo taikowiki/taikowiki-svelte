@@ -8,6 +8,7 @@
     interface Props {
         bpm: Song.SongData["bpm"];
         bpmShiver: 1 | 0;
+        keybpm: number[] | null;
         version: Song.Version[];
         genre: Song.Genre[];
         artists: string[];
@@ -21,6 +22,7 @@
     let {
         bpm = $bindable(),
         bpmShiver = $bindable(),
+        keybpm = $bindable(),
         version = $bindable(),
         genre = $bindable(),
         artists = $bindable(),
@@ -37,6 +39,27 @@
         }
     });
 
+    let keybpmString = $state(keybpm?.join(", ") ?? "");
+    $effect.pre(() => {
+        const str = keybpmString.trim();
+        updateKeyBPM(str);
+    });
+    function updateKeyBPM(str: string) {
+        if (str == "") {
+            keybpm = null;
+        } else {
+            const k = str
+                .split(",")
+                .map((e) => Number(e))
+                .filter((e) => !Number.isNaN(e) && e);
+            if (k.length === 0) {
+                keybpm = null;
+            } else {
+                keybpm = k;
+            }
+        }
+    }
+
     let artistsString = $state(artists.join(", "));
     $effect.pre(() => {
         artists = artistsString
@@ -52,6 +75,8 @@
             addedDate = new Date(addedDATE).getTime();
         }
     });
+
+    $inspect(keybpm);
 
     const lang = getLang();
     let genreI18n = $derived(getI18N("/song/add", $lang).genres);
@@ -103,6 +128,12 @@
                             <input type="number" bind:value={bpm.min} />
                             ~
                             <input type="number" bind:value={bpm.max} />
+                        </div>
+                        <div
+                            style="margin-right: 10px; font-size:13px; margin-left:5px;"
+                        >
+                            {i18n.keybpm}
+                            <input type="text" bind:value={keybpmString} />
                         </div>
                     </div>
                 </td>

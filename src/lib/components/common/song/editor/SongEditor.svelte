@@ -47,6 +47,7 @@
     <OtherEditor
         bind:bpm={songData.bpm}
         bind:bpmShiver={songData.bpmShiver}
+        bind:keybpm={songData.keybpm}
         bind:version={songData.version}
         bind:genre={songData.genre}
         bind:artists={songData.artists}

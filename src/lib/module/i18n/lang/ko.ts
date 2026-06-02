@@ -69,6 +69,7 @@ const newKo = {
                 other: '기타',
                 genre: '장르',
                 bpmShiver: 'BPM 흔들림',
+                keybpm: '주요 BPM',
                 version: '수록 버전',
                 artist: '아티스트',
                 commaPlz: '쉼표로 구분하여 작성해주세요.',

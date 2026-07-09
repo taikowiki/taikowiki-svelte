@@ -70,6 +70,7 @@ const newJa: I18N.RecursiveStringRecord = {
                 other: 'その他',
                 genre: 'ジャンル',
                 bpmShiver: 'BPM揺れ',
+                keybpm: 'Key BPM',
                 version: '収録バージョン',
                 artist: 'アーティスト',
                 commaPlz: 'カンマで区切って入力してください。',

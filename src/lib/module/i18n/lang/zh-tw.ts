@@ -69,6 +69,7 @@ const newZhtw: I18N.RecursiveStringRecord = {
                 other: '其他',
                 genre: '類型',
                 bpmShiver: 'BPM 抖動',
+                keybpm: 'Key BPM',
                 version: '收錄版本',
                 artist: '作者',
                 commaPlz: '請以逗號分隔。',

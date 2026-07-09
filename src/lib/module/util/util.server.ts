@@ -1,6 +1,7 @@
 import type { RequestEvent } from "@sveltejs/kit";
 import { Util } from ".";
 import { QueryBuilder } from "@yowza/db-handler";
+import type { InferDBSchema, Query } from "@yowza/db-handler/types";
 import type { RRequestData, RResponse } from "@yowza/rrequestor/types";
 import ndJson from 'ndjson-parser'
 
@@ -160,6 +161,7 @@ namespace UtilServer {
             romaji: ['string', 'null'],
             bpm: ['string'],
             bpmShiver: ['number'],
+            keybpm: ['string', 'null'],
             version: ['string'],
             isAsiaBanned: ['number'],
             isKrBanned: ['number'],
@@ -226,6 +228,7 @@ namespace UtilServer {
             favorites: ['string']
         }
     });
+    export type DBSchema = InferDBSchema<typeof queryBuilder['dbSchema']>
 
     export const internalRequestor = {
         async deleteUserRating(UUID: string): Promise<Util.RequestorResponse<void>> {

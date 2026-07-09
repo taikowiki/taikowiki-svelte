@@ -69,6 +69,7 @@ const newZhcn: I18N.RecursiveStringRecord = {
         other: '其他',
         genre: '类型',
         bpmShiver: 'BPM 抖动',
+        keybpm: 'Key BPM',
         version: '收录版本',
         artist: '作者',
         commaPlz: '请以逗号分隔。',

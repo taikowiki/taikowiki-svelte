@@ -69,6 +69,7 @@ const newEn: I18N.RecursiveStringRecord = {
                 other: 'Others',
                 genre: 'Geners',
                 bpmShiver: 'BPM Shiver',
+                keybpm: 'Key BPM',
                 version: 'Versions',
                 artist: 'Artists',
                 commaPlz: 'Please seperate with commas.',

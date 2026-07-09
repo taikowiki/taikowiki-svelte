@@ -401,6 +401,7 @@ namespace SongServer {
             }
         })
     }
+    
     /**
     * Parse songData fetched from the database to match the SongData type
     */
@@ -408,6 +409,7 @@ namespace SongServer {
         songDataFromDB.courses &&= JSON.parse(songDataFromDB.courses)
         songDataFromDB.courses && (songDataFromDB.courses.ura ??= null)
         songDataFromDB.bpm &&= JSON.parse(songDataFromDB.bpm)
+        songDataFromDB.keybpm &&= JSON.parse(songDataFromDB.keybpm)
         songDataFromDB.version &&= JSON.parse(songDataFromDB.version)
         songDataFromDB.genre &&= JSON.parse(songDataFromDB.genre)
         songDataFromDB.artists &&= JSON.parse(songDataFromDB.artists)

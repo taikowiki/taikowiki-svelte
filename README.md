@@ -16,6 +16,11 @@
 </p>
 
 ---
+> [!IMPORTANT]
+> The main administrator, [hotsixman](https://github.com/hotsixman), will be serving mandatory military service, so this repository may not be actively maintained until around March 2028.
+> 
+> The [taiko.wiki](taiko.wiki) website is expected to remain online until at least March 2027, but its availability beyond that cannot be guaranteed.
+---
 
 ## 🌟 Overview
 

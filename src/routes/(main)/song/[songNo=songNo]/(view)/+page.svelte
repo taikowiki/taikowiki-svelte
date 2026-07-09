@@ -64,6 +64,7 @@
         <SongDataDisplay
             bpm={song.bpm}
             bpmShiver={song.bpmShiver}
+            keybpm={song.keybpm}
             version={song.version}
             artists={song.artists}
             addedDate={song.addedDate}

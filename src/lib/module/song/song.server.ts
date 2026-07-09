@@ -235,6 +235,7 @@ namespace SongServer {
                     addedDate: (songData.addedDate),
                     courses: (JSON.stringify(songData.courses)),
                     isDeleted: (songData.isDeleted),
+                    keybpm: JSON.stringify(songData.keybpm)
                 } as const;
                 if (song === null) {
                     await Util.Server.queryBuilder

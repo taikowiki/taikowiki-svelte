@@ -1,7 +1,7 @@
 <script lang="ts" module>
     function modifyLevelByDifficulty(
-        difficulty: SongSearchOption["difficulty"],
-        option: SongSearchOption,
+        difficulty: any,
+        option: any,
     ) {
         switch (difficulty) {
             case undefined: {
@@ -70,7 +70,9 @@
 {#snippet difficultyItems()}
     {#each ["easy", "normal", "hard", "oni", "ura", "oniura"] as const as diff}
         <SearchBoxDifficultyItem value={diff} bind:group={option.difficulty}>
-            {i18n[diff]}
+            {#if diff !== "oniura"}
+                {diff === "oni" ? i18n["omote"] : i18n[diff]}
+            {/if}
         </SearchBoxDifficultyItem>
     {/each}
 {/snippet}

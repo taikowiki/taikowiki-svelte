@@ -490,7 +490,15 @@ export const docDBController = {
         }
 
         return async (run) => {
-            const count = await run(countQuery).then((v) => v[0].count as number);
+            const count = await run(countQuery).then((v) => {
+                let max = 0;
+                (v as {count:number}[]).forEach((e) => {
+                    if(e.count > max){
+                        max = e.count;
+                    }
+                });
+                return max;
+            });
             if (count === 0) {
                 return {
                     count,

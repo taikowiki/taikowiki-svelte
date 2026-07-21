@@ -1,6 +1,7 @@
 import { Song } from "../song";
 import { Dani } from ".";
 import { defineDBHandler } from "@yowza/db-handler";
+import { Util } from "../util";
 
 const { DAN } = Song.CONST;
 
@@ -12,6 +13,9 @@ namespace DaniServer {
         getAll: defineDBHandler<[], Dani.DB[]>(() => {
             return async (run) => {
                 const result = await run("SELECT * FROM `dani`");
+                result.forEach((e: any) => {
+                    e.data = Util.safeJSONParse(e.data);
+                })
                 return result;
             }
         }),
@@ -21,6 +25,9 @@ namespace DaniServer {
         getByVersion: defineDBHandler<[string], Dani.DB | null>((version) => {
             return async (run) => {
                 const result = await run("SELECT * FROM `dani` WHERE `version` = ?", [version]);
+                result.forEach((e: any) => {
+                    e.data = Util.safeJSONParse(e.data);
+                })
                 return result[0] ?? null;
             }
         }),

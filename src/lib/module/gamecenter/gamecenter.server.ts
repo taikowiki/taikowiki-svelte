@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Gamecenter } from ".";
 import { defineDBHandler } from "@yowza/db-handler";
+import { Util } from "../util";
 
 namespace GamecenterServer {
     export const DBController = {
@@ -15,7 +16,7 @@ namespace GamecenterServer {
                     return [];
                 }
 
-                return JSON.parse(result[0].favorites)
+                return Util.safeJSONParse(result[0].favorites)
             }
         }),
 
@@ -33,7 +34,7 @@ namespace GamecenterServer {
                     }
                 }
                 else {
-                    const favorites: number[] = JSON.parse(favoritesResult[0].favorites);
+                    const favorites: number[] = Util.safeJSONParse(favoritesResult[0].favorites);
                     if (favorites.includes(gamecenterOrder)) {
                         return;
                     }
@@ -56,7 +57,7 @@ namespace GamecenterServer {
                     return;
                 }
                 else {
-                    const favorites: number[] = JSON.parse(favoritesResult[0].favorites);
+                    const favorites: number[] = Util.safeJSONParse(favoritesResult[0].favorites);
                     if (!favorites.includes(gamecenterOrder)) {
                         return;
                     }
@@ -75,9 +76,9 @@ namespace GamecenterServer {
             return async (run) => {
                 const result = await run("SELECT * FROM `gamecenter/data`");
                 result.forEach((r: any) => {
-                    r.amenity = JSON.parse(r.amenity);
-                    r.machines = JSON.parse(r.machines);
-                    r.businessHours = JSON.parse(r.businessHours);
+                    r.amenity = Util.safeJSONParse(r.amenity);
+                    r.machines = Util.safeJSONParse(r.machines);
+                    r.businessHours = Util.safeJSONParse(r.businessHours);
                     r.coor = {
                         x: r.x,
                         y: r.y
@@ -102,9 +103,9 @@ namespace GamecenterServer {
                 }
 
                 result.forEach((r: any) => {
-                    r.amenity = JSON.parse(r.amenity);
-                    r.machines = JSON.parse(r.machines);
-                    r.businessHours = JSON.parse(r.businessHours);
+                    r.amenity = Util.safeJSONParse(r.amenity);
+                    r.machines = Util.safeJSONParse(r.machines);
+                    r.businessHours = Util.safeJSONParse(r.businessHours);
                     r.coor = {
                         x: r.x,
                         y: r.y
@@ -170,7 +171,7 @@ namespace GamecenterServer {
                 const result = await run("SELECT * FROM `gamecenter/report` WHERE `status` = ?", [status]);
 
                 result.forEach((e: any) => {
-                    e.data = JSON.parse(e.data)
+                    e.data = Util.safeJSONParse(e.data)
                 })
 
                 return result;
@@ -189,7 +190,7 @@ namespace GamecenterServer {
                 }
 
                 result.forEach((e: any) => {
-                    e.data = JSON.parse(e.data)
+                    e.data = Util.safeJSONParse(e.data)
                 })
 
                 return result[0];

@@ -295,6 +295,14 @@ export namespace Util {
             return `"${str.replaceAll('"', '""')}"`;
         }
     }
+
+    export function safeJSONParse(data: any){
+        if(typeof(data) === "string"){
+            return JSON.parse(data);
+        } else {
+            return data;
+        }
+    }
 }
 
 export namespace Util {

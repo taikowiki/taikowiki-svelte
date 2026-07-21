@@ -12,10 +12,7 @@ namespace DaniServer {
         getAll: defineDBHandler<[], Dani.DB[]>(() => {
             return async (run) => {
                 const result = await run("SELECT * FROM `dani`");
-                result.forEach((e: any) => {
-                    e.data = JSON.parse(e.data);
-                })
-                return JSON.parse(JSON.stringify(result));
+                return result;
             }
         }),
         /**
@@ -24,9 +21,6 @@ namespace DaniServer {
         getByVersion: defineDBHandler<[string], Dani.DB | null>((version) => {
             return async (run) => {
                 const result = await run("SELECT * FROM `dani` WHERE `version` = ?", [version]);
-                result.forEach((e: any) => {
-                    e.data = JSON.parse(e.data);
-                })
                 return result[0] ?? null;
             }
         }),
@@ -36,7 +30,7 @@ namespace DaniServer {
         getVersions: defineDBHandler<[], Partial<Song.DaniVersion>[]>(() => {
             return async (run) => {
                 const result = (await run("SELECT `version` FROM `dani`")).map((e: any) => Object.values(e)[0]);
-                return JSON.parse(JSON.stringify(result));
+                return result;
             }
         }),
         /**

@@ -74,7 +74,6 @@
 		"showdown": "^2.1.0",
 		"sqlstring": "^2.3.3",
 		"styled-svelte5": "^0.4.1",
-		"tja-analyzer": "github:jack9966qk/TJAAnalyzer",
 		"tja-parser": "0.2.9",
 		"tja-previewer": "0.1.6",
 		"tja-renderer": "1.0.0-beta.1",

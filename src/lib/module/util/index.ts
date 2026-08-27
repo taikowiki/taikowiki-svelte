@@ -298,10 +298,12 @@ export namespace Util {
 
     export function safeJSONParse(data: any){
         if(typeof(data) === "string"){
-            return JSON.parse(data);
-        } else {
-            return data;
+            try{
+                return JSON.parse(data);
+            }
+            catch{}
         }
+        return data;
     }
 }
 

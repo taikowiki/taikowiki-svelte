@@ -22,7 +22,7 @@ namespace SongServer {
             return async (run) => {
                 let result = await run(`SELECT ${columnsQuery} FROM \`song\` ORDER BY \`addedDate\` DESC;`);
                 result.forEach(parseSongDataFromDB)
-                return JSON.parse(JSON.stringify(result))
+                return result
             }
         }),
 
@@ -34,7 +34,7 @@ namespace SongServer {
             return async (run) => {
                 let result = await run(`SELECT ${columnsQuery} FROM \`song\` ORDER BY \`addedDate\` DESC;`);
                 result.forEach(parseSongDataFromDB)
-                return JSON.parse(JSON.stringify(result))
+                return result
             }
         }),
 
@@ -61,7 +61,7 @@ namespace SongServer {
                 let columnsQuery = '*';
                 let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` = ?`, [songNo]);
                 result.forEach(parseSongDataFromDB);
-                return (JSON.parse(JSON.stringify(result)) as SongData[])[0] ?? null;
+                return (result as SongData[])[0] ?? null;
             }
         }),
         /**
@@ -88,7 +88,7 @@ namespace SongServer {
                 const columnsQuery = '*';
                 let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${[...songNo].fill('?').join(', ')})`, [...songNo]);
                 result.forEach(parseSongDataFromDB);
-                return JSON.parse(JSON.stringify(result));
+                return result;
             }
         }),
         /**
@@ -103,7 +103,7 @@ namespace SongServer {
                 const columnsQuery = columns.map((e) => escapeId(e)).join(', ');
                 let result = await run(`SELECT ${columnsQuery} FROM \`song\` WHERE \`songNo\` IN (${[...songNo].fill('?').join(', ')})`, [...songNo]);
                 result.forEach(parseSongDataFromDB);
-                return JSON.parse(JSON.stringify(result));
+                return result;
             }
         }),
 
@@ -135,7 +135,7 @@ namespace SongServer {
                 songs.forEach(parseSongDataFromDB);
                 const count = Object.values((await run(`SELECT COUNT(\`order\`) FROM \`song\` ${sqlWhereQuery}`))[0])?.[0] as number ?? 0
                 return {
-                    songs: JSON.parse(JSON.stringify(songs)),
+                    songs,
                     count
                 }
             };
@@ -206,7 +206,7 @@ namespace SongServer {
             return async (run) => {
                 let result = await run(`SELECT \`title\`, \`songNo\` FROM \`song\` ORDER BY \`addedDate\` DESC LIMIT ${limit}`);
                 result.forEach(parseSongDataFromDB);
-                return JSON.parse(JSON.stringify(result))
+                return result
             }
         }),
 
@@ -296,13 +296,13 @@ namespace SongServer {
             return async (run) => {
                 if (status) {
                     return (await run("SELECT * FROM `song/request` WHERE `status` = ? ORDER BY createdTime DESC", [status])).map((request: any) => {
-                        request.data = JSON.parse(request.data);
+                        request.data = Util.safeJSONParse(request.data);
                         return request;
                     })
                 }
                 else {
                     return (await run("SELECT * FROM `song/request` ORDER BY createdTime DESC")).map((request: any) => {
-                        request.data = JSON.parse(request.data);
+                        request.data = Util.safeJSONParse(request.data);
                         return request;
                     })
                 }
@@ -316,13 +316,13 @@ namespace SongServer {
             return async (run) => {
                 if (status) {
                     return (await run("SELECT * FROM `song/request` WHERE `songNo` = ? AND `status` = ? ORDER BY createdTime DESC", [songNo, status])).map((request: any) => {
-                        request.data = JSON.parse(request.data);
+                        request.data = Util.safeJSONParse(request.data);
                         return request;
                     })
                 }
                 else {
                     return (await run("SELECT * FROM `song/request` WHERE `songNo` = ? ORDER BY createdTime DESC", [songNo])).map((request: any) => {
-                        request.data = JSON.parse(request.data);
+                        request.data = Util.safeJSONParse(request.data);
                         return request;
                     })
                 }
@@ -344,7 +344,7 @@ namespace SongServer {
                 if (result.length === 0) return null;
 
                 const request = result[0];
-                request.data = JSON.parse(request.data);
+                request.data = Util.safeJSONParse(request.data);
 
                 return request;
             }
@@ -407,14 +407,14 @@ namespace SongServer {
     * Parse songData fetched from the database to match the SongData type
     */
     export function parseSongDataFromDB(songDataFromDB: any) {
-        if (songDataFromDB.courses && typeof (songDataFromDB.courses) === "string") songDataFromDB.courses = JSON.parse(songDataFromDB.courses);
+        if (songDataFromDB.courses && typeof (songDataFromDB.courses) === "string") songDataFromDB.courses = Util.safeJSONParse(songDataFromDB.courses);
         songDataFromDB.courses && (songDataFromDB.courses.ura ??= null);
 
-        if (songDataFromDB.bpm && typeof (songDataFromDB.bpm) === "string") songDataFromDB.bpm = JSON.parse(songDataFromDB.bpm);
-        if (songDataFromDB.keybpm && typeof (songDataFromDB.keybpm) === "string") songDataFromDB.keybpm = JSON.parse(songDataFromDB.keybpm);
-        if (songDataFromDB.version && typeof (songDataFromDB.version) === "string") songDataFromDB.version = JSON.parse(songDataFromDB.version);
-        if (songDataFromDB.genre && typeof (songDataFromDB.genre) === "string") songDataFromDB.genre = JSON.parse(songDataFromDB.genre);
-        if (songDataFromDB.artists && typeof (songDataFromDB.artists) === "string") songDataFromDB.artists = JSON.parse(songDataFromDB.artists);
+        if (songDataFromDB.bpm && typeof (songDataFromDB.bpm) === "string") songDataFromDB.bpm = Util.safeJSONParse(songDataFromDB.bpm);
+        if (songDataFromDB.keybpm && typeof (songDataFromDB.keybpm) === "string") songDataFromDB.keybpm = Util.safeJSONParse(songDataFromDB.keybpm);
+        if (songDataFromDB.version && typeof (songDataFromDB.version) === "string") songDataFromDB.version = Util.safeJSONParse(songDataFromDB.version);
+        if (songDataFromDB.genre && typeof (songDataFromDB.genre) === "string") songDataFromDB.genre = Util.safeJSONParse(songDataFromDB.genre);
+        if (songDataFromDB.artists && typeof (songDataFromDB.artists) === "string") songDataFromDB.artists = Util.safeJSONParse(songDataFromDB.artists);
     }
 }
 

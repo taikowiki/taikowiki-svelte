@@ -8,7 +8,7 @@ export async function POST(event: RequestEvent) {
     const { request, locals } = event;
     const data = await request.formData();
     if (locals.user && locals.userData && data && data.has('UUID')) {
-        if (locals.userData.UUID !== data.get('UUID')) redirect(302, '/auth/user');
+        if (locals.userData.UUID !== data.get('UUID')) throw redirect(302, '/auth/user');
 
         try {
             await User.Server.DBController.deleteUser(locals.userData.UUID);

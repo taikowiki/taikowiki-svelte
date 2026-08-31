@@ -6,12 +6,18 @@ import type { Query } from '@yowza/db-handler/types';
 
 const { queryBuilder } = Util.Server;
 
+const VALID_DIFFICULTIES = new Set(['easy', 'normal', 'hard', 'oni', 'ura', 'oniura'] as const);
+const VALID_GENRES = new Set(['pops', 'anime', 'kids', 'game', 'variety', 'namco', 'vocaloid', 'classic'] as const);
+
 export async function GET({ url, setHeaders, locals }: RequestEvent) {
     const query = url.searchParams.get('query') || undefined;
-    const difficulty = url.searchParams.get('difficulty') as (Song.Difficulty | "oniura") || undefined;
-    const genre = url.searchParams.get('genre') as Song.Genre || undefined;
+    const rawDifficulty = url.searchParams.get('difficulty');
+    const rawGenre = url.searchParams.get('genre');
+    const difficulty = rawDifficulty && VALID_DIFFICULTIES.has(rawDifficulty as any) ? rawDifficulty as (Song.Difficulty | "oniura") : undefined;
+    const genre = rawGenre && VALID_GENRES.has(rawGenre as any) ? rawGenre as Song.Genre : undefined;
     let level: number | undefined = Number(url.searchParams.get('level'));
     if (isNaN(level) || level === 0) level = undefined;
+    else if (level < 1 || level > 10 || !Number.isInteger(level)) level = undefined;
 
     let sqlQuery = queryBuilder.select('song', ({ raw }) => ({
         songNo: 'songNo',

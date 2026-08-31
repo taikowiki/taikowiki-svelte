@@ -11,13 +11,24 @@ export namespace Hooks {
     /**
      * 특정 Origin에서의 요청 허용
      */
+    function matchOrigin(origin: string, allowedOrigin: string): boolean {
+        if (allowedOrigin === "*") return true;
+        if (origin === allowedOrigin) return true;
+        // 서브도메인 패턴 매칭: *.example.com
+        if (allowedOrigin.startsWith("*")) {
+            const suffix = allowedOrigin.slice(1); // .example.com
+            return origin.endsWith(suffix);
+        }
+        return false;
+    }
+
     export function allowOrigin(allowedOrigin: string, allowedPath: string, option?: AllowOriginOption) {
         const handle: Handle = async ({ event, resolve }) => {
             const origin = event.request.headers.get('Origin');
             if (!origin) return await resolve(event);
 
             const response = await resolve(event);
-            if ((allowedOrigin === "*" || origin === allowedOrigin) && event.url.pathname.startsWith(allowedPath)) {
+            if (matchOrigin(origin, allowedOrigin) && event.url.pathname.startsWith(allowedPath)) {
                 response.headers.set("Access-Control-Allow-Origin", origin);
                 response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
                 response.headers.set("Access-Control-Allow-Headers", "Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization");

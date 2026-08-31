@@ -277,7 +277,7 @@ export const docDBController = {
     getColumnsWhere: defineDBHandler<[columns: (keyof Doc.DB.DocDBData)[], where?: [column: keyof Doc.DB.DocDBData, value: any][], type?: 'and' | 'or', limit?: [number, number]], Partial<Doc.DB.DocDBData>[]>((columns, where, type, limit) => {
         const columnsQuery = columns.map(e => `\`${Util.sqlEscapeString(e)}\``).join(', ');
         const whereQuery = where && where.length > 0 ? 'WHERE ' + where.map(e => typeof (e[1]) === "string" ? `\`${Util.sqlEscapeString(e[0])}\` LIKE ?` : `\`${Util.sqlEscapeString(e[0])}\` = ?`).join(' ' + (type?.toUpperCase() ?? 'AND') + '') : '';
-        const limitQuery = limit ? `LIMIT ${limit[0]}, ${limit[1]}` : '';
+        const limitQuery = limit && Number.isInteger(limit[0]) && Number.isInteger(limit[1]) && limit[0] >= 0 && limit[1] > 0 ? `LIMIT ${limit[0]}, ${limit[1]}` : '';
         return async (run) => {
             const result = await run(`SELECT ${columnsQuery} FROM \`docs\` ${whereQuery} ${limitQuery}`,
                 where ? where.map((e) => e[1]) : []

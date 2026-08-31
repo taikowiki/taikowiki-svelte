@@ -63,7 +63,7 @@ const checkPermission = Hooks.checkPermissions([
     }
 ])
 
-const cors = Hooks.allowOrigin("https://donderhiroba.jp", "/", { credentials: true });
+const cors = Hooks.allowOrigin("https://*.donderhiroba.jp", "/", { credentials: true });
 const apiCors = Hooks.allowOrigin("*", "/api/v1", { credentials: true });
 
 Array.prototype.toSorted = function (compareFn?: any) {

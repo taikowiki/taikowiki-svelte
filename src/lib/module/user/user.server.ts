@@ -141,18 +141,18 @@ namespace UserServer {
         /**
          * Retrieve all user data.
          */
-        getAll: defineDBHandler<[], (User.Data & { order: number })[]>(() => {
+        getAll: defineDBHandler<[], Pick<User.Data, 'UUID' | 'nickname' | 'grade'>[]>(() => {
             return async (run) => {
-                return await run("SELECT * FROM `user/data`");
+                return await run("SELECT `UUID`, `nickname`, `grade` FROM `user/data`");
             }
         }),
 
         /**
          * Retrieve user data with grade below a specific level.
          */
-        getAllUnderGrade: defineDBHandler<[number], (User.Data & { order: number })[]>((grade) => {
+        getAllUnderGrade: defineDBHandler<[number], Pick<User.Data, 'UUID' | 'nickname' | 'grade'>[]>((grade) => {
             return async (run) => {
-                return await run("SELECT * FROM `user/data` WHERE `grade` < ?", [grade]);
+                return await run("SELECT `UUID`, `nickname`, `grade` FROM `user/data` WHERE `grade` < ?", [grade]);
             }
         }),
 

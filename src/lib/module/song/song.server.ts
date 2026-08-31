@@ -11,6 +11,27 @@ type SongSearchOption = Song.SongSearchOption;
 const titleColumns = ['title', 'titleKo', 'titleEn', 'titleZhCN', 'romaji'] as const;
 const aliasColumns = ['aliasKo', 'aliasEn'] as const;
 
+const VALID_DIFFICULTIES = new Set(['easy', 'normal', 'hard', 'oni', 'ura', 'oniura'] as const);
+const VALID_GENRES = new Set(['pops', 'anime', 'kids', 'game', 'variety', 'namco', 'vocaloid', 'classic'] as const);
+
+function validateSearchOption(option?: SongSearchOption): SongSearchOption | undefined {
+    if (!option) return undefined;
+    const validated: SongSearchOption = {};
+    if (option.difficulty && VALID_DIFFICULTIES.has(option.difficulty as any)) {
+        validated.difficulty = option.difficulty;
+    }
+    if (option.genre && VALID_GENRES.has(option.genre as any)) {
+        validated.genre = option.genre;
+    }
+    if (option.level !== undefined && Number.isInteger(option.level) && option.level >= 1 && option.level <= 10) {
+        validated.level = option.level;
+    }
+    if (option.query) {
+        validated.query = option.query;
+    }
+    return validated;
+}
+
 namespace SongServer {
     export const DBController = {
         /**
@@ -111,20 +132,21 @@ namespace SongServer {
          * Search and retrieve song data.
          */
         search: defineDBHandler<[number | null, SongSearchOption?], { songs: (SongData & { order: number })[], count: number }>((page, option) => {
+            const opt = validateSearchOption(option);
             let sqlWhereQuery = "WHERE (1)";
-            if (option?.difficulty && option?.level) {
-                if (option.difficulty === "oniura") {
-                    sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.oni.level') = ${option.level} OR JSON_EXTRACT(\`courses\`, '$.ura.level') = ${option.level})`;
+            if (opt?.difficulty && opt?.level) {
+                if (opt.difficulty === "oniura") {
+                    sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.oni.level') = ${opt.level} OR JSON_EXTRACT(\`courses\`, '$.ura.level') = ${opt.level})`;
                 }
                 else {
-                    sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.${option.difficulty}.level') = ${option.level})`;
+                    sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.${opt.difficulty}.level') = ${opt.level})`;
                 }
             }
-            if (option?.genre) {
-                sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
+            if (opt?.genre) {
+                sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${opt.genre}"'))`;
             }
-            if (option?.query) {
-                const query = `%${option.query.split(' ').map(Util.sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
+            if (opt?.query) {
+                const query = `%${opt.query.split(' ').map(Util.sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
                 sqlWhereQuery += `AND (${[...titleColumns, ...aliasColumns].map((column) => `\`${column}\` LIKE ${escape(query)}`).join(' OR ')})`;
             }
 
@@ -145,20 +167,21 @@ namespace SongServer {
         * Retrieves specific columns of song data.
         */
         searchColumns: defineDBHandler<[page: number | null, columns: (keyof SongData | "order")[], option?: SongSearchOption], { songs: Partial<(SongData & { order: number })>[], count: number }>((page, columns, option) => {
+            const opt = validateSearchOption(option);
             let sqlWhereQuery = "WHERE (1)";
-            if (option?.difficulty && option?.level) {
-                if (option.difficulty === "oniura") {
-                    sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.oni.level') = ${option.level} OR JSON_EXTRACT(\`courses\`, '$.ura.level') = ${option.level})`;
+            if (opt?.difficulty && opt?.level) {
+                if (opt.difficulty === "oniura") {
+                    sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.oni.level') = ${opt.level} OR JSON_EXTRACT(\`courses\`, '$.ura.level') = ${opt.level})`;
                 }
                 else {
-                    sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.${option.difficulty}.level') = ${option.level})`;
+                    sqlWhereQuery += `AND (JSON_EXTRACT(\`courses\`, '$.${opt.difficulty}.level') = ${opt.level})`;
                 }
             }
-            if (option?.genre) {
-                sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${option.genre}"'))`;
+            if (opt?.genre) {
+                sqlWhereQuery += `AND (JSON_CONTAINS(\`genre\`, '"${opt.genre}"'))`;
             }
-            if (option?.query) {
-                const query = `%${option.query.split(' ').map(Util.sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
+            if (opt?.query) {
+                const query = `%${opt.query.split(' ').map(Util.sqlEscapeString).map(e => e.replaceAll('%', '\\%').replaceAll('_', '\\_')).join('%')}%`
                 sqlWhereQuery += `AND (${[...titleColumns, ...aliasColumns].map((column) => `\`${column}\` LIKE ${escape(query)}`).join(' OR ')})`;
             }
 
